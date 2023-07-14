@@ -23,6 +23,7 @@
     pkgs.ripgrep
     pkgs.neovim
     pkgs.starship
+    pkgs.nerdfonts
     # Fleek Bling
     pkgs.git
     pkgs.htop

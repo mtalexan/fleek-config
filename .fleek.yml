@@ -1,7 +1,7 @@
 aliases:
     fleeks: cd ~/.local/share/fleek
-    gs: git status
     gcm: git commit
+    gs: git status
 bling: low
 blocklist: []
 byo_git: false
@@ -20,6 +20,7 @@ packages:
     - ripgrep
     - neovim
     - starship
+    - nerdfonts
 paths:
     - $HOME/bin
     - $HOME/.local/bin
