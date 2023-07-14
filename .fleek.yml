@@ -1,0 +1,39 @@
+aliases:
+    fleeks: cd ~/.local/share/fleek
+bling: low
+blocklist: []
+byo_git: false
+ejected: false
+flakedir: .local/share/fleek
+git:
+    autocommit: true
+    autopull: true
+    autopush: true
+    enabled: true
+min_version: 0.8.4
+name: Fleek Configuration
+overlays: {}
+packages:
+    - helix
+    - ripgrep
+    - neovim
+    - starship
+paths:
+    - $HOME/bin
+    - $HOME/.local/bin
+programs:
+    - dircolors
+shell: bash
+systems:
+    - arch: x86_64
+      hostname: fedora
+      os: linux
+      username: aaravchen
+track: nixos-unstable
+unfree: true
+users:
+    - email: github@trackit.fe80.email
+      name: Mike
+      ssh_private_key_file: ~/.ssh/id_ed25519_github
+      ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
+      username: aaravchen
