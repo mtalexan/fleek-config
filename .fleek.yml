@@ -1,5 +1,7 @@
 aliases:
     fleeks: cd ~/.local/share/fleek
+    gs: git status
+    gcm: git commit
 bling: low
 blocklist: []
 byo_git: false

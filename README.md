@@ -20,3 +20,7 @@ $ apply-$(hostname)
 
 Your actual aliases are listed below:
     fleeks = "cd ~/.local/share/fleek";
+
+    gcm = "git commit";
+
+    gs = "git status";
