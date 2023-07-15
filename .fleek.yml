@@ -12,7 +12,7 @@ aliases:
     gs: git status
     ls: ls --color=auto
     vdir: vdir --color=auto
-bling: low
+bling: none
 blocklist: []
 byo_git: false
 ejected: false
