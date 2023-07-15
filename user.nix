@@ -19,7 +19,7 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    extraconfig = ''
+    extraConfig = ''
       set nobackup
       set relativenumber
     '';
