@@ -26,6 +26,7 @@
     pkgs.nerdfonts
     pkgs.git
     pkgs.zsh
+    pkgs.fzf
     # Fleek Bling
     pkgs.git
     pkgs.htop

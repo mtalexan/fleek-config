@@ -33,6 +33,7 @@ packages:
     - nerdfonts
     - git
     - zsh
+    - fzf
 paths:
     - $HOME/bin
     - $HOME/.local/bin
