@@ -664,10 +664,14 @@
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
+      ##############################################################
       # Must come after any git aliases
       ${builtins.readFile snippets/git-completion.sh}
+      ##############################################################
+      ##############################################################
       # this MUST be last so all aliases are defined
       ${builtins.readFile snippets/alias_completion.bash}
+      ##############################################################
     '';
   };
 
@@ -677,8 +681,10 @@
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
+      ##############################################################
       # put it last so all git aliases are defined
       ${builtins.readFile snippets/git-completion.sh}
+      ##############################################################
     '';
   };
 }

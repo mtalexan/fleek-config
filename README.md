@@ -25,7 +25,17 @@ Your actual aliases are listed below:
 
     fleeks = "cd ~/.local/share/fleek";
 
+    g = "git";
+
+    gbvv = "git branch -vv";
+
     gcm = "git commit";
+
+    gd = "git diff";
+
+    gdc = "git diff --cached";
+
+    glg = "git log --oneline --decorate --graph";
 
     grep = "grep --color=auto";
 
