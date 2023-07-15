@@ -1,16 +1,6 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
   
-  programs.bash.historyControl = [
-    "ignoredups"
-    "ignorespace"
-  ];
-
-  home.sessionVariables = {
-    GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
-    PAGER = "less -R";
-  };
-
   programs.starship = {
     enableBashIntegration = true;
     enableZshIntegration = true;
@@ -656,16 +646,31 @@
     };
   };
  
+  programs.bash = {
+    historyControl = [
+      "ignoredups"
+      "ignorespace"
+    ];
+    sessionVariables = {
+      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
+      PAGER = "less -R";
+    };
+    initExtra = ''
 
-  programs.bash.initExtra = ''
+      # Must come after any git aliases
+      ${builtins.readFile snippets/git-completion.sh}
+      # this MUST be last so all aliases are defined
+      ${builtins.readFile snippets/alias_completion.bash}
+    '';
+  }
 
-    # Must come after any git aliases
-    ${builtins.readFile snippets/git-completion.sh}
-    # this MUST be last so all aliases are defined
-    ${builtins.readFile snippets/alias_completion.bash}
-  '';
-
-  programs.zsh.initExtra = ''
-    ${builtins.readFile snippets/git-completion.sh}
-  '';
+  programs.zsh = {
+    sessionVariables = {
+      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
+      PAGER = "less -R";
+    };
+    initExtra = ''
+      ${builtins.readFile snippets/git-completion.sh}
+    '';
+  };
 }
