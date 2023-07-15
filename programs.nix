@@ -8,6 +8,7 @@
 
   # User specified programs 
     programs.dircolors.enable = true; 
-    programs.starship.enable = true;
+    programs.starship.enable = true; 
+    programs.atuin.enable = true;
 
 }
