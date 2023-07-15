@@ -645,17 +645,24 @@
       };
     };
   };
- 
+
+  # shared shell settings
+  home = {
+    sessionVariables = {
+      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
+      PAGER = "less -R";
+    };
+  };
+
   programs.bash = {
     historyControl = [
       "ignoredups"
       "ignorespace"
     ];
-    sessionVariables = {
-      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
-      PAGER = "less -R";
-    };
     initExtra = ''
+      # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
+      # fix it so we can actually verify changes by opening a new terminal rather than relogging in
+      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
       # Must come after any git aliases
       ${builtins.readFile snippets/git-completion.sh}
@@ -665,11 +672,12 @@
   };
 
   programs.zsh = {
-    sessionVariables = {
-      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
-      PAGER = "less -R";
-    };
     initExtra = ''
+      # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
+      # fix it so we can actually verify changes by opening a new terminal rather than relogging in
+      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
+      # put it last so all git aliases are defined
       ${builtins.readFile snippets/git-completion.sh}
     '';
   };
