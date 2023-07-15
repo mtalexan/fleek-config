@@ -1,6 +1,7 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
  
+  # some per-system config is in the {system-name}/{username}.nix file
   programs.git = {
     aliases = {
       unstage = "restore --staged";
