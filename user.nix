@@ -6,6 +6,17 @@
     enableZshIntegration = true;
   };
 
+  programs.fzf = {
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    defaultOptions = [
+      #"--layout=default"
+      # ergo-key bindings using alt
+      "--bind='alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,ctrl-j:backward-word,ctrl-l:forward-word,ctrl-i:page-up,ctrl-k:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in'"
+      "--multi"
+    ];
+  };
+
   # some per-system config is in the {system-name}/{username}.nix file
   programs.git = {
     aliases = {
