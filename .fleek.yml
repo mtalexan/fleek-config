@@ -39,6 +39,7 @@ paths:
     - $HOME/.local/bin
 programs:
     - dircolors
+    - starship
 shell: bash
 systems:
     - arch: x86_64
