@@ -1,18 +1,17 @@
 aliases:
-    fleeks: cd ~/.local/share/fleek
-    ls: ls --color=auto
-    vdir: vdir --color=auto
-    grep: grep --color=auto
-    fgrep: fgrep --color=auto
     egrep: egrep --color=auto
-    # shell aliases for git commands
+    fgrep: fgrep --color=auto
+    fleeks: cd ~/.local/share/fleek
     g: git
     gbvv: git branch -vv
     gcm: git commit
     gd: git diff
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
+    grep: grep --color=auto
     gs: git status
+    ls: ls --color=auto
+    vdir: vdir --color=auto
 bling: low
 blocklist: []
 byo_git: false
@@ -32,6 +31,7 @@ packages:
     - neovim
     - starship
     - nerdfonts
+    - git
 paths:
     - $HOME/bin
     - $HOME/.local/bin

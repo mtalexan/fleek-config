@@ -24,6 +24,7 @@
     pkgs.neovim
     pkgs.starship
     pkgs.nerdfonts
+    pkgs.git
     # Fleek Bling
     pkgs.git
     pkgs.htop
