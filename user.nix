@@ -7,7 +7,7 @@
   };
 
   programs.exa = {
-    enabled = true;
+    enable = true;
     # See https://github.com/nix-community/home-manager/blob/master/modules/programs/exa.nix#L50
     # ls = exa
     # ll = exa -l
