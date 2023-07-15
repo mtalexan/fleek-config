@@ -34,6 +34,7 @@ packages:
     - git
     - zsh
     - fzf
+    - atuin
 paths:
     - $HOME/bin
     - $HOME/.local/bin
