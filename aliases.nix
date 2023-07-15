@@ -23,8 +23,6 @@
     
     "gs" = "git status";
     
-    "ls" = "ls --color=auto";
-    
     "vdir" = "vdir --color=auto";
     };
 }
