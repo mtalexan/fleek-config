@@ -659,8 +659,8 @@
 
   # MUST BE LAST
   # allow completions of git aliases
-  programs.bash.initExtra = builtins.readFile snippets/git-completion.sh;
+  programs.bash.initExtra = programs.bash.initExtra ++ builtins.readFile snippets/git-completion.sh;
   programs.zsh.initExtra = builtins.readFile snippets/git-completion.sh;
   # allows bash alias to auto-complete still
-  programs.bash.initExtra = builtins.readFile snippets/alias_completion.bash;
+  programs.bash.initExtra = programs.bash.initExtra ++ builtins.readFile snippets/alias_completion.bash;
 }
