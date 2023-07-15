@@ -649,5 +649,5 @@
 
   # MUST BE LAST
   # allows bash alias to auto-complete still
-  programs.bash.initExtra = builtins.readFile snippets/alias_completion.bash
+  programs.bash.initExtra = builtins.readFile snippets/alias_completion.bash;
 }
