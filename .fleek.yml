@@ -35,6 +35,7 @@ packages:
     - zsh
     - fzf
     - atuin
+    - exa
 paths:
     - $HOME/bin
     - $HOME/.local/bin
