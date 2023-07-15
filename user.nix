@@ -14,6 +14,17 @@
     };
   };
 
+  programs.neovim = {
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+    extraconfig = ''
+      set nobackup
+      set relativenumber
+    '';
+  };
+
   programs.starship = {
     enableBashIntegration = true;
     enableZshIntegration = true;
