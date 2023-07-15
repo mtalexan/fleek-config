@@ -2,6 +2,11 @@ aliases:
     fleeks: cd ~/.local/share/fleek
     gcm: git commit
     gs: git status
+    ls: ls --color=auto
+    vdir: vdir --color=auto
+    grep: grep --color=auto
+    fgrep: fgrep --color=auto
+    egrep: egrep --color=auto
 bling: low
 blocklist: []
 byo_git: false

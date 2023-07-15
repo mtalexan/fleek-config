@@ -1,6 +1,16 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
   
+  programs.bash.historyControl = [
+    "ignoredups"
+    "ignorespace"
+  ];
+
+  sessionVariables = {
+    GCC_COLORS = 'error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
+    PAGER = 'less -R';
+  };
+
   programs.starship = {
     enableBashIntegration = true;
     enableZshIntegration = true;
@@ -648,6 +658,9 @@
  
 
   # MUST BE LAST
+  # allow completions of git aliases
+  programs.bash.initExtra = builtins.readFile snippets/git-completion.sh;
+  programs.zsh.initExtra = builtins.readFile snippets/git-completion.sh;
   # allows bash alias to auto-complete still
   programs.bash.initExtra = builtins.readFile snippets/alias_completion.bash;
 }

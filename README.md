@@ -19,8 +19,18 @@ $ apply-$(hostname)
 ```
 
 Your actual aliases are listed below:
+    egrep = "egrep --color=auto";
+
+    fgrep = "fgrep --color=auto";
+
     fleeks = "cd ~/.local/share/fleek";
 
     gcm = "git commit";
 
+    grep = "grep --color=auto";
+
     gs = "git status";
+
+    ls = "ls --color=auto";
+
+    vdir = "vdir --color=auto";
