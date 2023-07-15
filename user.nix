@@ -4,7 +4,8 @@
   programs.git = {
     aliases = {
       unstage = "restore --staged";
-      graph = "log --oneline --decorate --graph";
+      #added by default because it's so common
+      #graph = "log --oneline --decorate --graph";
       co = "checkout";
       cm = "commit";
       bvv = "branch -vv";
