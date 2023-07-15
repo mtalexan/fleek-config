@@ -1,6 +1,18 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
-  
+ 
+  programs.git = {
+    aliases = {
+      unstage = "restore --staged";
+      graph = "log --oneline --decorate --graph";
+      co = "checkout";
+      cm = "commit";
+      bvv = "branch -vv";
+      last = "log -1 HEAD";
+      update = "pull --no-rebase --ff --no-commit --ff-only";
+    };
+  };
+
   programs.starship = {
     enableBashIntegration = true;
     enableZshIntegration = true;
