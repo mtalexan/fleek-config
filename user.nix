@@ -662,7 +662,7 @@
       # this MUST be last so all aliases are defined
       ${builtins.readFile snippets/alias_completion.bash}
     '';
-  }
+  };
 
   programs.zsh = {
     sessionVariables = {
