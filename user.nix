@@ -1,6 +1,11 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
  
+  programs.dircolors = {
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+  };
+
   # some per-system config is in the {system-name}/{username}.nix file
   programs.git = {
     aliases = {
