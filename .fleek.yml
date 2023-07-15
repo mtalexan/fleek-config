@@ -43,6 +43,7 @@ programs:
     - dircolors
     - starship
     - atuin
+    - exa
 shell: bash
 systems:
     - arch: x86_64

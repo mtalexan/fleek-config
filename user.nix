@@ -6,6 +6,21 @@
     enableZshIntegration = true;
   };
 
+  programs.exa = {
+    enabled = true;
+    # See https://github.com/nix-community/home-manager/blob/master/modules/programs/exa.nix#L50
+    # ls = exa
+    # ll = exa -l
+    # la = exa -a
+    # lt = exa --tree
+    # lla = exa -l -a
+    enableAliases = true;
+    extraOptions = [
+      "--group-directories-first"
+      "--header"
+    ];
+  };
+
   programs.fzf = {
     enableBashIntegration = true;
     enableZshIntegration = true;
@@ -43,6 +58,7 @@
   };
 
   programs.starship = {
+    enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
     settings = {
@@ -698,10 +714,18 @@
   };
 
   programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    enableVteIntegration = true;
+
     historyControl = [
       "ignoredups"
       "ignorespace"
     ];
+
+    # already in fleek
+    # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
+    # initExtra = "source <(fleek completion bash)";
     initExtra = ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
@@ -719,6 +743,9 @@
   };
 
   programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+
     initExtra = ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
