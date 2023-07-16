@@ -8,8 +8,7 @@
 
   programs.exa = {
     enable = true;
-    # For some reason these aren't working right, so they're defined expliictly instead
-    #enableAliases = true;
+    enableAliases = true;
     extraOptions = [
       "--group-directories-first"
       "--header"
