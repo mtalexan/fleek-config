@@ -3,12 +3,14 @@
 
   programs.bat = {
     enable = true;
-    theme = "TwoDark";
-    map-syntax = [
-      "*.jenkinsfile:Groovy"
-      "*.props:Java Properties"
-      "*.incl:Bash"
-    ];
+    config = {
+      theme = "TwoDark";
+      map-syntax = [
+        "*.jenkinsfile:Groovy"
+        "*.props:Java Properties"
+        "*.incl:Bash"
+      ];
+    };
   };
 
   programs.dircolors = {
