@@ -8,13 +8,8 @@
 
   programs.exa = {
     enable = true;
-    # See https://github.com/nix-community/home-manager/blob/master/modules/programs/exa.nix#L50
-    # ls = exa
-    # ll = exa -l
-    # la = exa -a
-    # lt = exa --tree
-    # lla = exa -l -a
-    enableAliases = true;
+    # For some reason these aren't working right, so they're defined expliictly instead
+    #enableAliases = true;
     extraOptions = [
       "--group-directories-first"
       "--header"
