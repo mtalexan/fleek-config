@@ -10,7 +10,11 @@ aliases:
     glg: git log --oneline --decorate --graph
     grep: grep --color=auto
     gs: git status
-    vdir: vdir --color=auto
+    ls: exa
+    ll: exa -l
+    la: exa -a
+    lt: exa --tree
+    lla: exa -l -a
 bling: none
 blocklist: []
 byo_git: false

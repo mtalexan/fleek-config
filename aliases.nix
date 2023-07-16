@@ -23,6 +23,14 @@
     
     "gs" = "git status";
     
-    "vdir" = "vdir --color=auto";
+    "la" = "exa -a";
+    
+    "ll" = "exa -l";
+    
+    "lla" = "exa -l -a";
+    
+    "ls" = "exa";
+    
+    "lt" = "exa --tree";
     };
 }
