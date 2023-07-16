@@ -21,7 +21,8 @@
 
   programs.exa = {
     enable = true;
-    enableAliases = true;
+    # set explicitly instead for clarity
+    #enableAliases = true;
     extraOptions = [
       "--group-directories-first"
       "--header"
@@ -773,3 +774,5 @@
     '';
   };
 }
+
+# vim: sw=2:expandtab

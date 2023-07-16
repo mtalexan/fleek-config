@@ -20,5 +20,17 @@
     "glg" = "git log --oneline --decorate --graph";
     
     "gs" = "git status";
+    
+    "la" = "exa -a";
+    
+    "ll" = "exa -l";
+    
+    "lla" = "exa -l -a";
+    
+    "ls" = "exa";
+    
+    "lt" = "exa --tree";
+    
+    "tree" = "exa --tree";
     };
 }

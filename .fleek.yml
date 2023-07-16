@@ -9,6 +9,12 @@ aliases:
     gs: git status
     cat: bat
     catp: bat -P
+    ls: exa
+    ll: exa -l
+    la: exa -a
+    lla: exa -l -a
+    lt: exa --tree
+    tree: exa --tree
 bling: none
 blocklist: []
 byo_git: false
