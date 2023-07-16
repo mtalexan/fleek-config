@@ -36,13 +36,3 @@ Your actual aliases are listed below:
     grep = "grep --color=auto";
 
     gs = "git status";
-
-    la = "exa -a";
-
-    ll = "exa -l";
-
-    lla = "exa -l -a";
-
-    ls = "exa";
-
-    lt = "exa --tree";
