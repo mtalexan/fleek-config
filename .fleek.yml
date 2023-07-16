@@ -1,6 +1,4 @@
 aliases:
-    egrep: egrep --color=auto
-    fgrep: fgrep --color=auto
     fleeks: cd ~/.local/share/fleek
     g: git
     gbvv: git branch -vv

@@ -712,6 +712,15 @@
     enableCompletion = true;
     enableVteIntegration = true;
 
+    shellOptions = [
+      "histappend"
+      "checkwinsize"
+      "extglob"
+      "globstar"
+      "checkjobs"
+      "progcomp"
+    ];
+
     historyControl = [
       "ignoredups"
       "ignorespace"
