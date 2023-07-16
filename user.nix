@@ -65,6 +65,19 @@
     '';
   };
 
+  # the 'z' and 'zi' commands
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    options = [
+      
+    ];
+  };
+
+  ####################################################################################
+  # prompt
+
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
@@ -710,6 +723,9 @@
       };
     };
   };
+
+  ##########################################################################################
+  # shell
 
   # shared shell settings
   home = {
