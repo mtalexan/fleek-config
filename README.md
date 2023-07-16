@@ -19,6 +19,10 @@ $ apply-$(hostname)
 ```
 
 Your actual aliases are listed below:
+    cat = "bat";
+
+    catp = "bat -P";
+
     fleeks = "cd ~/.local/share/fleek";
 
     g = "git";
@@ -32,7 +36,5 @@ Your actual aliases are listed below:
     gdc = "git diff --cached";
 
     glg = "git log --oneline --decorate --graph";
-
-    grep = "grep --color=auto";
 
     gs = "git status";

@@ -6,8 +6,9 @@ aliases:
     gd: git diff
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
-    grep: grep --color=auto
     gs: git status
+    cat: bat
+    catp: bat -P
 bling: none
 blocklist: []
 byo_git: false
@@ -41,6 +42,7 @@ programs:
     - starship
     - atuin
     - exa
+    - bat
 shell: bash
 systems:
     - arch: x86_64

@@ -10,6 +10,7 @@
     programs.dircolors.enable = true; 
     programs.starship.enable = true; 
     programs.atuin.enable = true; 
-    programs.exa.enable = true;
+    programs.exa.enable = true; 
+    programs.bat.enable = true;
 
 }

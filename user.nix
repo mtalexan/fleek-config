@@ -1,7 +1,18 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
- 
+
+  programs.bat = {
+    enable = true;
+    theme = "TwoDark";
+    map-syntax = [
+      "*.jenkinsfile:Groovy"
+      "*.props:Java Properties"
+      "*.incl:Bash"
+    ];
+  };
+
   programs.dircolors = {
+    enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
   };
