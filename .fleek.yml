@@ -50,6 +50,7 @@ programs:
     - atuin
     - exa
     - bat
+    - zoxide
 shell: bash
 systems:
     - arch: x86_64

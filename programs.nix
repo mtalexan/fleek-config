@@ -11,6 +11,7 @@
     programs.starship.enable = true; 
     programs.atuin.enable = true; 
     programs.exa.enable = true; 
-    programs.bat.enable = true;
+    programs.bat.enable = true; 
+    programs.zoxide.enable = true;
 
 }
