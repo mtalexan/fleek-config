@@ -24,7 +24,7 @@
       if ! shopt -q login_shell ; then # We're not a login shell
         # Need to redefine pathmunge, it gets undefined at the end of /etc/profile
         pathmunge () {
-          case ":${PATH}:" in
+          case ":$${PATH}:" in
             *:"$1":*)
               ;;
             *)
