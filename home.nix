@@ -29,6 +29,7 @@
     pkgs.fzf
     pkgs.atuin
     pkgs.exa
+    pkgs.bat
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })

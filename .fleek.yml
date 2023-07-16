@@ -32,6 +32,7 @@ packages:
     - fzf
     - atuin
     - exa
+    - bat
 paths:
     - $HOME/bin
     - $HOME/.local/bin
