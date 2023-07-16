@@ -1,6 +1,7 @@
 aliases:
+    cat: bat
+    catp: bat -P
     fleeks: cd ~/.local/share/fleek
-  # git-related aliases
     g: git
     gbvv: git branch -vv
     gcm: git commit
@@ -8,14 +9,10 @@ aliases:
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
     gs: git status
-  # replace cat with bat
-    cat: bat
-    catp: bat -P
-  # replace ls with exa
-    ls: exa
-    ll: exa -l
     la: exa -a
+    ll: exa -l
     lla: exa -l -a
+    ls: exa
     lt: exa --tree
     tree: exa --tree
 bling: none
@@ -43,6 +40,7 @@ packages:
     - atuin
     - exa
     - bat
+    - zoxide
 paths:
     - $HOME/bin
     - $HOME/.local/bin
