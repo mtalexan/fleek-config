@@ -50,6 +50,7 @@ programs:
     - atuin
     - exa
     - bat
+    - fzf
 shell: bash
 systems:
     - arch: x86_64
