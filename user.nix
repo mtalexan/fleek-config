@@ -32,7 +32,7 @@
   programs.fzf = {
     enableBashIntegration = true;
     enableZshIntegration = true;
-    defaultCommand = "fd --type f";
+    defaultCommand = "fd --type f --hidden --follow --exclude \".git\" .";
     defaultOptions = [
       #"--layout=default"
       # ergo-key bindings using alt
