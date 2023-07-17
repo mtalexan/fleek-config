@@ -59,7 +59,7 @@
       "--filepath-word"
     ];
     fileWidgetCommand = "fd --type f --hidden --follow --exclude \".git\" .";
-    filewidgetOptions = [
+    fileWidgetOptions = [
       "--preview 'bat -n --color=always {}'"
       "--preview-window right,1,border-vertical"
       "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
