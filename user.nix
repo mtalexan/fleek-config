@@ -16,7 +16,7 @@
       filter_mode = "host";
       # when pressing up-key, only look in the session
       filter_mode_shell_up_key_binding = "session";
-      style = "full";
+      style = "compact";
       inline_height = 7;
       show_help = false;
       exit_mode = "return-original";
