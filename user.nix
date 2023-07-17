@@ -56,6 +56,7 @@
       "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
       "--scheme=path"
       "--filepath-word"
+      "--multi"
     ];
     # Ctrl+T command
     fileWidgetCommand = "fd --type f --hidden --follow --exclude \".git\" .";
@@ -65,6 +66,7 @@
       "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
       "--scheme=path"
       "--filepath-word"
+      "--multi"
     ];
   };
 
