@@ -1,6 +1,28 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  programs.atuin = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    flags = [
+      #"--disable-up-arrow"
+    ];
+    settings = {
+      auto_sync = false;
+      # fzf-style search syntax
+      search_mode = "fuzzy";
+      # look at history of whole host
+      filter_mode = "host";
+      # when pressing up-key, only look in the session
+      filter_mode_shell_up_key_binding = "session";
+      style = "compact";
+      inline_height = 5;
+      show_help = false;
+      exit_mode = "return-original";
+    };
+  };
+
   programs.bat = {
     enable = true;
     config = {
