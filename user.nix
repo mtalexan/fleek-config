@@ -48,18 +48,20 @@
       "--color=dark"
       "--cycle"
     ];
+    # Alt+C command
     changeDirWidgetCommand = "fd --type d --hidden --follow --exclude \".git\" .";
     changeDirWidgetOptions = [
-      "--preview 'bat --tree --color=always {}'"
-      "--preview-window right,1,border-vertical"
+      "--preview 'exa --tree -L 2 --color=always {}'"
+      "--preview-window right,border-vertical"
       "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
       "--scheme=path"
       "--filepath-word"
     ];
+    # Ctrl+T command
     fileWidgetCommand = "fd --type f --hidden --follow --exclude \".git\" .";
     fileWidgetOptions = [
-      "--preview 'bat -n --color=always {}'"
-      "--preview-window right,1,border-vertical"
+      "--preview 'bat -n --color=always -r :500 {}'"
+      "--preview-window right,border-vertical"
       "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
       "--scheme=path"
       "--filepath-word"
