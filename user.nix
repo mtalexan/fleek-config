@@ -32,11 +32,39 @@
   programs.fzf = {
     enableBashIntegration = true;
     enableZshIntegration = true;
+    defaultCommand = [
+      "fd --type f"
+    ];
     defaultOptions = [
       #"--layout=default"
       # ergo-key bindings using alt
+      "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
       "--bind='alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,ctrl-j:backward-word,ctrl-l:forward-word,ctrl-i:page-up,ctrl-k:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in'"
-      "--multi"
+      "--border=sharp"
+      "--info=inline"
+      "--height=30%"
+      "--min-height=10"
+      "--layout=reverse"
+      "--ansi"
+      "--tabstop=4"
+      "--color=dark"
+      "--cycle"
+    ];
+    changeDirWidgetCommand = "fd --type d --hidden --follow --exclude \".git\" .";
+    changeDirWidgetOptions = [
+      "--preview 'bat --tree --color=always {}'"
+      "--preview-window right,1,border-vertical"
+      "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
+      "--scheme=path"
+      "--filepath-word"
+    ];
+    fileWidgetCommand = "fd --type f --hidden --follow --exclude \".git\" .";
+    filewidgetOptions = [
+      "--preview 'bat -n --color=always {}'"
+      "--preview-window right,1,border-vertical"
+      "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
+      "--scheme=path"
+      "--filepath-word"
     ];
   };
 
