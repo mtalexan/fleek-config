@@ -37,7 +37,6 @@ packages:
     - git
     - zsh
     - fzf
-    - atuin
     - exa
     - bat
     - fd
@@ -47,7 +46,6 @@ paths:
 programs:
     - dircolors
     - starship
-    - atuin
     - exa
     - bat
     - fzf

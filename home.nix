@@ -27,7 +27,6 @@
     pkgs.git
     pkgs.zsh
     pkgs.fzf
-    pkgs.atuin
     pkgs.exa
     pkgs.bat
     pkgs.fd
