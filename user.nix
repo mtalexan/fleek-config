@@ -1,6 +1,8 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  news.display = "show"
+
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;
