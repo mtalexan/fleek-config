@@ -49,7 +49,6 @@ programs:
     - exa
     - bat
     - fzf
-    - fd
 shell: bash
 systems:
     - arch: x86_64
