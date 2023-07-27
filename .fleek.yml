@@ -40,6 +40,8 @@ packages:
     - exa
     - bat
     - fd
+    - tldr
+    - manix
 paths:
     - $HOME/bin
     - $HOME/.local/bin
