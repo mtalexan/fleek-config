@@ -35,6 +35,11 @@
         "*.incl:Bash"
       ];
     };
+    extraPackages = [
+      batdiff
+      batman
+      batgrep
+    ];
   };
 
   programs.dircolors = {
