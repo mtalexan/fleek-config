@@ -12,6 +12,8 @@ aliases:
     la: exa -a
     ll: exa -l
     lla: exa -l -a
+    llg: exa -l --git
+    llag: exa -l -a --git
     ls: exa
     lt: exa --tree
     tree: exa --tree

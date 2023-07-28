@@ -45,6 +45,10 @@ Your actual aliases are listed below:
 
     lla = "exa -l -a";
 
+    llag = "exa -l -a --git";
+
+    llg = "exa -l --git";
+
     ls = "exa";
 
     lt = "exa --tree";
