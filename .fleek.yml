@@ -50,6 +50,7 @@ packages:
     - difftastic
     - delta
     - jq
+    - less
 paths:
     - $HOME/bin
     - $HOME/.local/bin
