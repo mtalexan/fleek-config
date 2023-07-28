@@ -107,6 +107,7 @@
       update = "pull --no-rebase --ff --no-commit --ff-only";
     };
     delta = {
+      # automatically sets itself as the pager for git
       enable = true;
       options = {
         # themese are set to mirror bat automatically
@@ -119,9 +120,6 @@
       };
     };
     extraConfig = {
-      core = {
-        pager = "delta";
-      };
       interactive = {
         diffFilter = "delta --color-only";
       };
