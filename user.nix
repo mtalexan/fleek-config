@@ -106,11 +106,22 @@
       last = "log -1 HEAD";
       update = "pull --no-rebase --ff --no-commit --ff-only";
     };
-    difftastic = {
+    delta = {
       enable = true;
-      background = "dark";
-      color = "auto";
-      display = "side-by-side";
+      line-numbers = true;
+      side-by-side = true;
+
+    };
+    #difftastic = {
+    #  enable = true;
+    #  background = "dark";
+    #  color = "auto";
+    #  display = "side-by-side-show-both";
+    #};
+    extraConfig = {
+      diff = {
+        colorMoved = "default";
+      };
     };
     lfs = {
       enable = true;
