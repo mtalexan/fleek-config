@@ -46,6 +46,7 @@ packages:
     - manix
     - atuin
     - difftastic
+    - delta
 paths:
     - $HOME/bin
     - $HOME/.local/bin
