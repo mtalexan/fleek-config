@@ -31,7 +31,7 @@
       # theme is reused by git-delta.
       # preview all available themes when applied to a file with: 
       #  bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
-      theme = "TwoDark";
+      theme = "OneHalfDark";
       map-syntax = [
         "*.jenkinsfile:Groovy"
         "*.props:Java Properties"
