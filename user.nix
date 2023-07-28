@@ -108,6 +108,7 @@
     };
     delta = {
       # automatically sets itself as the pager for git
+      # and the interactive.diffFilter
       enable = true;
       options = {
         # themese are set to mirror bat automatically
@@ -120,9 +121,6 @@
       };
     };
     extraConfig = {
-      interactive = {
-        diffFilter = "delta --color-only";
-      };
       diff = {
         colorMoved = "default";
         colorMovedWS = "allow-indentation-change";
