@@ -14,14 +14,19 @@
       auto_sync = false;
       # fzf-style search syntax
       search_mode = "fuzzy";
-      # look at history of whole host
-      filter_mode = "host";
+      # look at history of just the one session by default, hitting Ctrl+R again will give host
+      filter_mode = "session";
       # when pressing up-key, only look in the session
       filter_mode_shell_up_key_binding = "session";
+      # other formats take up more space and count towards the inline_height
       style = "compact";
       inline_height = 10;
+      # don't show an extra help line
       show_help = false;
-      exit_mode = "return-original";
+      # show a preview of the full command
+      show_preview = true;
+      # return-original doesn't work, it always wipes it
+      exit_mode = "return-query";
     };
   };
 
@@ -31,7 +36,7 @@
       # theme is reused by git-delta.
       # preview all available themes when applied to a file with: 
       #  bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
-      theme = "OneHalfDark";
+      theme = "Visual Studio Dark+";
       map-syntax = [
         "*.jenkinsfile:Groovy"
         "*.props:Java Properties"
@@ -78,7 +83,7 @@
     defaultOptions = [
       #"--layout=default"
       # ergo-key bindings using alt
-      "--bind 'ctrl-/:change-preview-window(right|hidden|),alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,ctrl-j:backward-word,ctrl-l:forward-word,alt-I:page-up,alt-K:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in,ctrl-alt-k:preview-down,ctrl-alt-i:preview-up,ctrl-alt-I:preview-page-up,ctrl-alt-K:preview-page-down'"
+      "--bind 'ctrl-/:toggle-preview,alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,alt-J:backward-word,alt-L:forward-word,alt-I:page-up,alt-K:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in,ctrl-alt-k:preview-down,ctrl-alt-i:preview-up,ctrl-alt-I:preview-page-up,ctrl-alt-K:preview-page-down'"
       "--border=sharp"
       "--info=inline"
       "--height=30%"
@@ -94,7 +99,7 @@
     changeDirWidgetOptions = [
       "--preview 'exa --tree -L 2 --color=always {}'"
       "--preview-window right,border-vertical"
-      "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
+      "--bind 'ctrl-/:toggle-preview'"
       "--scheme=path"
       "--filepath-word"
       "--multi"
@@ -104,7 +109,7 @@
     fileWidgetOptions = [
       "--preview 'bat -n --color=always -r :500 {}'"
       "--preview-window right,border-vertical"
-      "--bind 'ctrl-/:change-preview-window(right|hidden|)'"
+      "--bind 'ctrl-/:toggle-preview'"
       "--scheme=path"
       "--filepath-word"
       "--multi"
