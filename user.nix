@@ -38,13 +38,13 @@
     # extra command-line commands that wrap common uses of bat
     extraPackages = with pkgs.bat-extras; [
       # diffs
-      "batdiff"
+      batdiff
       # man pages
-      "batman"
+      batman
       # use for grep/ripgrep (limited rg options)
-      "batgrep"
+      batgrep
       # pretty-print code from a file
-      "prettybat"
+      prettybat
     ];
   };
 
@@ -72,7 +72,7 @@
     defaultOptions = [
       #"--layout=default"
       # ergo-key bindings using alt
-      "--bind 'ctrl-/:change-preview-window(right|hidden|),alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,ctrl-j:backward-word,ctrl-l:forward-word,ctrl-i:page-up,ctrl-k:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in'"
+      "--bind 'ctrl-/:change-preview-window(right|hidden|),alt-bs:backward-kill-word,alt-j:backward-char,alt-l:forward-char,alt-i:up,alt-k:down,ctrl-j:backward-word,ctrl-l:forward-word,alt-I:page-up,alt-K:page-down,ctrl-g:cancel,alt-u:beginning-of-line,alt-o:end-of-line,ctrl-n:next-history,ctrl-p:previous-history,ctrl-]:jump,alt-space:toggle-in,ctrl-space:toggle-in,ctrl-alt-k:preview-down,ctrl-alt-i:preview-up,ctrl-alt-I:preview-page-up,ctrl-alt-K:preview-page-down'"
       "--border=sharp"
       "--info=inline"
       "--height=30%"
