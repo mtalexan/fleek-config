@@ -35,6 +35,7 @@
     pkgs.atuin
     pkgs.difftastic
     pkgs.delta
+    pkgs.jq
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
