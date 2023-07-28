@@ -19,7 +19,7 @@
       # when pressing up-key, only look in the session
       filter_mode_shell_up_key_binding = "session";
       style = "compact";
-      inline_height = 7;
+      inline_height = 10;
       show_help = false;
       exit_mode = "return-original";
     };
@@ -28,12 +28,20 @@
   programs.bat = {
     enable = true;
     config = {
+      # theme is reused by git-delta.
+      # preview all available themes when applied to a file with: 
+      #  bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
       theme = "TwoDark";
       map-syntax = [
         "*.jenkinsfile:Groovy"
         "*.props:Java Properties"
         "*.incl:Bash"
       ];
+      # explicitly set this
+      tabs = 4;
+      # bat really wants this to be the pager and auto-sets the correct options to it,
+      # so make it explicit.
+      pager = "less";
     };
     # extra command-line commands that wrap common uses of bat
     extraPackages = with pkgs.bat-extras; [

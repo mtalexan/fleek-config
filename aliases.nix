@@ -3,6 +3,8 @@
    home.shellAliases = {
     "bathelp" = "bat --plain --language=help";
     
+    "batpretty" = "prettybat";
+    
     "cat" = "bat";
     
     "catp" = "bat -P";

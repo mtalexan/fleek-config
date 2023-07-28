@@ -19,6 +19,8 @@ aliases:
     tree: exa --tree
     # pipe a command's help text to this
     bathelp: bat --plain --language=help
+    # more consistent name for the bat utility
+    batpretty: prettybat
 bling: none
 blocklist: []
 byo_git: false

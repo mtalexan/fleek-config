@@ -21,6 +21,8 @@ $ apply-$(hostname)
 Your actual aliases are listed below:
     bathelp = "bat --plain --language=help";
 
+    batpretty = "prettybat";
+
     cat = "bat";
 
     catp = "bat -P";
