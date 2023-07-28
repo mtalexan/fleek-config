@@ -106,6 +106,15 @@
       last = "log -1 HEAD";
       update = "pull --no-rebase --ff --no-commit --ff-only";
     };
+    difftastic = {
+      enable = true;
+      background = "dark";
+      color = "auto";
+      display = "inline";
+    };
+    lfs = {
+      enable = true;
+    };
   };
 
   programs.neovim = {
