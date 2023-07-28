@@ -118,6 +118,8 @@
         hyperlinks = true;
         # this causes it to open in vscode when hyperlinks to commits are clicked
         hyperlinks-file-link-format = "vscode://file/{path}:{line}" ;
+        # use relative paths for all file names
+        relative-paths = true;
       };
     };
     extraConfig = {
