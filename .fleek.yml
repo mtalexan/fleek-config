@@ -44,6 +44,7 @@ packages:
     - fd
     - tldr
     - manix
+    - atuin
 paths:
     - $HOME/bin
     - $HOME/.local/bin
@@ -53,6 +54,7 @@ programs:
     - exa
     - bat
     - fzf
+    - atuin
 shell: bash
 systems:
     - arch: x86_64
