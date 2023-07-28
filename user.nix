@@ -109,20 +109,28 @@
     delta = {
       enable = true;
       options = {
+        # themese are set to mirror bat automatically
         line-numbers = true;
         side-by-side = true;
+        navigate = true;
+        hyperlinks = true;
+        # this causes it to open in vscode when hyperlinks to commits are clicked
+        hyperlinks-file-link-format = "vscode://file/{path}:{line}" ;
       };
-
     };
-    #difftastic = {
-    #  enable = true;
-    #  background = "dark";
-    #  color = "auto";
-    #  display = "side-by-side-show-both";
-    #};
     extraConfig = {
+      core = {
+        pager = "delta";
+      };
+      interactive = {
+        diffFilter = "delta --color-only";
+      };
       diff = {
         colorMoved = "default";
+        colorMovedWS = "allow-indentation-change";
+      };
+      merge = {
+        conflictStyle = "diff3";
       };
     };
     lfs = {
