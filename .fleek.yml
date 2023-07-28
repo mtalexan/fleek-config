@@ -52,6 +52,7 @@ packages:
     - jq
     - less
     - man
+    - nix-index
 paths:
     - $HOME/bin
     - $HOME/.local/bin
