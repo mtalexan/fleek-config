@@ -120,6 +120,10 @@
         hyperlinks-file-link-format = "vscode://file/{path}:{line}" ;
         # use relative paths for all file names
         relative-paths = true;
+        # tab display width
+        tabs = 4;
+        # header blocks only extend to the end of the file section and not the entire terminal width
+        width = "variable";
       };
     };
     extraConfig = {
