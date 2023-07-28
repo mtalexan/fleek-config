@@ -36,9 +36,9 @@
       ];
     };
     extraPackages = [
-      batdiff
-      batman
-      batgrep
+      "batdiff"
+      "batman"
+      "batgrep"
     ];
   };
 
