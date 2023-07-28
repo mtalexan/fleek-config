@@ -12,8 +12,8 @@ aliases:
     la: exa -a
     ll: exa -l
     lla: exa -l -a
-    llg: exa -l --git
     llag: exa -l -a --git
+    llg: exa -l --git
     ls: exa
     lt: exa --tree
     tree: exa --tree
@@ -45,6 +45,7 @@ packages:
     - tldr
     - manix
     - atuin
+    - difftastic
 paths:
     - $HOME/bin
     - $HOME/.local/bin
