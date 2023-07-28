@@ -39,6 +39,7 @@
     pkgs.less
     pkgs.man
     pkgs.nix-index
+    pkgs.noti
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })

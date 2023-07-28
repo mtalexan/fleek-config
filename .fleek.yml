@@ -53,6 +53,7 @@ packages:
     - less
     - man
     - nix-index
+    - noti
 paths:
     - $HOME/bin
     - $HOME/.local/bin
