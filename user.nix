@@ -37,8 +37,6 @@
         "*.props:Java Properties"
         "*.incl:Bash"
       ];
-      # explicitly set this
-      tabs = 4;
       # bat really wants this to be the pager and auto-sets the correct options to it,
       # so make it explicit.
       pager = "less";
