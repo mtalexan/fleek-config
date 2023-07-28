@@ -51,6 +51,7 @@ packages:
     - delta
     - jq
     - less
+    - man
 paths:
     - $HOME/bin
     - $HOME/.local/bin
