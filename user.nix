@@ -36,7 +36,7 @@
       ];
     };
     # extra command-line commands that wrap common uses of bat
-    extraPackages = [
+    extraPackages = with pkgs.bat-extras; [
       # diffs
       "batdiff"
       # man pages
