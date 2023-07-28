@@ -110,7 +110,7 @@
       enable = true;
       background = "dark";
       color = "auto";
-      display = "side-by-side-both";
+      display = "side-by-side-show-both";
     };
     lfs = {
       enable = true;
