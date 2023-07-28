@@ -17,6 +17,8 @@ aliases:
     ls: exa
     lt: exa --tree
     tree: exa --tree
+    # pipe a command's help text to this
+    bathelp: bat --plain --language=help
 bling: none
 blocklist: []
 byo_git: false

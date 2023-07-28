@@ -35,10 +35,16 @@
         "*.incl:Bash"
       ];
     };
+    # extra command-line commands that wrap common uses of bat
     extraPackages = [
+      # diffs
       "batdiff"
+      # man pages
       "batman"
+      # use for grep/ripgrep (limited rg options)
       "batgrep"
+      # pretty-print code from a file
+      "prettybat"
     ];
   };
 

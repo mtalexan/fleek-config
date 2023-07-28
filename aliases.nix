@@ -1,6 +1,8 @@
 { pkgs, misc, ... }: {
   # DO NOT EDIT: This file is managed by fleek. Manual changes will be overwritten.
    home.shellAliases = {
+    "bathelp" = "bat --plain --language=help";
+    
     "cat" = "bat";
     
     "catp" = "bat -P";
