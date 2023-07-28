@@ -164,6 +164,8 @@
     };
   };
 
+  programs.jq.enable = true;
+
   programs.neovim = {
     defaultEditor = true;
     viAlias = true;
