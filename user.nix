@@ -1,7 +1,8 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
-  news.display = "show";
+  # doesn't work for fleek for some reason
+  #news.display = "show";
 
   programs.atuin = {
     enable = true;
