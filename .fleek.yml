@@ -32,7 +32,10 @@ git:
     enabled: true
 min_version: 0.8.4
 name: Fleek Configuration
-overlays: {}
+overlays:
+  nixneovim:
+    url: github:nixneovim/nixneovim
+    follow: false
 packages:
     - helix
     - ripgrep
