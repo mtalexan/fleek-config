@@ -190,12 +190,6 @@
       :set backspace=2 "make backspace work like most other programs
       :syntax on
     '';
-    extraLuaConfig = ''
-      vim.o.background = 'dark'
-      require('barbar').setup()
-      require('onedarkpro').setup()
-      require('vscode').load()
-    '';
     plugins = with pkgs.vimPlugins; [
       {
         plugin = barbar-nvim;
