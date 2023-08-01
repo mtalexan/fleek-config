@@ -215,9 +215,21 @@ in
     # or can be from gitHub by using the custom function define in the let at the top of
     # this file, vimPluginFromGitHub
     plugins = with pkgs.vimPlugins; [
-      nvim-web-devicons # needed by other plugins
+      # needed by barbar-nvim and lualine-nvim for icons
+      nvim-web-devicons
+
+      # tabs for buffers
       barbar-nvim
-      lualine-nvim
+
+      # nicer mode line
+      {
+        plugin = lualine-nvim;
+        config = ''
+          lua require('lualine').setup({options={theme='vscode'}})
+        '';
+      }
+
+      # use nix precompiled grammars
       nvim-treesitter.withAllGrammars
 
       {
