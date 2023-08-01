@@ -1,6 +1,6 @@
 { pkgs, misc, lib, ... }: 
 let
-  # use lib.fakeSha256 for hash initially
+  # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
     pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
     version = "${rev}";
@@ -212,7 +212,7 @@ in
       nvim-treesitter.withAllGrammars
 
       # latest as of 2023-08-01
-      (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+      (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=")
     ];
   };
 
