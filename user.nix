@@ -198,6 +198,7 @@
             }
           })
         '';
+      }
       {
         # a more advanced plugin that can use GitHub plugins
         plugin = packer-nvim;
