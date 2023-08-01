@@ -1,8 +1,10 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
-  # doesn't work for fleek for some reason
-  #news.display = "show";
+  news.display = "show";
+
+  # Must exist, or home-manager pitches a fit if news.display has ever been set
+  news.json.output = {};
 
   programs.atuin = {
     enable = true;
