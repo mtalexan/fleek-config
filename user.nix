@@ -180,6 +180,7 @@
   };
 
   programs.neovim = {
+    enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
@@ -192,7 +193,7 @@
     #  :set backspace=2 "make backspace work like most other programs
     #  :syntax on
     #'';
-    plugins = [
+    plugins = with pkgs.vimPlugins; [
       pkgs.vimPlugins.barbar-nvim
       pkgs.vimPlugins.nvim-treesitter.withAllGrammars
 
