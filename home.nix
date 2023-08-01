@@ -48,6 +48,8 @@
     pkgs.zsh-autosuggestions
     pkgs.zsh-fast-syntax-highlighting
     pkgs.bash-completion
+    pkgs.nix-bash-completions
+    pkgs.getoptions
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
