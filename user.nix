@@ -191,16 +191,16 @@
     #  :set backspace=2 "make backspace work like most other programs
     #  :syntax on
     #'';
-    plugins = with pkgs.vimPlugins; [
+    plugins = [
       {
-        plugin = barbar-nvim;
+        plugin = vimPlugins.barbar-nvim;
         config = ''
           packadd! barbar-nvim.lua
           lua require 'barbar'.setup()
         '';
       }
       {
-        plugin = nvim-treesitter.withAllGrammars;
+        plugin = vimPlugins.nvim-treesitter.withAllGrammars;
         config = ''
           packadd! nvim-treesitter.lua
           lua require 'nvim-treesitter'.setup()
