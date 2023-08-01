@@ -185,17 +185,27 @@
     vimAlias = true;
     vimdiffAlias = true;
     extraConfig = ''
-      :set nobackup=true
-      :set relativenumber=true
-      :set backspace=2 "make backspace work like most other programs
-      :syntax on
     '';
+    #  :set nobackup=true
+    #  :set relativenumber=true
+    #  :set backspace=2 "make backspace work like most other programs
+    #  :syntax on
+    #'';
     plugins = with pkgs.vimPlugins; [
       {
         plugin = barbar-nvim;
-        config = "let g:barbar_auto_setup = v:true";
+        config = ''
+          packadd! barbar-nvim.lua
+          lua require 'barbar'.setup()
+        '';
       }
-      nvim-treesitter.withAllGrammars
+      {
+        plugin = nvim-treesitter.withAllGrammars;
+        config = ''
+          packadd! nvim-treesitter.lua
+          lua require 'nvim-treesitter'.setup()
+        '';
+      }
       { 
         plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
             name = "vscode";
@@ -209,7 +219,11 @@
               hash = lib.fakeSha256;
             };
           };
-        config = "";
+        config = ''
+          packadd! vscode.lua
+          lua require 'vscode'.setup()
+          lua require 'vscode'.load()
+        '';
       }
     ];
   };
