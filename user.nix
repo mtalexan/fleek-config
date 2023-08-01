@@ -197,20 +197,28 @@
       require('vscode').load()
     '';
     plugins = with pkgs.vimPlugins; [
-      barbar-nvim
-      onedarkpro-nvim
-
-      pkgs.vimUtils.buildVimPluginFrom2Nix {
-        name = "vscode";
-        src = pkgs.fetchFromGitHub {
-          owner = "Mofiqul";
-          repo = "vscode.nvim";
-          # latest as of 2023-08-01
-          rev = "05973862f95f85dd0564338a03baf61b56e1823f";
-          # use this when updating, then replace it with the real hash
-          #  hash = lib.fakeSha256
-          hash = lib.fakeSha256;
-        };
+      {
+        plugin = barbar-nvim;
+        config = "let g:barbar_auto_setup = v:true";
+      }
+      {
+        plugin = onedarkpro-nvim;
+        config = "";
+      }
+      { 
+        plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
+            name = "vscode";
+            src = pkgs.fetchFromGitHub {
+              owner = "Mofiqul";
+              repo = "vscode.nvim";
+              # latest as of 2023-08-01
+              rev = "05973862f95f85dd0564338a03baf61b56e1823f";
+              # use this when updating, then replace it with the real hash
+              #  hash = lib.fakeSha256
+              hash = lib.fakeSha256;
+            };
+          };
+        config = "";
       }
     ];
   };
