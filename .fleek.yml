@@ -55,6 +55,7 @@ packages:
     - man
     - nix-index
     - noti
+    - bashInteractive
 paths:
     - $HOME/bin
     - $HOME/.local/bin
