@@ -201,10 +201,7 @@
         plugin = barbar-nvim;
         config = "let g:barbar_auto_setup = v:true";
       }
-      {
-        plugin = onedarkpro-nvim;
-        config = "";
-      }
+      nvim-treesitter.withAllGrammars
       { 
         plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
             name = "vscode";
