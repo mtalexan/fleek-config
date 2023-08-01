@@ -938,7 +938,6 @@
       "autoload -U +X -z compinit && compinit"
       # allow bash-style completion to be parsed as well
       "autoload -U +X bashcompinit && bashcompinit"
-    "
     ];
 
     initExtra = ''
