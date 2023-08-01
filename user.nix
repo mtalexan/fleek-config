@@ -189,23 +189,7 @@
     '';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
-      {
-        plugin = lualine-nvim;
-        config = ''
-          require('lualine).setup({
-            options {
-              theme = 'vscode'
-            }
-          })
-        '';
-      }
-      {
-        # a more advanced plugin that can use GitHub plugins
-        plugin = packer-nvim;
-        config = ''
-          use 'Mofiqul/vscode.nvim'
-        '';
-      }
+      lualine-nvim
     ];
   };
 
