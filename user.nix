@@ -187,6 +187,16 @@
       vim.opt.nobackup = true
       vim.opt.relativenumber = true
       vim.o.background = 'dark'
+
+      loal c = require('vscode.colors').get_colors()
+      require('vscode').setup({
+        style = 'dark'
+        italic_comments = true
+        group_overrides = {
+          Cursor = { fg = c.vscDarkBlue, bg=c.vscLightGreen, bold=true },
+        }
+      })
+      require('vscode').load()
     '';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
