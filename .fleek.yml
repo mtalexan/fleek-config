@@ -64,7 +64,6 @@ packages:
     - bash-completion
     - nix-bash-completions
     - vimPlugins.barbar-nvim
-    - vimPlugins.onedarkpro-nvim
 paths:
     - $HOME/bin
     - $HOME/.local/bin
