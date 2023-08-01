@@ -912,7 +912,7 @@
     enableAutosuggestions = true;
     enableVteIntegration = true;
     autocd = false;
-    defaultKeymap = "emacs"
+    defaultKeymap = "emacs";
 
     history = {
       expireDuplicatesFirst = true;
