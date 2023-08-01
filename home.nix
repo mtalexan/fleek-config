@@ -22,7 +22,6 @@
     # user selected packages
     pkgs.helix
     pkgs.ripgrep
-    pkgs.neovim
     pkgs.starship
     pkgs.nerdfonts
     pkgs.git
