@@ -916,6 +916,7 @@
       expireDuplicatesFirst = true;
       extended = true;
       ignoreDups = true;
+      ignoreSpace = false;
       save = 100000;
       size = 100000;
       share = true;
@@ -942,7 +943,8 @@
     '';
 
     initExtraFirst = ''
-      setopt appendhistory extendedglob nomatch notify complete_aliases listambiguous pushdignoredups noautomenu nomenucomplete histignoredups histignorerealdups histsavenodups histverify sharehistory noflowcontrol
+      # these don't have home-manager options to enable
+      setopt nomatch notify complete_aliases listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol
     '';
 
     initExtra = ''
