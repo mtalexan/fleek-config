@@ -187,6 +187,11 @@
       set nobackup
       set relativenumber
     '';
+    plugins = with pkgs.vimPlugins; [
+      barbar-nvim
+      lualine-nvim
+
+    ];
   };
 
   # supplies the command-not-found hook to tell about nix packages
@@ -934,6 +939,8 @@
     #  styles = "";
     #};
 
+    # instead of a plugin manager, use the plugins directly in nix recipes.
+    # see examples: https://nix-community.github.io/home-manager/options.html#opt-programs.zsh.plugins
     plugins = [
       {
         # Adds the 'up' command
