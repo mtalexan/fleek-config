@@ -38,7 +38,7 @@
       map-syntax = [
         "*.jenkinsfile:Groovy"
         "*.props:Java Properties"
-        "*.incl:Bash"
+        "*.incl:Bourne Again Shell (bash)"
       ];
       # bat really wants this to be the pager and auto-sets the correct options to it,
       # so make it explicit.
@@ -911,11 +911,13 @@
     enableCompletion = true;
     enableAutosuggestions = true;
     enableVteIntegration = true;
+    autocd = false;
     history = {
       expireDuplicatesFirst = true;
       extended = true;
       ignoreDups = true;
-      save = 100000000;
+      save = 100000;
+      size = 100000;
       share = true;
     };
     historySubstringSearch = {
@@ -937,6 +939,10 @@
       autoload -U +X -z compinit && compinit
       # allow bash-style completion to be parsed as well
       autoload -U +X bashcompinit && bashcompinit
+    '';
+
+    initExtraFirst = ''
+      setopt appendhistory extendedglob nomatch notify complete_aliases listambiguous pushdignoredups noautomenu nomenucomplete histignoredups histignorerealdups histsavenodups histverify sharehistory noflowcontrol
     '';
 
     initExtra = ''
