@@ -183,8 +183,9 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    vimdiffAlias = true;
+    vimdiffAlias = false;
     extraConfig = ''
+
     '';
     #  :set nobackup=true
     #  :set relativenumber=true
@@ -192,39 +193,27 @@
     #  :syntax on
     #'';
     plugins = [
-      {
-        plugin = pkgs.vimPlugins.barbar-nvim;
-        config = ''
-          packadd! barbar-nvim.lua
-          lua require 'barbar'.setup()
-        '';
-      }
-      {
-        plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
-        config = ''
-          packadd! nvim-treesitter.lua
-          lua require 'nvim-treesitter'.setup()
-        '';
-      }
-      { 
-        plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
-            name = "vscode";
-            src = pkgs.fetchFromGitHub {
-              owner = "Mofiqul";
-              repo = "vscode.nvim";
-              # latest as of 2023-08-01
-              rev = "05973862f95f85dd0564338a03baf61b56e1823f";
-              # use this when updating, then replace it with the real hash
-              #  hash = lib.fakeSha256
-              hash = lib.fakeSha256;
-            };
-          };
-        config = ''
-          packadd! vscode.lua
-          lua require 'vscode'.setup()
-          lua require 'vscode'.load()
-        '';
-      }
+      pkgs.vimPlugins.barbar-nvim;
+      pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+      #{ 
+      #  plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
+      #      name = "vscode";
+      #      src = pkgs.fetchFromGitHub {
+      #        owner = "Mofiqul";
+      #        repo = "vscode.nvim";
+      #        # latest as of 2023-08-01
+      #        rev = "05973862f95f85dd0564338a03baf61b56e1823f";
+      #        # use this when updating, then replace it with the real hash
+      #        #  hash = lib.fakeSha256
+      #        hash = lib.fakeSha256;
+      #      };
+      #    };
+      #  config = ''
+      #    packadd! vscode.lua
+      #    lua require 'vscode'.setup()
+      #    lua require 'vscode'.load()
+      #  '';
+      #}
     ];
   };
 
