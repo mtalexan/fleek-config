@@ -954,9 +954,126 @@
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
+
       ##############################################################
-      # put it last so all git aliases are defined
-      #builtins.readFile snippets/git-completion.sh
+      # Start custom keymap
+      ##############################################################
+
+      # mark tracking functions so we can properly handle
+      # Ctrl+g as unset mark if the mark is set
+      unset-mark-command () {
+          zle set-mark-command -n -1
+          MARKISSET=false
+      }
+      zle -N unset-mark-command
+
+      copy-region-as-kill-unmark () {
+          zle copy-region-as-kill
+          # also unset mark like it should
+          zle unset-mark-command
+          MARKISSET=false
+      }
+      zle -N copy-region-as-kill-unmark
+
+      kill-region-tracked () {
+          zle kill-region
+          MARKISSET=false
+      }
+      zle -N kill-region-tracked
+
+      set-mark-command-tracked () {
+          zle set-mark-command
+          MARKISSET=true
+      }
+      zle -N set-mark-command-tracked
+
+      # uses MARKISSET from other commands
+      unset-or-break-mark-command () {
+          if $${MARKISSET} >/dev/null
+          then
+              zle unset-mark-command
+          else
+              zle send-break
+          fi
+      }
+      zle -N unset-or-break-mark-command
+
+      # define functions to share clipboard with X11
+      # breaks yank-pop
+
+      # uses CUTBUFFER from x-yank
+      x-backward-kill-word () {
+        zle backward-kill-word
+        print -rn $${CUTBUFFER} | xsel -i
+      }
+      zle -N x-backward-kill-word
+
+      # uses CUTBUFFER from x-yank
+      x-copy-region-as-kill () {
+        zle copy-region-as-kill
+        print -rn $${CUTBUFFER} | xsel -i
+      }
+      zle -N x-copy-region-as-kill
+
+      # uses CUTBUFFER from x-yank
+      x-kill-region () {
+        zle kill-region
+        print -rn $${CUTBUFFER} | xsel -i
+      }
+      zle -N x-kill-region
+
+      x-yank () {
+        CUTBUFFER=$(xsel -o </dev/null)
+        zle yank
+      }
+      zle -N x-yank
+
+      # uses CUTBUFFER from x-yank
+      x-kill-line () {
+        zle kill-line
+        print -rn $${CUTBUFFER} | xsel -i
+      }
+      zle -N x-kill-line
+
+      # Alt+u
+      bindkey '^[u' beginning-of-line
+      # Alt+o
+      bindkey '^[o' end-of-line
+      # Alt+l
+      bindkey '^[l' forward-char
+      # Alt+Shift+l
+      bindkey '^[L' emacs-forward-word
+      # Alt+l
+      bindkey '^[j' backward-char
+      # Alt+Shift+j
+      bindkey '^[J' emacs-backward-word
+      # Ctrl+Backspace
+      bindkey '^^?' backward-kill-word
+      # Ctrl+w
+      bindkey '^w' kill-region-tracked
+      # Alt+w
+      bindkey '^[w' copy-region-as-kill-unmark
+      # Ctrl+k
+      bindkey '^k' kill-line
+      # Ctrl+y
+      bindkey '^y' yank
+      # Alt+y
+      bindkey '^[y' yank-pop
+      # Alt+space
+      bindkey '^[ ' set-mark-command-tracked
+      # Ctrl+space
+      bindkey '^ ' set-mark-command-tracked
+      # Ctrl+@ (what's actually sent on Ctrl+space)
+      bindkey '^@' set-mark-command-tracked
+      # Ctrl+Shift+-
+      bindkey '^_' undo
+      # Ctrl+x Ctrl+x
+      bindkey '^x^x' exchange-point-and-mark
+      # Ctrl+g
+      bindkey '^g' unset-or-break-mark-command
+
+      ##############################################################
+      # End custom keymap
       ##############################################################
     '';
   };
