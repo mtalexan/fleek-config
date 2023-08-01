@@ -32,10 +32,7 @@ git:
     enabled: true
 min_version: 0.8.4
 name: Fleek Configuration
-overlays:
-#  nixneovim:
-#    url: github:nixneovim/nixneovim
-#    follow: false
+overlays: {}
 packages:
     - helix
     - ripgrep
@@ -66,6 +63,7 @@ packages:
     - zsh-fast-syntax-highlighting
     - bash-completion
     - nix-bash-completions
+    - vimPlugins.barbar-nvim
 paths:
     - $HOME/bin
     - $HOME/.local/bin
