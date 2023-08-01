@@ -183,9 +183,13 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    extraConfig = ''
+      :set nobackup=true
+      :set relativenumber=true
+      :set backspace=2 "make backspace work like most other programs
+      :syntax on
+    '';
     extraLuaConfig = ''
-      vim.opt.nobackup = true
-      vim.opt.relativenumber = true
       vim.o.background = 'dark'
     '';
     plugins = with pkgs.vimPlugins; [
