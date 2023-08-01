@@ -917,10 +917,10 @@
       ignoreDups = true;
       save = 100000000;
       share = true;
-      historySubstringSearch = {
-        enable = true;
-        # hitting up or down will use the currently typed string in the back into history
-      };
+    };
+    historySubstringSearch = {
+      enable = true;
+      # hitting up or down will use the currently typed string in the back into history
     };
 
 
