@@ -912,6 +912,8 @@
     enableAutosuggestions = true;
     enableVteIntegration = true;
     autocd = false;
+    defaultKeymap = "emacs"
+
     history = {
       expireDuplicatesFirst = true;
       extended = true;
