@@ -918,7 +918,7 @@
 
       ##############################################################
       # put it last so all git aliases are defined
-      #${builtins.readFile snippets/git-completion.sh}
+      #builtins.readFile snippets/git-completion.sh
       ##############################################################
     '';
   };
