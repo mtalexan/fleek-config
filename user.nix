@@ -215,8 +215,8 @@ in
       lualine-nvim
       nvim-treesitter.withAllGrammars
 
-      # latest as of 2023-08-01
       {
+        # latest rev as of 2023-08-01
         plugin = (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=");
         config = ''
           :set colorscheme vscode
