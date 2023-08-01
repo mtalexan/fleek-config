@@ -63,7 +63,6 @@ packages:
     - zsh-fast-syntax-highlighting
     - bash-completion
     - nix-bash-completions
-    - vimPlugins.barbar-nvim
 paths:
     - $HOME/bin
     - $HOME/.local/bin
