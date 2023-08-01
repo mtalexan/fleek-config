@@ -183,58 +183,14 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    extraConfig = ''
-      g:barbar_auto_setup= v:false " disable auto-setup, it's in lua below
-    '';
     extraLuaConfig = ''
       vim.opt.nobackup = true
       vim.opt.relativenumber = true
       vim.o.background = 'dark'
-
-      -- barbar
-      require('barbar').setup({
-        auto_hide = false,
-        clickable = true,
-        focus_on_close = 'previous',
-        hide = { 
-          extensions = false, 
-          inactive = true 
-        },
-        icons = {
-          preset = 'powerline',
-        },
-      })
-
-      -- vscode colors
-      loal c = require('vscode.colors').get_colors()
-      require('vscode').setup({
-        style = 'dark',
-        italic_comments = true,
-        group_overrides = {
-          Cursor = { fg = c.vscDarkBlue, bg=c.vscLightGreen, bold=true },
-        },
-      })
-      require('vscode').load()
-      
-      -- lualine
-      require('lualine').setup({
-        options = {
-          icons_enabled = false,
-          theme = 'vscode',
-        },
-      })
-      require('lualine').setup()
     '';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
-      lualine-nvim
-      {
-        # lets us load github plugins too
-        plugin = nvim-packer;
-        config = ''
-          use 'Mofiqul/vscode.nvim'
-        '';
-      }
+      onedarkpro-nvim
     ];
   };
 
