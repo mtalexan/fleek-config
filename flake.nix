@@ -15,9 +15,6 @@
 
     # Overlays
     
-    nixneovim.url = "github:nixneovim/nixneovim";
-    
-    
 
   };
 
@@ -42,7 +39,7 @@
           ./fedora/custom.nix
           # self-manage fleek
           ({
-           nixpkgs.overlays = [inputs.nixneovim.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -63,7 +60,7 @@
           ./goln-5cl17g3/custom.nix
           # self-manage fleek
           ({
-           nixpkgs.overlays = [inputs.nixneovim.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
