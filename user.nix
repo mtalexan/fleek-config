@@ -2,8 +2,7 @@
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
   news = {
-    display = "notify";
-    entries = [];
+    enable = false;
   };
 
   programs.atuin = {
