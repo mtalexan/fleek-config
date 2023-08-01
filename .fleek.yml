@@ -76,7 +76,7 @@ programs:
     - bat
     - fzf
     - atuin
-shell: bash
+shell: zsh
 systems:
     - arch: x86_64
       home: ""
