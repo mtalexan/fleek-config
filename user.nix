@@ -183,15 +183,15 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    extraConfig = ''
-      :set nobackup=true
-      :set relativenumber=true
-      :set backspace=2 "make backspace work like most other programs
-      :syntax on
-    '';
-    extraLuaConfig = ''
-      vim.o.background = 'dark'
-    '';
+    #extraConfig = ''
+    #  :set nobackup=true
+    #  :set relativenumber=true
+    #  :set backspace=2 "make backspace work like most other programs
+    #  :syntax on
+    #'';
+    #extraLuaConfig = ''
+    #  vim.o.background = 'dark'
+    #'';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
       onedarkpro-nvim
