@@ -194,6 +194,7 @@
       vim.o.background = 'dark'
       require('barbar').setup()
       require('onedarkpro').setup()
+      require('vscode').load()
     '';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
