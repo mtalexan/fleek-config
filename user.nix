@@ -945,8 +945,9 @@
           repo = "up.zsh";
           # latest commit as of 2023-08-01, already 7+ years old
           rev = "c8cc0d0edd6be2d01f467267e3ed385c386a0acb";
-          # use 52x '0's to get a failure that tells you the correct hash
-          sha256 = "0000000000000000000000000000000000000000000000000000";
+          # use this to generate an error that shows the real value
+          #  sha256 = lib.fakeSha256;
+          sha256 = lib.fakeSha256;
         };
       }
     ];
