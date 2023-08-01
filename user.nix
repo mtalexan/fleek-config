@@ -900,7 +900,7 @@
 
       ##############################################################
       # Must come after any git aliases
-      ${builtins.readFile snippets/git-completion.sh}
+      #${builtins.readFile snippets/git-completion.sh}
       ##############################################################
       ##############################################################
       # this MUST be last so all aliases are defined
@@ -920,7 +920,7 @@
 
       ##############################################################
       # put it last so all git aliases are defined
-      ${builtins.readFile snippets/git-completion.sh}
+      #${builtins.readFile snippets/git-completion.sh}
       ##############################################################
     '';
   };
