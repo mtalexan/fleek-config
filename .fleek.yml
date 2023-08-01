@@ -58,7 +58,7 @@ packages:
     - bashInteractive
     - zsh-completions
     - zsh-fzf-tab
-    - nix-zsh-completiongs
+    - nix-zsh-completions
     - zsh-autosuggestions
     - zsh-fast-syntax-highlighting
     - bash-completion

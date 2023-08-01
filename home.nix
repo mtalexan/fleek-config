@@ -44,7 +44,7 @@
     pkgs.bashInteractive
     pkgs.zsh-completions
     pkgs.zsh-fzf-tab
-    pkgs.nix-zsh-completiongs
+    pkgs.nix-zsh-completions
     pkgs.zsh-autosuggestions
     pkgs.zsh-fast-syntax-highlighting
     pkgs.bash-completion
