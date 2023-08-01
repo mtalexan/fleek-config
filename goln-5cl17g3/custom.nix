@@ -1,7 +1,7 @@
 { pkgs, misc, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
-  home.sessionPath = home.sessionPath ++ [
+  home.sessionPath = [
     "$HOME/DevTools/bin"
   ];
 
