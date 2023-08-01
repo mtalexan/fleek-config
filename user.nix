@@ -909,6 +909,37 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
+    enableAutosuggestions = true;
+    enableVteIntegration = true;
+    history = {
+      expireDuplicatesFirst = true;
+      extended = true;
+      ignoreDups = true;
+      save = 100000000;
+      share = true;
+      historySubstringSearch = {
+        enable = true;
+        # hitting up or down will use the currently typed string in the back into history
+      };
+    };
+
+
+    initExtraBeforeCompInit = ''
+      zstyle ':completion:*' completer _list _expand _complete _ignored _match
+      zstyle ':completion:*' completions 1
+      zstyle ':completion:*' insert-unambiguous true
+      zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}
+      zstyle ':completion:*' preserve-prefix '//[^/]##/'
+      zstyle ':completion:*' use-cache yes
+    '';
+
+    completionInit = [
+      # allow more advanced completion functionality
+      "autoload -U +X -z compinit && compinit"
+      # allow bash-style completion to be parsed as well
+      "autoload -U +X bashcompinit && bashcompinit"
+    "
+    ];
 
     initExtra = ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
