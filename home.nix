@@ -50,6 +50,7 @@
     pkgs.bash-completion
     pkgs.nix-bash-completions
     pkgs.vimPlugins.barbar-nvim
+    pkgs.vimPlugins.onedarkpro-nvim
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
