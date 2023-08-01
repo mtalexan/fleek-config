@@ -19,6 +19,7 @@ aliases:
     ls: exa
     lt: exa --tree
     tree: exa --tree
+allow_broken: false
 bling: none
 blocklist: []
 byo_git: false
@@ -67,9 +68,15 @@ programs:
 shell: bash
 systems:
     - arch: x86_64
+      home: ""
       hostname: fedora
       os: linux
       username: aaravchen
+    - arch: x86_64
+      home: ""
+      hostname: goln-5cl17g3
+      os: linux
+      username: mtalexander
 track: nixos-unstable
 unfree: true
 users:
@@ -78,3 +85,8 @@ users:
       ssh_private_key_file: ~/.ssh/id_ed25519_github
       ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
       username: aaravchen
+    - email: github@trackit.fe80.xyz
+      name: Mike
+      ssh_private_key_file: ~/.ssh/github_personal_ed25519
+      ssh_public_key_file: ~/.ssh/github_personal_ed25519.pub
+      username: mtalexander
