@@ -208,7 +208,7 @@
           #  hash = lib.fakeSha256
           hash = lib.fakeSha256;
         };
-      };
+      }
     ];
   };
 
