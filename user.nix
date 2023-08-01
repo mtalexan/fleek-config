@@ -193,8 +193,8 @@
     #  :syntax on
     #'';
     plugins = [
-      pkgs.vimPlugins.barbar-nvim;
-      pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+      pkgs.vimPlugins.barbar-nvim
+      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
       #{ 
       #  plugin = pkgs.vimUtils.buildVimPluginFrom2Nix {
       #      name = "vscode";
