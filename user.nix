@@ -194,7 +194,7 @@
     plugins = with pkgs.vimPlugins; [
       nvim-web-devicons # needed by other plugins
       barbar-nvim
-      lua
+      lualine-nvim
       nvim-treesitter.withAllGrammars
 
       pkgs.vimUtils.buildVimPluginFrom2Nix {
