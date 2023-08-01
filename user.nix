@@ -204,7 +204,7 @@ in
 
     '';
     extraLuaConfig = ''
-      vim.opt.nobackup = true
+      vim.opt.backup = false
       vim.opt.relativenumber = true
       vim.opt.backspace = 2 -- make backspace work like most other programs
       vim.opt.syntax = on
@@ -216,7 +216,12 @@ in
       nvim-treesitter.withAllGrammars
 
       # latest as of 2023-08-01
-      (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=")
+      {
+        plugin = (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=");
+        config = ''
+          :set colorscheme vscode
+        '';
+      }
     ];
   };
 
