@@ -3,12 +3,13 @@ let
   # use lib.fakeSha256 for hash initially
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
     pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
+    version = "${rev}";
     src = pkgs.fetchFromGitHub {
       owner = "${owner}";
       repo = "${repo}";
       rev = "${rev}";
       hash = "${hash}";
-      };
+    };
   };
 
 in
