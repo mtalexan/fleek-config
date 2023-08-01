@@ -3,7 +3,7 @@
 
   news = {
     display = "notify";
-    json.output = "";
+    entries = [];
   };
 
   programs.atuin = {
