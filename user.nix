@@ -957,7 +957,7 @@
       # Set the color for the found portion (implies it's enabled)
       autosuggestions.color = "fg=6";
       # Set case-sensitivity for completion, history lookup, etc.
-      casesensitivity = true;
+      caseSensitive = true;
       # color output
       color = true;
 
