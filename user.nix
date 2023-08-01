@@ -1,7 +1,7 @@
 { pkgs, misc, lib, ... }: 
 let
   # use lib.fakeSha256 for hash initially
-  vimPluginFromGithub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
+  vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
     pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
     src = pkgs.fetchFromGitHub {
       owner = "${owner}";
