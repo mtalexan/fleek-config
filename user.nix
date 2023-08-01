@@ -183,13 +183,21 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    extraConfig = ''
-      set nobackup
-      set relativenumber
+    extraLuaConfig = ''
+      vim.opt.nobackup = true
+      vim.opt.relativenumber = true
+      vim.o.background = 'dark'
     '';
     plugins = with pkgs.vimPlugins; [
       barbar-nvim
       lualine-nvim
+      {
+        # lets us load github plugins too
+        plugin = nvim-packer;
+        config = ''
+          use 'Mofiqul/vscode.nvim'
+        '';
+      }
     ];
   };
 
