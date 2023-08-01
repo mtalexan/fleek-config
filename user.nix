@@ -1071,8 +1071,19 @@
     '';
 
     initExtraFirst = ''
+      ####################################################
+      # Start initExtraFirst
+      ####################################################
+
       # these don't have home-manager options to enable
       setopt nomatch notify complete_aliases listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol
+
+      # Need to enable the bash completion options very early so the functions are defined when sourcing completion scripts in the initExtra
+      # allow bash-style completion to be parsed as well
+      autoload -U +X bashcompinit && bashcompinit
+      ####################################################
+      # End initExtraFirst
+      ####################################################
     '';
 
     initExtra = ''

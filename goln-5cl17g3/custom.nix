@@ -28,4 +28,4 @@
   '';
 }
 
-# vim: sw=2;expandtab
+# vim: sw=2:expandtab
