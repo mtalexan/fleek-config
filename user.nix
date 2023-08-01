@@ -1,4 +1,17 @@
 { pkgs, misc, lib, ... }: 
+let
+  # use lib.fakeSha256 for hash initially
+  vimPluginFromGithub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
+    pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
+    src = pkgs.fetchFromGitHub {
+      owner = "${owner}";
+      repo = "${repo}";
+      rev = "${rev}";
+      hash = "${hash}";
+      };
+  };
+
+in
 {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
@@ -197,16 +210,8 @@
       lualine-nvim
       nvim-treesitter.withAllGrammars
 
-      pkgs.vimUtils.buildVimPluginFrom2Nix {
-        name = "vscode";
-        src = pkgs.fetchFromGitHub {
-          owner = "Mofiqul";
-          repo = "vscode.nvim";
-          # latest as of 2023-08-01
-          rev = "05973862f95f85dd0564338a03baf61b56e1823f";
-          # use this when updating, then replace it with the real hash
-          #  hash = lib.fakeSha256
-          hash = lib.fakeSha256;
+      # latest as of 2023-08-01
+      (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" lib.fakeSha256)
         };
       }
     ];
