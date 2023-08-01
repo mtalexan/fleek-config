@@ -199,11 +199,15 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = false;
+    # bug in some versions of home-manager requires this to be set to something for plugins to get parsed
     extraConfig = ''
-      :set nobackup=true
-      :set relativenumber=true
-      :set backspace=2 "make backspace work like most other programs
-      :syntax on
+
+    '';
+    extraLuaConfig = ''
+      vim.opt.nobackup = true
+      vim.opt.relativenumber = true
+      vim.opt.backspace = 2 -- make backspace work like most other programs
+      vim.opt.syntax = on
     '';
     plugins = with pkgs.vimPlugins; [
       nvim-web-devicons # needed by other plugins
