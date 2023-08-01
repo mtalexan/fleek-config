@@ -208,7 +208,6 @@ in
     extraLuaConfig = ''
       vim.opt.backup = false
       vim.opt.relativenumber = true
-      vim.opt.backspace = 2 -- make backspace work like most other programs
       vim.opt.syntax = on
     '';
 
