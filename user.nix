@@ -890,7 +890,7 @@
     # already in fleek
     # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
     # initExtra = "source <(fleek completion bash)";
-    initExtra = ''
+    initExtra = initExtra + ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
@@ -910,7 +910,7 @@
     enable = true;
     enableCompletion = true;
 
-    initExtra = ''
+    initExtra = initExtra + ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"

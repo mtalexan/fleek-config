@@ -5,8 +5,7 @@
     "$HOME/DevTools/bin"
   ];
 
-  programs.bash = {
-    initExtra = initExtra + ''
+  programs.bash.initExtra = ''
     
     if [ -e "$HOME/.cargo/env" ] ; then
       source $HOME/.cargo/env
@@ -18,7 +17,6 @@
       source $HOME/.jfrog/jfrog_bash_completion
     fi
   '';
-  };
   programs.zsh.initExtra = programs.zsh.initExtra + ''
 
     if [ -e "$HOME/.cargo/env" ] ; then
