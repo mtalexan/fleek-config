@@ -193,14 +193,14 @@
     #'';
     plugins = [
       {
-        plugin = vimPlugins.barbar-nvim;
+        plugin = pkgs.vimPlugins.barbar-nvim;
         config = ''
           packadd! barbar-nvim.lua
           lua require 'barbar'.setup()
         '';
       }
       {
-        plugin = vimPlugins.nvim-treesitter.withAllGrammars;
+        plugin = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
         config = ''
           packadd! nvim-treesitter.lua
           lua require 'nvim-treesitter'.setup()
