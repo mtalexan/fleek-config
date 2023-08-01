@@ -933,12 +933,12 @@
       zstyle ':completion:*' use-cache yes
     '';
 
-    completionInit = [
+    completionInit = ''
       # allow more advanced completion functionality
-      "autoload -U +X -z compinit && compinit"
+      autoload -U +X -z compinit && compinit
       # allow bash-style completion to be parsed as well
-      "autoload -U +X bashcompinit && bashcompinit"
-    ];
+      autoload -U +X bashcompinit && bashcompinit
+    '';
 
     initExtra = ''
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
