@@ -1,7 +1,10 @@
 { pkgs, misc, lib, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
-  news.display = "notify";
+  news = {
+    display = "notify";
+    json.output = "";
+  };
 
   programs.atuin = {
     enable = true;
