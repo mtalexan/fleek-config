@@ -4,7 +4,7 @@
   news.display = "show";
 
   # Must exist, or home-manager pitches a fit if news.display has ever been set
-  news.json.output = {};
+  config.news.json.output = {};
 
   programs.atuin = {
     enable = true;
