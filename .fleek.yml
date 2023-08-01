@@ -60,7 +60,6 @@ packages:
     - zsh-fzf-tab
     - nix-zsh-completiongs
     - zsh-autosuggestions
-    - zsh-syntax-highlighting
 paths:
     - $HOME/bin
     - $HOME/.local/bin
