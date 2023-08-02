@@ -31,3 +31,7 @@ With '--really' option, all other sd options are ignored and passed to the scrip
 
 
 Within scripts, the `SD` environment variable is set to the unresolved directory the script was found in (e.g. 'dirname $0')
+
+
+All commands in the top level folder follow:
+---------------------------------------------------------
