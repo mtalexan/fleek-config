@@ -953,6 +953,7 @@ in
       SD_EDITOR = "nvim";
       # defaults to 'cat' if not set
       SD_CAT = "bat";
+      FOO = "bar";
     };
   };
 
