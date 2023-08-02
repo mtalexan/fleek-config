@@ -987,7 +987,7 @@ in
       SUDOEDITOR = "nvim";
       GIT_EDITOR = "nvim";
       # use the FZF changeDir (Alt+C) display options
-      _ZO_FZF_OPTS = "$${FZF_ALT_C_OPTS}";
+      _ZO_FZF_OPTS = "$FZF_ALT_C_OPTS";
     };
   };
 
