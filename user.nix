@@ -987,7 +987,7 @@ in
       SUDOEDITOR = "nvim";
       GIT_EDITOR = "nvim";
       # use options like FZF changeDir (Alt+C) display options
-      _ZO_FZF_OPTS = lib.concatString [
+      _ZO_FZF_OPTS = lib.concatStringsSep " " [
         "--preview 'exa --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')'"
         "--preview-window right,border-vertical" 
         "--bind 'ctrl-/:toggle-preview'"
