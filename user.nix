@@ -975,8 +975,8 @@ in
     initExtra = ''
       # home-manager puts sessionVariables in a file only sourced during login.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
-      #unset __HM_SESS_VARS_SOURCED
-      #. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      unset __HM_SESS_VARS_SOURCED
+      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
       ##############################################################
       # Must come after any git aliases
@@ -1172,8 +1172,8 @@ in
     initExtra = ''
       # home-manager puts sessionVariables in a file only sourced during login.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
-      #unset __HM_SESS_VARS_SOURCED
-      #. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      unset __HM_SESS_VARS_SOURCED
+      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
       ##############################################################
       # Start custom keymap
