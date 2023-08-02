@@ -21,18 +21,10 @@
   home.packages = [
     # user selected packages
     pkgs.helix
-    pkgs.starship
     pkgs.nerdfonts
     pkgs.git
-    pkgs.zsh
-    pkgs.fzf
-    pkgs.exa
-    pkgs.bat
     pkgs.fd
     pkgs.manix
-    pkgs.atuin
-    pkgs.difftastic
-    pkgs.delta
     pkgs.jq
     pkgs.less
     pkgs.man

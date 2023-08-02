@@ -35,18 +35,10 @@ name: Fleek Configuration
 overlays: {}
 packages:
     - helix
-    - starship
     - nerdfonts
     - git
-    - zsh
-    - fzf
-    - exa
-    - bat
     - fd
     - manix
-    - atuin
-    - difftastic
-    - delta
     - jq
     - less
     - man
