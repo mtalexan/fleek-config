@@ -288,7 +288,7 @@ in
   };
 
   # a Rust-based tldr program
-  programs.tealdear = {
+  programs.tealdeer = {
     enable = true;
     # see https://dbrgn.github.io/tealdeer/config.html
     settings = {
