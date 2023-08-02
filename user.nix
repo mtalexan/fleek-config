@@ -980,6 +980,8 @@ in
     # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
     # initExtra = "source <(fleek completion bash)";
     initExtra = ''
+      [ -z "$__HM_SESS_VARS_SOURCED" ] || echo "hm-session-vars.sh already sourced by the time .bashrc is parsed"
+
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
@@ -1176,6 +1178,8 @@ in
     '';
 
     initExtra = ''
+      [ -z "$__HM_SESS_VARS_SOURCED" ] || echo "hm-session-vars.sh already sourced by the time .zshrc is parsed"
+
       # home-manager annoyingly puts sessionVariables in a file only sourced by .bash_profile.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
