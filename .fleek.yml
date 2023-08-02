@@ -17,9 +17,8 @@ aliases:
     llg: exa -l --git
     ls: exa
     lt: exa --tree
-    tree: exa --tree
-    # a custom command that uses rg on the current folder in an fzf window and allows recursive fzf fuzzy find on interactive rg results
     rgfzf: sd rg-fzf
+    tree: exa --tree
 allow_broken: false
 bling: none
 blocklist: []
@@ -44,7 +43,6 @@ packages:
     - exa
     - bat
     - fd
-    - tldr
     - manix
     - atuin
     - difftastic

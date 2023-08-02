@@ -29,7 +29,6 @@
     pkgs.exa
     pkgs.bat
     pkgs.fd
-    pkgs.tldr
     pkgs.manix
     pkgs.atuin
     pkgs.difftastic
