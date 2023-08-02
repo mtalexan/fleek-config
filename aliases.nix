@@ -11,8 +11,6 @@
     
     "fleeks" = "cd ~/.local/share/fleek";
     
-    "g" = "git";
-    
     "gbvv" = "git branch -vv";
     
     "gcm" = "git commit";
@@ -22,8 +20,6 @@
     "gdc" = "git diff --cached";
     
     "glg" = "git log --oneline --decorate --graph";
-    
-    "gs" = "git status";
     
     "la" = "exa -a";
     

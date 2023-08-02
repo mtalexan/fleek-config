@@ -270,6 +270,15 @@ in
     ];
   };
 
+  # Wraps some basic git commands so numbers can be used to reference file names
+  programs.scmpuff = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    # WARNING: Creates a 'gs' alias
+  };
+
+
   ####################################################################################
   # prompt
 

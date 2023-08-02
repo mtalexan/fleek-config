@@ -4,13 +4,13 @@ aliases:
     cat: bat
     catp: bat -P
     fleeks: cd ~/.local/share/fleek
-    g: git
     gbvv: git branch -vv
     gcm: git commit
     gd: git diff
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
-    gs: git status
+    # defined by scmpuff
+    #gs: git status
     la: exa -a
     ll: exa -l
     lla: exa -l -a
