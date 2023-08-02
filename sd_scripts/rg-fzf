@@ -26,7 +26,7 @@ INITIAL_QUERY="${*:-}"
     --bind "start:reload($RG_PREFIX {q})+unbind($RG_MODE_KEY)" \
     --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
     --bind "$FZF_MODE_KEY:unbind(change,$FZF_MODE_KEY)+change-prompt($FZF_PROMPT)+enable-search+rebind($RG_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f):reload($RG_PREFIX {q})" \
-    --bind "$RG_MODE_KEY:unbind($RG_MODE_KEY)+change-prompt($RG_PROMPT)+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,$FZF_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r):reload" \
+    --bind "$RG_MODE_KEY:unbind($RG_MODE_KEY)+change-prompt($RG_PROMPT)+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,$FZF_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r):reload()" \
     --color "hl:-1:underline,hl+:-1:underline:reverse" \
     --prompt "$RG_RPOMPT" \
     --delimiter : \
