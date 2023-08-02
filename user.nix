@@ -107,7 +107,7 @@ in
       "--color=dark"
       "--cycle"
     ];
-    # Alt+C command
+    # Alt+C command, look for directories
     changeDirWidgetCommand = "fd --type d --hidden --follow --exclude \".git\" .";
     changeDirWidgetOptions = [
       "--preview 'exa --tree -L 2 --color=always {}'"
@@ -285,6 +285,45 @@ in
       # defaults to 'cat' if not set
       SD_CAT = "bat";
     };
+  };
+
+  # a Rust-based tldr program
+  programs.tealdear = {
+    enable = true;
+    # see https://dbrgn.github.io/tealdeer/config.html
+    settings = {
+      display = {
+        use_pager = true;
+        compact = false;
+      };
+      # style = {};
+      updates = {
+        auto_update = true;
+        # auto_update_interval = 720; # default
+      };
+      # directories = {};
+    };
+  };
+
+  # 'z' and 'zi' commands for directory jumps based on frecency.  
+  # Uses fzf to select options if using 'z <pattern> '+tab
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegrations = true;
+    enableZshIntegrations = true;
+    # options to pass to the 'zoxide init' command
+    options = [
+      # update directory scores on every folder change
+      "--hook=pwd"
+      # replace the cd command with zoxide if set.  Default is 'z' and 'zi'
+      #"--cmd=cd"
+    ];
+    # The following environment variables have to be set manually in the home.sessionVariables
+    # _ZO_ECHO = 1 ; to print matched dir before jumping
+    # _ZO_EXCLUDE_DIRS = dir:dir:dir ; list of ':' separated dirs to ignore
+    # _ZO_FZF_OPTS = <opts>; options to pass to fzf when opening it for match selection
+    # _ZO_MAXAGE = 10000; maximum number of entries in the database
+    # _ZO_RESOLVE_SYMLINKS = 1; to resolve symlinks before adding to the database
   };
 
   ####################################################################################
@@ -942,11 +981,13 @@ in
   # shared shell settings
   home = {
     # WARNING: by default all sessionVariables are only sourced once at login.
-    #   Special logic 
+    #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
     sessionVariables = {
       GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
       SUDOEDITOR = "nvim";
       GIT_EDITOR = "nvim";
+      # use the FZF changeDir (Alt+C) display options
+      _ZO_FZF_OPTS = "$${FZF_ALT_C_OPTS}";
     };
   };
 
