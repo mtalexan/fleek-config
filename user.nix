@@ -309,8 +309,8 @@ in
   # Uses fzf to select options if using 'z <pattern> '+tab
   programs.zoxide = {
     enable = true;
-    enableBashIntegrations = true;
-    enableZshIntegrations = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
     # options to pass to the 'zoxide init' command
     options = [
       # update directory scores on every folder change
