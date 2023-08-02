@@ -33,6 +33,7 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays: {}
+# only things that aren't listed in the user.nix and set to enable=true there need to be listed here
 packages:
     - helix
     - nerdfonts
@@ -57,11 +58,6 @@ paths:
     - $HOME/.local/bin
 programs:
     - dircolors
-    - starship
-    - exa
-    - bat
-    - fzf
-    - atuin
 shell: zsh
 systems:
     - arch: x86_64
