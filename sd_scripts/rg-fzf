@@ -32,5 +32,5 @@ INITIAL_QUERY="${*:-}"
     --delimiter : \
     --header "╱ $RG_MODE_KEY (ripgrep mode) ╱ $FZF_MODE_KEY (fzf mode) ╱" \
     --preview 'bat --color=always {1} --highlight-line {2}' \
-    --preview-window 'right,60%,border-left,+{2}+3/3,~3' \
+    --preview-window 'top,60%,border-bottom,+{2}+3/3,~3' \
     --bind 'enter:become(nvim {1} +{2})'
