@@ -55,4 +55,6 @@ Your actual aliases are listed below:
 
     lt = "exa --tree";
 
+    rgfzf = "sd rg-fzf";
+
     tree = "exa --tree";

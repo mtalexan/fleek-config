@@ -37,6 +37,8 @@
     
     "lt" = "exa --tree";
     
+    "rgfzf" = "sd rg-fzf";
+    
     "tree" = "exa --tree";
     };
 }
