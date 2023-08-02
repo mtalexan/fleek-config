@@ -1,4 +1,5 @@
 { pkgs, misc, lib, ... }: 
+  # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
@@ -14,7 +15,6 @@ let
 
 in
 {
-  # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
   programs.atuin = {
     enable = true;
