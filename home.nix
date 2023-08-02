@@ -21,7 +21,6 @@
   home.packages = [
     # user selected packages
     pkgs.helix
-    pkgs.ripgrep
     pkgs.starship
     pkgs.nerdfonts
     pkgs.git

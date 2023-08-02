@@ -35,7 +35,6 @@ name: Fleek Configuration
 overlays: {}
 packages:
     - helix
-    - ripgrep
     - starship
     - nerdfonts
     - git
