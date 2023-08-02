@@ -986,8 +986,22 @@ in
       GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
       SUDOEDITOR = "nvim";
       GIT_EDITOR = "nvim";
-      # use the FZF changeDir (Alt+C) display options
-      _ZO_FZF_OPTS = "$FZF_ALT_C_OPTS";
+      # use options like FZF changeDir (Alt+C) display options
+      _ZO_FZF_OPTS = lib.strings.concatStringsSep " " [
+        (lib.strings.escapeNixString "--preview 'exa --tree -L2 --color=always $( echo {} | awk '\''{ print \$2 }'\'')'")
+        "--preview-window right,border-vertical" 
+        "--bind 'ctrl-/:toggle-preview'"
+        "--scheme=path"
+        "--filepath-word"
+        "--multi" 
+        "--info=inline"
+        "--border=sharp" 
+        "--height=50%" 
+        "--tabstop=4" 
+        "--color=dark" 
+        "--cycle" 
+        "--layout=reverse"
+      ];
     };
   };
 
