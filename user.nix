@@ -277,7 +277,7 @@ in
     enable = true;
     settings = {
       # within the home-manager config folder, ~/.local/share/fleek/sd_scripts
-      SD_ROOT = "${config.home.homeDirectory}/sd_scripts";
+      SD_ROOT = "${home.homeDirectory}/sd_scripts";
       # defaults to EDITOR or VISUALEDITOR if not set
       SD_EDITOR = "nvim";
       # defaults to 'cat' if not set
