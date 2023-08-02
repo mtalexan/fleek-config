@@ -4,9 +4,10 @@
 #
 # Starts fzf with ripgrep as the searcher in the current directory (starts with a blank query).  Every time a new character
 # is typed, it stops the rg process and starts a new one with the new search terms (on a 0.1 second delay).
-# Hitting Ctrl+F switches to fzf being the fuzzy finder in file contents, and Ctrl+R switches back.
+# Hitting Ctrl+F switches to fzf as a fuzzy finder on the rg results. Ctrl+R switches back to the original rg
+# search terms to reduce file matches.
 # The search terms for each mode are stored separately in temporary files named /tmp/rg-fzf-{r,f} and
-# restored when switching back to the mode.
+# restored when switching back to the mode since fzf search operates over the rg results.
 # 
 # Requires fzf, ripgrep, and bat (for syntax-highlited preview).  Enter opens the file in nvim on the highlighted line.
 #
@@ -25,13 +26,13 @@ INITIAL_QUERY="${*:-}"
 : | fzf --ansi --disabled --query "$INITIAL_QUERY" \
     --bind "start:reload($RG_PREFIX {q})+unbind($RG_MODE_KEY)" \
     --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-    --bind "$FZF_MODE_KEY:unbind(change,$FZF_MODE_KEY)+change-prompt($FZF_PROMPT)+enable-search+rebind($RG_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f):reload($RG_PREFIX {q})" \
-    --bind "$RG_MODE_KEY:unbind($RG_MODE_KEY)+change-prompt($RG_PROMPT)+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,$FZF_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r):reload({q})" \
+    --bind "$FZF_MODE_KEY:unbind(change,$FZF_MODE_KEY)+change-prompt($FZF_PROMPT)+enable-search+rebind($RG_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+    --bind "$RG_MODE_KEY:unbind($RG_MODE_KEY)+change-prompt($RG_PROMPT)+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,$FZF_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
     --color "hl:-1:underline,hl+:-1:underline:reverse" \
     --prompt "$RG_RPOMPT" \
     --delimiter : \
     --header "╱ $RG_MODE_KEY (ripgrep mode) ╱ $FZF_MODE_KEY (fzf mode) ╱" \
-    --height "80%" \
+    --height "95%" \
     --multi \
     --preview 'bat --color=always {1} --highlight-line {2}' \
     --preview-window 'top,60%,border-bottom,+{2}+3/3,~3' \
