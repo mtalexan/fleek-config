@@ -9,8 +9,7 @@ aliases:
     gd: git diff
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
-    # defined by scmpuff
-    #gs: git status
+    gs: git status
     la: exa -a
     ll: exa -l
     lla: exa -l -a

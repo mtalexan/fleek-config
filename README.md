@@ -39,6 +39,8 @@ Your actual aliases are listed below:
 
     glg = "git log --oneline --decorate --graph";
 
+    gs = "git status";
+
     la = "exa -a";
 
     ll = "exa -l";
