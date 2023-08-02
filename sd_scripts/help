@@ -1,0 +1,33 @@
+A tool from https://github.com/ianthehenry/sd
+Allows calling scripts from the configured ~/.local/share/fleek/sd_scripts/ folder with the 'sd' command and folders/executables as subcommands.
+
+Subcommands are converted to find executable files.  For example:
+
+Calling 'sd foo bar' will:
+- If 'SD_PATH/foo' is an executable, execute 'SD_PATH/foo bar'
+- If 'SD_PATH/foo/bar' is an executable, execute 'SD_PATH/foo/bar' without arguments.
+- If 'SD_PATH/foo/bar' is a directory, do the same as 'sd foo bar --help'
+- If 'SD_PATH/foo/bar' is a non-executable file, do the same as 'sd foo bar --cat'
+
+With the '--help' option, help text for the subcommand is printed.  
+For sub-commands referencing executable files, this is either:
+- Contents of 'SD_PATH/foo/bar.help' if present
+- The first contiguous bash comment block in '${SD_PATH}/foo/bar'
+
+For sub-commands referencing directories, this is both:
+- Contents of 'SD_PATH/foo/bar/help' if present
+- Then list of help for all possible subcommands, with first line of help text for each.
+
+
+With '--new' option, a new script is created with the name using the first file named "template" found via upward directory search (if any), and any arguments after the '--new' appended to the end of the file.  If no extra arguments are provided, the new file is opened in the SD_EDITOR instead.
+
+With '--cat' option, prints the script with SD_CAT.
+
+With '--edit' option, opens the script for editing with SD_EDITOR.
+
+With '--which' option, prints the path of the script.
+
+With '--really' option, all other sd options are ignored and passed to the script instead.  Not order-dependent.  Use '--really --really' to pass '--really' to the script.
+
+
+Within scripts, the `SD` environment variable is set to the unresolved directory the script was found in (e.g. 'dirname $0')

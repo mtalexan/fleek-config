@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# example argument used here
+print_usage()
+{
+    echo "USAGE:"
+    echo " $0 [opts]"
+    echo ""
+    echo " Options:"
+    echo "   -h"
+    echo "   --help"
+    echo "     Print this help text."
+    echo "   -m(y|n)"
+    echo "   --min=(y|n)"
+    echo "   --minimal=(y|n)"
+    echo "     default=n"
+    echo "     Only install and configure the absolute minimum.  Intended for unattended install."
+    echo "     Non-minimal configurations will attempt to install credential handlers as well."
+    echo ""
+}
+
+die ()
+{
+    [ $# -eq 0 ] || echo >&2 "ERROR:" "$@"
+    exit 1
+}
+export -f die
+
+print_usage_and_die()
+{
+    [ $# -eq 0 ] || echo >&2 "ERROR:" "$@"
+    print_usage >&2
+    exit 1
+}
+
+OPTS=$(getopt -n "$(basename $0)" --options hm: --longoptions help,min:,minimal: -- "$@") \
+    || print_usage_and_die "Unable to parse arguments"
+
+eval set -- "$OPTS"
+
+# defaults for options, set by shell environment if present, always overridden by command-line value when set.
+CONFIG_MINIMAL=${CONFIG_MINIMAL:-n}
+
+# TODO: for parsing free arguments, can be removed if no free arguments are allowed
+FREE_ARGS=0
+ALL_FREE_ARGS=false
+
+while [ -n "${1:-}" ]
+do
+    case "$1" in
+        -h | --help)
+            print_usage
+            exit 0
+            ;;
+# TODO: Add option specifics hwere
+        -m | --min | --minimal)
+            [ -z "$2" ] || print_usage_and_die "No value given for minimal state"
+            CONFIG_MINIMAL=$2
+            shift 2
+            ;;
+# TODO: pick one of the two blocks for free argument parsing
+# If not using free arguments
+        --)
+            # end of argument list, do nothing
+            shift
+            ;;
+        *)
+            print_usage_and_die "Unrecognized argument: $1"
+            ;;
+# alternative if free arguments are in use
+        --)
+            # anything else is a free argument
+            ALL_FREE_ARGS=true
+            shift
+            ;;
+        *)
+            if ! ${ALL_FREE_ARGS}; then
+                print_usage_and_die "Unrecognized argument: $1"
+            else
+                    FREE_ARGS=$(expr "${FREE_ARGS}" "+" "1")
+                    case ${FREE_ARGS} in
+                            1)
+                                    #process first free argument here
+                                    #contained in $1
+                                    ;;
+                            *)
+                                    # too many free arguments, error our
+                                    print_usage_and_die "Too many free arguments"
+                                    ;;
+                    esac
+                    # we handled the argument, move to the next one
+                    shift
+            fi
+            ;;
+    esac
+done
+
+# TODO: Do error checking on values and illegal combinations of options
+
+# if either set, both must be set
+[ -n "${CONFIG_MINIMAL}" ] || print_usage_and_die "Must set --minimal"
+
+# "Lock" values
+# TODO: list variables here
+readonly CONFIG_MINIMAL
+
+
+
+
+
+
+
+# vim: sw=4;expandtab

@@ -271,6 +271,20 @@ in
   };
 
 
+  # a quick script calling tool from a sub-directory of scripts
+  # https://github.com/ianthehenry/sd
+  programs.script-directory = {
+    enable = true;
+    settings = {
+      # within the home-manager config folder, ~/.local/share/fleek/sd_scripts
+      SD_ROOT = "${config.home.homeDirectory}/sd_scripts";
+      # defaults to EDITOR or VISUALEDITOR if not set
+      SD_EDITOR = "nvim";
+      # defaults to 'cat' if not set
+      SD_CAT = "bat";
+    };
+  };
+
   ####################################################################################
   # prompt
 

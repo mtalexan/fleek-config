@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# fzf+ripgrep preview wrapper with togglable search mode.
+#
+# Starts fzf with ripgrep as the searcher in the current directory (starts with a blank query).  Every time a new character
+# is typed, it stops the rg process and starts a new one with the new search terms (on a 0.1 second delay).
+# Hitting Ctrl+F switches to fzf being the fuzzy finder in file contents, and Ctrl+R switches back.
+# The search terms for each mode are stored separately in temporary files named /tmp/rg-fzf-{r,f} and
+# restored when switching back to the mode.
+# 
+# Requires fzf, ripgrep, and bat (for syntax-highlited preview).  Enter opens the file in nvim on the highlighted line.
+#
+# Based on example from: https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode
+
+
+rm -f /tmp/rg-fzf-{r,f}
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+# prompts for the modes.  Be sure to include trailing spaces
+RG_PROMPT="rg> "
+FZF_PROMPT="fzf> "
+# the keys to switch modes
+RG_MODE_KEY="ctrl-r"
+FZF_MODE_KEY="ctrl-f"
+INITIAL_QUERY="${*:-}"
+: | fzf --ansi --disabled --query "$INITIAL_QUERY" \
+    --bind "start:reload($RG_PREFIX {q})+unbind($RG_MODE_KEY)" \
+    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+    --bind "$FZF_MODE_KEY:unbind(change,$FZF_MODE_KEY)+change-prompt($FZF_PROMPT)+enable-search+rebind($RG_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+    --bind "$RG_MODE_KEY:unbind($RG_MODE_KEY)+change-prompt($RG_PROMPT)+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,$FZF_MODE_KEY)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --prompt "$RG_RPOMPT" \
+    --delimiter : \
+    --header "╱ $RG_MODE_KEY (ripgrep mode) ╱ $FZF_MODE_KEY (fzf mode) ╱" \
+    --preview 'bat --color=always {1} --highlight-line {2}' \
+    --preview-window 'right,60%,border-left,+{2}+3/3,~3' \
+    --bind 'enter:become(nvim {1} +{2})'
