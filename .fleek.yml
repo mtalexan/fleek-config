@@ -33,7 +33,6 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays: {}
-# only things that aren't listed in the user.nix and set to enable=true there need to be listed here
 packages:
     - helix
     - nerdfonts
@@ -70,6 +69,11 @@ systems:
       hostname: goln-5cl17g3
       os: linux
       username: mtalexander
+    - arch: x86_64
+      home: ""
+      hostname: laptop
+      os: linux
+      username: aaravchen
 track: nixos-unstable
 unfree: true
 users:
