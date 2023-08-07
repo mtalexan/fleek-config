@@ -559,7 +559,7 @@ in
       };
 
       shlvl = {
-        threshold = 2;
+        threshold = 1;
         repeat = true; # repeat symbol for the number of levels
         style = "white bold";
         symbol = "❯";
