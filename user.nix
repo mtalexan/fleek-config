@@ -1143,8 +1143,9 @@ in
       color = true;
 
       editor = {
-        # Auto convert .... to ../..
-        dotExpansion = true;
+        # Do NOT use dotExpansion.  It conflicts with git needing to use .. vs ... when diffing.
+        ## Auto convert .... to ../..
+        #dotExpansion = true;
         keymap = "emacs";
         # Allow the zsh prompt context to be shown.  Really only relevant to VI
         promptContext = true;
