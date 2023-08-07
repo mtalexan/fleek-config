@@ -559,8 +559,12 @@ in
       };
 
       shlvl = {
-        threshold = 1;
+        # WARNING: The detection logic is off-by-one in bash: https://github.com/starship/starship/issues/2407
+        threshold = 2;
         repeat = true; # repeat symbol for the number of levels
+        # TODO: Waiting for starship 1.16.1 release that adds this.  
+        ## Decreases the repeat count by repeat_offset and doesn't show if it comes out to 0 or less
+        #repeat_offset = 1;
         style = "white bold";
         symbol = "❯";
         format = "[$symbol]($style)";
