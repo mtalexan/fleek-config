@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Sets up nix passthru from the host system for a toolbox
+#
+# Once setup, all the nix tools and home-manager will work from the host,
+# any any prompt or anything will function transparently.
+
+
+die() 
+{
+    [ $# -eq 0 ] || echo >&2 "ERROR: " "$@"
+    exit 1
+}
+
+# all host files are under this root
+readonly hostfs="/run/host"
+
+# create a temp file with the fixed block we need to include in some files
+
+tmp_text=$(mktemp) || die "Creating temp file 1"
+
+cat > ${tmp_text} <<EOF
+
+# Nix
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+    . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+# End Nix
+
+EOF
+[ $? -eq 0 ] || die "Creating file to source nix"
+
+sudo ln -s $hostfs/nix /nix || die "/nix symlink"
+sudo ln -s $hostfs/var/nix-profile /var/nix-profile || die "/var/nix-profile symlink"
+sudo ln -s $hostfs/etc/profile.d/nix.sh /etc/profile.d/nix.sh || die "/etc/profile.d/nix.sh symlink"
+
+tmp_rc=$(mktemp) || die "Creating tempfile 2"
+
+
+# add the block of text to the top of each of these files, creating them if necessary
+for F in /etc/bashrc.bashrc /etc/bashrc /etc/zshrc ; do 
+    cat $tmp_text > $tmp_rc || die "Initially populating replacement for $F"
+    if [ -e $F ]; then
+        cat $F >> $tmp_rc || die "Adding existing content from $F to replacement"
+    fi
+    sudo mv $tmp_rc $F || die "Replacing $F"
+done
+
+# vim: sw=4:expandtab
