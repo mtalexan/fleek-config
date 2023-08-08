@@ -52,5 +52,6 @@ for F in /etc/bashrc.bashrc /etc/bashrc /etc/zshrc ; do
 done
 
 echo "SUCCESS"
+echo "Now exit the toolbox and re-enter it to see the effects"
 
 # vim: sw=4:expandtab
