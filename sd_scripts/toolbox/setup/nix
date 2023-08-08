@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Sets up nix passthru from the host system for a toolbox
+# Sets up nix passthru from the host system for a toolbox/distrobox
 #
 # Once setup, all the nix tools and home-manager will work from the host,
 # any any prompt or anything will function transparently.
-
+# Nix uses cacertificates configured by the daemon, so the nix tools inside
+# the toolbox/distrobox will not use the cacerts from within the container
+# for the purposes of nix operations.
 
 die() 
 {
@@ -15,7 +17,8 @@ die()
 # all host files are under this root
 readonly hostfs="/run/host"
 
-[ -e $hostfs ] || die "Not in a toolbox or distrobox!"
+[ -e $hostfs ] || die "Not in a toolbox/distrobox!"
+[ ! -e /nix ] || die "Nix already setup in toolbox/distrobox"
 
 # create a temp file with the fixed block we need to include in some files
 
