@@ -30,20 +30,25 @@ fi
 EOF
 [ $? -eq 0 ] || die "Creating file to source nix"
 
+set -x
 sudo ln -s $hostfs/nix /nix || die "/nix symlink"
 sudo ln -s $hostfs/var/nix-profile /var/nix-profile || die "/var/nix-profile symlink"
 sudo ln -s $hostfs/etc/profile.d/nix.sh /etc/profile.d/nix.sh || die "/etc/profile.d/nix.sh symlink"
+set +x
 
 tmp_rc=$(mktemp) || die "Creating tempfile 2"
 
 
 # add the block of text to the top of each of these files, creating them if necessary
-for F in /etc/bashrc.bashrc /etc/bashrc /etc/zshrc ; do 
+for F in /etc/bashrc.bashrc /etc/bashrc /etc/zshrc ; do
+    echo "Adding sourcing of nix-daemon.sh to $F"
     cat $tmp_text > $tmp_rc || die "Initially populating replacement for $F"
     if [ -e $F ]; then
         cat $F >> $tmp_rc || die "Adding existing content from $F to replacement"
     fi
     sudo mv $tmp_rc $F || die "Replacing $F"
 done
+
+echo "SUCCESS"
 
 # vim: sw=4:expandtab
