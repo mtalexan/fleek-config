@@ -1,4 +1,6 @@
 aliases:
+    # fleek can be run as a flake without needing to be installed, so alias the base command to the flake
+    fleek: nix run github:ublue-os/fleek --
     bathelp: bat --plain --language=help
     batpretty: prettybat
     cat: bat
