@@ -74,6 +74,11 @@ systems:
       hostname: laptop
       os: linux
       username: aaravchen
+    - arch: x86_64
+      home: ""
+      hostname: laptopFedora
+      os: linux
+      username: aaravchen
 track: nixos-unstable
 unfree: true
 users:
