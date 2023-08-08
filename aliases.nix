@@ -9,8 +9,6 @@
     
     "catp" = "bat -P";
     
-    "fleek" = "nix run github:ublue-os/fleek --";
-    
     "fleeks" = "cd ~/.local/share/fleek";
     
     "gbvv" = "git branch -vv";
