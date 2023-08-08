@@ -581,7 +581,7 @@ in
         style = "bold red";
         format = "[$symbol $signal_name$common_meaning$maybe_int]($style)";
         # used when pipestatus=true and pipeline status returns
-        pipestatus_format = "(\[$pipestatus\]=>[$symbol $signal_name$common_meaning$maybe_int]($style))";
+        pipestatus_format = "(\\[$pipestatus\\]=>[$symbol $signal_name$common_meaning$maybe_int]($style))";
         pipestatus_segment_format = "[$status]($style)";
         disabled = false;
       };
@@ -620,7 +620,7 @@ in
       };
 
       git_commit = {
-        format = "[ @$hash( \($tag\))]($style) ";
+        format = "[ @$hash( \\($tag\\))]($style) ";
         style = "git_commitish";
         # only show commit if we don't have a branch name
         only_detached = true;
@@ -635,7 +635,7 @@ in
 
       git_state = {
         style = "git_stateish";
-        format = "[$state(\($progress_current/$progress_total\))]($style)";
+        format = "[$state(\\($progress_current/$progress_total\\))]($style)";
         disabled = false;
       };
 
@@ -663,7 +663,7 @@ in
 
       aws = {
         symbol = " ";
-        format = "[$symbol($profile)( \($region\))( \[$duration\])]($style) ";
+        format = "[$symbol($profile)( \\($region\\))( \\[$duration\\])]($style) ";
         disabled = true;
       };
 
@@ -683,7 +683,7 @@ in
         # if inside a container that has starship installed.
         # Only really applies to toolbx or distrobx
         #symbol = "🛠 ";
-        format = "([\[$name\]]($style)) ";
+        format = "([\\[$name\\]]($style)) ";
         disabled = false;
       };
 
@@ -700,7 +700,7 @@ in
       };
 
       elixir = {
-        format = "[$symbol($version( \(OTP $otp_version\)))]($style) ";
+        format = "[$symbol($version( \\(OTP $otp_version\\)))]($style) ";
         disabled = true;
       };
 
@@ -711,7 +711,7 @@ in
       };
 
       gcloud = {
-        format = "([$symbol$account(@$domain)(\($region\))]($style)) ";
+        format = "([$symbol$account(@$domain)(\\($region\\))]($style)) ";
         disabled = true;
       };
 
@@ -728,7 +728,7 @@ in
       };
 
       kubernetes = {
-        format = "[$symbol$context(\($namespace\))]($style) ";
+        format = "[$symbol$context(\\($namespace\\))]($style) ";
         disabled = true;
       };
 
@@ -738,18 +738,18 @@ in
       };
 
       nix_shell = {
-        format = "[$symbol$state( \($name\))]($style) ";
+        format = "[$symbol$state( \\($name\\))]($style) ";
         heuristic = true; # try to detect "nix shell" style shells too
         disabled = false;
       };
 
       ocaml = {
-        format = "[$symbol($version)( \($switch_indicator$switch_name\))]($style) ";
+        format = "[$symbol($version)( \\($switch_indicator$switch_name\\))]($style) ";
         disabled = false;
       };
 
       openstack = {
-        format = "[$symbol$cloud(\($project\))]($style) ";
+        format = "[$symbol$cloud(\\($project\\))]($style) ";
         disabled = true;
       };
 
@@ -781,7 +781,7 @@ in
       };
 
       singularity = {
-        format = "([$symbol\[$env\]]($style) )";
+        format = "([$symbol\\[$env\\]]($style) )";
         disabled = true;
       };
 
