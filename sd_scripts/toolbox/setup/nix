@@ -15,6 +15,8 @@ die()
 # all host files are under this root
 readonly hostfs="/run/host"
 
+[ -e $hostfs ] || die "Not in a toolbox or distrobox!"
+
 # create a temp file with the fixed block we need to include in some files
 
 tmp_text=$(mktemp) || die "Creating temp file 1"
