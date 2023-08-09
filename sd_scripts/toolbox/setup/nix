@@ -35,11 +35,11 @@ fi
 EOF
 [ $? -eq 0 ] || die "Creating file to source nix"
 
-set -x
-sudo ln -s $hostfs/nix /nix || die "/nix symlink"
-sudo ln -s $hostfs/var/nix-profile /var/nix-profile || die "/var/nix-profile symlink"
-sudo ln -s $hostfs/etc/profile.d/nix.sh /etc/profile.d/nix.sh || die "/etc/profile.d/nix.sh symlink"
-set +x
+for P in /nix /var/nix-profile /etc/nix /etc/profile.d/nix.sh /etc/sudoers.d/nix-sudo-env; do
+    set -x
+    sudo ln -s $hostfs$P $P || die "$P symlink"
+    set +x
+done
 
 tmp_rc=$(mktemp) || die "Creating tempfile 2"
 
