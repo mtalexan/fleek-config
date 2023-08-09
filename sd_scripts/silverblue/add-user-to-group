@@ -5,25 +5,30 @@
 # This is non-trivial because 'usermod -a -G' doesn't work.
 # Instead the group needs to be manually registered in the /etc/groups file,
 # and only then can the user be added.  
+#
+# $0 GROUP [USER]
+#
+# If USER isn't specified
 
 if [ $# -lt 1 ] || [ $# -gt 2 ]; then
     echo "USAGE: $0 GROUP [USER]"
     exit 1
 fi
 
-GROUP=$1
-USER=${2:-$(id -un)}
+THE_GROUP=$1
+THE_USER=${2:-$(id -un)}
 
-[ -n "$GROUP" ] || { echo >&2 "ERROR: no group specified"; exit 1 }
+[ -n "$THE_GROUP" ] || { echo >&2 "ERROR: no group specified"; exit 1; }
 
 # if it's not in /etc/group already...
-if ! grep -qE "^${GROUP}:" /etc/group ; then
+if ! grep -qE "^${THE_GROUP}:" /etc/group ; then
     # make sure it's in /usr/lib/group where groups are actually tracked
-    grep -qE "^${GROUP}:" /usr/lib/group || { echo >&2 "ERROR: Group doesn't exist on the system"; exit 1; }
+    grep -qE "^${THE_GROUP}:" /usr/lib/group || { echo >&2 "ERROR: Group doesn't exist on the system"; exit 1; }
     # copy the line into the /etc/group
-    grep -E "^${GROUP}:" /usr/lib/group | sudo tee -a /etc/group || exit 1
+    grep -E "^${THE_GROUP}:" /usr/lib/group | sudo tee -a /etc/group || exit 1
 fi
 
-sudo usermod -a -G ${GROUP} ${USER} || exit 1
+sudo usermod -a -G ${THE_GROUP} ${THE_USER} || exit 1
 
 # vim: sw=4:expandtab
+
