@@ -182,7 +182,7 @@ in
         # header blocks only extend to the end of the file section and not the entire terminal width
         width = "variable";
         # files in listings need a box
-        file-style = "bold yellow box";
+        #file-style = "bold yellow box";
       };
     };
     extraConfig = {
