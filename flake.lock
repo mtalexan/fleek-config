@@ -5,17 +5,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1690310546,
-        "narHash": "sha256-5Q0d0v6YWhEDniXCiToON1lVjqTiHTaY0+P8hamAvhQ=",
-        "owner": "ublue-os",
-        "repo": "fleek",
-        "rev": "610c12d0c6bdcc1d7261176d42ff9b743b029784",
-        "type": "github"
+        "lastModified": 1696342919,
+        "narHash": "sha256-dQYj2yDvZhiJEKegdsbGXUYPs7CYy+Gjj/wcEZrJMsE=",
+        "rev": "6c181c0e2625239952beb10dda200f6be6c1c3b0",
+        "revCount": 454,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/ublue-os/fleek/0.10.5/018af5eb-c742-7771-85c8-579b5ab1232b/source.tar.gz"
       },
       "original": {
-        "owner": "ublue-os",
-        "repo": "fleek",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://flakehub.com/f/ublue-os/fleek/%2A.tar.gz"
       }
     },
     "home-manager": {
@@ -25,31 +24,30 @@
         ]
       },
       "locked": {
-        "lastModified": 1690887397,
-        "narHash": "sha256-ckasuN7MgAiDgLkUo1IdEq8FEKymcUWKzmY6/R9KOOo=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "4542db605602898fe0c431e19f01e1af2865dae8",
-        "type": "github"
+        "lastModified": 1698250431,
+        "narHash": "sha256-qs2gTeH4wpnWPO6Oi6sOhp2IhG0i0DzcnrJxIY3/CP8=",
+        "rev": "09587fbbc6a669f7725613e044c2577dc5d43ab5",
+        "revCount": 3087,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/nix-community/home-manager/0.1.3087%2Brev-09587fbbc6a669f7725613e044c2577dc5d43ab5/018b679e-4d1a-7251-8be5-847ed0a39b27/source.tar.gz"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://flakehub.com/f/nix-community/home-manager/0.1.tar.gz"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1681154110,
-        "narHash": "sha256-OQwWzlzAY1dCqgSsgZzsPIOGmX4pBGaoXOy0rSl4b5Y=",
+        "lastModified": 1698356355,
+        "narHash": "sha256-r7e1xOAX5WIBBLSSpgJhVHA8+KXxziF9bjWK+WJc8iE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "115a96e2ac1e92937cd47c30e073e16dcaaf6247",
+        "rev": "02b72dc74a22e31b387810c7040b935b9d685d60",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "release-22.11",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }

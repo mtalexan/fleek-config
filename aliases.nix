@@ -25,25 +25,25 @@
     
     "gs" = "git status";
     
-    "la" = "exa -a";
+    "la" = "eza -a";
     
     "latest-fleek-version" = "nix run https://getfleek.dev/latest.tar.gz -- version";
     
-    "ll" = "exa -l";
+    "ll" = "eza -l";
     
-    "lla" = "exa -l -a";
+    "lla" = "eza -l -a";
     
-    "llag" = "exa -l -a --git";
+    "llag" = "eza -l -a --git";
     
-    "llg" = "exa -l --git";
+    "llg" = "eza -l --git";
     
-    "ls" = "exa";
+    "ls" = "eza";
     
-    "lt" = "exa --tree";
+    "lt" = "eza --tree";
     
     "rgfzf" = "sd rg-fzf";
     
-    "tree" = "exa --tree";
+    "tree" = "eza --tree";
     
     "update-fleek" = "nix run https://getfleek.dev/latest.tar.gz -- update";
     };

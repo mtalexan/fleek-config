@@ -11,15 +11,15 @@ aliases:
     gdc: git diff --cached
     glg: git log --oneline --decorate --graph
     gs: git status
-    la: exa -a
-    ll: exa -l
-    lla: exa -l -a
-    llag: exa -l -a --git
-    llg: exa -l --git
-    ls: exa
-    lt: exa --tree
+    la: eza -a
+    ll: eza -l
+    lla: eza -l -a
+    llag: eza -l -a --git
+    llg: eza -l --git
+    ls: eza
+    lt: eza --tree
     rgfzf: sd rg-fzf
-    tree: exa --tree
+    tree: eza --tree
 allow_broken: false
 auto_gc: false
 bling: none

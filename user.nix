@@ -78,7 +78,7 @@ in
     enableZshIntegration = true;
   };
 
-  programs.exa = {
+  programs.eza = {
     enable = true;
     # set explicitly instead for clarity
     #enableAliases = true;
@@ -124,7 +124,7 @@ in
       "."
     ];
     changeDirWidgetOptions = [
-      "--preview 'exa --tree -L 2 --color=always {}'"
+      "--preview 'eza --tree -L 2 --color=always {}'"
       "--preview-window right,border-vertical"
       "--bind 'ctrl-/:toggle-preview'"
       "--scheme=path"
@@ -1015,8 +1015,8 @@ in
       _ZO_FZF_OPTS = lib.concatStringsSep " " [
         # 'zoxide -i' always passes the score then the folder name with some leading indentation.
         # Carefully echo the string, parse it thru awk to get only the second column, and then use
-        # the result in an exa --tree command that shows colors and only 2 dirs deep in each tree
-        "--preview 'exa --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')'"
+        # the result in an eza --tree command that shows colors and only 2 dirs deep in each tree
+        "--preview 'eza --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')'"
         "--preview-window right,border-vertical" 
         "--bind 'ctrl-/:toggle-preview'"
         "--scheme=path"
