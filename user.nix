@@ -169,7 +169,7 @@ in
       options = {
         # themese are set to mirror bat automatically
         line-numbers = true;
-        side-by-side = true;
+        side-by-side = false;
         navigate = true;
         hyperlinks = true;
         # this causes it to open in vscode when hyperlinks to commits are clicked

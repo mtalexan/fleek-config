@@ -27,6 +27,8 @@
     
     "la" = "exa -a";
     
+    "latest-fleek-version" = "nix run https://getfleek.dev/latest.tar.gz -- version";
+    
     "ll" = "exa -l";
     
     "lla" = "exa -l -a";
@@ -42,5 +44,7 @@
     "rgfzf" = "sd rg-fzf";
     
     "tree" = "exa --tree";
+    
+    "update-fleek" = "nix run https://getfleek.dev/latest.tar.gz -- update";
     };
 }

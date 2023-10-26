@@ -1,10 +1,9 @@
 aliases:
-    # fleek can be run as a flake without needing to be installed, so alias the base command to the flake
-    fleek: nix run github:ublue-os/fleek --
     bathelp: bat --plain --language=help
     batpretty: prettybat
     cat: bat
     catp: bat -P
+    fleek: nix run github:ublue-os/fleek --
     fleeks: cd ~/.local/share/fleek
     gbvv: git branch -vv
     gcm: git commit
@@ -22,6 +21,7 @@ aliases:
     rgfzf: sd rg-fzf
     tree: exa --tree
 allow_broken: false
+auto_gc: false
 bling: none
 blocklist: []
 byo_git: false
@@ -65,21 +65,45 @@ systems:
       home: ""
       hostname: fedora
       os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: Mike
+        ssh_private_key_file: ~/.ssh/id_ed25519_github
+        ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
+        username: aaravchen
       username: aaravchen
     - arch: x86_64
       home: ""
       hostname: goln-5cl17g3
       os: linux
+      user:
+        email: github@trackit.fe80.xyz
+        name: Mike
+        ssh_private_key_file: ~/.ssh/github_personal_ed25519
+        ssh_public_key_file: ~/.ssh/github_personal_ed25519.pub
+        username: mtalexander
       username: mtalexander
     - arch: x86_64
       home: ""
       hostname: laptop
       os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: Mike
+        ssh_private_key_file: ~/.ssh/id_ed25519_github
+        ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
+        username: aaravchen
       username: aaravchen
     - arch: x86_64
       home: ""
       hostname: laptopFedora
       os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: Mike
+        ssh_private_key_file: ~/.ssh/id_ed25519_github
+        ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
+        username: aaravchen
       username: aaravchen
 track: nixos-unstable
 unfree: true
