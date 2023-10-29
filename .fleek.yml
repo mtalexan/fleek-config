@@ -54,6 +54,7 @@ packages:
     - zsh-fast-syntax-highlighting
     - bash-completion
     - nix-bash-completions
+    - yq
 paths:
     - $HOME/bin
     - $HOME/.local/bin
