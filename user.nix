@@ -1065,7 +1065,7 @@ in
       # subshell.  We can't actually detect whether we're in a bash-in-bash case, so assume bash with SHLVL less than
       # 2 (bash, or bash-in-zsh/bash) always needs to be incremented by 1.
       ''
-      [ "$SHLVL" -le 2 ] || SHLVL=$((SHLVL + 1))
+      [ "$SHLVL" -gt 2 ] || SHLVL=$((SHLVL + 1))
       ''
 
       # home-manager puts sessionVariables in a file only sourced during login.
