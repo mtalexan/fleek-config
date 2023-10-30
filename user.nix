@@ -1061,6 +1061,10 @@ in
     # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
     # initExtra = "source <(fleek completion bash)";
     initExtra = lib.concatLines [
+      # bash has a bug where it somehow evaluates and prints SHLVL in a subshell as off-by-one for the first
+      # subshell.  So fix this by always forcing SHLVL 2 -> 3 (i.e. bash in zsh)
+      [ \$SHLVL -ne 2 ] || SHLVL=3
+
       # home-manager puts sessionVariables in a file only sourced during login.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
       ''
