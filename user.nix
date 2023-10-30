@@ -1062,14 +1062,10 @@ in
     # initExtra = "source <(fleek completion bash)";
     initExtra = lib.concatLines [
       # bash has a bug where it somehow evaluates and prints SHLVL in a subshell as off-by-one for the first
-      # subshell.  So fix this by always forcing SHLVL 2 -> 3 (i.e. bash in zsh)
+      # subshell.  We can't actually detect whether we're in a bash-in-bash case, so assume bash with SHLVL less than
+      # 2 (bash, or bash-in-zsh/bash) always needs to be incremented by 1.
       ''
-      if [ -n "$SHLVL" ]; then
-        echo "SHLVL=\\"$SHLVL\\""
-        if [ "$SHLVL" -le 2 ] ; then
-          SHLVL=3
-        fi
-      fi
+      [ "$SHLVL" -le 2 ] || SHLVL=$((SHLVL + 1))
       ''
 
       # home-manager puts sessionVariables in a file only sourced during login.
