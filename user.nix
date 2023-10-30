@@ -1064,9 +1064,9 @@ in
       # bash has a bug where it somehow evaluates and prints SHLVL in a subshell as off-by-one for the first
       # subshell.  So fix this by always forcing SHLVL 2 -> 3 (i.e. bash in zsh)
       ''
-      if [ -n "\$SHLVL" ]; then
-        echo "SHLVL=\\"\$SHLVL\\""
-        if [ "\$SHLVL" -le 2 ] ; then
+      if [ -n "$SHLVL" ]; then
+        echo "SHLVL=\\"$SHLVL\\""
+        if [ "$SHLVL" -le 2 ] ; then
           SHLVL=3
         fi
       fi
