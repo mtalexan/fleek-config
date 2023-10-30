@@ -1064,7 +1064,12 @@ in
       # bash has a bug where it somehow evaluates and prints SHLVL in a subshell as off-by-one for the first
       # subshell.  So fix this by always forcing SHLVL 2 -> 3 (i.e. bash in zsh)
       ''
-      [ -z "\$SHLVL" ] || [ "\$SHLVL" -le 2 ] || SHLVL=3
+      if [ -n "\$SHLVL" ]; then
+        echo "SHLVL=\\"\$SHLVL\\""
+        if [ "\$SHLVL" -le 2 ] ; then
+          SHLVL=3
+        fi
+      fi
       ''
 
       # home-manager puts sessionVariables in a file only sourced during login.
