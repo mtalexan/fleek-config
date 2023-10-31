@@ -1,0 +1,214 @@
+#!/bin/bash
+
+# Fixes an existing git fastclone cache in the current directory so all fastclone commands are silently redirected to use SSH.
+#
+# Modifies any HTTPS clones to be SSH clones by changing the remote and the directory naming.  Creates
+# symlinks for all HTTPS, SSH, w/ .git, and w/o .git combos to go to the single SSH w/ .git that's real.
+
+prompt_continue()
+{
+	local JUNK
+	read -p "  continue? [Y/n] " JUNK
+	if [[ -n "$JUNK" ]] && [[ "$JUNK" != "y" ]] && [[ "$JUNK" != "Y" ]] ; then
+		exit 1
+	fi
+}
+
+prompt_continue_if_debug()
+{
+	if [ -n "$DEBUG" ] ; then
+		prompt_continue
+	fi
+}
+export DEBUG
+
+# Warn and give a chance to cancel
+echo "MUST be run from within the git_fast_clone cache folder!"
+prompt_continue
+
+declare -a WRONG_PATHS_HTTP
+WRONG_PATHS_HTTP=( $(find . -maxdepth 1 -type d -name "https___*" -not -name "*.lock") )
+if [[ ${#WRONG_PATHS_HTTP[@]} -gt 0 ]] ; then
+	echo "--------------------------------------------"
+	echo "Correcting HTTPS cloned repos"
+	echo "--------------------------------------------"
+	echo ""
+fi
+for P in "${WRONG_PATHS_HTTP[@]}" ; do	
+	# strip the leading path
+	P=${P#./}
+	echo "Improperly cloned repo directory \"${P}\""
+	if [[ ! -e "${P}" ]] ; then
+		echo "ERROR: folder doesn't exist \"${P}\""
+		continue
+	fi
+
+	pushd ${P} >/dev/null
+	
+	# get the upstream remote, which we know is always named "origin"
+	OLD_URL=$(git remote get-url origin)
+
+	popd >/dev/null
+	
+	# strip the https protocol
+	NEW_URL=${OLD_URL#https://}
+	# swap the first '/' after the hostname for a ':'
+	NEW_URL=$(echo "${NEW_URL}" | sed -E -e 's@^([^/]+)/(.*)@\1:\2@')
+	# add the git@ prefix
+	NEW_URL=git@${NEW_URL}
+
+	echo "Converting repo from ${OLD_URL} to ${NEW_URL} with fresh clone"
+
+	# create a directory to clone into
+	TEMP_CLONE=$(mktemp -d)
+	pushd ${TEMP_CLONE} >/dev/null
+	
+	git fast-clone ${NEW_URL}
+
+	popd >/dev/null
+	sudo rm -r ${TEMP_CLONE}
+done
+
+declare -a WRONG_PATHS_GIT
+WRONG_PATHS_GIT=( $(find . -maxdepth 1 -type d -name "git*" -not -name "*_git" -not -name "*.lock") )
+if [[ ${#WRONG_PATHS_GIT[@]} -gt 0 ]] ; then
+	echo "--------------------------------------------"
+	echo "Correcting improperly SSH cloned repos"
+	echo "--------------------------------------------"
+	echo ""
+fi
+for P in "${WRONG_PATHS_GIT[@]}" ; do
+	# strip the leading path
+	P=${P#./}
+	echo "Improperly cloned repo directory \"${P}\""
+	if [[ ! -e "${P}" ]] ; then
+		echo "ERROR: folder doesn't exist \"${P}\""
+		continue
+	fi
+
+	pushd ${P} >/dev/null
+	
+	# get the upstream remote, which we know is always named "origin"
+	OLD_URL=$(git remote get-url origin)
+
+	popd >/dev/null
+	
+	# add the .git suffix
+	NEW_URL=${OLD_URL}.git
+	
+	echo "Converting repo from ${OLD_URL} to ${NEW_URL} with fresh clone"
+
+	# create a directory to clone into
+	TEMP_CLONE=$(mktemp -d)
+	pushd ${TEMP_CLONE} >/dev/null
+	
+	git fast-clone ${NEW_URL}
+
+	popd >/dev/null
+	sudo rm -r ${TEMP_CLONE}
+done
+
+
+echo ""
+echo "---------------------------------------------------------------------"
+echo "Creating/replacing incorrect cache paths with symlinks"
+echo "---------------------------------------------------------------------"
+echo ""
+declare -a RIGHT_PATHS
+RIGHT_PATHS=( $(find . -maxdepth 1 -type d -name "git@*_git") )
+# Read the folders that do start with "git@" and end with "_git"
+for P in "${RIGHT_PATHS[@]}" ; do
+	# strip the leading path
+	P=${P#./}
+	echo "Considering correctly cloned folder \"${P}\""
+	if [[ ! -e "${P}" ]] ; then
+		echo "ERROR: folder doesn't exist \"${P}\""
+		continue
+	fi
+
+	# replace any folder that was cloned without the trailing ".git" and therefore doesn't have the _git ending
+	WRONG_FOLDER=${P%_git}
+	if [[ -e ${WRONG_FOLDER} ]] && [[ ! -L ${WRONG_FOLDER} ]] ; then
+		echo "	Removing ${WRONG_FOLDER}"
+		prompt_continue_if_debug
+		sudo rm -r ${WRONG_FOLDER}
+	fi
+	if [[ ! -L ${WRONG_FOLDER} ]] ; then
+		# create the symlink to direct the wrong name to the right one
+		echo "	Creating symlink from ${WRONG_FOLDER}"
+		ln -srf ${P} ${WRONG_FOLDER}
+	fi
+
+	# replace the lock file for the wrong folder name with a symlink to the lock file for the correct folder name
+	if [[ ! -e ${P}.lock ]] ; then
+		echo "	ERROR: No lockfile for ${P}, can't properly replace it"
+	else
+		if [[ -e ${WRONG_FOLDER}.lock ]] && [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Removing ${WRONG_FOLDER}.lock"
+			prompt_continue_if_debug
+			sudo rm ${WRONG_FOLDER}.lock
+		fi
+		if [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Creating symlink from ${WRONG_FOLDER}.lock"
+			ln -srf ${P}.lock ${WRONG_FOLDER}.lock
+		fi
+	fi
+
+	# replace any folder that was cloned with https
+	WRONG_FOLDER=https___${P#git@}
+	if [[ -e ${WRONG_FOLDER} ]] && [[ ! -L ${WRONG_FOLDER} ]] ; then
+		echo "	Removing ${WRONG_FOLDER}"
+		prompt_continue_if_debug
+		sudo rm -r ${WRONG_FOLDER}
+	fi
+	if [[ ! -L ${WRONG_FOLDER} ]] ; then
+		# create the symlink to direct the wrong name to the right one
+		echo "	Creating symlink from ${WRONG_FOLDER}"
+		ln -srf ${P} ${WRONG_FOLDER}
+	fi
+
+	# replace the lock file for the wrong folder name with a symlink to the lock file for the correct folder name
+	if [[ ! -e ${P}.lock ]] ; then
+		echo "	ERROR: No lockfile for ${P}, can't properly replace it"
+	else
+		if [[ -e ${WRONG_FOLDER}.lock ]] && [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Removing ${WRONG_FOLDER}.lock"
+			prompt_continue_if_debug
+			sudo rm ${WRONG_FOLDER}.lock
+		fi
+		if [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Creating symlink from ${WRONG_FOLDER}.lock"
+			ln -srf ${P}.lock ${WRONG_FOLDER}.lock
+		fi
+	fi
+	
+	# replace any folder that was cloned with https and without the .git ending
+	WRONG_FOLDER=https___${P#git@}
+	WRONG_FOLDER=${WRONG_FOLDER%_git}
+	if [[ -e ${WRONG_FOLDER} ]] && [[ ! -L ${WRONG_FOLDER} ]] ; then
+		echo "	Removing ${WRONG_FOLDER}"
+		prompt_continue_if_debug
+		sudo rm -r ${WRONG_FOLDER}
+	fi
+	if [[ ! -L ${WRONG_FOLDER} ]] ; then
+		# create the symlink to direct the wrong name to the right one
+		echo "	Creating symlink from ${WRONG_FOLDER}"
+		ln -srf ${P} ${WRONG_FOLDER}
+	fi
+
+	# replace the lock file for the wrong folder name with a symlink to the lock file for the correct folder name
+	if [[ ! -e ${P}.lock ]] ; then
+		echo "	ERROR: No lockfile for ${P}, can't properly replace it"
+	else
+		if [[ -e ${WRONG_FOLDER}.lock ]] && [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Removing ${WRONG_FOLDER}.lock"
+			prompt_continue_if_debug
+			sudo rm ${WRONG_FOLDER}.lock
+		fi
+		if [[ ! -L ${WRONG_FOLDER}.lock ]] ; then
+			echo "	Creating symlink from ${WRONG_FOLDER}.lock"
+			ln -srf ${P}.lock ${WRONG_FOLDER}.lock
+		fi
+	fi
+done
+
