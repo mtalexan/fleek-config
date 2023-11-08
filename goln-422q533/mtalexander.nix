@@ -9,8 +9,8 @@
             graph = "log --decorate --oneline --graph";
             add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
         };
-        userName = "Mike";
-        userEmail = "github@trackit.fe80.xyz";
+        userName = "mtalexander";
+        userEmail = ""michael.alexander@karlstorz.com"";
         extraConfig = {
             feature.manyFiles = true;
             init.defaultBranch = "main";
