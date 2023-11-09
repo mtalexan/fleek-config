@@ -332,7 +332,7 @@ in
   };
 
   programs.terminator = {
-    enable = true;
+    enable = false;
     config = {
       global_config = {
         focus = "system";
