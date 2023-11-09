@@ -433,11 +433,11 @@ in
           child1 = {
             parent = window0;
             profile = default;
-            type = Terminal;
+            type = "Terminal";
           };
           window0 = {
             parent = "";
-            type = Window;
+            type = "Window";
           };
         };
       };
