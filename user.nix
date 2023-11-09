@@ -336,16 +336,16 @@ in
     config = {
       global_config = {
         borderless = false;
-        tab_position = "bottom";
+        tab_position = bottom;
         scroll_tabbar = true;
         homogeneous_tabbar = false;
         title_hide_sizetext = true;
-        inactive_color_offset = "0.66";
-        enabled_plugins = "ActivityWatch, InactivityWatch, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler";
+        inactive_color_offset = 0.66;
+        enabled_plugins = ActivityWatch, InactivityWatch, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler;
         always_split_with_profile = true;
         title_use_system_font = false;
-        title_font = "DejaVu Sans Mono for Powerline 12";
-        focus = "system";
+        title_font = DejaVu Sans Mono for Powerline 12;
+        focus = system;
       };
       keybindings = {
         zoom_in = "<Primary>plus";
@@ -405,7 +405,7 @@ in
       profiles = {
         default = {
           audible_bell = true;
-          visible_bell = true;
+          visible_bell = false;
           urgent_bell = true;
           background_color = "#002b36";
           cursor_blink = false;
@@ -419,19 +419,19 @@ in
           use_system_font = false;
           copy_on_selection = true;
           split_to_group = true;
-          font = "DejaVuSansMono Nerd Font 11";
+          font = DejaVuSansMono Nerd Font 11;
         };
       };
       layouts = {
         default = {
           child1 = {
-            parent = "window0";
-            profile = "default";
-            type = "Terminal";
+            parent = window0;
+            profile = default;
+            type = Terminal;
           };
           window0 = {
             parent = "";
-            type = "Window";
+            type = Window;
           };
         };
       };
