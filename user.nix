@@ -331,6 +331,111 @@ in
     };
   };
 
+  programs.terminator = {
+    enable = true;
+    config = {
+      global_config = {
+        focus = "system";
+        tab_position = "bottom";
+        title_hide_sizetext = true;
+        inactive_color_offset = "0.66";
+        enabled_plugins = "InactivityWatch, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler";
+        always_split_with_profile = true;
+        title_use_system_font = false;
+        title_font = "DejaVu Sans Mono for Powerline 12";
+      };
+      keybindings = {
+        zoom_in = ""None";";
+        zoom_out = "None";
+        zoom_normal = "None";
+        new_tab = "None";
+        cycle_next = "None";
+        cycle_prev = "None";
+        go_next = "None";
+        go_prev = "None";
+        go_up = "<Super>i";
+        go_down = "<Super>k";
+        go_left = "<Super>j";
+        go_right = "<Super>l";
+        rotate_cw = "None";
+        rotate_ccw = "None";
+        split_horiz = "<Alt>2";
+        split_vert = "<Alt>3";
+        close_term = "<Alt>minus";
+        copy = "<Primary><Shift>Delete";
+        paste = "<Primary><Shift>Insert";
+        toggle_scrollbar = "None";
+        page_up = "<Shift>Page_Up";
+        page_down = "<Shift>Page_Down";
+        line_up = "<Shift>Up";
+        line_down = "<Shift>Down";
+        close_window = "None";
+        resize_up = "None";
+        resize_down = "None";
+        resize_left = "None";
+        resize_right = "None";
+        move_tab_right = "None";
+        move_tab_left = "None";
+        toggle_zoom = "None";
+        scaled_zoom = "None";
+        next_tab = "<Super>n";
+        prev_tab = "<Super>p";
+        reset = "None";
+        reset_clear = "None";
+        hide_window = "None";
+        group_all = "None";
+        ungroup_all = "None";
+        group_tab = "None";
+        ungroup_tab = "None";
+        new_window = "<Primary><Shift>t";
+        new_terminator = "None";
+        broadcast_off = "None";
+        broadcast_group = "None";
+        broadcast_all = "None";
+        insert_number = "None";
+        insert_padded = "None";
+        edit_window_title = "F9";
+        edit_tab_title = "None";
+        edit_terminal_title = "None";
+        layout_launcher = "None";
+      };
+      profiles = {
+        default = {
+          audible_bell = true;
+          urgent_bell = true;
+          background_color = "#002b36";
+          cursor_blink = false;
+          cursor_color = "#d85d5d";
+          font = "DejaVuSansMono Nerd Font 11";
+          foreground_color = "#839496";
+          show_titlebar = false;
+          scrollbar_position = "hidden";
+          scrollback_infinite = true;
+          palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3";
+          word_chars = "-,./?%&#_~:";
+          use_custom_command = true;
+          custom_command = "zsh";
+          use_system_font = false;
+          copy_on_selection = true;
+          split_to_group = true;
+        };
+      };
+      layouts = {
+        default = {
+          child1 = {
+            parent = "window0";
+            profile = "default";
+            type = "Terminal";
+          };
+          window0 = {
+            parent = "";
+            type = "Window";
+          };
+        };
+      };
+    };
+  };
+
   # 'z' and 'zi' commands for directory jumps based on frecency.  
   # Uses fzf to select options if using 'z <pattern> '+tab
   programs.zoxide = {
