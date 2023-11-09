@@ -413,8 +413,8 @@ in
           scrollback_infinite = true;
           palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3";
           word_chars = "-,./?%&#_~:";
-          use_custom_command = true;
-          custom_command = "zsh";
+          use_custom_command = false;
+          #custom_command = "zsh";
           use_system_font = false;
           copy_on_selection = true;
           split_to_group = true;
