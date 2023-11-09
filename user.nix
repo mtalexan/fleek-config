@@ -345,7 +345,7 @@ in
         title_font = "DejaVu Sans Mono for Powerline 12";
       };
       keybindings = {
-        zoom_in = ""None";";
+        zoom_in = "None";
         zoom_out = "None";
         zoom_normal = "None";
         new_tab = "None";
