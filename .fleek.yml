@@ -111,8 +111,8 @@ systems:
       hostname: goln-422q533
       os: linux
       user:
-        email: '"michael.alexander@karlstorz.com"'
-        name: mtalexander
+        email: 'github@trackit.fe80.xyz'
+        name: Mike
         ssh_private_key_file: ~/.ssh/github_personal_ed25519
         ssh_public_key_file: ~/.ssh/github_personal_ed25519.pub
         username: mtalexander
