@@ -345,10 +345,10 @@ in
         title_font = "DejaVu Sans Mono for Powerline 12";
       };
       keybindings = {
-        zoom_in = "None";
-        zoom_out = "None";
+        zoom_in = "<Primary><Shift>equal";
+        zoom_out = "<Primary><Shift>minus";
         zoom_normal = "None";
-        new_tab = "None";
+        new_tab = "<Primary><Shift>n";
         cycle_next = "None";
         cycle_prev = "None";
         go_next = "None";
@@ -848,7 +848,8 @@ in
 
       nix_shell = {
         format = "[$symbol$state( \\($name\\))]($style) ";
-        heuristic = false; # try to detect "nix shell" style shells too
+        # don't set heuristic = true, it detects the nix-profile of home-manager as a shell
+        heuristic = false; # try to detect "nix shell" style shells too?
         disabled = false;
       };
 
