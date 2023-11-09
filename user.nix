@@ -848,7 +848,7 @@ in
 
       nix_shell = {
         format = "[$symbol$state( \\($name\\))]($style) ";
-        heuristic = true; # try to detect "nix shell" style shells too
+        heuristic = false; # try to detect "nix shell" style shells too
         disabled = false;
       };
 
