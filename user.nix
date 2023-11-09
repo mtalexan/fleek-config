@@ -335,7 +335,7 @@ in
     enable = true;
     config = {
       global_config = {
-        borderless = true;
+        borderless = false;
         tab_position = "bottom";
         scroll_tabbar = true;
         homogeneous_tabbar = false;
