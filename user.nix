@@ -350,7 +350,7 @@ in
         ];
         always_split_with_profile = true;
         title_use_system_font = false;
-        title_font = DejaVu Sans Mono for Powerline 12;
+        title_font = "DejaVu Sans Mono for Powerline 12";
         focus = system;
       };
       keybindings = {
@@ -425,7 +425,7 @@ in
           use_system_font = false;
           copy_on_selection = true;
           split_to_group = true;
-          font = DejaVuSansMono Nerd Font 11;
+          font = "DejaVuSansMono Nerd Font 11";
         };
       };
       layouts = {
