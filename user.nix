@@ -341,13 +341,7 @@ in
         homogeneous_tabbar = false;
         title_hide_sizetext = true;
         inactive_color_offset = 0.66;
-        enabled_plugins = [
-          ActivityWatch
-          InactivityWatch
-          LaunchpadBugURLHandler
-          LaunchpadCodeURLHandler
-          APTURLHandler
-        ];
+        enabled_plugins = "ActivityWatch, InactivityWatch, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler";
         always_split_with_profile = true;
         title_use_system_font = false;
         title_font = "DejaVu Sans Mono for Powerline 12";
