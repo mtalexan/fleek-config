@@ -22,7 +22,7 @@
 
     # distrobox hooks to copy are host-name specific
     ".config/distrobox" = {
-      enable = true;
+      enable = false;
       # keep the permissions from the files in the fleek folder
       executable = null;
       # Make each individual file a symlink in the copy rather than symlinking the
