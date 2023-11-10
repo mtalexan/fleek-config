@@ -30,7 +30,7 @@
       # latter.
       recursive = true;
       # relative to the repo root, under the host-specific folder
-      source = "home_files/distrobox";
+      source = "goln-5cl17g3/home_files/distrobox";
     };
   };
 
