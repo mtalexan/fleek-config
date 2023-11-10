@@ -12,11 +12,11 @@
       executable = false;
       text = [
         # support the init hooks (see home.file.distrobox_preinithooks)
-        """container_pre_init_hook="$HOME/.config/distrobox/pre-init-hooks.sh""""
+        ''container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"''
         # support the init hooks (see home.file.distrobox_inithooks)
-        """container_init_hook="$HOME/.config/distrobox/init-hooks.sh""""
+        ''container_init_hook="$HOME/.config/distrobox/init-hooks.sh"''
         # configure it to use docker
-        """container_manager="docker""""
+        ''container_manager="docker"''
       ];
     };
 
