@@ -30,7 +30,7 @@
       # latter.
       recursive = true;
       # relative to the repo root, under the host-specific folder
-      source = "${hostname}/home_files/distrobox";
+      source = "${HOST}/home_files/distrobox";
     };
   };
 
