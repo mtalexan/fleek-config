@@ -7,7 +7,7 @@
 
   # The primary distrobox config file
   home.file.distrobox_config = {
-    enable = true;
+    enable = false;
     executable = false;
     # target, relative to HOME
     target = ".config/distrobox/distrobox.conf";
