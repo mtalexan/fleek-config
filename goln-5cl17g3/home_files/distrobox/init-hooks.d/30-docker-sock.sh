@@ -1,0 +1,1 @@
+../../../../home_files/template_distrobox/init-hooks.d/30-docker-sock.sh

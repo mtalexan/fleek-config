@@ -1,6 +1,10 @@
 { pkgs, misc, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  # configured in the main file, selected to be enabled for this host
+  home.file.distrobox_config.enable = true;
+  home.file.distrobox_hooks.enable = true;
+
   home.sessionPath = [
     "$HOME/DevTools/bin"
   ];

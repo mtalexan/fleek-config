@@ -1,0 +1,1 @@
+../../../home_files/template_distrobox/pre-init-hooks.sh
