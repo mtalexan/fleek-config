@@ -21,17 +21,17 @@
     };
 
     # distrobox hooks to copy are host-name specific
-    ".config/distrobox" = {
-      enable = false;
-      # keep the permissions from the files in the fleek folder
-      executable = null;
-      # Make each individual file a symlink in the copy rather than symlinking the
-      # whole directory. We put home.file.distrobox_config here too, so we can't do the
-      # latter.
-      recursive = true;
-      # relative to the repo root, under the host-specific folder
-      source = "home_files/distrobox";
-    };
+    #".config/distrobox" = {
+    #  enable = false;
+    #  # keep the permissions from the files in the fleek folder
+    #  executable = null;
+    #  # Make each individual file a symlink in the copy rather than symlinking the
+    #  # whole directory. We put home.file.distrobox_config here too, so we can't do the
+    #  # latter.
+    #  recursive = true;
+    #  # relative to the repo root, under the host-specific folder
+    #  source = "home_files/distrobox";
+    #};
   };
 
   #####################################
