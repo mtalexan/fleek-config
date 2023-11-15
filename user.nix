@@ -42,9 +42,77 @@ in
       # keep the permissions from the files in the fleek folder
       executable = null;
       # Make each individual file a symlink in the copy rather than symlinking the
-      # whole directory. We put home.file.distrobox_config here too, so we can't do the
+      # whole directory. We put other home.file's here too, so we can't do the
       # latter.
       recursive = true;
+    };
+
+    # The basic settings for podman.
+    # Still requires uidmap to be installed manually from built-in package manager.
+    # Pulled from Ubuntu.
+    ".config/containers" = {
+      executable = false;
+      # Make each individual file a symlink in the copy rather than symlinking the
+      # whole directory. We put other home.file's here too, so we can't do the
+      # latter.
+      recursive = true;
+      source = ./home_files/podman_config;
+    };
+
+    # set of pre-defined short name aliases for images via podman
+    ".config/containers/registries.conf.d/000-shortnames.conf" = {
+      executable = false;
+      text = ''
+        [aliases]
+          # almalinux
+          "almalinux" = "docker.io/library/almalinux"
+          "almalinux-minimal" = "docker.io/library/almalinux-minimal"
+          # containers
+          "skopeo" = "quay.io/skopeo/stable"
+          "podman" = "quay.io/podman/stable"
+          # docker
+          "alpine" = "docker.io/library/alpine"
+          "docker" = "docker.io/library/docker"
+          "registry" = "docker.io/library/registry"
+          # Fedora
+          "fedora-minimal" = "registry.fedoraproject.org/fedora-minimal"
+          "fedora" = "registry.fedoraproject.org/fedora"
+          # openSUSE
+          "opensuse/tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
+          "tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
+          # SUSE
+          "suse/sle15" = "registry.suse.com/suse/sle15"
+          "sle15" = "registry.suse.com/suse/sle15"
+          # Red Hat Enterprise Linux
+          "rhel" = "registry.access.redhat.com/rhel"
+          "rhel6" = "registry.access.redhat.com/rhel6"
+          "rhel7" = "registry.access.redhat.com/rhel7"
+          "ubi7" = "registry.access.redhat.com/ubi7"
+          "ubi7-init" = "registry.access.redhat.com/ubi7-init"
+          "ubi7-minimal" = "registry.access.redhat.com/ubi7-minimal"
+          "ubi8" = "registry.access.redhat.com/ubi8"
+          "ubi8-minimal" = "registry.access.redhat.com/ubi8-minimal"
+          "ubi8-init" = "registry.access.redhat.com/ubi8-init"
+          "ubi8-micro" = "registry.access.redhat.com/ubi8-micro"
+          "ubi8/ubi" = "registry.access.redhat.com/ubi8/ubi"
+          "ubi8/ubi-minimal" = "registry.access.redhat.com/ubi8-minimal"
+          "ubi8/ubi-init" = "registry.access.redhat.com/ubi8-init"
+          "ubi8/ubi-micro" = "registry.access.redhat.com/ubi8-micro"
+          # Debian
+          "debian" = "docker.io/library/debian"
+          # Ubuntu
+          "ubuntu" = "docker.io/library/ubuntu"
+          # Oracle Linux
+          "oraclelinux" = "container-registry.oracle.com/os/oraclelinux"
+          # busybox
+          "busybox" = "docker.io/library/busybox"
+          # php
+          "php" = "docker.io/library/php"
+          # python
+          "python" = "docker.io/library/python"
+          # node
+          "node" = "docker.io/library/node"
+      '';
     };
   };
 

@@ -21,7 +21,7 @@ aliases:
     rgfzf: sd rg-fzf
     tree: eza --tree
 allow_broken: false
-auto_gc: false
+auto_gc: true
 bling: none
 blocklist: []
 byo_git: false
@@ -35,6 +35,9 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays: {}
+# These are installed, but "not configured".
+# If adding custom config with home-manager settings, list it here, but if using
+# fleeks built-in config, it needs to be listed under 'programs' instead.
 packages:
     - helix
     - nerdfonts
@@ -58,6 +61,8 @@ packages:
 paths:
     - $HOME/bin
     - $HOME/.local/bin
+    - $HOME/.local/share/fleek/bin
+# things to install that will use the fleek built-in config.  Everything else goes under 'packages'
 programs:
     - dircolors
 shell: zsh
