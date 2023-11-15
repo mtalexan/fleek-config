@@ -15,17 +15,20 @@
     #####################################
 
     # The primary distrobox config file
-    custom.distrobox.hooks = {
-      enable = true;
-      host_certs = true;
-      docker_sock = true;
+    custom.distrobox = {
+      hooks = {
+        enable = true;
+        host_certs = true;
+        docker_sock = true;
+      };
+      config.engine = "docker";
     };
-    # add an extra line specifically to on this host for the distrobox config
-    home.file.".config/distrobox/distrobox.conf".text =
-        ''
-          # configure it to use docker
-          container_manager="docker"
-        '';
+    ## add an extra line specifically to on this host for the distrobox config
+    #home.file.".config/distrobox/distrobox.conf".text =
+    #    ''
+    #      # configure it to use docker
+    #      container_manager="docker"
+    #    '';
 
     custom.podman.config = {
       ubuntu = true;

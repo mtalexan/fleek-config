@@ -16,21 +16,36 @@
   # distrobox.confto use the hooks.  Always includes the hooks for passing thru nix support.
   # Optionally includes the hooks for injecting the host certs, and for passing thru the docker socket (with permissions).
   # Extra distrobox.conf can be specified by putting it in home.file.".config/distrobox/distrobox.conf".text in a custom.nix
-  options.custom.distrobox.hooks = with lib; {
-    # includes the nix hook by default
-    enable = mkEnableOption(mdDoc "distrobox pre-init and init hooks directories, including nix passthru hook");
-    host_certs = mkEnableOption(mdDoc "distrobox host certificate injection hook");
-    docker_sock = mkEnableOption(mdDoc "distrobox docker socket passthru hook, including permissions");
+  options.custom.distrobox = with lib; {
+    config = {
+      engine = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "If set to non-null, the container engine is explicitly set in the distrobox.conf"
+      };
+    };
+    hooks = {
+      # includes the nix hook by default
+      enable = mkEnableOption(mdDoc "distrobox pre-init and init hooks directories, including nix passthru hook");
+      host_certs = mkEnableOption(mdDoc "distrobox host certificate injection hook");
+      docker_sock = mkEnableOption(mdDoc "distrobox docker socket passthru hook, including permissions");
+    };
   };
 
   config.home.file.".config/distrobox/distrobox.conf" = {
-    enable = config.custom.distrobox.hooks.enable;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.config.engine != null;
     executable = false;
-    text =
+    text = lib.concatLines [
+      (mkIf config.custom.distrobox.hooks.enable
         ''
           container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
           container_init_hook="~/.config/distrobox/init-hooks.sh"
-        '';
+        '')
+      (mkIf config.custom.distrobox.hooks.config.engine != null
+        ''
+          container_manager="${config.custom.distrobox.hooks.config.engine}"
+        '')
+    ];
   };
   config.home.file.".config/distrobox/init-hooks.sh" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
