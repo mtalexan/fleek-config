@@ -1,4 +1,4 @@
-{ pkgs, misc, ... }: {
+{ pkgs, misc, lib, ... }: {
   # The configuration for the prompt goes in here
   programs.starship = {
     enable = true;
