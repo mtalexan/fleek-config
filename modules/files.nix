@@ -33,29 +33,29 @@
         '';
   };
   config.home.file.".config/distrobox/init-hoooks.sh" = {
-    enable = with config.custom.distrobox.hooks; enable or host_certs or docker_sock;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/init-hooks.sh;
   };
   config.home.file.".config/distrobox/pre-init-hoooks.sh" = {
-    enable = with config.custom.distrobox.hooks; enable or host_certs or docker_sock;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/pre-init-hooks.sh;
   };
   config.home.file.".config/distrobox/init-hoooks.d/.keep" = {
-    enable = with config.custom.distrobox.hooks; enable or host_certs or docker_sock;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = false;
     # only used to ensure the folder exists
     text = "";
   };
   config.home.file.".config/distrobox/pre-init-hoooks.d/.keep" = {
-    enable = with config.custom.distrobox.hooks; enable or host_certs or docker_sock;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = false;
     # only used to ensure the folder exists
     text = "";
   };
   config.home.file.".config/distrobox/init-hoooks.d/20-nix.sh" = {
-    enable = with config.custom.distrobox.hooks; enable or host_certs or docker_sock;
+    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/init-hoooks.d/20-nix.sh;
   };
