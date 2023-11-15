@@ -20,8 +20,8 @@ in
   # Each of the following should define an option.custom.files.X.enable, then set the
   # matching home.file.X.enable with the option value.
 
-  options.custom.files.".config/distrobox/distrobox.conf".enable = {
-    enable = lib.mkOption {
+  options.custom.files.".config/distrobox/distrobox.conf".enable = with lib; {
+    enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -42,7 +42,7 @@ in
   };
 
   # distrobox hooks to copy are host-name specific
-  options.custom.files.".config/distrobox".enable = {
+  options.custom.files.".config/distrobox".enable = with lib; {
     enable = lib.mkOption {
       type = types.bool;
       default = false;
@@ -69,7 +69,7 @@ in
   # The basic settings for podman.
   # Still requires uidmap to be installed manually from built-in package manager.
   # Pulled from Ubuntu.
-  options.custom.files.".config/containers".enable = {
+  options.custom.files.".config/containers".enable = with lib; {
     enable = lib.mkOption {
       type = types.bool;
       default = false;
@@ -90,7 +90,7 @@ in
   };
 
   # set of pre-defined short name aliases for images via podman
-  options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = {
+  options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = with lib; {
     enable = lib.mkOption {
       type = types.bool;
       default = false;
@@ -100,7 +100,6 @@ in
       '';
     };
   };
-
   home.file.".config/containers/registries.conf.d/000-shortnames.conf" = {
     enable = config.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable;
     executable = false;
