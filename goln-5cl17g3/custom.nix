@@ -15,7 +15,7 @@
     #####################################
 
     # The primary distrobox config file
-    custom.files.".config/distrobox/distrobox.conf".enable = false;
+    custom.files.".config/distrobox/distrobox.conf".enable = true;
     # add an extra line specifically to on this host.
     home.file.".config/distrobox/distrobox.conf".text =
         ''
