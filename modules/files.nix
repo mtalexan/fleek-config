@@ -32,17 +32,17 @@
           container_init_hook="~/.config/distrobox/init-hooks.sh"
         '';
   };
-  config.home.file.".config/distrobox/init-hoooks.sh" = {
+  config.home.file.".config/distrobox/init-hooks.sh" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/init-hooks.sh;
   };
-  config.home.file.".config/distrobox/pre-init-hoooks.sh" = {
+  config.home.file.".config/distrobox/pre-init-hooks.sh" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/pre-init-hooks.sh;
   };
-  config.home.file.".config/distrobox/init-hoooks.d/.keep" = {
+  config.home.file.".config/distrobox/init-hooks.d/.keep" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = false;
     # only used to ensure the folder exists
@@ -50,7 +50,7 @@
     ''
     '';
   };
-  config.home.file.".config/distrobox/pre-init-hoooks.d/.keep" = {
+  config.home.file.".config/distrobox/pre-init-hooks.d/.keep" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = false;
     # only used to ensure the folder exists
@@ -58,10 +58,10 @@
     ''
     '';
   };
-  config.home.file.".config/distrobox/init-hoooks.d/20-nix.sh" = {
+  config.home.file.".config/distrobox/init-hooks.d/20-nix.sh" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = true;
-    source = ../home_files/distrobox/init-hoooks.d/20-nix.sh;
+    source = ../home_files/distrobox/init-hooks.d/20-nix.sh;
   };
 
 
@@ -73,17 +73,17 @@
     ''
     '';
   };
-  config.home.file.".config/distrobox/pre-init-hoooks.d/00-root-cas.sh" = {
+  config.home.file.".config/distrobox/pre-init-hooks.d/00-root-cas.sh" = {
     enable = config.custom.distrobox.hooks.host_certs;
     executable = true;
-    source = ../home_files/distrobox/pre-init-hoooks.d/00-root-cas.sh;
+    source = ../home_files/distrobox/pre-init-hooks.d/00-root-cas.sh;
   };
 
 
-  config.home.file.".config/distrobox/init-hoooks.d/30-docker-sock.sh" = {
+  config.home.file.".config/distrobox/init-hooks.d/30-docker-sock.sh" = {
     enable = config.custom.distrobox.hooks.docker_sock;
     executable = true;
-    source = ../home_files/distrobox/pre-init-hoooks.d/30-docker-sock.sh;
+    source = ../home_files/distrobox/pre-init-hooks.d/30-docker-sock.sh;
   };
 
   #####################################
