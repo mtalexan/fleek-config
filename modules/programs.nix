@@ -1,4 +1,4 @@
-
+{ pkgs, misc, ... }:
 # Programs that aren't the shell or the prompt are in here
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
