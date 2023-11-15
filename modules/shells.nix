@@ -83,7 +83,7 @@
       ##############################################################
       # alias_completion.bash
       ##############################################################
-      ${builtins.readFile snippets/alias_completion.bash}
+      ${builtins.readFile ../snippets/alias_completion.bash}
       ##############################################################
       # End alias_completion.bash
       ##############################################################
