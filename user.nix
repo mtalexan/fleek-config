@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, ... }:
+{ pkgs, misc, lib, config, options, ... }:
   # FEEL FREE TO EDIT: This file is NOT managed by fleek.
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -21,7 +21,7 @@ in
   # matching home.file.X.enable with the option value.
 
   options.custom.files.".config/distrobox/distrobox.conf".enable = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -43,7 +43,7 @@ in
 
   # distrobox hooks to copy are host-name specific
   options.custom.files.".config/distrobox".enable = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -70,7 +70,7 @@ in
   # Still requires uidmap to be installed manually from built-in package manager.
   # Pulled from Ubuntu.
   options.custom.files.".config/containers".enable = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -91,7 +91,7 @@ in
 
   # set of pre-defined short name aliases for images via podman
   options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = types.bool;
       default = false;
       description = ''
