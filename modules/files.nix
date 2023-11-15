@@ -21,7 +21,7 @@
       engine = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "If set to non-null, the container engine is explicitly set in the distrobox.conf"
+        description = "If set to non-null, the container engine is explicitly set in the distrobox.conf";
       };
     };
     hooks = {
