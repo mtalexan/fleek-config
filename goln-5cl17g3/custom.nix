@@ -10,8 +10,11 @@
     ".config/distrobox/distrobox.conf" = {
       enable = true;
       # add an extra line specifically to on this host.
-      # configure it to use docker
-      text = ''container_manager="docker"'';
+      text =
+      ''
+        # configure it to use docker
+        container_manager="docker"
+      '';
     };
 
     # distrobox hooks to copy are host-name specific
