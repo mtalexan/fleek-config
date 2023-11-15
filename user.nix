@@ -1,3 +1,4 @@
+{ pkgs, misc, lib, config, ... }:
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 #####################################
 # Files (arbitrary)
@@ -5,7 +6,6 @@
 # Each of the following should define an option.custom.files.X.enable, then set the
 # matching home.file.X.enable with the option value.
 
-{ pkgs, misc, lib, config, ... }: 
 # The primary distrobox config file
 let
   cfgfile = ".config/distrobox/distrobox.conf";
@@ -33,7 +33,6 @@ in
   };
 }
 
-{ pkgs, misc, lib, config, ... }:
 # distrobox hooks to copy are host-name specific
 let
   cfgfile = ".config/distrobox";
@@ -65,8 +64,6 @@ in
   };
 }
 
-{ pkgs, misc, lib, config, ... }:
-
 # The basic settings for podman.
 # Still requires uidmap to be installed manually from built-in package manager.
 # Pulled from Ubuntu.
@@ -96,7 +93,6 @@ in
   };
 }
 
-{ pkgs, misc, lib, config, ... }:
 # set of pre-defined short name aliases for images via podman
 let
   cfgfile = ".config/containers/registries.conf.d/000-shortnames.conf";
@@ -170,7 +166,6 @@ in
   };
 }
 
-{ pkgs, misc, lib, config, ... }:
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
