@@ -29,13 +29,14 @@ in
         ''container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"''
         # support the init hooks (see home.file.distrobox_inithooks)
         ''container_init_hook="~/.config/distrobox/init-hooks.sh"''
-        # configure it to use docker
-        #''container_manager="docker"''
       ];
     };
 
     # distrobox hooks to copy are host-name specific
     ".config/distrobox" = {
+      # 'source' must be set in the custom.nix!
+      #source = ./home_files/distrobox;
+
       enable = false;
       # keep the permissions from the files in the fleek folder
       executable = null;
@@ -43,8 +44,6 @@ in
       # whole directory. We put home.file.distrobox_config here too, so we can't do the
       # latter.
       recursive = true;
-      # relative to the repo root, under the host-specific folder
-      source = ./${hostname}/home_files/distrobox;
     };
   };
 
