@@ -32,6 +32,7 @@ in
     };
   };
 
+  config = {
     home.file.".config/distrobox/distrobox.conf" = {
       enable = config.custom.files.".config/distrobox/distrobox.conf".enable;
       executable = false;
@@ -44,7 +45,6 @@ in
         '';
     };
 
-  config = {
     # distrobox hooks to copy are host-name specific
     home.file.".config/distrobox" = {
       # 'source' must be set in the custom.nix!
