@@ -30,6 +30,14 @@
       # has to be set here so it's in the hostname-specific folder
       source = ./home_files/distrobox;
     };
+
+    # basic shared Ubuntu-style podman setup
+    ".config/containers" = {
+      enable = true;
+    };
+    ".config/containers/registries.conf.d/000-shortnames.conf" = {
+      enable = true;
+    };
   };
 
   #####################################
