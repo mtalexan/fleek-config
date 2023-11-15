@@ -35,17 +35,18 @@
   config.home.file.".config/distrobox/distrobox.conf" = {
     enable = config.custom.distrobox.hooks.enable or (config.custom.distrobox.config.engine != null);
     executable = false;
-    text = lib.concatLines [
-      #lib.optionalString config.custom.distrobox.hooks.enable ''
+    text = "" ++
+      lib.strings.optionalString config.custom.distrobox.hooks.enable
         ''
           container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
           container_init_hook="~/.config/distrobox/init-hooks.sh"
-        ''
-      #lib.optionalString (config.custom.distrobox.hooks.config.engine != null) ''
+        '' 
+      ++
+      lib.optionalString (config.custom.distrobox.hooks.config.engine != null)
         ''
           container_manager="${config.custom.distrobox.config.engine}"
         ''
-    ];
+    ;
   };
   config.home.file.".config/distrobox/init-hooks.sh" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
