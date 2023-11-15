@@ -33,14 +33,14 @@
   };
 
   config.home.file.".config/distrobox/distrobox.conf" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.config.engine != null;
+    enable = config.custom.distrobox.hooks.enable or (config.custom.distrobox.config.engine != null);
     executable = false;
     text = lib.concatLines [
       lib.mkIf config.custom.distrobox.hooks.enable ''
           container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
           container_init_hook="~/.config/distrobox/init-hooks.sh"
         ''
-      lib.mkIf config.custom.distrobox.hooks.config.engine != null ''
+      lib.mkIf (config.custom.distrobox.hooks.config.engine != null) ''
           container_manager="${config.custom.distrobox.hooks.config.engine}"
         ''
     ];
