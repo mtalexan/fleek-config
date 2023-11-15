@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, options, ... }:
+{ pkgs, misc, lib, config, config.home, config.programs, options, ... }:
   # FEEL FREE TO EDIT: This file is NOT managed by fleek.
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
