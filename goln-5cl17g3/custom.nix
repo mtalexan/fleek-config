@@ -15,29 +15,28 @@
     #####################################
 
     # The primary distrobox config file
-    custom.files.".config/distrobox/distrobox.conf".enable = true;
-    # add an extra line specifically to on this host.
+    custom.distrobox.hooks = {
+      enable = true;
+      host_certs = true;
+      docker_sock = true;
+    };
+    # add an extra line specifically to on this host for the distrobox config
     home.file.".config/distrobox/distrobox.conf".text =
         ''
           # configure it to use docker
           container_manager="docker"
         '';
 
-    # distrobox hooks. setup is hostname-specific
-    custom.files.".config/distrobox".enable = true;
-    # has to be set here so relative path is in the hostname-specific folder
-    home.file.".config/distrobox".source = ./home_files/distrobox;
-
-    # basic shared Ubuntu-style podman setup
-    custom.files.".config/containers".enable = true;
-
-    # common podman shortname aliases for public imaes
-    custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = true;
+    custom.podman.config = {
+      ubuntu = true;
+      shortnames = true;
+    };
 
     #####################################
     # Programs
     #####################################
 
+    # add the extra DevTools path, just in case it's there.  If it is, it's relevant
     home.sessionPath = [
       "$HOME/DevTools/bin"
     ];
