@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, config.home, config.programs, options, ... }:
+{ pkgs, misc, lib, config, options, ... }:
   # FEEL FREE TO EDIT: This file is NOT managed by fleek.
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -20,15 +20,7 @@ in
   # Each of the following should define an option.custom.files.X.enable, then set the
   # matching home.file.X.enable with the option value.
 
-  options.custom.files.".config/distrobox/distrobox.conf".enable = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        If enabled, the distrobox.conf file is auto-populated from the home.file.".config/distrobox/distrobox.conf"
-      '';
-    };
-  };
+  options.custom.files.".config/distrobox/distrobox.conf".enable = lib.mkEnableOption(lib.mdDoc "distrobox.conf file auto-population");
   config.home.file.".config/distrobox/distrobox.conf" = {
     enable = config.custom.files.".config/distrobox/distrobox.conf".enable;
     executable = false;
@@ -42,17 +34,7 @@ in
   };
 
   # distrobox hooks to copy are host-name specific
-  options.custom.files.".config/distrobox".enable = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        If enabled, the distrobox pre-init and init hooks are auto-populated.  Requires creating a copy of the
-        home_files/template_distrobox using the home_files/from_templates.sh into a specific host folder, and
-        explicitly setting the home.file.".config/distrobox".source to a path relative to the custom.nix.
-      '';
-    };
-  };
+  options.custom.files.".config/distrobox".enable = lib.mkEnableOption(lib.mdDoc "distrobox pre-init and init hooks");
   config.home.file.".config/distrobox" = {
     # 'source' must be set in the custom.nix!
     #source = ./home_files/distrobox;
@@ -69,16 +51,7 @@ in
   # The basic settings for podman.
   # Still requires uidmap to be installed manually from built-in package manager.
   # Pulled from Ubuntu.
-  options.custom.files.".config/containers".enable = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        If enabled, the storage configuration, basic top-level registry configuration, and sig-store
-        write location are configured for podman in the standard Ubuntu-like way.
-      '';
-    };
-  };
+  options.custom.files.".config/containers".enable = lib.mkEnableOption(lib.mdDoc "podman ubuntu-like registry and storage settings");
   config.home.file.".config/containers" = {
     enable = config.custom.files.".config/containers".enable;
     executable = false;
@@ -90,16 +63,7 @@ in
   };
 
   # set of pre-defined short name aliases for images via podman
-  options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        If enabled, a predefined list of short alias names of public images is defined as part of the
-        podman registry config.
-      '';
-    };
-  };
+  options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = lib.mkEnableOption(lib.mdDoc "podman predefined list of public image aliases");
   config.home.file.".config/containers/registries.conf.d/000-shortnames.conf" = {
     enable = config.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable;
     executable = false;
