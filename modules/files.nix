@@ -62,7 +62,7 @@
     # whole directory. We put other home.file's here too, so we can't do the
     # latter.
     recursive = true;
-    source = ./home_files/podman_config;
+    source = ../home_files/podman_config;
   };
 
   # set of pre-defined short name aliases for images via podman
