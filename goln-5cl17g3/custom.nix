@@ -10,7 +10,7 @@
     ".config/distrobox/distrobox.conf" = {
       enable = true;
       # add an extra line specifically to on this host
-      text = text ++ [
+      text = .text ++ [
         # configure it to use docker
         ''container_manager="docker"''
       ];
