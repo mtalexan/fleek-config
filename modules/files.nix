@@ -43,7 +43,7 @@
         ''
       #lib.optionalString (config.custom.distrobox.hooks.config.engine != null) ''
         ''
-          container_manager="${config.custom.distrobox.hooks.config.engine}"
+          container_manager="${config.custom.distrobox.config.engine}"
         ''
     ];
   };
