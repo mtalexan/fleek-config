@@ -1,4 +1,3 @@
-
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 #####################################
 # Files (arbitrary)
@@ -6,7 +5,7 @@
 # Each of the following should define an option.custom.files.X.enable, then set the
 # matching home.file.X.enable with the option value.
 
-{ pkgs, misc, lib, config, ... }:
+{ pkgs, misc, lib, config, ... }: 
 # The primary distrobox config file
 let
   cfgfile = ".config/distrobox/distrobox.conf";
@@ -32,7 +31,7 @@ in
         container_init_hook="~/.config/distrobox/init-hooks.sh"
       '';
   };
-};
+}
 
 { pkgs, misc, lib, config, ... }:
 # distrobox hooks to copy are host-name specific
@@ -64,7 +63,7 @@ in
     # latter.
     recursive = true;
   };
-};
+}
 
 { pkgs, misc, lib, config, ... }:
 
@@ -95,7 +94,7 @@ in
     recursive = true;
     source = ./home_files/podman_config;
   };
-};
+}
 
 { pkgs, misc, lib, config, ... }:
 # set of pre-defined short name aliases for images via podman
@@ -169,7 +168,7 @@ in
         "node" = "docker.io/library/node"
     '';
   };
-};
+}
 
 { pkgs, misc, lib, config, ... }:
 let
@@ -1740,6 +1739,6 @@ in
       ''
     ];
   };
-};
+}
 
 # vim: sw=2:expandtab
