@@ -1,4 +1,4 @@
-{ pkgs, misc, ... }: {
+{ pkgs, misc, lib, config, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
   # extra packages that should be installed only on this host
@@ -12,33 +12,25 @@
   # Files (arbitrary)
   #####################################
 
-  home.file = {
-    # The primary distrobox config file
-    ".config/distrobox/distrobox.conf" = {
-      enable = true;
-      # add an extra line specifically to on this host.
-      text =
+  # The primary distrobox config file
+  config.custom.files.".config/distrobox/distrobox.conf".enable = false;
+  # add an extra line specifically to on this host.
+  home.file.".config/distrobox/distrobox.conf".text =
       ''
         # configure it to use docker
         container_manager="docker"
       '';
-    };
 
-    # distrobox hooks to copy are host-name specific
-    ".config/distrobox" = {
-      enable = true;
-      # has to be set here so it's in the hostname-specific folder
-      source = ./home_files/distrobox;
-    };
+  # distrobox hooks. setup is hostname-specific
+  config.custom.files.".config/distrobox".enable = true;
+  # has to be set here so relative path is in the hostname-specific folder
+  home.file.".config/distrobox".source = ./home_files/distrobox;
 
-    # basic shared Ubuntu-style podman setup
-    ".config/containers" = {
-      enable = true;
-    };
-    ".config/containers/registries.conf.d/000-shortnames.conf" = {
-      enable = true;
-    };
-  };
+  # basic shared Ubuntu-style podman setup
+  config.custom.files.".config/containers".enable = true;
+
+  # common podman shortname aliases for public imaes
+  config.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = true;
 
   #####################################
   # Programs

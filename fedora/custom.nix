@@ -1,6 +1,10 @@
 { pkgs, misc, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  #####################################
+  # Programs
+  #####################################
+
   programs.bash.initExtra = ''
     ######################################################################
     # Fedora default is to source /etc/bashrc, but this includes unconditional

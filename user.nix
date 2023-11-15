@@ -1,5 +1,172 @@
-{ pkgs, misc, lib, ... }: 
+{ pkgs, misc, lib, config, ... }: 
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
+
+#####################################
+# Files (arbitrary)
+#####################################
+# Each of the following should define an option.custom.files.X.enable, then set the
+# matching home.file.X.enable with the option value.
+
+# The primary distrobox config file
+let
+  cfgfile = ".config/distrobox/distrobox.conf";
+in
+{
+  options.custom.files.${cfgfile}.enable = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, the distrobox.conf file is auto-populated from the home.file."${cfgfile}"
+      '';
+    };
+  };
+  home.file.${cfgfile} = {
+    enable = config.custom.files.${cfgfile}.enable;
+    executable = false;
+    text =
+      ''
+        # support the init hooks (see home.file.distrobox_preinithooks)
+        container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
+        # support the init hooks (see home.file.distrobox_inithooks)
+        container_init_hook="~/.config/distrobox/init-hooks.sh"
+      '';
+  };
+};
+
+# distrobox hooks to copy are host-name specific
+let
+  cfgfile = ".config/distrobox";
+in
+{
+  options.custom.files.${cfgfile}.enable = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, the distrobox pre-init and init hooks are auto-populated.  Requires creating a copy of the
+        home_files/template_distrobox using the home_files/from_templates.sh into a specific host folder, and
+        explicitly setting the home.file."${cfgfile}".source to a path relative to the custom.nix.
+      '';
+    };
+  };
+
+  home.file.${cfgfile} = {
+    # 'source' must be set in the custom.nix!
+    #source = ./home_files/distrobox;
+
+    enable = config.custom.files.${cfgfile}.enable;
+    # keep the permissions from the files in the fleek folder
+    executable = null;
+    # Make each individual file a symlink in the copy rather than symlinking the
+    # whole directory. We put other home.file's here too, so we can't do the
+    # latter.
+    recursive = true;
+  };
+};
+
+# The basic settings for podman.
+# Still requires uidmap to be installed manually from built-in package manager.
+# Pulled from Ubuntu.
+let
+  cfgfile = ".config/containers";
+in
+{
+  options.custom.files.${cfgfile}.enable = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, the storage configuration, basic top-level registry configuration, and sig-store
+        write location are configured for podman in the standard Ubuntu-like way.
+      '';
+    };
+  };
+
+  home.file.${cfgfile} = {
+    enable = config.custom.files.${cfgfile}.enable;
+    executable = false;
+    # Make each individual file a symlink in the copy rather than symlinking the
+    # whole directory. We put other home.file's here too, so we can't do the
+    # latter.
+    recursive = true;
+    source = ./home_files/podman_config;
+  };
+};
+
+# set of pre-defined short name aliases for images via podman
+let
+  cfgfile = ".config/containers/registries.conf.d/000-shortnames.conf";
+in
+{
+  options.custom.files.${cfgfile}.enable = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, a predefined list of short alias names of public images is defined as part of the
+        podman registry config.
+      '';
+    };
+  };
+
+  home.file.${cfgfile} = {
+    enable = config.custom.files.${cfgfile}.enable;
+    executable = false;
+    text = ''
+      [aliases]
+        # almalinux
+        "almalinux" = "docker.io/library/almalinux"
+        "almalinux-minimal" = "docker.io/library/almalinux-minimal"
+        # containers
+        "skopeo" = "quay.io/skopeo/stable"
+        "podman" = "quay.io/podman/stable"
+        # docker
+        "alpine" = "docker.io/library/alpine"
+        "docker" = "docker.io/library/docker"
+        "registry" = "docker.io/library/registry"
+        # Fedora
+        "fedora-minimal" = "registry.fedoraproject.org/fedora-minimal"
+        "fedora" = "registry.fedoraproject.org/fedora"
+        # openSUSE
+        "opensuse/tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
+        "tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
+        # SUSE
+        "suse/sle15" = "registry.suse.com/suse/sle15"
+        "sle15" = "registry.suse.com/suse/sle15"
+        # Red Hat Enterprise Linux
+        "rhel" = "registry.access.redhat.com/rhel"
+        "rhel6" = "registry.access.redhat.com/rhel6"
+        "rhel7" = "registry.access.redhat.com/rhel7"
+        "ubi7" = "registry.access.redhat.com/ubi7"
+        "ubi7-init" = "registry.access.redhat.com/ubi7-init"
+        "ubi7-minimal" = "registry.access.redhat.com/ubi7-minimal"
+        "ubi8" = "registry.access.redhat.com/ubi8"
+        "ubi8-minimal" = "registry.access.redhat.com/ubi8-minimal"
+        "ubi8-init" = "registry.access.redhat.com/ubi8-init"
+        "ubi8-micro" = "registry.access.redhat.com/ubi8-micro"
+        "ubi8/ubi" = "registry.access.redhat.com/ubi8/ubi"
+        "ubi8/ubi-minimal" = "registry.access.redhat.com/ubi8-minimal"
+        "ubi8/ubi-init" = "registry.access.redhat.com/ubi8-init"
+        "ubi8/ubi-micro" = "registry.access.redhat.com/ubi8-micro"
+        # Debian
+        "debian" = "docker.io/library/debian"
+        # Ubuntu
+        "ubuntu" = "docker.io/library/ubuntu"
+        # Oracle Linux
+        "oraclelinux" = "container-registry.oracle.com/os/oraclelinux"
+        # busybox
+        "busybox" = "docker.io/library/busybox"
+        # php
+        "php" = "docker.io/library/php"
+        # python
+        "python" = "docker.io/library/python"
+        # node
+        "node" = "docker.io/library/node"
+    '';
+  };
+};
+
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
@@ -12,110 +179,8 @@ let
       hash = "${hash}";
     };
   };
-
 in
 {
-  #####################################
-  # Files (arbitrary)
-  #####################################
-  # These should NOT include 'enable', they should define the common definitions.
-  # In each hostname custom.nix file the desired files should be listed with their enable=true set.
-
-  home.file = {
-    # The primary distrobox config file
-    ".config/distrobox/distrobox.conf" = {
-      executable = false;
-      text =
-        ''
-          # support the init hooks (see home.file.distrobox_preinithooks)
-          container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
-          # support the init hooks (see home.file.distrobox_inithooks)
-          container_init_hook="~/.config/distrobox/init-hooks.sh"
-        '';
-    };
-
-    # distrobox hooks to copy are host-name specific
-    ".config/distrobox" = {
-      # 'source' must be set in the custom.nix!
-      #source = ./home_files/distrobox;
-
-      # keep the permissions from the files in the fleek folder
-      executable = null;
-      # Make each individual file a symlink in the copy rather than symlinking the
-      # whole directory. We put other home.file's here too, so we can't do the
-      # latter.
-      recursive = true;
-    };
-
-    # The basic settings for podman.
-    # Still requires uidmap to be installed manually from built-in package manager.
-    # Pulled from Ubuntu.
-    ".config/containers" = {
-      executable = false;
-      # Make each individual file a symlink in the copy rather than symlinking the
-      # whole directory. We put other home.file's here too, so we can't do the
-      # latter.
-      recursive = true;
-      source = ./home_files/podman_config;
-    };
-
-    # set of pre-defined short name aliases for images via podman
-    ".config/containers/registries.conf.d/000-shortnames.conf" = {
-      executable = false;
-      text = ''
-        [aliases]
-          # almalinux
-          "almalinux" = "docker.io/library/almalinux"
-          "almalinux-minimal" = "docker.io/library/almalinux-minimal"
-          # containers
-          "skopeo" = "quay.io/skopeo/stable"
-          "podman" = "quay.io/podman/stable"
-          # docker
-          "alpine" = "docker.io/library/alpine"
-          "docker" = "docker.io/library/docker"
-          "registry" = "docker.io/library/registry"
-          # Fedora
-          "fedora-minimal" = "registry.fedoraproject.org/fedora-minimal"
-          "fedora" = "registry.fedoraproject.org/fedora"
-          # openSUSE
-          "opensuse/tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
-          "tumbleweed" = "registry.opensuse.org/opensuse/tumbleweed"
-          # SUSE
-          "suse/sle15" = "registry.suse.com/suse/sle15"
-          "sle15" = "registry.suse.com/suse/sle15"
-          # Red Hat Enterprise Linux
-          "rhel" = "registry.access.redhat.com/rhel"
-          "rhel6" = "registry.access.redhat.com/rhel6"
-          "rhel7" = "registry.access.redhat.com/rhel7"
-          "ubi7" = "registry.access.redhat.com/ubi7"
-          "ubi7-init" = "registry.access.redhat.com/ubi7-init"
-          "ubi7-minimal" = "registry.access.redhat.com/ubi7-minimal"
-          "ubi8" = "registry.access.redhat.com/ubi8"
-          "ubi8-minimal" = "registry.access.redhat.com/ubi8-minimal"
-          "ubi8-init" = "registry.access.redhat.com/ubi8-init"
-          "ubi8-micro" = "registry.access.redhat.com/ubi8-micro"
-          "ubi8/ubi" = "registry.access.redhat.com/ubi8/ubi"
-          "ubi8/ubi-minimal" = "registry.access.redhat.com/ubi8-minimal"
-          "ubi8/ubi-init" = "registry.access.redhat.com/ubi8-init"
-          "ubi8/ubi-micro" = "registry.access.redhat.com/ubi8-micro"
-          # Debian
-          "debian" = "docker.io/library/debian"
-          # Ubuntu
-          "ubuntu" = "docker.io/library/ubuntu"
-          # Oracle Linux
-          "oraclelinux" = "container-registry.oracle.com/os/oraclelinux"
-          # busybox
-          "busybox" = "docker.io/library/busybox"
-          # php
-          "php" = "docker.io/library/php"
-          # python
-          "python" = "docker.io/library/python"
-          # node
-          "node" = "docker.io/library/node"
-      '';
-    };
-  };
-
   #####################################
   # Program configs
   #####################################
@@ -1670,6 +1735,6 @@ in
       ''
     ];
   };
-}
+};
 
 # vim: sw=2:expandtab
