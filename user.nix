@@ -25,12 +25,13 @@ in
     # The primary distrobox config file
     ".config/distrobox/distrobox.conf" = {
       executable = false;
-      text = [
-        # support the init hooks (see home.file.distrobox_preinithooks)
-        ''container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"''
-        # support the init hooks (see home.file.distrobox_inithooks)
-        ''container_init_hook="~/.config/distrobox/init-hooks.sh"''
-      ];
+      text =
+        ''
+          # support the init hooks (see home.file.distrobox_preinithooks)
+          container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
+          # support the init hooks (see home.file.distrobox_inithooks)
+          container_init_hook="~/.config/distrobox/init-hooks.sh"
+        '';
     };
 
     # distrobox hooks to copy are host-name specific
