@@ -18,11 +18,12 @@ in
   #####################################
   # Files (arbitrary)
   #####################################
+  # These should NOT include 'enable', they should define the common definitions.
+  # In each hostname custom.nix file the desired files should be listed with their enable=true set.
 
   home.file = {
     # The primary distrobox config file
     ".config/distrobox/distrobox.conf" = {
-      enable = false;
       executable = false;
       text = [
         # support the init hooks (see home.file.distrobox_preinithooks)
@@ -37,7 +38,6 @@ in
       # 'source' must be set in the custom.nix!
       #source = ./home_files/distrobox;
 
-      enable = false;
       # keep the permissions from the files in the fleek folder
       executable = null;
       # Make each individual file a symlink in the copy rather than symlinking the
