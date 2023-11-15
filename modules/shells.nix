@@ -1,4 +1,4 @@
-{ pkgs, misc, ... }: {
+{ pkgs, misc, lib, ... }: {
   # Settings for the different shells go in here
 
   # shared shell settings
