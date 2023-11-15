@@ -1,6 +1,12 @@
 { pkgs, misc, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  # extra packages that should be installed only on this host
+  home.packages = with pkgs [
+    podman
+    distrobox
+  ];
+
   #####################################
   # Files (arbitrary)
   #####################################
