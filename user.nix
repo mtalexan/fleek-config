@@ -1225,34 +1225,32 @@ in
     # shell
 
     # shared shell settings
-    home = {
-      # WARNING: by default all sessionVariables are only sourced once at login.
-      #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
-      sessionVariables = {
-        GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
-        SUDOEDITOR = "nvim";
-        GIT_EDITOR = "nvim";
-        # use options like FZF changeDir (Alt+C) display options
-        _ZO_FZF_OPTS = lib.concatStringsSep " " [
-          # 'zoxide -i' always passes the score then the folder name with some leading indentation.
-          # Carefully echo the string, parse it thru awk to get only the second column, and then use
-          # the result in an eza --tree command that shows colors and only 2 dirs deep in each tree
-          "--preview 'eza --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')'"
-          "--preview-window right,border-vertical" 
-          "--bind 'ctrl-/:toggle-preview'"
-          "--scheme=path"
-          "--filepath-word"
-          "--multi" 
-          "--info=inline"
-          "--border=sharp" 
-          # let it be taller than fzf history, but not fullscreen like changeDir
-          "--height=50%" 
-          "--tabstop=4" 
-          "--color=dark" 
-          "--cycle" 
-          "--layout=reverse"
-        ];
-      };
+    # WARNING: by default all sessionVariables are only sourced once at login.
+    #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
+    home.sessionVariables = {
+      GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
+      SUDOEDITOR = "nvim";
+      GIT_EDITOR = "nvim";
+      # use options like FZF changeDir (Alt+C) display options
+      _ZO_FZF_OPTS = lib.concatStringsSep " " [
+        # 'zoxide -i' always passes the score then the folder name with some leading indentation.
+        # Carefully echo the string, parse it thru awk to get only the second column, and then use
+        # the result in an eza --tree command that shows colors and only 2 dirs deep in each tree
+        "--preview 'eza --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')'"
+        "--preview-window right,border-vertical" 
+        "--bind 'ctrl-/:toggle-preview'"
+        "--scheme=path"
+        "--filepath-word"
+        "--multi" 
+        "--info=inline"
+        "--border=sharp" 
+        # let it be taller than fzf history, but not fullscreen like changeDir
+        "--height=50%" 
+        "--tabstop=4" 
+        "--color=dark" 
+        "--cycle" 
+        "--layout=reverse"
+      ];
     };
 
     programs.bash = {
