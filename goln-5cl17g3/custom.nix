@@ -1,7 +1,7 @@
 { pkgs, misc, lib, config, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
-  custom = {
+  config = {
     # extra packages that should be installed only on this host
     home.packages = [
       pkgs.distrobox
