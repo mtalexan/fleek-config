@@ -1,31 +1,36 @@
 { pkgs, misc, lib, config, ... }:
-let a=1;
-in
-{
-  # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
-#####################################
-# Files (arbitrary)
-#####################################
-# Each of the following should define an option.custom.files.X.enable, then set the
-# matching home.file.X.enable with the option value.
-
-{ pkgs, misc, lib, config, ... }:
-# The primary distrobox config file
+  # FEEL FREE TO EDIT: This file is NOT managed by fleek.
 let
-  cfgfile = ".config/distrobox/distrobox.conf";
+  # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+  vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
+    pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
+    version = "${rev}";
+    src = pkgs.fetchFromGitHub {
+      owner = "${owner}";
+      repo = "${repo}";
+      rev = "${rev}";
+      hash = "${hash}";
+    };
+  };
 in
 {
-  options.custom.files.${cfgfile}.enable = {
+  #####################################
+  # Files (arbitrary)
+  #####################################
+  # Each of the following should define an option.custom.files.X.enable, then set the
+  # matching home.file.X.enable with the option value.
+
+  options.custom.files.".config/distrobox/distrobox.conf".enable = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        If enabled, the distrobox.conf file is auto-populated from the home.file."${cfgfile}"
+        If enabled, the distrobox.conf file is auto-populated from the home.file.".config/distrobox/distrobox.conf"
       '';
     };
   };
-  home.file.${cfgfile} = {
-    enable = config.custom.files.${cfgfile}.enable;
+  home.file.".config/distrobox/distrobox.conf" = {
+    enable = config.custom.files.".config/distrobox/distrobox.conf".enable;
     executable = false;
     text =
       ''
@@ -35,31 +40,24 @@ in
         container_init_hook="~/.config/distrobox/init-hooks.sh"
       '';
   };
-}
 
-{ pkgs, misc, lib, config, ... }:
-# distrobox hooks to copy are host-name specific
-let
-  cfgfile = ".config/distrobox";
-in
-{
-  options.custom.files.${cfgfile}.enable = {
+  # distrobox hooks to copy are host-name specific
+  options.custom.files.".config/distrobox".enable = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
         If enabled, the distrobox pre-init and init hooks are auto-populated.  Requires creating a copy of the
         home_files/template_distrobox using the home_files/from_templates.sh into a specific host folder, and
-        explicitly setting the home.file."${cfgfile}".source to a path relative to the custom.nix.
+        explicitly setting the home.file.".config/distrobox".source to a path relative to the custom.nix.
       '';
     };
   };
-
-  home.file.${cfgfile} = {
+  home.file.".config/distrobox" = {
     # 'source' must be set in the custom.nix!
     #source = ./home_files/distrobox;
 
-    enable = config.custom.files.${cfgfile}.enable;
+    enable = config.custom.files.".config/distrobox".enable;
     # keep the permissions from the files in the fleek folder
     executable = null;
     # Make each individual file a symlink in the copy rather than symlinking the
@@ -67,17 +65,11 @@ in
     # latter.
     recursive = true;
   };
-}
 
-{ pkgs, misc, lib, config, ... }:
-# The basic settings for podman.
-# Still requires uidmap to be installed manually from built-in package manager.
-# Pulled from Ubuntu.
-let
-  cfgfile = ".config/containers";
-in
-{
-  options.custom.files.${cfgfile}.enable = {
+  # The basic settings for podman.
+  # Still requires uidmap to be installed manually from built-in package manager.
+  # Pulled from Ubuntu.
+  options.custom.files.".config/containers".enable = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -87,9 +79,8 @@ in
       '';
     };
   };
-
-  home.file.${cfgfile} = {
-    enable = config.custom.files.${cfgfile}.enable;
+  home.file.".config/containers" = {
+    enable = config.custom.files.".config/containers".enable;
     executable = false;
     # Make each individual file a symlink in the copy rather than symlinking the
     # whole directory. We put other home.file's here too, so we can't do the
@@ -97,15 +88,9 @@ in
     recursive = true;
     source = ./home_files/podman_config;
   };
-}
 
-{ pkgs, misc, lib, config, ... }:
-# set of pre-defined short name aliases for images via podman
-let
-  cfgfile = ".config/containers/registries.conf.d/000-shortnames.conf";
-in
-{
-  options.custom.files.${cfgfile}.enable = {
+  # set of pre-defined short name aliases for images via podman
+  options.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -116,8 +101,8 @@ in
     };
   };
 
-  home.file.${cfgfile} = {
-    enable = config.custom.files.${cfgfile}.enable;
+  home.file.".config/containers/registries.conf.d/000-shortnames.conf" = {
+    enable = config.custom.files.".config/containers/registries.conf.d/000-shortnames.conf".enable;
     executable = false;
     text = ''
       [aliases]
@@ -171,23 +156,7 @@ in
         "node" = "docker.io/library/node"
     '';
   };
-}
 
-{ pkgs, misc, lib, config, ... }:
-let
-  # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-  vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
-    pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
-    version = "${rev}";
-    src = pkgs.fetchFromGitHub {
-      owner = "${owner}";
-      repo = "${repo}";
-      rev = "${rev}";
-      hash = "${hash}";
-    };
-  };
-in
-{
   #####################################
   # Program configs
   #####################################
@@ -1743,5 +1712,5 @@ in
     ];
   };
 }
-}
+
 # vim: sw=2:expandtab
