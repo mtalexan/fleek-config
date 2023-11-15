@@ -42,12 +42,6 @@
     executable = true;
     source = ../home_files/distrobox/pre-init-hooks.sh;
   };
-  config.home.file.".config/distrobox/init-hooks.d/.keep" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
-    executable = false;
-    # only used to ensure the folder exists
-    text = "";
-  };
   config.home.file.".config/distrobox/pre-init-hooks.d/.keep" = {
     enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
     executable = false;
