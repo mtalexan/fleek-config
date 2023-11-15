@@ -15,7 +15,38 @@ let
 
 in
 {
-  
+  #####################################
+  # Files (arbitrary)
+  #####################################
+
+  home.file = {
+    # The primary distrobox config file
+    ".config/distrobox/distrobox.conf" = {
+      enable = false;
+      executable = false;
+      text = [
+        # support the init hooks (see home.file.distrobox_preinithooks)
+        ''container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"''
+        # support the init hooks (see home.file.distrobox_inithooks)
+        ''container_init_hook="~/.config/distrobox/init-hooks.sh"''
+        # configure it to use docker
+        #''container_manager="docker"''
+      ];
+    };
+
+    # distrobox hooks to copy are host-name specific
+    ".config/distrobox" = {
+      enable = false;
+      # keep the permissions from the files in the fleek folder
+      executable = null;
+      # Make each individual file a symlink in the copy rather than symlinking the
+      # whole directory. We put home.file.distrobox_config here too, so we can't do the
+      # latter.
+      recursive = true;
+      # relative to the repo root, under the host-specific folder
+      source = ./${hostname}/home_files/distrobox;
+    };
+  };
 
   #####################################
   # Program configs
