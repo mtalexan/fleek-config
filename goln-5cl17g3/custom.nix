@@ -23,12 +23,6 @@
       };
       config.engine = "docker";
     };
-    ## add an extra line specifically to on this host for the distrobox config
-    #home.file.".config/distrobox/distrobox.conf".text =
-    #    ''
-    #      # configure it to use docker
-    #      container_manager="docker"
-    #    '';
 
     custom.podman.config = {
       ubuntu = true;

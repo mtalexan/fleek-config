@@ -12,16 +12,31 @@
   # Distrobox
   #####################################
 
-  # Adds scripts for parsing hooks from directories, the directory structure itself, and the settings in the
-  # distrobox.confto use the hooks.  Always includes the hooks for passing thru nix support.
-  # Optionally includes the hooks for injecting the host certs, and for passing thru the docker socket (with permissions).
-  # Extra distrobox.conf can be specified by putting it in home.file.".config/distrobox/distrobox.conf".text in a custom.nix
+  # Supports some basic distrobox customization.
+  # config.
+  #   engine : string : can be set to the name of a container engine that will be included explicitly in the distrobox.conf.
+  #            without this setting, distrobox picks whichever is  installed, and may prefer an unexpected engine
+  #            when multiple are installed.
+  #   extra : string : any extra options to add to the distrobox.conf.  Should be a string with \n.
+  # hooks.
+  #   enable : T/F : Add the pre-init and init hook directories with scripts to parse them, and add the hook scripts
+  #            to the distrobox.conf.  Automatically adds an init-hook.d/20-nix.sh that will map thru the nix
+  #            store and commands from the host.
+  #   host_certs : T/F : Injects extra custom certificates from the host into the containers.  Also adds any certs from
+  #                the ~/.config/distrobox/certs/ folder.
+  #   docker_sock : T/F : Maps the docker socket from the host into the container with the proper permissions.  Assumes
+  #                 the container has client tools installed that are able to make use of the socket.
   options.custom.distrobox = with lib; {
     config = {
       engine = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = "If set to non-null, the container engine is explicitly set in the distrobox.conf";
+      };
+      extra = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Any extra options to add to the distrobox.conf";
       };
     };
     hooks = {
@@ -33,7 +48,7 @@
   };
 
   config.home.file.".config/distrobox/distrobox.conf" = {
-    enable = config.custom.distrobox.hooks.enable or (config.custom.distrobox.config.engine != null);
+    enable = config.custom.distrobox.hooks.enable or (config.custom.distrobox.config.engine != null) or (config.custom.distrobox.config.extra != null);
     executable = false;
     text = "" +
       lib.optionalString config.custom.distrobox.hooks.enable
@@ -46,6 +61,8 @@
         ''
           container_manager="${config.custom.distrobox.config.engine}"
         ''
+      +
+      lib.optionalString (config.custom.distrobox.config.extra != null) ${config.custom.distrobox.config.extra}
     ;
   };
   config.home.file.".config/distrobox/init-hooks.sh" = {
@@ -94,9 +111,11 @@
   # Podman
   #####################################
 
-  # Adds basic config for podman, and optionally a predefined list of shortname aliases for public images.
-  # Will run an onChange hook to verify you have newuidmap and newgidmap available, and are in the /etc/subuid
-  # and /etc/subgid files.
+  # Supports automated setup of some common podman-on-Ubuntu settings.
+  # config.
+  #   ubuntu : T/F : Adds a pre-defined storage.conf, default registries via registries.conf, and sig-store location
+  #            via registries.d/default.yaml
+  #   shortnames : T/F : Adds a list of short aliases for common public images via registries.conf.d/000-shortnames.conf
   options.custom.podman.config = with lib; {
     # includes the nix hook by default
     ubuntu = mkEnableOption(mdDoc "podman ubuntu-like storage.conf, default registries, and sig-store");
