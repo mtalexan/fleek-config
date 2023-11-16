@@ -32,6 +32,7 @@
 
   programs.bash = {
     enable = true;
+    # This doesn't seem to work.  The line had to be added manually instead
     enableCompletion = true;
     enableVteIntegration = true;
 
@@ -47,6 +48,14 @@
     historyControl = [
       "ignoredups"
       "ignorespace"
+    ];
+
+    # this is included in all shell types, not just interactive
+    bashrcExtra = lib.concatLines [
+      # enableCompletion = true is supposed to set this, but it doesn't seem to work.  Add it manually
+      ''
+        . ${pkgs.bash-completion}/share/bash-completion/bash_completion
+      ''
     ];
 
     # already in fleek

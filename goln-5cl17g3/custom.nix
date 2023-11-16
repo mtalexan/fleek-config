@@ -10,6 +10,12 @@
       pkgs.skopeo
     ];
 
+    # the paths to the system directories for these tools so completions will work
+    environment.pathsToLink = [
+      "/usr/share/bash-completion"
+      "/usr/share/zsh"
+    ];
+
     #####################################
     # Files (arbitrary)
     #####################################
