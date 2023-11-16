@@ -6,8 +6,6 @@
     # extra packages that should be installed only on this host
     home.packages = [
       pkgs.distrobox
-      pkgs.podman
-      pkgs.skopeo
     ];
 
     #####################################
