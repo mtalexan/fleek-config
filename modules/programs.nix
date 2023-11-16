@@ -2,7 +2,7 @@
 # Programs that aren't the shell or the prompt are in here
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-  vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPluginFrom2Nix {
+  vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPlugin {
     pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
     version = "${rev}";
     src = pkgs.fetchFromGitHub {
