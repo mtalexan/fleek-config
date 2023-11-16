@@ -62,7 +62,7 @@
           container_manager="${config.custom.distrobox.config.engine}"
         ''
       +
-      lib.optionalString (config.custom.distrobox.config.extra != null) ${config.custom.distrobox.config.extra}
+      lib.optionalString (config.custom.distrobox.config.extra != null) config.custom.distrobox.config.extra
     ;
   };
   config.home.file.".config/distrobox/init-hooks.sh" = {
