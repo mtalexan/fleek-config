@@ -48,7 +48,7 @@
   };
 
   config.home.file.".config/distrobox/distrobox.conf" = {
-    enable = config.custom.distrobox.hooks.enable or (config.custom.distrobox.config.engine != null) or (config.custom.distrobox.config.extra != null);
+    enable = config.custom.distrobox.hooks.enable || (config.custom.distrobox.config.engine != null) || (config.custom.distrobox.config.extra != null);
     executable = false;
     text = "" +
       lib.optionalString config.custom.distrobox.hooks.enable
@@ -66,23 +66,23 @@
     ;
   };
   config.home.file.".config/distrobox/init-hooks.sh" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
+    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/init-hooks.sh;
   };
   config.home.file.".config/distrobox/pre-init-hooks.sh" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
+    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/pre-init-hooks.sh;
   };
   config.home.file.".config/distrobox/pre-init-hooks.d/.keep" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
+    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
     executable = false;
     # only used to ensure the folder exists
     text = "";
   };
   config.home.file.".config/distrobox/init-hooks.d/20-nix.sh" = {
-    enable = config.custom.distrobox.hooks.enable or config.custom.distrobox.hooks.host_certs or config.custom.distrobox.hooks.docker_sock;
+    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
     executable = true;
     source = ../home_files/distrobox/init-hooks.d/20-nix.sh;
   };
