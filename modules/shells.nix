@@ -50,13 +50,13 @@
       "ignorespace"
     ];
 
-    ## this is included in all shell types, not just interactive
-    #bashrcExtra = lib.concatLines [
-    #  # enableCompletion = true is supposed to set this, but it doesn't seem to work.  Add it manually
-    #  ''
-    #    . ${pkgs.bash-completion}/share/bash-completion/bash_completion
-    #  ''
-    #];
+    # this is included in all shell types, not just interactive
+    bashrcExtra = lib.concatLines [
+      # enableCompletion = true is supposed to set this, but it doesn't seem to work.  Add it manually
+      ''
+        . ${pkgs.bash-completion}/share/bash-completion/bash_completion
+      ''
+    ];
 
     # already in fleek
     # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
