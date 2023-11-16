@@ -118,25 +118,20 @@
   #   shortnames : T/F : Adds a list of short aliases for common public images via registries.conf.d/000-shortnames.conf
   options.custom.podman.config = with lib; {
     # includes the nix hook by default
-    ubuntu = mkEnableOption(mdDoc "podman ubuntu-like storage.conf, default registries, and sig-store");
+    ubuntu = mkEnableOption(mdDoc "podman ubuntu-like libpod.conf and default public registries");
     shortnames = mkEnableOption(mdDoc "podman shortname aliases for common public images");
   };
 
 
-  config.home.file.".config/containers/storage.conf" = {
+  config.home.file.".config/containers/libpod.conf" = {
     enable = config.custom.podman.config.ubuntu;
     executable = false;
-    source = ../home_files/podman_config/storage.conf;
+    source = ../home_files/podman_config/libpod.conf;
   };
   config.home.file.".config/containers/registries.conf" = {
     enable = config.custom.podman.config.ubuntu;
     executable = false;
     source = ../home_files/podman_config/registries.conf;
-  };
-  config.home.file.".config/containers/registries.d/default.yaml" = {
-    enable = config.custom.podman.config.ubuntu;
-    executable = false;
-    source = ../home_files/podman_config/registries.d/default.yaml;
   };
 
 
