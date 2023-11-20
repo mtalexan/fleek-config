@@ -113,8 +113,10 @@
 
   # Supports automated setup of some common podman-on-Ubuntu settings.
   # config.
-  #   ubuntu : T/F : Adds a pre-defined storage.conf, default registries via registries.conf, and sig-store location
-  #            via registries.d/default.yaml
+  #   ubuntu : T/F : Adds a pre-defined storage.conf, default registries via registries.conf, sig-store location
+  #            via registries.d/default.yaml, and policy.json for loopback access to the containers.
+  #            Likely the pkgs.catatonit will also need to be installed with pkgs.podman so the --init option to podman
+  #            works.
   #   shortnames : T/F : Adds a list of short aliases for common public images via registries.conf.d/000-shortnames.conf
   options.custom.podman.config = with lib; {
     # includes the nix hook by default

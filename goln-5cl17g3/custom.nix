@@ -7,6 +7,8 @@
     home.packages = [
       pkgs.distrobox
       pkgs.podman
+      # need to include catatonit if using he custom.podman.config.ubuntu=true so the --init option works to podman
+      pkgs.catatonit
       pkgs.skopeo
     ];
 
