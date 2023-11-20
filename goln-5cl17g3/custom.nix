@@ -27,8 +27,8 @@
     };
 
     custom.podman.config = {
-      ubuntu = false;
-      shortnames = false;
+      ubuntu = true;
+      shortnames = true;
     };
 
     #####################################
