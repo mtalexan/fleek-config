@@ -133,7 +133,11 @@
     executable = false;
     source = ../home_files/podman_config/registries.conf;
   };
-
+  config.home.file.".config/containers/policy.json" = {
+    enable = config.custom.podman.config.ubuntu;
+    executable = false;
+    source = ../home_files/podman_config/policy.json;
+  };
 
   config.home.file.".config/containers/registries.conf.d/000-shortnames.conf" = {
     enable = config.custom.podman.config.shortnames;
