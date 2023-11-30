@@ -14,7 +14,6 @@ let
   };
 in
 {
-
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -62,6 +61,14 @@ in
         '';
       }
     ];
+  };
+
+  # shared shell settings
+  # WARNING: by default all sessionVariables are only sourced once at login.
+  #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
+  home.sessionVariables = {
+    SUDOEDITOR = "nvim";
+    GIT_EDITOR = "nvim";
   };
 }
 
