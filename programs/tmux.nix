@@ -76,17 +76,17 @@
           # what to copy to when keys are pressed
           # default is 'clipboard'
           ''
-          set -g @yank_selection 'primary'
+          set -g @yank_selection 'clipboard'
           ''
           # what to copy to when mouse highlights something.
           # default='primary'
           ''
           set -g @yank_selection_mouse 'primary'
           ''
-          ## stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
-          #''
-          #set -g @yank_action 'copy-pipe'
-          #''
+          # stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
+          ''
+          set -g @yank_action 'copy-pipe'
+          ''
         ];
       }
 
@@ -100,11 +100,6 @@
           # Use 'tmux show-options -g | grep status' to see what the current values are
           ''
           set -g status-left '#{tmux_mode_indicator} [#{session_name}]'
-          ''
-          # override the normal mode indicator text (normally ' TMUX ').
-          # all of them are 4 characters, so maintain width.
-          ''
-          set -g @mode_indicator_empty_prompt '      '
           ''
         ];
       }
