@@ -94,12 +94,19 @@
         # shows the mode (wait, copy, sync, tmux) in the mode line
         # https://github.com/MunifTanjim/tmux-mode-indicator
         plugin = tmuxPlugins.mode-indicator;
-        # requires manually adding '#{tmux_mode_indicator}' to either status-left or status-right,
-        # replicating what's already there.
-        # Use 'tmux show-options -g | grep status' to see what the current values are
-        extraConfig = ''
-        set -g status-left '#{tmux_mode_indicator} [#{session_name}]
-        '';
+        extraConfig = lib.concatLines [
+          # requires manually adding '#{tmux_mode_indicator}' to either status-left or status-right,
+          # replicating what's already there, in order to do anything
+          # Use 'tmux show-options -g | grep status' to see what the current values are
+          ''
+          set -g status-left '#{tmux_mode_indicator} [#{session_name}]'
+          ''
+          # override the normal mode indicator text (normally ' TMUX ').
+          # all of them are 4 characters, so maintain width.
+          ''
+          set -g @mode_indicator_empty_prompt '      '
+          ''
+        ];
       }
 
       # saves all the pane input/output (prefix + M-S-p), what's currently visible (Prefix + M-p),
