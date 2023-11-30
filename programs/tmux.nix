@@ -132,7 +132,7 @@
       }
 
       {
-        # Prefix + ? fuzzy scrollback search for jumping to matched line
+        # Prefix + C-f fuzzy scrollback search for jumping to matched line
         # https://github.com/roosta/tmux-fuzzback
         plugin = tmuxPlugins.fuzzback;
         extraConfig = lib.concatLines [
