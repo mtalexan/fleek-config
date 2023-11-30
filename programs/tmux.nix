@@ -38,6 +38,10 @@
       ''
       bind-key -T prefix v paste-buffer -p
       ''
+      # enable set-clipboard, which is the best way when using a decent terminal
+      ''
+      set -s set-clipboard external
+      ''
     ];
 
     plugins = with pkgs; [
