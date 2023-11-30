@@ -40,7 +40,7 @@
       ''
       # unbind our right click, tmux never has anything useful and doesn't keep the menu up
       ''
-      unbind MouseDown2Pane
+      unbind-key MouseDown3Pane
       ''
     ];
 
