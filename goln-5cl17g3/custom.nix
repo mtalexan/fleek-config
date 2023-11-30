@@ -10,7 +10,7 @@
       # need to include catatonit if using he custom.podman.config.ubuntu=true so the --init option works to podman
       pkgs.catatonit
       pkgs.skopeo
-      pkgs.renamea
+      pkgs.rename
     ];
 
     #####################################
