@@ -11,7 +11,7 @@
     # can include session|window|pane|command|keybinding|clipboard|process
     TMUX_FZF_ORDER="window|pane|command|keybinding|session"
 
-  }
+  };
 
   programs.tmux = {
     # default prefix is C-b
@@ -44,8 +44,9 @@
     plugins = with pkgs; [
       # tmux-sensible always included automatically
 
-      # theme for tmux colors
       {
+        # theme for tmux colors
+        # https://github.com/egel/tmux-gruvbox
         plugin = tmuxPlugins.gruvbox;
         extraConfig = lib.concatLines [
           # set theme color to 'light' or 'dark'
