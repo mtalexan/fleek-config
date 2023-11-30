@@ -437,7 +437,8 @@
       ''bindkey '^[ ' set-mark-command-tracked''
 
       # Ctrl+space
-      ''bindkey '^ ' set-mark-command-tracked''
+      # conflicts with tmux copy-mode set mark
+      #''bindkey '^ ' set-mark-command-tracked''
 
       # Ctrl+@ (what's actually sent on Ctrl+space)
       ''bindkey '^@' set-mark-command-tracked''
