@@ -28,7 +28,7 @@
     plugins = with pkgs; [
       # tmux-sensible always included automatically
 
-      # uses FZF for interaction
+      # Prefix + S-f Uses FZF for command interaction
       # https://github.com/sainnhe/tmux-fzf
       tmuxPlugins.tmux-fzf
 
@@ -36,7 +36,8 @@
       # https://github.com/MunifTanjim/tmux-mode-indicator
       tmuxPlugins.mode-indicator
 
-      # saves all the pane history, what's currently visible, or everything that's been typed and printed
+      # saves all the pane input/output (prefix + M-S-p), what's currently visible (Prefix + M-p),
+      # start/stop logging everything (Prefix + S-p), or clear pane history (Prefix + M-c)
       # using a key combo trigger
       # https://github.com/tmux-plugins/tmux-logging
       tmuxPlugins.logging
