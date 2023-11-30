@@ -9,7 +9,7 @@
     TMUX_FZF_LAUNCH_KEY="f";
     # option choices and ordering.
     # can include session|window|pane|command|keybinding|clipboard|process
-    TMUX_FZF_ORDER="window|pane|command|keybinding|session";
+    TMUX_FZF_ORDER="window|pane|command|keybinding|session|clipboard";
   };
 
   programs.tmux = {
