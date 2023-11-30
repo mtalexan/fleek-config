@@ -1,4 +1,10 @@
 { pkgs, misc, lib, ... }: {
+
+  ## plugins that aren't configured by home-manager
+  #home.packages = with pkgs; [
+  #  tmuxPlugins.tmux-fzf
+  #];
+
   programs.tmux = {
     enable = true;
     # automatically includes the tmux-sensible plugin, which adapts some common options
@@ -8,21 +14,27 @@
     keyMode = "emacs";
     mouse = true;
 
-    # currently conflicts with zsh-completions package, which has conflicting file permissions on the _tmuxinator completions file
-    ## Allow tmux layouts, startup/exit behaviors, etc to be pre-defined in YAML.
-    ## https://github.com/tmuxinator/tmuxinator
-    ## Stores the settings (with --local) in .tmuxinator.yaml in the current folder
-    ## Create a new project (multiple allowed per file)
-    ##   tmuxinator new --local [project]
-    ## Start a tmux session from the project:
-    ##   tmuxinator start --local [project]
-    #tmuxinator.enable = true;
+    # Allow tmux layouts, startup/exit behaviors, etc to be pre-defined in YAML.
+    # Can convert from tmuxinator or teamocil formats if needed
+    # https://github.com/tmux-python/tmuxp
+    # Capture a current tmux session with:
+    #   tmuxp freeze -f yaml -o {pathed_file_name.yaml}
+    #  (will need manual correction of processes in the panes. 
+    #   Use 'null', 'blank', or 'shell_command:' for panes with default shell
+    #   https://github.com/tmux-python/tmuxp)
+    #
     tmuxp.enable = true;
 
-    #plugins = with pkgs; [
-    #  # tmux-sensible always included automatically
-    #  tmuxPlugins.
-    #];
+    plugins = with pkgs; [
+      # tmux-sensible always included automatically
+
+      # uses FZF for interaction
+      # https://github.com/sainnhe/tmux-fzf
+      tmuxPlugins.tmux-fzf
+      # shows the mode (wait, copy, sync, tmux) in the mode line
+      # https://github.com/MunifTanjim/tmux-mode-indicator
+      tmuxPlugins.mode-indicator
+    ];
   };
 }
 
