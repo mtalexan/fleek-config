@@ -1,11 +1,20 @@
 { pkgs, misc, lib, ... }: {
+  # Requires fzf for most of the plugins
 
-  ## plugins that aren't configured by home-manager
-  #home.packages = with pkgs; [
-  #  tmuxPlugins.tmux-fzf
-  #];
+  # extra environment variables
+  home.sessionVariables = {
+    # tmux-fzf configures most options via environment variables instead
+
+    # Prefix + this to trigger it
+    TMUX_FZF_LAUNCH_KEY="f";
+    # option choices and ordering.
+    # can include session|window|pane|command|keybinding|clipboard|process
+    TMUX_FZF_ORDER="window|pane|command|keybinding|session"
+
+  }
 
   programs.tmux = {
+    # default prefix is C-b
     enable = true;
     # automatically includes the tmux-sensible plugin, which adapts some common options
     # https://github.com/tmux-plugins/tmux-sensible
@@ -25,16 +34,73 @@
     #
     tmuxp.enable = true;
 
+    extraConfig = lib.concatLines [
+      # rebind paste from primary key combo to Prefix + v
+      ''
+      bind-key -T prefix v paste-buffer -p
+      ''
+    ];
+
     plugins = with pkgs; [
       # tmux-sensible always included automatically
 
-      # Prefix + S-f Uses FZF for command interaction
+      # theme for tmux colors
+      {
+        plugin = tmuxPlugins.gruvbox;
+        extraConfig = lib.concatLines [
+          # set theme color to 'light' or 'dark'
+          ''
+          set -g @tmux-grubox 'dark'
+          ''
+        ];
+      }
+
+      # Prefix + f Uses FZF for command interaction
       # https://github.com/sainnhe/tmux-fzf
+      # Most settings are thru TMUX_FZF_ environment variables (see above)
       tmuxPlugins.tmux-fzf
 
-      # shows the mode (wait, copy, sync, tmux) in the mode line
-      # https://github.com/MunifTanjim/tmux-mode-indicator
-      tmuxPlugins.mode-indicator
+      # Better copy support, including mouse, clipboard, and remote clipboard.
+      # https://github.com/tmux-plugins/tmux-yank
+      # Copy Mode:
+      #   Prefix + y copies to primary, secondary, or clipboard.
+      #   Prefix + S-y copies current directory to primary, secondary, or clipboard, and 
+      #     immediately exists copy mode and pastes it.
+      # Normal Mode:
+      #   Prefix + y copies text from command-line primary, secondary, or clipboard
+      #   Prefix + S-y copies current working directory to primary, secondary, or clipboard
+      # requires wl-copy or xsel to be installed for 'clipboard' option to work
+      {
+        plugin = tmuxPlugins.yank;
+        extraConfig = lib.concatLines [
+          # what to copy to when keys are pressed
+          # default is 'clipboard'
+          ''
+          set -g @yank_selection 'primary'
+          ''
+          # what to copy to when mouse highlights something.
+          # default='primary'
+          ''
+          set -g @yank_selection_mouse 'primary'
+          ''
+          ## stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
+          #''
+          #set -g @yank_action 'copy-pipe'
+          #''
+        ];
+      }
+
+      {
+        # shows the mode (wait, copy, sync, tmux) in the mode line
+        # https://github.com/MunifTanjim/tmux-mode-indicator
+        plugin = tmuxPlugins.mode-indicator;
+        # requires manually adding '#{tmux_mode_indicator}' to either status-left or status-right,
+        # replicating what's already there.
+        # Use 'tmux show-options -g | grep status' to see what the current values are
+        extraConfig = ''
+        set -g status-left '#{} [#{session_name}]
+        '';
+      }
 
       # saves all the pane input/output (prefix + M-S-p), what's currently visible (Prefix + M-p),
       # start/stop logging everything (Prefix + S-p), or clear pane history (Prefix + M-c)
@@ -42,7 +108,7 @@
       # https://github.com/tmux-plugins/tmux-logging
       tmuxPlugins.logging
 
-      # Prefix + j activates easyjump mode to jump to an instance of an entered character based on the hint typed
+      # Prefix + j activates easyjump mode and auto-enters copy mode
       # https://github.com/schasse/tmux-jump
       tmuxPlugins.jump
 
@@ -56,7 +122,7 @@
           #set  -g @fzf-url-history-limit '2000'
           #''
 
-          # changes fzf config options
+          # changes fzf config options.  Does not use default fzf display options.
           #''
           #set -g @fzf-url-fzf-options 'h-w 50% -h 50% --multi -0 --no-preview --no-border'
           #''
@@ -68,9 +134,21 @@
         # https://github.com/roosta/tmux-fuzzback
         plugin = tmuxPlugins.fuzzback;
         extraConfig = lib.concatLines [
-          ## make it an fzf popup rather than regular fzf
+          # set the keybinding
+          ''
+          set -g @fuzzback-bind 'C-f'
+          ''
+          # make it an fzf popup rather than regular fzf
+          ''
+          set -g @fuzzback-popup 1
+          ''
+          # set the popup size (limit it)
+          ''
+          set -g @fuzzback-popup-size '20%'
+          ''
+          ## reverse so entry is at the top and selection is top-down instead
           #''
-          #set -g @fuzzback-popup 1
+          #set -g @fuzzback-finder-layouer 'reverse'
           #''
         ];
       }
