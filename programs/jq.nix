@@ -1,5 +1,5 @@
 { pkgs, misc, lib, ... }: {
-  programs.jq {
+  programs.jq = {
     enable = true;
   };
 }
