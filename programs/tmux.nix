@@ -38,6 +38,10 @@
       ''
       bind-key -T prefix v paste-buffer -p
       ''
+      # unbind our right click, tmux never has anything useful and doesn't keep the menu up
+      ''
+      unbind MouseDown2Pane
+      ''
     ];
 
     plugins = with pkgs; [
@@ -51,6 +55,10 @@
           # set theme color to 'light' or 'dark'
           ''
           set -g @tmux-grubox 'dark'
+          ''
+          # middle click in copy-mode exits the mode and pastes primary
+          ''
+          bind-key -T copy-mode MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" { send-keys -M } { cancel } { paste-buffer -p }
           ''
         ];
       }
@@ -86,6 +94,16 @@
           # stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
           ''
           set -g @yank_action 'copy-pipe-no-clear'
+          ''
+          # not actually from the plugin, support double click to select word, and triple click to select line
+          # WARNING: this hardcodes using xsel
+          ''
+          bind -T copy-mode    DoubleClick1Pane select-pane \; send -X select-word \; send -X copy-pipe-no-clear "xsel -i --primary"
+          bind -T copy-mode-vi DoubleClick1Pane select-pane \; send -X select-word \; send -X copy-pipe-no-clear "xsel -i --primary"
+          bind -n DoubleClick1Pane select-pane \; copy-mode -M \; send -X select-word \; send -X copy-pipe-no-clear "xsel -i --primary"
+          bind -T copy-mode    TripleClick1Pane select-pane \; send -X select-line \; send -X copy-pipe-no-clear "xsel -i --primary"
+          bind -T copy-mode-vi TripleClick1Pane select-pane \; send -X select-line \; send -X copy-pipe-no-clear "xsel -i --primary"
+          bind -n TripleClick1Pane select-pane \; copy-mode -M \; send -X select-line \; send -X copy-pipe-no-clear "xsel -i --primary"
           ''
         ];
       }
