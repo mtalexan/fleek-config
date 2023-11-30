@@ -9,7 +9,7 @@
     TMUX_FZF_LAUNCH_KEY="f";
     # option choices and ordering.
     # can include session|window|pane|command|keybinding|clipboard|process
-    TMUX_FZF_ORDER="window|pane|command|keybinding|session|clipboard";
+    TMUX_FZF_ORDER="window|pane|command|keybinding|process|session|clipboard";
   };
 
   programs.tmux = {
@@ -34,7 +34,7 @@
     tmuxp.enable = true;
 
     extraConfig = lib.concatLines [
-      # rebind paste from primary key combo to Prefix + v
+      # bind paste-from-primary key combo to Prefix + v also
       ''
       bind-key -T prefix v paste-buffer -p
       ''
@@ -57,38 +57,38 @@
 
       # Prefix + f Uses FZF for command interaction
       # https://github.com/sainnhe/tmux-fzf
-      # Most settings are thru TMUX_FZF_ environment variables (see above)
+      # Settings are all thru TMUX_FZF_ environment variables (see above)
       tmuxPlugins.tmux-fzf
 
-      # Better copy support, including mouse, clipboard, and remote clipboard.
-      # https://github.com/tmux-plugins/tmux-yank
-      # Copy Mode:
-      #   Prefix + y copies to primary, secondary, or clipboard.
-      #   Prefix + S-y copies current directory to primary, secondary, or clipboard, and 
-      #     immediately exists copy mode and pastes it.
-      # Normal Mode:
-      #   Prefix + y copies text from command-line primary, secondary, or clipboard
-      #   Prefix + S-y copies current working directory to primary, secondary, or clipboard
-      # requires wl-copy or xsel to be installed for 'clipboard' option to work
-      {
-        plugin = tmuxPlugins.yank;
-        extraConfig = lib.concatLines [
-          # what to copy to when keys are pressed
-          # default is 'clipboard'
-          ''
-          set -g @yank_selection 'clipboard'
-          ''
-          # what to copy to when mouse highlights something.
-          # default='primary'
-          ''
-          set -g @yank_selection_mouse 'primary'
-          ''
-          # stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
-          ''
-          set -g @yank_action 'copy-pipe'
-          ''
-        ];
-      }
+      ## Better copy support, including mouse, clipboard, and remote clipboard.
+      ## https://github.com/tmux-plugins/tmux-yank
+      ## Copy Mode:
+      ##   Prefix + y copies to primary, secondary, or clipboard.
+      ##   Prefix + S-y copies current directory to primary, secondary, or clipboard, and 
+      ##     immediately exists copy mode and pastes it.
+      ## Normal Mode:
+      ##   Prefix + y copies text from command-line primary, secondary, or clipboard
+      ##   Prefix + S-y copies current working directory to primary, secondary, or clipboard
+      ## requires wl-copy or xsel to be installed for 'clipboard' option to work
+      #{
+      #  plugin = tmuxPlugins.yank;
+      #  extraConfig = lib.concatLines [
+      #    # what to copy to when keys are pressed
+      #    # default is 'clipboard'
+      #    ''
+      #    set -g @yank_selection 'clipboard'
+      #    ''
+      #    # what to copy to when mouse highlights something.
+      #    # default='primary'
+      #    ''
+      #    set -g @yank_selection_mouse 'primary'
+      #    ''
+      #    # stay in copy mode after yanking instead of leaving it (default='copy-pipe-and-cancel')
+      #    ''
+      #    set -g @yank_action 'copy-pipe-no-clear'
+      #    ''
+      #  ];
+      #}
 
       {
         # shows the mode (wait, copy, sync, tmux) in the mode line
