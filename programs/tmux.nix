@@ -15,7 +15,7 @@
     #   tmuxinator new --local [project]
     # Start a tmux session from the project:
     #   tmuxinator start --local [project]
-    tmuxinator.enable = true;
+    #tmuxinator.enable = true;
 
     #plugins = with pkgs; [
     #  # tmux-sensible always included automatically
