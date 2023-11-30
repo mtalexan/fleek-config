@@ -150,7 +150,7 @@
           ''
           ## reverse so entry is at the top and selection is top-down instead
           #''
-          #set -g @fuzzback-finder-layouer 'reverse'
+          #set -g @fuzzback-finder-layout 'reverse'
           #''
         ];
       }
