@@ -58,7 +58,11 @@
           ''
           # middle click in copy-mode exits the mode and pastes primary
           ''
-          bind-key -T copy-mode MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" { send-keys -M } { cancel } { paste-buffer -p }
+          bind-key -T copy-mode MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" { send-keys -M } { paste-buffer -p }
+          ''
+          # unbind right-click, the menus don't stay open so they don't work
+          ''
+          unbind MouseDown3Pane
           ''
         ];
       }
