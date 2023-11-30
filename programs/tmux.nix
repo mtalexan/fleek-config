@@ -98,7 +98,7 @@
         # replicating what's already there.
         # Use 'tmux show-options -g | grep status' to see what the current values are
         extraConfig = ''
-        set -g status-left '#{} [#{session_name}]
+        set -g status-left '#{tmux_mode_indicator} [#{session_name}]
         '';
       }
 
