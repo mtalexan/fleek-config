@@ -74,9 +74,28 @@
         ];
       }
 
-      # Prefix + Tab to get fzf fuzzy-searchable list of tokens to paste or copy
-      # https://github.com/laktak/extrakto
-      tmuxPlugins.extrakto
+      {
+        # Prefix + Tab to get fzf fuzzy-searchable list of tokens to paste or copy
+        # https://github.com/laktak/extrakto
+        plugin = tmuxPlugins.extrakto;
+        extraConfig = lib.concatLines [
+          # configure what content to grab for parsing
+          # "recent" (visible), "full" pane's history, "window recent" (all windows'
+          # visible areas), "window full" (all current windows' panes' history),
+          # or any of the options followed by a number to limit the scrollback from
+          # the relevant panes to the specified limit.
+          # Default = "window full"
+          ''
+          set -g @extrakto_grab_area 'window recent'
+          ''
+          ## configure filter type availability and order, with first being default.
+          ## Options are: word, line, path, url, quote, s-quote, all
+          ## Default = word all line
+          #''
+          #set -g @extrakto_filter_order 'word all line'
+          #''
+        ];
+      }
     ];
   };
 }
