@@ -76,7 +76,7 @@
 
       # Prefix + Tab to get fzf fuzzy-searchable list of tokens to paste or copy
       # https://github.com/laktak/extrakto
-      tmuxPlugins.extraakto
+      tmuxPlugins.extrakto
     ];
   };
 }
