@@ -3,6 +3,7 @@
 
   imports = [
     ../modules/fedora_shells.nix
+    ../programs/terminator.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well

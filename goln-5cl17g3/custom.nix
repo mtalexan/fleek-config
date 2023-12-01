@@ -1,6 +1,10 @@
 { pkgs, misc, lib, config, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
+  imports = [
+    ../programs/terminator.nix
+  ];
+
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
     # extra packages that should be installed only on this host

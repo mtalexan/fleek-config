@@ -20,7 +20,8 @@
     ./programs/ripgrep.nix
     ./programs/script-directory.nix
     ./programs/tealdear.nix
-    ./programs/terminator.nix
+    # this is a GUI app, so individual hosts must add it manually
+    #./programs/terminator.nix
     ./programs/tmux.nix
     ./programs/zoxide.nix
 
