@@ -38,9 +38,9 @@
       ''
       bind-key -T prefix v paste-buffer -p
       ''
-      # unbind our right click, tmux never has anything useful and doesn't keep the menu up
+      # middle click in copy-mode exits the mode and pastes primary (hopefully?)
       ''
-      unbind-key MouseDown3Pane
+      bind-key -T copy-mode MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" { send-keys -M } { paste-buffer -p }
       ''
     ];
 
@@ -55,14 +55,6 @@
           # set theme color to 'light' or 'dark'
           ''
           set -g @tmux-grubox 'dark'
-          ''
-          # middle click in copy-mode exits the mode and pastes primary
-          ''
-          bind-key -T copy-mode MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" { send-keys -M } { paste-buffer -p }
-          ''
-          # unbind right-click, the menus don't stay open so they don't work
-          ''
-          unbind MouseDown3Pane
           ''
         ];
       }
