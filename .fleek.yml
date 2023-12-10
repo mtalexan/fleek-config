@@ -129,6 +129,17 @@ systems:
         ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
         username: mike
       username: mike
+    - arch: x86_64
+      home: ""
+      hostname: cloud-t610
+      os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: Mike
+        ssh_private_key_file: ~/.ssh/id_ed25519_github
+        ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
+        username: mike
+      username: mike
 track: nixos-unstable
 unfree: true
 users:
