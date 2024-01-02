@@ -177,7 +177,7 @@
     # let execute bit be defined individually by the files in the linked directory
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
   };
-  config.programs.bash.initExtra = (lib.mkIf config.custom.extraterm.config.enableBashIntegration
+  config.programs.bash.initExtra = (lib.mkIf config.custom.extraterm.config.enableBashIntegration {
      lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
     ]
