@@ -5,7 +5,10 @@
   #          The current config below relies on the kitty.app being in home_files, and will link the application.
 
   options.custom.kitty.config = with lib; {
-    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues?)");
+    # It would be great if we could do this, but Golang packages in Nix usually aren't setup properly for LDAP users that aren't
+    # in the passwd file, and that includes Kitty. Additionally, the GLFX/OpenGL stuff doesn't detect from the system properly during
+    # the build.
+    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues? LDAP failure.)");
   };
 
   # Add manually installed tools to the PATH (~/.local/bin)

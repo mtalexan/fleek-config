@@ -3,7 +3,7 @@
 
   imports = [
     ../programs/terminator.nix
-    #../programs/kitty.nix
+    ../programs/kitty.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -37,9 +37,10 @@
       shortnames = true;
     };
 
-    #custom.kitty.config = {
-    #  fromNix = false;
-    #};
+    # the default. Doesn't work because Golang fails on LDAP lookup, and OpenGL build detection fails.
+    custom.kitty.config = {
+      fromNix = false;
+    };
 
     #####################################
     # Programs
