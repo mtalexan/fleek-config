@@ -146,6 +146,52 @@
     executable = false;
     source = ../home_files/podman_config/registries.conf.d/000-shortnames.conf;
   };
+
+  #####################################
+  # Extraterm
+  #####################################
+
+  # Terminal emulator. Uses the new Qt version (post 0.60.0). Includes some custom shell commands and command
+  # framing support.
+  # Currently setup of 0.75.0.
+  #   enable : T/F : Installs the AppImage as 'extraterm' in ~/.local/bin. First time running it on a system adds options to the GUI.
+  #   enableBashIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to bashrc
+  #   enableZshIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to zshrc
+  #   enableFishIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to fishrc
+  options.custom.extraterm.config = with lib; {
+    enable = mkEnableOption(mdDoc "Enable extraterm AppImage in the ~/.local/bin (PATH) as 'extraterm'");
+    enableBashIntegration = mkEnableOption(mdDoc "Enable bash integration required for framing and 'from' and 'show' commands.");
+    enableZshIntegration = mkEnableOption(mdDoc "Enable zsh integration required for framing and 'from' and 'show' commands.");
+    enableFishIntegration = mkEnableOption(mdDoc "Enable fish integration required for framing and 'from' and 'show' commands.");
+  }
+
+  config.home.file.".local/bin/extraterm" = {
+    enable = config.custom.extraterm.config.enable;
+    executable = true;
+    source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.Appimage;
+  };
+
+  config.home.file.".config/extraterm/integrations" = {
+    enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration || config.custom.extraterm.config.enableFishIntegration;
+    recursive = false; # symlink the whole folder, not each file in it
+    # let execute bit be defined individually by the files in the linked directory
+    source = ../home_files/extraterm/extraterm-commands-0.75.0;
+  };
+  (mkIf config.custom.extraterm.config.enableBashIntegration {
+    config.programs.bash.initExtra = lib.concatLines [
+      "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
+    ];
+  })
+  (mkIf config.custom.extraterm.config.enableZshIntegration {
+    config.programs.zsh.initExtra = lib.concatLines [
+      "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
+    ];
+  })
+  (mkIf config.custom.extraterm.config.enableFishIntegration {
+    config.programs.fish.initExtra = lib.concatLines [
+      "source $HOME/.config/extraterm/integrations/setup_extraterm_fish.fish"
+    ];
+  })
 }
 
 # vim: sw=2:expandtab
