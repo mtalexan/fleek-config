@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Installs kitty, which relies on OpenGL and therefore can't work when installed via Nix.
+# Directions from https://sw.kovidgoyal.net/kitty/binary/#install-kitty
 #
 # Args:
 #  1: (optional) install destination folder. Will contain kitty.app when done. Default="~/.local/"

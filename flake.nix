@@ -15,9 +15,6 @@
 
     # Overlays
     
-    nixgl.url = "github:guibou/nixGL";
-    
-    
 
   };
 
@@ -49,7 +46,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -75,7 +72,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -101,7 +98,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -127,7 +124,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -153,7 +150,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -179,7 +176,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];
@@ -205,7 +202,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.nixgl.overlay ];
+           nixpkgs.overlays = [];
           })
 
         ];

@@ -34,10 +34,7 @@ git:
     enabled: true
 min_version: 0.8.4
 name: Fleek Configuration
-overlays:
-  nixgl:
-    url: github:guibou/nixGL
-    follow: false
+overlays: {}
 packages:
     - helix
     - nerdfonts
