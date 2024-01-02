@@ -6,7 +6,7 @@
   # the nix derivation, so we have to manually put the folders somewhere so that changes will be detected.
   home.file.".local/share/sd" = {
     enable = true;
-    recursive = false;
+    recursive = true;
     source = ../sd_scripts;
   };
 
