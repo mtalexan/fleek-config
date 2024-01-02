@@ -11,24 +11,24 @@
   # Add manually installed tools to the PATH (~/.local/bin)
   config.home.file = {
     ".local/bin/kitty" = {
-      enable = ! config.custom.kitty.config.fromNix;
+      enable = (! config.custom.kitty.config.fromNix);
       executable = true;
       source = ../home_files/kitty.app/bin/kitty;
     };
     ".local/bin/kitten" = {
-      enable = ! config.custom.kitty.config.fromNix;
+      enable = (! config.custom.kitty.config.fromNix);
       executable = true;
       source = ../home_files/kitty.app/bin/kitten;
     };
     # install the icon
     ".local/share/icons/kitty.png" = {
-      enable = ! config.custom.kitty.config.fromNix;
+      enable = (! config.custom.kitty.config.fromNix);
       executable = false;
       source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
     };
     # add the .desktop files
     ".local/share/applications/kitty.desktop" = {
-      enable = ! config.custom.kitty.config.fromNix;
+      enable = (! config.custom.kitty.config.fromNix);
       executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
@@ -46,7 +46,7 @@
       '';
     };
     ".local/share/applications/kitty-open.desktop" = {
-      enable = ! config.custom.kitty.config.fromNix;
+      enable = (! config.custom.kitty.config.fromNix);
       executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
