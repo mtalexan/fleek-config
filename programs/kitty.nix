@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, options... }: {
+{ pkgs, misc, lib, config, options, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
   # WARNING: The nix version doesn't work since it's hermatically sealed against system graphics capabilities detection.
   #          Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
