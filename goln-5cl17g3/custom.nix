@@ -36,10 +36,10 @@
       shortnames = true;
     };
 
-    #custom.extraterm.config = {
-    #  enableBashIntegration = true;
-    #  enableZshIntegration = true;
-    #};
+    custom.extraterm.config = {
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
 
     #####################################
     # Programs
