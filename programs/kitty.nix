@@ -4,29 +4,32 @@
   #          Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
   #          The current config below relies on the kitty.app being in home_files, and will link the application.
 
+  options.custom.kitty.config = with lib; {
+    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues?)")
+  };
 
   # Add manually installed tools to the PATH (~/.local/bin)
-  home.file = {
+  config.home.file = {
     ".local/bin/kitty" = {
-      enabled = true;
+      enable = !config.custom.kitty.config.fromNix;
       executable = true;
       source = ../home_files/kitty.app/bin/kitty;
     };
     ".local/bin/kitten" = {
-      enabled = true;
+      enable = !config.custom.kitty.config.fromNix;
       executable = true;
       source = ../home_files/kitty.app/bin/kitten;
     };
     # install the icon
     ".local/share/icons/kitty.png" = {
-      enabled = true;
+      enable = !config.custom.kitty.config.fromNix;
       executable = false;
       source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
     };
     # add the .desktop files
     ".local/share/applications/kitty.desktop" = {
-      enabled = true;
-      executable = true;
+      enable = !config.custom.kitty.config.fromNix;
+      executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
       text = ''
@@ -43,8 +46,8 @@
       '';
     };
     ".local/share/applications/kitty-open.desktop" = {
-      enabled = true;
-      executable = true;
+      enable = !config.custom.kitty.config.fromNix;
+      executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
       text = ''
@@ -66,7 +69,7 @@
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
-  programs.zsh.initExtra = ''
+  config.programs.zsh.initExtra = ''
     if test -n "$KITTY_INSTALLATION_DIR"; then
         export KITTY_SHELL_INTEGRATION="enabled"
         autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
@@ -74,15 +77,15 @@
         unfunction kitty-integration
     fi
   '';
-  programs.bash.initExtra = ''
+  config.programs.bash.initExtra = ''
     if test -n "$KITTY_INSTALLATION_DIR"; then
         export KITTY_SHELL_INTEGRATION="enabled"
         source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
     fi
   '';
 
-  programs.kitty = {
-    enable = false;
+  config.programs.kitty = {
+    enable = config.custom.kitty.config.fromNix;
     shellIntegration = {
       # Since automatic shell integration doesn't work in subshells, multiplexers, etc, we have to manually detect and load the code ourselves
       # as part of the rc file
