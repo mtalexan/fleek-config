@@ -19,7 +19,7 @@
   '';
 
   programs.kitty = {
-    enable = true;
+    enable = false;
     shellIntegration = {
       # Since automatic shell integration doesn't work in subshells, multiplexers, etc, we have to manually detect and load the code ourselves
       # as part of the rc file
@@ -31,7 +31,7 @@
     #  "LS_COLORS" = "1";
     #};
     #font = {
-    #  package = ???;
+    #  package = pkgs.nerdfonts;
     #  name = ???;
     #  size = ???;
     #};
