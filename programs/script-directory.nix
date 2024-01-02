@@ -2,21 +2,13 @@
   # a quick script calling tool from a sub-directory of scripts
   # https://github.com/ianthehenry/sd
 
-  # programs.script-directory.settings.SD_ROOT doesn't proper track the folder contents to know when to regenerate
-  # the nix derivation, so we have to manually put the folders somewhere so that changes will be detected.
-  home.file.".local/share/sd" = {
-    enable = true;
-    recursive = true;
-    source = ../sd_scripts;
-  };
+  # WARNING: This package doesn't work properly in home-manager and will not detect changes to the sd_scripts folder
+  #          to regenerate the derivation containing the files.  You MUST disable sd and then re-enable it to get it to regenerate.
 
   programs.script-directory = {
     enable = true;
     settings = {
-      # this can't be files in fleek directly or the files will get copied into a derivation that doesn't
-      # properly detect when it needs to be updated.  Instead we link the files in our fleeks folder to a location in the HOME,
-      # then use that folder as the SD_ROOT
-      SD_ROOT = "${config.home.homeDirectory}/.local/share/sd";
+      SD_ROOT = "${../sd_scripts}";
       # defaults to EDITOR or VISUALEDITOR if not set
       SD_EDITOR = "nvim";
       # defaults to 'cat' if not set

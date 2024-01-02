@@ -1,78 +1,11 @@
-{ pkgs, misc, lib, config, options, ... }: {
+{ pkgs, misc, lib, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
-  # WARNING: The nix version doesn't work since it's hermatically sealed against system graphics capabilities detection.
-  #          Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
-  #          The current config below relies on the kitty.app being in home_files, and will link the application.
-
-  options.custom.kitty.config = with lib; {
-    # It would be great if we could do this, but Golang packages in Nix usually aren't setup properly for LDAP users that aren't
-    # in the passwd file, and that includes Kitty. Additionally, the GLFX/OpenGL stuff doesn't detect from the system properly during
-    # the build.
-    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues? LDAP failure.)");
-    fromManual = mkEnableOption(mdDoc "kitty was manually installed to ~/.local/kitty.app/ already.");
-  };
-
-  # Add manually installed tools to the PATH (~/.local/bin)
-  config.home.file = {
-    ".local/bin/kitty" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
-      executable = true;
-      source = ../home_files/kitty.app/bin/kitty;
-    };
-    ".local/bin/kitten" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
-      executable = true;
-      source = ../home_files/kitty.app/bin/kitten;
-    };
-    # install the icon
-    ".local/share/icons/kitty.png" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
-      executable = false;
-      source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
-    };
-    # add the .desktop files
-    ".local/share/applications/kitty.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
-      executable = false;
-      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-      # The file is so simple anyway, just generate it instead.
-      text = ''
-        [Desktop Entry]
-        Version=1.0
-        Type=Application
-        Name=kitty
-        GenericName=Terminal emulator
-        Comment=Fast, feature-rich, GPU based terminal
-        TryExec=kitty
-        Exec=$HOME/.local/bin/kitty
-        Icon=$HOME/.local/share/icons/kitty.png
-      '';
-    };
-    ".local/share/applications/kitty-open.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
-      executable = false;
-      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-      # The file is so simple anyway, just generate it instead.
-      text = ''
-        [Desktop Entry]
-        Version=1.0
-        Type=Application
-        Name=kitty URL Launcher
-        GenericName=Terminal emulator
-        Comment=Open URLs with kitty
-        TryExec=kitty
-        Exec=$HOME/.local/bin/kitty +open %U
-        Icon=$HOME/.local/share/icons/kitty.png
-        Categories=System;TerminalEmulator;
-        NoDisplay=true
-        MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
-      '';
-    };
-  };
+  # WARNING: Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
+  #          An sd command is provided to ease this 'sd install kitty'
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
-  config.programs.zsh.initExtra = ''
+  programs.zsh.initExtra = ''
     if test -n "$KITTY_INSTALLATION_DIR"; then
         export KITTY_SHELL_INTEGRATION="enabled"
         autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
@@ -80,15 +13,16 @@
         unfunction kitty-integration
     fi
   '';
-  config.programs.bash.initExtra = ''
+  programs.bash.initExtra = ''
     if test -n "$KITTY_INSTALLATION_DIR"; then
         export KITTY_SHELL_INTEGRATION="enabled"
         source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
     fi
   '';
 
-  config.programs.kitty = {
-    enable = config.custom.kitty.config.fromNix && (! config.custom.kitty.config.fromManual);
+  programs.kitty = {
+    # can't install from nix
+    enable = false;
     shellIntegration = {
       # Since automatic shell integration doesn't work in subshells, multiplexers, etc, we have to manually detect and load the code ourselves
       # as part of the rc file

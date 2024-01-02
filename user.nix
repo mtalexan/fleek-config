@@ -18,7 +18,7 @@
     ./programs/nix-index.nix
     ./programs/noti.nix
     ./programs/ripgrep.nix
-    ./programs/script-directory.nix
+    #./programs/script-directory.nix
     ./programs/tealdear.nix
     # this is a GUI app, so individual hosts must add it manually
     #./programs/terminator.nix

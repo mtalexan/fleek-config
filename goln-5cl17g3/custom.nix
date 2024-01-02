@@ -37,12 +37,6 @@
       shortnames = true;
     };
 
-    # the default. Doesn't work because Golang fails on LDAP lookup, and OpenGL build detection fails.
-    custom.kitty.config = {
-      fromNix = false;
-      fromManual = true;
-    };
-
     #####################################
     # Programs
     #####################################
