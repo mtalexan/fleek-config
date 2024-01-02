@@ -2,9 +2,6 @@
   # a quick script calling tool from a sub-directory of scripts
   # https://github.com/ianthehenry/sd
 
-  # WARNING: This package doesn't work properly in home-manager and will not detect changes to the sd_scripts folder
-  #          to regenerate the derivation containing the files.  You MUST disable sd and then re-enable it to get it to regenerate.
-
   programs.script-directory = {
     enable = true;
     settings = {
