@@ -170,7 +170,7 @@
   };
 
   config.home.file.".config/extraterm/integrations" = {
-    enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration || config.custom.extraterm.config.enableFishIntegration;
+    enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration;
     recursive = false; # symlink the whole folder, not each file in it
     # let execute bit be defined individually by the files in the linked directory
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
