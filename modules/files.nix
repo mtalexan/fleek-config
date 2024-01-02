@@ -180,18 +180,26 @@
     enable = config.custom.extraterm.config.enableAppImage;
     executable = false;
     text = ''
+      #!/usr/bin/env xdg-open
       [Desktop Entry]
+      Version=0.75.0
+      Terminal=false
       Type=Application
       Name=Extraterm
-      GenericName=Terminal
       Comment=Extraterm terminal emulator
-      Icon=$HOME/.local/share/extraterm/icon.png
-      Exec=$HOME/.local/bin/extraterm
-      Terminal=false
+      Exec=~/.local/bin/extraterm
+      Icon=~/.local/share/extraterm/icon.png
       Categories=Utility
     '';
-    # register the desktop file when it gets updated/changed if xdg-desktop-menu is present in the system
-    onChange = ''if [ -n "$(which xdg-desktop-menu)" ] ; then $(which xdg-desktop-menu) install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop; fi'';
+    # register the desktop file when it gets updated/changed.
+    # Try 'update-desktop-database' if it exists, otherwise try 'xdg-desktop-menu'
+    onChange = ''
+      if [ -n "$(which update-desktop-database)" ]; then
+        $(which update-desktop-database) ~/.local/share/applications
+      elif [ -n "$(which xdg-desktop-menu)" ] ; then
+        $(which xdg-desktop-menu) install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop
+      fi
+    '';
   };
 
   config.home.file.".config/extraterm/integrations" = {
