@@ -20,7 +20,7 @@
   home.files.".local/share/icons/kitty.png" = {
     enabled = true;
     executable = false;
-    source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png
+    source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
   };
   # add the .desktop files
   home.files.".local/share/applications/kitty.desktop" = {
