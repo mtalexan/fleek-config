@@ -163,7 +163,7 @@
     enableBashIntegration = mkEnableOption(mdDoc "Enable bash integration required for framing and 'from' and 'show' commands.");
     enableZshIntegration = mkEnableOption(mdDoc "Enable zsh integration required for framing and 'from' and 'show' commands.");
     enableFishIntegration = mkEnableOption(mdDoc "Enable fish integration required for framing and 'from' and 'show' commands.");
-  }
+  };
 
   config.home.file.".local/bin/extraterm" = {
     enable = config.custom.extraterm.config.enable;
