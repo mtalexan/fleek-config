@@ -177,18 +177,18 @@
     # let execute bit be defined individually by the files in the linked directory
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
   };
-  (lib.mkIf config.custom.extraterm.config.enableBashIntegration
-    config.programs.bash.initExtra = lib.concatLines [
+  config.programs.bash.initExtra = (lib.mkIf config.custom.extraterm.config.enableBashIntegration
+     lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
     ];
   })
-  (lib.mkIf config.custom.extraterm.config.enableZshIntegration {
-    config.programs.zsh.initExtra = lib.concatLines [
+  config.programs.zsh.initExtra = (lib.mkIf config.custom.extraterm.config.enableZshIntegration {
+    lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
     ];
   })
-  (lib.mkIf config.custom.extraterm.config.enableFishIntegration {
-    config.programs.fish.initExtra = lib.concatLines [
+  config.programs.fish.initExtra = (lib.mkIf config.custom.extraterm.config.enableFishIntegration {
+    lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_fish.fish"
     ];
   })
