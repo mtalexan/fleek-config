@@ -9,62 +9,60 @@
   };
 
   # Add manually installed tools to the PATH (~/.local/bin)
-  config.home.file = {
-    ".local/bin/kitty" = {
-      enable = (! config.custom.kitty.config.fromNix);
-      executable = true;
-      source = ../home_files/kitty.app/bin/kitty;
-    };
-    ".local/bin/kitten" = {
-      enable = (! config.custom.kitty.config.fromNix);
-      executable = true;
-      source = ../home_files/kitty.app/bin/kitten;
-    };
-    # install the icon
-    ".local/share/icons/kitty.png" = {
-      enable = (! config.custom.kitty.config.fromNix);
-      executable = false;
-      source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
-    };
-    # add the .desktop files
-    ".local/share/applications/kitty.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix);
-      executable = false;
-      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-      # The file is so simple anyway, just generate it instead.
-      text = ''
-        [Desktop Entry]
-        Version=1.0
-        Type=Application
-        Name=kitty
-        GenericName=Terminal emulator
-        Comment=Fast, feature-rich, GPU based terminal
-        TryExec=kitty
-        Exec=$HOME/.local/bin/kitty
-        Icon=$HOME/.local/share/icons/kitty.png
-        Categories=System;TerminalEmulator;
-      '';
-    };
-    ".local/share/applications/kitty-open.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix);
-      executable = false;
-      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-      # The file is so simple anyway, just generate it instead.
-      text = ''
-        [Desktop Entry]
-        Version=1.0
-        Type=Application
-        Name=kitty URL Launcher
-        GenericName=Terminal emulator
-        Comment=Open URLs with kitty
-        TryExec=kitty
-        Exec=$HOME/.local/bin/kitty +open %U
-        Icon=$HOME/.local/share/icons/kitty.png
-        Categories=System;TerminalEmulator;
-        NoDisplay=true
-        MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
-      '';
-    };
+  config.home.file.".local/bin/kitty" = {
+    enable = (! config.custom.kitty.config.fromNix);
+    executable = true;
+    source = ../home_files/kitty.app/bin/kitty;
+  };
+  config.home.file.".local/bin/kitten" = {
+    enable = (! config.custom.kitty.config.fromNix);
+    executable = true;
+    source = ../home_files/kitty.app/bin/kitten;
+  };
+  # install the icon
+  config.home.file.".local/share/icons/kitty.png" = {
+    enable = (! config.custom.kitty.config.fromNix);
+    executable = false;
+    source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
+  };
+  # add the .desktop files
+  config.home.file.".local/share/applications/kitty.desktop" = {
+    enable = (! config.custom.kitty.config.fromNix);
+    executable = false;
+    # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
+    # The file is so simple anyway, just generate it instead.
+    text = ''
+      [Desktop Entry]
+      Version=1.0
+      Type=Application
+      Name=kitty
+      GenericName=Terminal emulator
+      Comment=Fast, feature-rich, GPU based terminal
+      TryExec=kitty
+      Exec=$HOME/.local/bin/kitty
+      Icon=$HOME/.local/share/icons/kitty.png
+      Categories=System;TerminalEmulator;
+    '';
+  };
+  config.home.file.".local/share/applications/kitty-open.desktop" = {
+    enable = (! config.custom.kitty.config.fromNix);
+    executable = false;
+    # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
+    # The file is so simple anyway, just generate it instead.
+    text = ''
+      [Desktop Entry]
+      Version=1.0
+      Type=Application
+      Name=kitty URL Launcher
+      GenericName=Terminal emulator
+      Comment=Open URLs with kitty
+      TryExec=kitty
+      Exec=$HOME/.local/bin/kitty +open %U
+      Icon=$HOME/.local/share/icons/kitty.png
+      Categories=System;TerminalEmulator;
+      NoDisplay=true
+      MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
+    '';
   };
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
