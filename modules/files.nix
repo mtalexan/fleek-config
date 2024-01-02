@@ -183,13 +183,16 @@
       [Desktop Entry]
       Type=Application
       Name=Extraterm
+      GenericName=Terminal
       Comment=Extraterm terminal emulator
       Icon=$HOME/.local/share/extraterm/icon.png
       Exec=$HOME/.local/bin/extraterm
       Terminal=false
-      Categories=Extraterm;terminal
+      Categories=Utility
     '';
-  };t
+    # register the desktop file when it gets updated/changed
+    onChange = "xdg-desktop-menu install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop";
+  };
 
   config.home.file.".config/extraterm/integrations" = {
     enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration;
