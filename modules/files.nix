@@ -177,15 +177,21 @@
     # let execute bit be defined individually by the files in the linked directory
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
   };
-  config.programs.bash.initExtra = mkIf config.custom.extraterm.config.enableBashIntegration {
+  config.programs.bash.initExtra = lib.concatLines [
+    (mkIf config.custom.extraterm.config.enableBashIntegration {
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
-  };
-  config.programs.zsh.initExtra = mkIf config.custom.extraterm.config.enableZshIntegration {
+    })
+  ];
+  config.programs.zsh.initExtra = lib.concatLines [
+    (mkIf config.custom.extraterm.config.enableZshIntegration {
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
-  };
-  config.programs.fish.initExtra = mkIf config.custom.extraterm.config.enableFishIntegration {
+    })
+  ];
+  config.programs.fish.initExtra = lib.concatLines [
+    (mkIf config.custom.extraterm.config.enableFishIntegration {
       "source $HOME/.config/extraterm/integrations/setup_extraterm_fish.fish"
-  };
+    })
+  ];
 }
 
 # vim: sw=2:expandtab
