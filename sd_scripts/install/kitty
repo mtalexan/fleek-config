@@ -4,7 +4,7 @@
 # Directions from https://sw.kovidgoyal.net/kitty/binary/#install-kitty
 #
 # Args:
-#  1: (optional) install destination folder. Will contain kitty.app when done. Default="~/.local/"
+#  1: (optional) install destination folder. Will contain kitty.app when done. Default="${HOME}/.local/". Cannot use "~/".
 
 die() {
     [ $# -eq 0 ] || echo >&2 "ERROR: " "$@"
@@ -12,9 +12,8 @@ die() {
 }
 
 # default install dir is already ~/.local, we just make it explicit
-INSTALL_DIR="${1:-~/.local}"
-#shellcheck disable=SC2086 # do NOT quote INSTALL_DIR in the readlink or the evaluation of ~/ will fail.
-abs_install_dir="$(readlink -e ${INSTALL_DIR})"
+INSTALL_DIR="${1:-${HOME}/.local}"
+abs_install_dir="$(readlink -e "${INSTALL_DIR}")"
 [ -n "${abs_install_dir}" ] || die "No such installation path: ${INSTALL_DIR}"
 readonly INSTALL_DIR
 readonly abs_install_dir
