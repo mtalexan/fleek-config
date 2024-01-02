@@ -194,10 +194,10 @@
     # register the desktop file when it gets updated/changed.
     # Try 'update-desktop-database' if it exists, otherwise try 'xdg-desktop-menu'
     onChange = ''
-      if [ -n "$(which update-desktop-database)" ]; then
-        $(which update-desktop-database) ~/.local/share/applications
-      elif [ -n "$(which xdg-desktop-menu)" ] ; then
-        $(which xdg-desktop-menu) install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop
+      if command -v update-desktop-database &>/dev/null; then
+        update-desktop-database ~/.local/share/applications
+      elif command -v xdg-desktop-menu &>/dev/null ; then
+        xdg-desktop-menu install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop
       fi
     '';
   };
