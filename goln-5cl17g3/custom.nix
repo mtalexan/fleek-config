@@ -37,8 +37,7 @@
     };
 
     custom.extraterm.config = {
-      enable = true;
-      guiIntegration = true;
+      enableAppImage = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
