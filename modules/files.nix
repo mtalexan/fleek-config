@@ -157,12 +157,10 @@
   #   enable : T/F : Installs the AppImage as 'extraterm' in ~/.local/bin. First time running it on a system adds options to the GUI.
   #   enableBashIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to bashrc
   #   enableZshIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to zshrc
-  #   enableFishIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to fishrc
   options.custom.extraterm.config = with lib; {
     enable = mkEnableOption(mdDoc "Enable extraterm AppImage in the ~/.local/bin (PATH) as 'extraterm'");
     enableBashIntegration = mkEnableOption(mdDoc "Enable bash integration required for framing and 'from' and 'show' commands.");
     enableZshIntegration = mkEnableOption(mdDoc "Enable zsh integration required for framing and 'from' and 'show' commands.");
-    enableFishIntegration = mkEnableOption(mdDoc "Enable fish integration required for framing and 'from' and 'show' commands.");
   };
 
   config.home.file.".local/bin/extraterm" = {
@@ -185,11 +183,6 @@
   config.programs.zsh.initExtra = (lib.mkIf config.custom.extraterm.config.enableZshIntegration
     (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
-    ])
-  );
-  config.programs.fish.initExtra = (lib.mkIf config.custom.extraterm.config.enableFishIntegration
-    (lib.concatLines [
-      "source $HOME/.config/extraterm/integrations/setup_extraterm_fish.fish"
     ])
   );
 }
