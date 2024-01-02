@@ -178,19 +178,19 @@
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
   };
   config.programs.bash.initExtra = (lib.mkIf config.custom.extraterm.config.enableBashIntegration {
-     lib.concatLines [
+     (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
-    ]
+    ])
   });
   config.programs.zsh.initExtra = (lib.mkIf config.custom.extraterm.config.enableZshIntegration {
-    lib.concatLines [
+    (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
-    ]
+    ])
   });
   config.programs.fish.initExtra = (lib.mkIf config.custom.extraterm.config.enableFishIntegration {
-    lib.concatLines [
+    (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_fish.fish"
-    ]
+    ])
   });
 }
 
