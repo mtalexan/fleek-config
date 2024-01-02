@@ -159,48 +159,50 @@
   #   enableBashIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to bashrc
   #   enableZshIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to zshrc
   options.custom.extraterm.config = with lib; {
-    enableAppImage = mkEnableOption(mdDoc "Enable extraterm AppImage in the ~/.local/bin (PATH) as 'extraterm'");
+    # app image is broken
+    #enableAppImage = mkEnableOption(mdDoc "Enable extraterm AppImage in the ~/.local/bin (PATH) as 'extraterm'");
+    # WARNING: this integration causes extraterm to be unable to run subshells
     enableBashIntegration = mkEnableOption(mdDoc "Enable bash integration required for framing and 'from' and 'show' commands.");
     enableZshIntegration = mkEnableOption(mdDoc "Enable zsh integration required for framing and 'from' and 'show' commands.");
   };
 
-
-  config.home.file.".local/bin/extraterm" = {
-    enable = config.custom.extraterm.config.enableAppImage;
-    executable = true;
-    source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.AppImage;
-  };
-
-  config.home.file.".local/share/extraterm/icon.png" = {
-    enable = config.custom.extraterm.config.enableAppImage;
-    executable = true;
-    source = ../home_files/extraterm/icon.png;
-  };
-  config.home.file.".local/share/applications/Extraterm-0.75.0.desktop" = {
-    enable = config.custom.extraterm.config.enableAppImage;
-    executable = false;
-    text = ''
-      #!/usr/bin/env xdg-open
-      [Desktop Entry]
-      Version=0.75.0
-      Terminal=false
-      Type=Application
-      Name=Extraterm
-      Comment=Extraterm terminal emulator
-      Exec=~/.local/bin/extraterm
-      Icon=~/.local/share/extraterm/icon.png
-      Categories=Utility
-    '';
-    # register the desktop file when it gets updated/changed.
-    # Try 'update-desktop-database' if it exists, otherwise try 'xdg-desktop-menu'
-    onChange = ''
-      if command -v update-desktop-database &>/dev/null; then
-        update-desktop-database ~/.local/share/applications
-      elif command -v xdg-desktop-menu &>/dev/null ; then
-        xdg-desktop-menu install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop
-      fi
-    '';
-  };
+  # AppImage doesn't work as a technology for terminals since it nests a new environment that masks some of the host
+  #config.home.file.".local/bin/extraterm" = {
+  #  enable = config.custom.extraterm.config.enableAppImage;
+  #  executable = true;
+  #  source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.AppImage;
+  #};
+  #
+  #config.home.file.".local/share/extraterm/icon.png" = {
+  #  enable = config.custom.extraterm.config.enableAppImage;
+  #  executable = true;
+  #  source = ../home_files/extraterm/icon.png;
+  #};
+  #config.home.file.".local/share/applications/Extraterm-0.75.0.desktop" = {
+  #  enable = config.custom.extraterm.config.enableAppImage;
+  #  executable = false;
+  #  text = ''
+  #    #!/usr/bin/env xdg-open
+  #    [Desktop Entry]
+  #    Version=0.75.0
+  #    Terminal=false
+  #    Type=Application
+  #    Name=Extraterm
+  #    Comment=Extraterm terminal emulator
+  #    Exec=~/.local/bin/extraterm
+  #    Icon=~/.local/share/extraterm/icon.png
+  #    Categories=Utility
+  #  '';
+  #  # register the desktop file when it gets updated/changed.
+  #  # Try 'update-desktop-database' if it exists, otherwise try 'xdg-desktop-menu'
+  #  onChange = ''
+  #    if command -v update-desktop-database &>/dev/null; then
+  #      update-desktop-database ~/.local/share/applications
+  #    elif command -v xdg-desktop-menu &>/dev/null ; then
+  #      xdg-desktop-menu install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop
+  #    fi
+  #  '';
+  #};
 
   config.home.file.".config/extraterm/integrations" = {
     enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration;
