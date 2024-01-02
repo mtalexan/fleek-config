@@ -36,6 +36,13 @@
       shortnames = true;
     };
 
+    custom.extraterm.config = {
+      # use from the AppImage doesn't work
+      #enableAppImage = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
+
     #####################################
     # Programs
     #####################################
