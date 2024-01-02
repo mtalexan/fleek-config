@@ -9,6 +9,7 @@
     # in the passwd file, and that includes Kitty. Additionally, the GLFX/OpenGL stuff doesn't detect from the system properly during
     # the build.
     fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues? LDAP failure.)");
+    manualInstall = mkEnableOption(mdDoc "kitty was manually installed to ~/.local/kitty.app/ already.");
   };
 
   # Add manually installed tools to the PATH (~/.local/bin)
@@ -16,18 +17,18 @@
     ".local/bin/kitty" = {
       enable = ! config.custom.kitty.config.fromNix;
       executable = true;
-      source = ../home_files/kitty.app/bin/kitty;
+      source = (lib.mkIf config.custom.kitty.config.manualInstall { ../home_files/kitty.app/bin/kitty; } { $HOME/.local/kitty.app/bin/kitty; } );
     };
     ".local/bin/kitten" = {
       enable = ! config.custom.kitty.config.fromNix;
       executable = true;
-      source = ../home_files/kitty.app/bin/kitten;
+      source = (lib.mkIf config.custom.kitty.config.manualInstall { ../home_files/kitty.app/bin/kitten; } { $HOME/.local/kitty.app/bin/kitten; } );
     };
     # install the icon
     ".local/share/icons/kitty.png" = {
       enable = ! config.custom.kitty.config.fromNix;
       executable = false;
-      source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
+      source = (lib.mkIf config.custom.kitty.config.manualInstall { ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png; } { $HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png; } );
     };
     # add the .desktop files
     ".local/share/applications/kitty.desktop" = {
@@ -45,7 +46,6 @@
         TryExec=kitty
         Exec=$HOME/.local/bin/kitty
         Icon=$HOME/.local/share/icons/kitty.png
-        Categories=System;TerminalEmulator;
       '';
     };
     ".local/share/applications/kitty-open.desktop" = {
