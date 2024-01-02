@@ -190,8 +190,8 @@
       Terminal=false
       Categories=Utility
     '';
-    # register the desktop file when it gets updated/changed
-    onChange = "xdg-desktop-menu install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop";
+    # register the desktop file when it gets updated/changed if xdg-desktop-menu is present in the system
+    onChange = ''if [ -n "$(which xdg-desktop-menu)" ] ; then $(which xdg-desktop-menu) install --mode user $HOME/.local/share/applications/Extraterm-0.75.0.desktop; fi'';
   };
 
   config.home.file.".config/extraterm/integrations" = {
