@@ -411,6 +411,17 @@
       #:     map ctrl+alt+a send_text application Word\x1bOH
     };
 
+    # See theme options with 'kitty +kitten themes'.
+    # These change the color name definitions, so using 'red' or 'bright-green' have different meanings.
+    #theme = "Glacier";
+    theme = "Neowave";
+    #theme = "Nightfox";
+    #theme = "Relaxed Afterglow";
+    #theme = "Renault Style";
+    #theme = "Space Gray Eighties";
+    #theme = "Space Gray Eighties Dull";
+    #theme = "Warm Neon";
+
     # note that the 'extraConfig' can be used to directly set the native format directly instead
     settings = {
       # Ctrl+Shift+F2 in kitty opens a well commented settings file
@@ -1463,9 +1474,6 @@
       #: to x11 or wayland to force the choice. Changing this setting by
       #: reloading the config is not supported.
     };
-
-    # See theme options with 'kitty +kitten themes'
-    #theme = ;
   };
 }
 
