@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Installs kitty, which relies on OpenGL and therefore can't work when installed via Nix.
+#
+# Args:
+#  1: (optional) install destination folder. Will contain kitty.app when done. Default="~/.local/"
+
+die() {
+    [ $# -eq 0 ] || echo >&2 "ERROR: " "$@"
+    exit 1
+}
+
+# default install dir is already ~/.local, we just make it explicit
+INSTALL_DIR="${1:-~/.local}"
+abs_install_dir="$(readlink -e "${INSTALL_DIR}")"
+[ -n "${abs_install_dir}" ] || die "No such installation path: ${INSTALL_DIR}"
+readonly INSTALL_DIR
+readonly abs_install_dir
+
+# install it
+curl -sSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="${abs_install_dir}" || die
+
+# Create symbolic links to add kitty and kitten to PATH (assuming ~/.local/bin is in your system-wide PATH)
+ln -sf "${abs_install_dir}/kitty.app/bin/kitty" "${abs_install_dir}/kitty.app/bin/kitten" ~/.local/bin/ || die "Creating links to binaries"
+# Place the kitty.desktop file somewhere it can be found by the OS
+cp "${abs_install_dir}/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/ || die "Copying kitty.desktop"
+# If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
+cp "${abs_install_dir}/kitty.app/share/applications/kitty-open.desktop" ~/.local/share/applications/ || die "Copying kitty-open.desktop"
+# Update the paths to the kitty executable and its icon in the kitty.desktop file(s)
+sed -i \
+    -e "s|Icon=kitty|Icon=${abs_install_dir}/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" \
+    -e "s|Exec=kitty|Exec=${abs_install_dir}/kitty.app/bin/kitty|g" \
+    ~/.local/share/applications/kitty*.desktop \
+|| die "Correcting kitty icon and executable locations in .desktop files"
