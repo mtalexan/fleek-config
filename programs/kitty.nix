@@ -9,30 +9,30 @@
     # in the passwd file, and that includes Kitty. Additionally, the GLFX/OpenGL stuff doesn't detect from the system properly during
     # the build.
     fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues? LDAP failure.)");
-    manualInstall = mkEnableOption(mdDoc "kitty was manually installed to ~/.local/kitty.app/ already.");
+    fromManual = mkEnableOption(mdDoc "kitty was manually installed to ~/.local/kitty.app/ already.");
   };
 
   # Add manually installed tools to the PATH (~/.local/bin)
   config.home.file = {
     ".local/bin/kitty" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.manualInstall);
+      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
       executable = true;
       source = ../home_files/kitty.app/bin/kitty;
     };
     ".local/bin/kitten" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.manualInstall);
+      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
       executable = true;
       source = ../home_files/kitty.app/bin/kitten;
     };
     # install the icon
     ".local/share/icons/kitty.png" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.manualInstall);
+      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
       executable = false;
       source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
     };
     # add the .desktop files
     ".local/share/applications/kitty.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.manualInstall);
+      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
       executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
@@ -49,7 +49,7 @@
       '';
     };
     ".local/share/applications/kitty-open.desktop" = {
-      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.manualInstall);
+      enable = (! config.custom.kitty.config.fromNix) && (! config.custom.kitty.config.fromManual);
       executable = false;
       # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
       # The file is so simple anyway, just generate it instead.
@@ -88,7 +88,7 @@
   '';
 
   config.programs.kitty = {
-    enable = config.custom.kitty.config.fromNix && (! config.custom.kitty.config.manualInstall);
+    enable = config.custom.kitty.config.fromNix && (! config.custom.kitty.config.fromManual);
     shellIntegration = {
       # Since automatic shell integration doesn't work in subshells, multiplexers, etc, we have to manually detect and load the code ourselves
       # as part of the rc file
