@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, ... }: {
+{ pkgs, misc, lib, config, ... }: {
   # a quick script calling tool from a sub-directory of scripts
   # https://github.com/ianthehenry/sd
 
