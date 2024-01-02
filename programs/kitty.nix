@@ -6,60 +6,62 @@
 
 
   # Add manually installed tools to the PATH (~/.local/bin)
-  home.files.".local/bin/kitty" = {
-    enabled = true;
-    executable = true;
-    source = ../home_files/kitty.app/bin/kitty;
-  };
-  home.files.".local/bin/kitten" = {
-    enabled = true;
-    executable = true;
-    source = ../home_files/kitty.app/bin/kitten;
-  };
-  # install the icon
-  home.files.".local/share/icons/kitty.png" = {
-    enabled = true;
-    executable = false;
-    source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
-  };
-  # add the .desktop files
-  home.files.".local/share/applications/kitty.desktop" = {
-    enabled = true;
-    executable = true;
-    # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-    # The file is so simple anyway, just generate it instead.
-    text = ''
-      [Desktop Entry]
-      Version=1.0
-      Type=Application
-      Name=kitty
-      GenericName=Terminal emulator
-      Comment=Fast, feature-rich, GPU based terminal
-      TryExec=kitty
-      Exec=$HOME/.local/bin/kitty
-      Icon=$HOME/.local/share/icons/kitty.png
-      Categories=System;TerminalEmulator;
-    '';
-  };
-  home.files.".local/share/applications/kitty-open.desktop" = {
-    enabled = true;
-    executable = true;
-    # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
-    # The file is so simple anyway, just generate it instead.
-    text = ''
-      [Desktop Entry]
-      Version=1.0
-      Type=Application
-      Name=kitty URL Launcher
-      GenericName=Terminal emulator
-      Comment=Open URLs with kitty
-      TryExec=kitty
-      Exec=$HOME/.local/bin/kitty +open %U
-      Icon=$HOME/.local/share/icons/kitty.png
-      Categories=System;TerminalEmulator;
-      NoDisplay=true
-      MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
-    '';
+  home.file = {
+    ".local/bin/kitty" = {
+      enabled = true;
+      executable = true;
+      source = ../home_files/kitty.app/bin/kitty;
+    };
+    ".local/bin/kitten" = {
+      enabled = true;
+      executable = true;
+      source = ../home_files/kitty.app/bin/kitten;
+    };
+    # install the icon
+    ".local/share/icons/kitty.png" = {
+      enabled = true;
+      executable = false;
+      source = ../home_files/kitty.app/share/icons/hicolor/256x256/apps/kitty.png;
+    };
+    # add the .desktop files
+    ".local/share/applications/kitty.desktop" = {
+      enabled = true;
+      executable = true;
+      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
+      # The file is so simple anyway, just generate it instead.
+      text = ''
+        [Desktop Entry]
+        Version=1.0
+        Type=Application
+        Name=kitty
+        GenericName=Terminal emulator
+        Comment=Fast, feature-rich, GPU based terminal
+        TryExec=kitty
+        Exec=$HOME/.local/bin/kitty
+        Icon=$HOME/.local/share/icons/kitty.png
+        Categories=System;TerminalEmulator;
+      '';
+    };
+    ".local/share/applications/kitty-open.desktop" = {
+      enabled = true;
+      executable = true;
+      # There's a desktop file shipped with kitty.app, but it needs the Icon and Exec path fixed.
+      # The file is so simple anyway, just generate it instead.
+      text = ''
+        [Desktop Entry]
+        Version=1.0
+        Type=Application
+        Name=kitty URL Launcher
+        GenericName=Terminal emulator
+        Comment=Open URLs with kitty
+        TryExec=kitty
+        Exec=$HOME/.local/bin/kitty +open %U
+        Icon=$HOME/.local/share/icons/kitty.png
+        Categories=System;TerminalEmulator;
+        NoDisplay=true
+        MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
+      '';
+    };
   };
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
