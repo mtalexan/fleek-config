@@ -5,7 +5,7 @@
   #          The current config below relies on the kitty.app being in home_files, and will link the application.
 
   options.custom.kitty.config = with lib; {
-    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues?)")
+    fromNix = mkEnableOption(mdDoc "Use kitty from nix instead of the one included in the repo directly (OpenGL issues?)");
   };
 
   # Add manually installed tools to the PATH (~/.local/bin)
