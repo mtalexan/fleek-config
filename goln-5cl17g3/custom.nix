@@ -3,7 +3,7 @@
 
   imports = [
     ../programs/terminator.nix
-    ../programs/kitty.nix
+    #../programs/kitty.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -36,6 +36,10 @@
       ubuntu = true;
       shortnames = true;
     };
+
+    #custom.kitty.config = {
+    #  fromNix = false;
+    #};
 
     #####################################
     # Programs
