@@ -159,9 +159,11 @@
   #   enableZshIntegration : T/F : Adds sourcing of the shell integration scripts needed for framing, 'from', and 'show' commands to zshrc
   options.custom.extraterm.config = with lib; {
     enable = mkEnableOption(mdDoc "Enable extraterm AppImage in the ~/.local/bin (PATH) as 'extraterm'");
+    guiIntegration = mkEnableOption(mdDoc "Add GUI launcher integration for the AppImage");
     enableBashIntegration = mkEnableOption(mdDoc "Enable bash integration required for framing and 'from' and 'show' commands.");
     enableZshIntegration = mkEnableOption(mdDoc "Enable zsh integration required for framing and 'from' and 'show' commands.");
   };
+
 
   config.home.file.".local/bin/extraterm" = {
     enable = config.custom.extraterm.config.enable;
@@ -169,18 +171,38 @@
     source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.AppImage;
   };
 
+  config.home.file.".local/share/extraterm/icon.png" = {
+    enable = config.custom.extraterm.config.enable && config.custom.extraterm.config.guiIntegration;
+    executable = true;
+    source = ../home_files/extraterm/icon.png;
+  };
+  config.home.file.".local/share/applications/Extraterm.desktop" = {
+    enable = config.custom.extraterm.config.enable && config.custom.extraterm.config.guiIntegration;
+    executable = false;
+    text = ''
+      [Desktop Entry]
+      Type=Application
+      Name=Extraterm
+      Comment=Extraterm terminal emulator
+      Icon=$HOME/.local/share/extraterm/icon.png
+      Exec=$HOME/.local/bin/extraterm
+      Terminal=false
+      Categories=Extraterm;terminal
+    '';
+  };
+
   config.home.file.".config/extraterm/integrations" = {
-    enable = config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration;
+    enable = config.custom.extraterm.config.enable && (config.custom.extraterm.config.enableBashIntegration || config.custom.extraterm.config.enableZshIntegration);
     recursive = false; # symlink the whole folder, not each file in it
     # let execute bit be defined individually by the files in the linked directory
     source = ../home_files/extraterm/extraterm-commands-0.75.0;
   };
-  config.programs.bash.initExtra = (lib.mkIf config.custom.extraterm.config.enableBashIntegration
+  config.programs.bash.initExtra = (lib.mkIf (config.custom.extraterm.config.enable && config.custom.extraterm.config.enableBashIntegration)
      (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
     ])
   );
-  config.programs.zsh.initExtra = (lib.mkIf config.custom.extraterm.config.enableZshIntegration
+  config.programs.zsh.initExtra = (lib.mkIf (config.custom.extraterm.config.enable && config.custom.extraterm.config.enableZshIntegration)
     (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
     ])
