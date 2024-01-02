@@ -166,7 +166,7 @@
   config.home.file.".local/bin/extraterm" = {
     enable = config.custom.extraterm.config.enable;
     executable = true;
-    source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.Appimage;
+    source = ../home_files/extraterm/ExtratermQt-0.75.0.glibc2.34-x86_64.AppImage;
   };
 
   config.home.file.".config/extraterm/integrations" = {
