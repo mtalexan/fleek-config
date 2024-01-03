@@ -1043,7 +1043,8 @@
       #: the second number is the margin between the tab bar and the
       #: contents of the current tab.
 
-      # tab_bar_style = "powerline";
+      # tab_bar_style = "fade";
+      tab_bar_style = "powerline";
 
       #: The tab bar style, can be one of: fade, separator, powerline, or
       #: hidden. In the fade style, each tab's edges fade into the
@@ -1092,7 +1093,7 @@
       #: tab that does not have focus has some activity.
 
       # tab_title_template = "{title}";
-      tab_title_template = "{sup.index}: {title}";
+      tab_title_template = "{index}: {title}";
 
       #: A template to render the tab title. The default just renders the
       #: title. If you wish to include the tab-index as well, use something
