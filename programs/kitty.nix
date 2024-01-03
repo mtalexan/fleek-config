@@ -1500,4 +1500,5 @@
   };
 }
 
-# vim: sw=2:expandtab
+# vim: sw=2:tw=2:expandtab
+
