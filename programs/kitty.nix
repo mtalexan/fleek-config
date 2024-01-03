@@ -73,9 +73,7 @@
 
     extraConfig = lib.concatLines [
       # from default kitty.conf that includes all keybindings and default settings: https://sw.kovidgoyal.net/kitty/conf/#sample-kitty-conf
-      ''
-        # vim:fileencoding=utf-8:foldmethod=marker
-      ''
+
       # FONTS
       # mostly should be configured via nix fonts={} above
       ''
@@ -2154,10 +2152,10 @@
         # WARNING: it's not possible to duplicate env after window creation, so it won't match exactly.
         # Hsplit and Vsplit are backwards of what feels natural (split along axis)
         map kitty_mod+enter>h launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=vsplit
-        map kitty_mod+enter>h launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=hsplit
+        map kitty_mod+enter>v launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=hsplit
         # allow clean window opening
         map kitty_mod+alt+enter>h launch --type=window --location=vsplit
-        map kitty_mod+alt+enter>h launch --type=window --location=hsplit
+        map kitty_mod+alt+enter>v launch --type=window --location=hsplit
       ''
       ''
         #::  You can open a new kitty window running an arbitrary program, for
@@ -2703,6 +2701,12 @@
         #: }}}
 
         #: }}}
+      ''
+      # All other Nix options come before this one, and home-manager adds prefix comments.
+      # So putting this last will put it last in the file since vim will only pick it up if it's first or last
+      ''
+
+        # vim:fileencoding=utf-8:foldmethod=marker
       ''
     ];
   };
