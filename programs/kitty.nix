@@ -71,7 +71,7 @@
     # The theme, shellIntegration.mode, and font however have other uses that make them useful still however.
     # So use extraConfig to directly set most of the .conf file to avoid all the translation issues.
 
-    extraConf = lib.concatLines [
+    extraConfig = lib.concatLines [
       # from default kitty.conf that includes all keybindings and default settings: https://sw.kovidgoyal.net/kitty/conf/#sample-kitty-conf
       ''
         # vim:fileencoding=utf-8:foldmethod=marker
