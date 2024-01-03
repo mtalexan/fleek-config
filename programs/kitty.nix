@@ -5,29 +5,45 @@
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
-  programs.zsh.initExtra = ''
-    if test -n "$KITTY_INSTALLATION_DIR"; then
-        export KITTY_SHELL_INTEGRATION="enabled"
-        autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-        kitty-integration
-        unfunction kitty-integration
-    fi
-  '';
-  programs.bash.initExtra = ''
-    if test -n "$KITTY_INSTALLATION_DIR"; then
-        export KITTY_SHELL_INTEGRATION="enabled"
-        source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
-    fi
-  '';
+  programs.zsh = {
+    #initExtra = ''
+    #  if test -n "$KITTY_INSTALLATION_DIR"; then
+    #      export KITTY_SHELL_INTEGRATION="enabled"
+    #      autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+    #      kitty-integration
+    #      unfunction kitty-integration
+    #  fi
+    #'';
+    # Assume we will be using kitty as the primary terminal, so alias ssh
+    shellAliases = {
+      # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
+      "ssh" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
+    };
+  };
+  programs.bash = {
+    #initExtra = ''
+    #  if test -n "$KITTY_INSTALLATION_DIR"; then
+    #      export KITTY_SHELL_INTEGRATION="enabled"
+    #      source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+    #  fi
+    #'';
+    # Assume we will be using kitty as the primary terminal, so alias ssh
+    shellAliases = {
+      # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
+      "ssh" = "kitty +kitten ssh --kitten shell_integration=no-rc";
+  };
 
   programs.kitty = {
-    # can't install from nix
+    # we can't use the nix installation, but we also can't use our config without installing it.
+    # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
+    # installation location, so manual installation will work.
     enable = true;
-    #package = [];
     shellIntegration = {
-      # Since automatic shell integration doesn't work in subshells, multiplexers, etc, we have to manually detect and load the code ourselves
-      # as part of the rc file
-      mode = "disabled";
+      # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
+      # injected kitty integration (set by mode=).  Instead we use the enable{Bash,Zsh}Integration options that add only the necessary
+      # content to the rc files for loading, which only affects when loading on the host.
+      enableBashIntegration = true;
+      enableZshIntegration = true;
     };
     #environment = {
       # variables set on every child process.  Equivalent of 'env' in the settings.
@@ -169,6 +185,10 @@
       # WINDOW MGMT
       #-------------------------------------------------
       # "kitty_mod+enter" = "new_window";
+      # always default to opening new windows in identical environment and location as the current one.
+      "kitty_mod+enter" = "clone-in-kitty --type=window";
+      # but allow a clean window open with a slight variation on the keys
+      "kitty_mod+alt+enter" = "new_window";
 
       #: You can open a new window running an arbitrary program, for
       #: example::
