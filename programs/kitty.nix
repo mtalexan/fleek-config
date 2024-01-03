@@ -150,6 +150,13 @@
       # "kitty_mod+s" = "paste_from_selection";
       # "kitty_mod+o" = "pass_selection_to_program";
 
+      # specify the programs instead
+      "kitty_mod+o>f" = "pass_selection_to_program firefox";
+      "kitty_mod+o>v" = "pass_selection_to_program code";
+      "kitty_mod+o>n" = "new_tab nvim @selection";
+      # generic system handler for the open
+      "kitty_mod+o>o" = "pass_selection_to_program";
+
       #: You can also pass the contents of the current selection to any
       #: program using pass_selection_to_program. By default, the system's
       #: open program is used, but you can specify your own, the selection
@@ -172,6 +179,10 @@
       # "kitty_mod+home"      = "scroll_home";
       # "kitty_mod+end"       = "scroll_end";
       # "kitty_mod+h"         = "show_scrollback";
+      # open the history in a split
+      "kitty_mod+alt+h>s"         = "launch --stdin-source=@screen_scrollback --stdin-add-formatting --type=window less +G -R +@input-line-number";
+      # open the history of the last visited command (default=last run command) in an overlay
+      "kitty_mod+alt+h>l"         = "show_last_visited_command_output";
 
       #: You can pipe the contents of the current screen + history buffer as
       #: STDIN to an arbitrary program using the ``launch`` function. For
@@ -183,15 +194,24 @@
       #: For more details on piping screen and buffer contents to external
       #: programs, see launch.
 
+      # With shell integration.
+      # Scroll back to previous prompts
+      # "kitty_mod+x" = "scroll_to_prompt 1"
+      # "kitty_mod+z" = "scroll_to_prompt -1"
+
       # WINDOW MGMT
       #-------------------------------------------------
       # "kitty_mod+enter" = "new_window";
-      # always default to opening new windows in identical environment and location as the current one.
+      # Always default to opening new windows in identical environment and location as the current one.
+      # Also change new window to wait for a split type modifier, though this only works when layout=Splits (the 
+      # default with the modified enable_layouts below).
       # WARNING: it's not actually possible to copy the environment, you need to manually run clone-in-kitty
       #          while it's in an environment that supports it in order to do that.
-      "kitty_mod+enter" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env";
+      "kitty_mod+enter>h" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --layout=hsplit";
+      "kitty_mod+enter>v" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --layout=vsplit";
       # but allow a clean window open with a slight variation on the keys
-      "kitty_mod+alt+enter" = "new_window";
+      "kitty_mod+alt+enter>h" = "launch --type=window --layout=hsplit";
+      "kitty_mod+alt+enter>v" = "launch --type=window --layout=vsplit";
 
       #: You can open a new window running an arbitrary program, for
       #: example::
@@ -241,6 +261,20 @@
       # "kitty_mod+8" = "eighth_window";
       # "kitty_mod+9" = "ninth_window";
       # "kitty_mod+0" = "tenth_window";
+
+      # use Ergo-style navigation among windows
+      "kitty_mod+alt+i" = "neighboring_window up";
+      "kitty_mod+alt+j" = "neighboring_window left";
+      "kitty_mod+alt+k" = "neighboring_window down";
+      "kitty_mod+alt+l" = "neighboring_window right";
+
+      # Visually select and focus wihndow. Not listed in the defaults but on the site.
+      # select window by number for focus move and swapping
+      # "kitty_mod+f7" = "focus_visible_window";
+      # "kitty_mod+f8" = "swap_with_window";
+      "kitty_mod+;" = "focus_visible_window";
+      "kitty_mod+alt+;" = "swap_with_window";
+
 
       # TAB MGMT
       #-------------------------------------------------
@@ -640,7 +674,9 @@
       #: is changed it will only affect newly created windows, not existing
       #: ones.
 
-      # scrollback_pager = "less +INPUT_LINE_NUMBER"
+      # scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
+      # wrap lines instead
+      scrollback_pager = "less --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
 
       #: Program with which to view scrollback in a new window. The
       #: scrollback buffer is passed as STDIN to this program. If you change
@@ -929,6 +965,9 @@
       #: as number of cells instead of pixels.
 
       # enabled_layouts = "*";
+      # set "Splits" first, which lets us arbitrarily split horizontally and vertically,
+      # and use neighbor navigation among them. None of the other modes allow this.
+      enabled_layouts = "Splits,Tall,Horizontal,Grid,Stack";
 
       #: The enabled window layouts. A comma separated list of layout names.
       #: The special value all means all layouts. The first listed layout
@@ -1323,6 +1362,8 @@
       #: can fail silently because their stdout/stderr/stdin no longer work.
 
       # allow_remote_control = "no";
+      # allow kitten @launch commands.  If set to "socket-only" it would only allow them from the local machine.
+      allow_remote_control = "yes";
 
       #: Allow other programs to control kitty. If you turn this on other
       #: programs can control all aspects of kitty, including sending text
