@@ -73,7 +73,7 @@
 
     extraConfig = lib.concatLines [
       ''
-        enabled_layouts Splits,Tall,Horizontal,Grid,Stack
+        enabled_layouts Splits
         map kitty_mod+enter>h launch --type=window --location=vsplit
         map kitty_mod+enter>v launch --type=window --location=hsplit
       ''
