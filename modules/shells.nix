@@ -110,6 +110,16 @@
     # see examples: https://nix-community.github.io/home-manager/options.html#opt-programs.zsh.plugins
     plugins = [
       {
+        # will source zsh-autosuggestions.plugin.zsh
+        name = "zsh-autosuggestions";
+        src = pkgs.fetchFromGitHub {
+          owner = "zsh-users";
+          repo = "zsh-autosuggestions";
+          rev = "v0.7.0";
+          sha256 = "sha256-000000000000000000000000000000000000000000=";
+        };
+      }
+      {
         # Adds the 'up' command
 
         # will source up.plugin.zsh
@@ -166,7 +176,8 @@
         "python"
         "screen"
         "syntax-highlighting"
-        "autosuggestions"
+        # autosuggestions don't work via prezto unless you use the prezto prompt.
+        #"autosuggestions"
         # using starship instead
         #"prompt"
       ];
