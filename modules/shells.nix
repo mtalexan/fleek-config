@@ -130,7 +130,7 @@
       enable = true;
       # fish-like autosuggestions
       # Set the color for the found portion (implies it's enabled)
-      autosuggestions.color = "fg=6";
+      autosuggestions.color = "fg=5";
       # Set case-sensitivity for completion, history lookup, etc.
       caseSensitive = true;
       # color output
