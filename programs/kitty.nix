@@ -187,7 +187,7 @@
       #-------------------------------------------------
       # "kitty_mod+enter" = "new_window";
       # always default to opening new windows in identical environment and location as the current one.
-      "kitty_mod+enter" = "clone-in-kitty --type=window";
+      "kitty_mod+enter" = "kitten clone-in-kitty --type=window";
       # but allow a clean window open with a slight variation on the keys
       "kitty_mod+alt+enter" = "new_window";
 
