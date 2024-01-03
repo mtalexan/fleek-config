@@ -415,7 +415,8 @@
     # See theme options with 'kitty +kitten themes'.
     # These change the color name definitions, so using 'red' or 'bright-green' have different meanings.
     #theme = "Glacier";
-    theme = "Neowave";
+    theme = "Gruvbox Material Dark Hard";
+    #theme = "Neowave";
     #theme = "Nightfox";
     #theme = "Relaxed Afterglow";
     #theme = "Renault Style";
@@ -1042,7 +1043,7 @@
       #: the second number is the margin between the tab bar and the
       #: contents of the current tab.
 
-      # tab_bar_style = "fade";
+      # tab_bar_style = "powerline";
 
       #: The tab bar style, can be one of: fade, separator, powerline, or
       #: hidden. In the fade style, each tab's edges fade into the
