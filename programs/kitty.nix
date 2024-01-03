@@ -57,7 +57,7 @@
     # See theme options with 'kitty +kitten themes'.
     # These change the color name definitions, so using 'red' or 'bright-green' have different meanings.
     #theme = "Glacier";
-    #theme = "Gruvbox Material Dark Hard";
+    theme = "Gruvbox Material Dark Hard";
     #theme = "Neowave";
     #theme = "Nightfox";
     #theme = "Relaxed Afterglow";
