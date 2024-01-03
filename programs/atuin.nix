@@ -1,6 +1,6 @@
 { pkgs, misc, lib, ... }: {
   programs.atuin = {
-    enable = true;
+    enable = false;
     enableBashIntegration = true;
     enableZshIntegration = true;
     flags = [
