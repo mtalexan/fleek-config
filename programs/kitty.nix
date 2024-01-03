@@ -187,7 +187,9 @@
       #-------------------------------------------------
       # "kitty_mod+enter" = "new_window";
       # always default to opening new windows in identical environment and location as the current one.
-      "kitty_mod+enter" = "kitten @ launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env";
+      # WARNING: it's not actually possible to copy the environment, you need to manually run clone-in-kitty
+      #          while it's in an environment that supports it in order to do that.
+      "kitty_mod+enter" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env";
       # but allow a clean window open with a slight variation on the keys
       "kitty_mod+alt+enter" = "new_window";
 
@@ -638,7 +640,7 @@
       #: is changed it will only affect newly created windows, not existing
       #: ones.
 
-      # scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
+      # scrollback_pager = "less +INPUT_LINE_NUMBER"
 
       #: Program with which to view scrollback in a new window. The
       #: scrollback buffer is passed as STDIN to this program. If you change
