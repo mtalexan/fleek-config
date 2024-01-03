@@ -1548,7 +1548,7 @@
         #: Listen to the specified socket for remote control connections. Note
         #: that this will apply to all kitty instances. It can be overridden
         #: by the kitty --listen-on command line option. For UNIX sockets,
-        #: such as unix:${TEMP}/mykitty or unix:@mykitty (on Linux).
+        #: such as unix:$TEMP/mykitty or unix:@mykitty (on Linux).
         #: Environment variables are expanded and relative paths are resolved
         #: with respect to the temporary directory. If {kitty_pid} is present,
         #: then it is replaced by the PID of the kitty process, otherwise the
@@ -1569,7 +1569,7 @@
         #: environment variables are expanded recursively, for example::
 
         #:     env VAR1=a
-        #:     env VAR2=${HOME}/${VAR1}/b
+        #:     env VAR2=$HOME/$VAR1/b
 
         #: The value of VAR2 will be <path to home directory>/a/b.
 
@@ -1600,7 +1600,13 @@
         #:     exe_search_path /some/prepended/path
         #:     exe_search_path +/some/appended/path
         #:     exe_search_path -/some/excluded/path
-
+      ''
+      # update check
+      ''
+        # don't check for updates or phone home
+        update_check_interval 0
+      ''
+      ''
         # update_check_interval 24
 
         #: The interval to periodically check if an update to kitty is
