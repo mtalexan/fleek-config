@@ -151,11 +151,11 @@
       # "kitty_mod+o" = "pass_selection_to_program";
 
       # specify the programs instead
-      "kitty_mod+o>f" = "pass_selection_to_program firefox";
-      "kitty_mod+o>v" = "pass_selection_to_program code";
-      "kitty_mod+o>n" = "new_tab nvim @selection";
+      "ctrl+shift+o>f" = "pass_selection_to_program firefox";
+      "ctrl+shift+o>v" = "pass_selection_to_program code";
+      "ctrl+shift+o>n" = "new_tab nvim @selection";
       # generic system handler for the open
-      "kitty_mod+o>o" = "pass_selection_to_program";
+      "ctrl+shift+o>o" = "pass_selection_to_program";
 
       #: You can also pass the contents of the current selection to any
       #: program using pass_selection_to_program. By default, the system's
@@ -180,9 +180,9 @@
       # "kitty_mod+end"       = "scroll_end";
       # "kitty_mod+h"         = "show_scrollback";
       # open the history in a split
-      "kitty_mod+alt+h>s"         = "launch --stdin-source=@screen_scrollback --stdin-add-formatting --type=window less +G -R +@input-line-number";
+      "ctrl+shift+alt+h>s"         = "launch --stdin-source=@screen_scrollback --stdin-add-formatting --type=window less +G -R +@input-line-number";
       # open the history of the last visited command (default=last run command) in an overlay
-      "kitty_mod+alt+h>l"         = "show_last_visited_command_output";
+      "ctrl+shift+alt+h>l"         = "show_last_visited_command_output";
 
       #: You can pipe the contents of the current screen + history buffer as
       #: STDIN to an arbitrary program using the ``launch`` function. For
@@ -208,11 +208,11 @@
       # WARNING: it's not actually possible to copy the environment, you need to manually run clone-in-kitty
       #          while it's in an environment that supports it in order to do that.
       # WARNING: if not in Splits layout, kitty_mod+enter will work like normal and these are all ignored
-      "kitty_mod+enter>h" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=vsplit";
-      "kitty_mod+enter>v" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=hsplit";
+      "ctrl+shift+enter>h" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=vsplit";
+      "ctrl+shift+enter>v" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=hsplit";
       # but allow a clean window open with a slight variation on the keys
-      "kitty_mod+alt+enter>h" = "launch --type=window --location=hsplit";
-      "kitty_mod+alt+enter>v" = "launch --type=window --location=vsplit";
+      "ctrl+shift+alt+enter>h" = "launch --type=window --location=hsplit";
+      "ctrl+shift+alt+enter>v" = "launch --type=window --location=vsplit";
 
       #: You can open a new window running an arbitrary program, for
       #: example::
@@ -264,17 +264,17 @@
       # "kitty_mod+0" = "tenth_window";
 
       # use Ergo-style navigation among windows
-      "kitty_mod+alt+i" = "neighboring_window up";
-      "kitty_mod+alt+j" = "neighboring_window left";
-      "kitty_mod+alt+k" = "neighboring_window down";
-      "kitty_mod+alt+l" = "neighboring_window right";
+      "ctrl+shift+alt+i" = "neighboring_window up";
+      "ctrl+shift+alt+j" = "neighboring_window left";
+      "ctrl+shift+alt+k" = "neighboring_window down";
+      "ctrl+shift+alt+l" = "neighboring_window right";
 
       # Visually select and focus wihndow. Not listed in the defaults but on the site.
       # select window by number for focus move and swapping
       # "kitty_mod+f7" = "focus_visible_window";
       # "kitty_mod+f8" = "swap_with_window";
-      "kitty_mod+;" = "focus_visible_window";
-      "kitty_mod+alt+;" = "swap_with_window";
+      "ctrl+shift+;" = "focus_visible_window";
+      "ctrl+shift+alt+;" = "swap_with_window";
 
 
       # TAB MGMT
