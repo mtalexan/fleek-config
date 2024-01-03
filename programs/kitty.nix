@@ -207,11 +207,12 @@
       # default with the modified enable_layouts below).
       # WARNING: it's not actually possible to copy the environment, you need to manually run clone-in-kitty
       #          while it's in an environment that supports it in order to do that.
-      "kitty_mod+enter>h" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --layout=hsplit";
-      "kitty_mod+enter>v" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --layout=vsplit";
+      # WARNING: if not in Splits layout, kitty_mod+enter will work like normal and these are all ignored
+      "kitty_mod+enter>h" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=vsplit";
+      "kitty_mod+enter>v" = "launch --type=window --cwd=current --copy-colors --copy-cmdline --copy-env --location=hsplit";
       # but allow a clean window open with a slight variation on the keys
-      "kitty_mod+alt+enter>h" = "launch --type=window --layout=hsplit";
-      "kitty_mod+alt+enter>v" = "launch --type=window --layout=vsplit";
+      "kitty_mod+alt+enter>h" = "launch --type=window --location=hsplit";
+      "kitty_mod+alt+enter>v" = "launch --type=window --location=vsplit";
 
       #: You can open a new window running an arbitrary program, for
       #: example::
@@ -676,7 +677,7 @@
 
       # scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
       # wrap lines instead
-      scrollback_pager = "less --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
+      #scrollback_pager = "less --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
 
       #: Program with which to view scrollback in a new window. The
       #: scrollback buffer is passed as STDIN to this program. If you change
@@ -778,7 +779,6 @@
       #: contents of the system clipboard.
 
       # strip_trailing_spaces = "never";
-      strip_trailing_spaces = "smart";
 
       #: Remove spaces at the end of lines when copying to clipboard. A
       #: value of smart will do it when using normal selections, but not
@@ -964,10 +964,10 @@
       #: suffix of "c" on the width/height values to have them interpreted
       #: as number of cells instead of pixels.
 
-      # enabled_layouts = "*";
+      # enabled_layout = "*";
       # set "Splits" first, which lets us arbitrarily split horizontally and vertically,
       # and use neighbor navigation among them. None of the other modes allow this.
-      enabled_layouts = "Splits,Tall,Horizontal,Grid,Stack";
+      enabled_layout = "Splits,Tall,Horizontal,Grid,Stack";
 
       #: The enabled window layouts. A comma separated list of layout names.
       #: The special value all means all layouts. The first listed layout
