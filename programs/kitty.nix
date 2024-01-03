@@ -31,6 +31,7 @@
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
       "ssh" = "kitty +kitten ssh --kitten shell_integration=no-rc";
+    };
   };
 
   programs.kitty = {
