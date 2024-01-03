@@ -285,6 +285,15 @@
 
       ''
       ##############################################################
+      # Auto suggestion plugin settings
+      ##############################################################
+      
+      # pink foreground for completion, with underline
+      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
+      ''
+
+      ''
+      ##############################################################
       # Start custom keymap
       ##############################################################
       ''
