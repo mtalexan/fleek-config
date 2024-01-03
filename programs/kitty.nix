@@ -676,7 +676,7 @@
 
       # scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
       # wrap lines instead
-      scrollback_pager = "less --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER"
+      scrollback_pager = "less --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
 
       #: Program with which to view scrollback in a new window. The
       #: scrollback buffer is passed as STDIN to this program. If you change
