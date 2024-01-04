@@ -31,6 +31,8 @@ Your actual aliases are listed below:
 
     fleeks = "cd ~/.local/share/fleek";
 
+    gbc = "git branch --show-current";
+
     gbvv = "git branch -vv";
 
     gcm = "git commit";
