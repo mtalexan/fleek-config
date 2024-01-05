@@ -17,7 +17,7 @@
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
-      "ssh" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
+      "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
     };
   };
   programs.bash = {
@@ -30,7 +30,7 @@
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
-      "ssh" = "kitty +kitten ssh --kitten shell_integration=no-rc";
+      "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc";
     };
   };
 
