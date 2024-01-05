@@ -259,7 +259,8 @@
       ''
 
       # these don't have home-manager options to enable
-      "setopt nomatch notify complete_aliases listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
+      # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
+      "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
 
       # the completionInit gets ignored when prezto is enabled because it's trying to be efficient and not call it twice.
       # but we customized it, so we have to add it manually
