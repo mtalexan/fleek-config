@@ -285,7 +285,7 @@
       # _expand
 
       # disable expansion of nested subshell commands into their resulting values when using the _expand completer
-      zsstyle ':completion:*:expand:*' substitute no
+      zstyle ':completion:*:expand:*' substitute no
 
       # _manuals
 
