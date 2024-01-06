@@ -236,11 +236,79 @@
 
 
     initExtraBeforeCompInit = ''
-      zstyle ':completion:*' completer _list _expand _complete _ignored _match
-      zstyle ':completion:*' completions 1
-      zstyle ':completion:*' insert-unambiguous true
-      zstyle ':completion:*' preserve-prefix '//[^/]##/'
+      # See man zshcompsys for details on completers and their options
+
+      # Ordered list of completion engines to try. 
+      # Do NOT use _expand which does partial expansion.
+      # _approximate lists possible corrections only if nothing else matches
+      # _manuals adds manpage completion
+      # _complete is the standard completion function where functions are installed/defined explicitly
+      # _ignored re-adds results from other completers that were removed by 'ignore-patterns' option
+      # _list waits on results and calls completion a second time without modifying the current word/line. This ensures the _match and _approximate results actually
+      #       only get used if nothing else matches.
+      # _match Treats the original as a glob match pattern against possible completion candidates.
+      # _prefix ignores any suffix after the cursor and tries again. Can set a different list of completers to use when trying again.
+      #         Usually needs COMPLETE_IN_WORD set to be useful.
+      # WARNING: _expand, _expand_alias, and _correct are intended for point-expansion/replacement and not for real use here
+      zstyle ':completion:*' completer _list _complete _ignored _manuals _approximate
+      # expand unambiguous prefixes from any/all completers
+      zstyle ':completion:*' expand _prefix
+      # highlight the first ambiguous character in the match. If set 'yes' the default is used, otherwise a color or style may be
+      zstyle ':completion:*' show-ambiguity yes
+
+      # set the style to use when _approximate offers corrections
+      zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+      # warnings and messages format from the completion engine
+      zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+      zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+      
+      # bring up a selection menu to pick the completion if the list is long.
+      # if selecting one isn't supported by the completion engine, just bring up the menu for scrolling instead.
+      # 'interactive' means the search pattern can be interactively adjusted in real time to update the results 
+      # in the list rather than needing a keypress to do it first.
+      # TODO: Investigate fzf-tab instead
+      zstyle ':completion:*' menu select=long-list interactive
+
+      # cache results so the same thing again is faster
       zstyle ':completion:*' use-cache yes
+
+      # _match
+
+      # Insert prefixes that are shared by all possible matches.
+      zstyle ':completion:*:match:*' insert-unambiguous true
+
+      # _ignored
+
+      # if there's only 1 match from the _ignored completer, show it with the original but don't insert it
+      zstyle ':completion:*:ignored:*' single-ignored show
+
+      # _expand
+
+      # disable expansion of nested subshell commands into their resulting values when using the _expand completer
+      zsstyle ':completion:*:expand:*' substitute no
+
+      # _manuals
+
+      # when completing man pages, set the specific page (e.g. 'man 5') using the suffix syntax (e.g. 'man <cmd>.5') so it can be easily changed if there's multiple section matches
+      # alternative: insert the 'man 5 ' as a prefix when that's the only match
+      zstyle ':completion:*:manuals.*' insert-sections suffix
+
+      # _approximate
+      # The name of the completer is set to approximate-N where N is the number of corrections, but just 'approximate' applies to all of them
+
+      # limit the number of corrections allowed. It iterates thru the number of possible corrections, and stops if any matches are found, this sets the upper bound.
+      zstyle ':completion:*:approximate:*' max-errors 4
+      # Insert prefixes that are shared by all possible matches.
+      zstyle ':completion:*:approximate:*' insert-unambiguous true
+      # Always show the unmodified original as an option, even if there's only 1 unambiguous match. Without this set, 
+      # the original is already an option, but only if there's no single unambiguous match.
+      zstyle ':completion:*:approximate:*' original yes
+      # add descriptions to the grouping of approximate matches in green
+      #zstyle ':completion:*:approximate:*:*:*:descriptions' format '%F{green}-- $d --%f'
+
+      # Completion settings for specific applicatons
+
+      zstyle ':completion:*:*:kill:*' verbose yes
     '';
 
     # this gets disregarded when prezto is enabled because prezto already includes loading compinit.
