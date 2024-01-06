@@ -1516,6 +1516,7 @@
         #: control/#rc-custom-auth> for details.
 
         # allow_remote_control no
+        allow_remote_control yes
 
         #: Allow other programs to control kitty. If you turn this on, other
         #: programs can control all aspects of kitty, including sending text
