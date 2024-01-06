@@ -2156,7 +2156,7 @@
         # WARNING: it's not possible to duplicate env after window creation, so it won't match exactly.
         # Hsplit and Vsplit are backwards of what feels natural (split along axis)
         #map kitty_mod+enter>h launch --type=window --cwd=current --location=vsplit
-        map kitty_mod+enter>h new_window_with_cwd
+        map kitty_mod+enter>h @ launch --type=window --cwd=current --copy-env --location=vsplit
         map kitty_mod+enter>v launch --type=window --cwd=current --copy-cmdline --copy-env --location=hsplit
         # allow clean window opening
         map kitty_mod+alt+enter>h launch --type=window --location=vsplit
