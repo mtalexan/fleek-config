@@ -2370,6 +2370,7 @@
 
         # remap the ctrl+shift+alt+t to a prefix
         map kitty_mod+alt+t>n set_tab_title
+        map kitty_mod+alt+t>k close_tab
         map kitty_mod+alt+t>1 goto_tab 1
         map kitty_mod+alt+t>2 goto_tab 2
         map kitty_mod+alt+t>3 goto_tab 3
