@@ -2308,6 +2308,7 @@
         # Puts number overlays on all windows and waits for a key to pick which one to jump to.
         # Automatically jumps to the only other one when only 2 windows are present.
         map kitty_mod+; focus_visible_window
+
         # jump to last focused window
         map kitty_mod+alt+; nth_window -1
 
@@ -2360,13 +2361,24 @@
         # map kitty_mod+alt+t set_tab_title
         # map shift+cmd+i     set_tab_title
 
-
         #: You can also create shortcuts to go to specific tabs, with 1 being
         #: the first tab, 2 the second tab and -1 being the previously active
         #: tab, and any number larger than the last tab being the last tab::
 
         #:     map ctrl+alt+1 goto_tab 1
         #:     map ctrl+alt+2 goto_tab 2
+
+        # remap the ctrl+shift+alt+t to a prefix
+        map kitty_mod+alt+t>n set_tab_title
+        map kitty_mod+alt+t>1 goto_tab 1
+        map kitty_mod+alt+t>2 goto_tab 2
+        map kitty_mod+alt+t>3 goto_tab 3
+        map kitty_mod+alt+t>4 goto_tab 4
+        map kitty_mod+alt+t>5 goto_tab 5
+        map kitty_mod+alt+t>6 goto_tab 6
+        map kitty_mod+alt+t>7 goto_tab 7
+        map kitty_mod+alt+t>8 goto_tab 8
+        map kitty_mod+alt+t>9 goto_tab 9
 
         #: Just as with new_window above, you can also pass the name of
         #: arbitrary commands to run when using new_tab and new_tab_with_cwd.
