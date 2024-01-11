@@ -2524,20 +2524,20 @@
         #: <https://sw.kovidgoyal.net/kitty/kittens/hints/>.
 
         #-------
-        # copy to both current prompt and clipboard
+        # copy to clipboard only, so it can be used from the scrollback history buffer too.
         # allow multi-select until escape is hit
 
         # paths/files, also works for container names with tags
-        map kitty_mod+p>f kitten hints --type path --program - --program @ --multiple
-        map kitty_mod+p>p kitten hints --type path --program - --program @ --multiple
+        map kitty_mod+p>f kitten hints --type path --program @ --multiple
+        map kitty_mod+p>p kitten hints --type path --program @ --multiple
         # hash/digest
-        map kitty_mod+p>h kitten hints --type hash --program - --program @ --multiple
+        map kitty_mod+p>h kitten hints --type hash --program @ --multiple
         # url
-        map kitty_mod+p>u kitten hints --type url --program - --program @ --multiple
+        map kitty_mod+p>u kitten hints --type url --program @ --multiple
         # ip
-        map kitty_mod+p>i kitten hints --type ip --program - --program @ --multiple
+        map kitty_mod+p>i kitten hints --type ip --program @ --multiple
         # word
-        map kitty_mod+p>w kitten hints --type word --program - --program @ --multiple
+        map kitty_mod+p>w kitten hints --type word --program @ --multiple
 
         #: }}}
       ''
