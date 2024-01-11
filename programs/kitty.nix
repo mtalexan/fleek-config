@@ -2527,18 +2527,17 @@
         # copy to both current prompt and clipboard
         # allow multi-select until escape is hit
 
-        # paths/files
+        # paths/files, also works for container names with tags
         map kitty_mod+p>f kitten hints --type path --program - --program @ --multiple
         map kitty_mod+p>p kitten hints --type path --program - --program @ --multiple
         # hash/digest
         map kitty_mod+p>h kitten hints --type hash --program - --program @ --multiple
         # url
         map kitty_mod+p>u kitten hints --type url --program - --program @ --multiple
-        # container image
-        map kitty_mod+p>c kitten hints --type regex --regex '[a-zA-Z0-9/_-]:[a-zA-Z0-9/_-]' --program - --program @ --multiple
         # ip
         map kitty_mod+p>i kitten hints --type ip --program - --program @ --multiple
-
+        # word
+        map kitty_mod+p>w kitten hints --type word --program - --program @ --multiple
 
         #: }}}
       ''
