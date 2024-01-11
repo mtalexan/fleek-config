@@ -2522,6 +2522,24 @@
         #: The hints kitten has many more modes of operation that you can map
         #: to different shortcuts. For a full description see hints kitten
         #: <https://sw.kovidgoyal.net/kitty/kittens/hints/>.
+
+        #-------
+        # remap kitty_mod+e as the prefix
+        # copy to both current prompt and clipboard
+        # allow multi-select until escape is hit
+
+        # paths
+        map kitty_mod+e>p kitten hints --type path --program - --program @ --multiple
+        # hash/digest
+        map kitty_mod+e>h kitten hints --type hash --program - --program @ --multiple
+        # url
+        map kitty_mod+e>u kitten hints --type url --program - --program @ --multiple
+        # container image
+        map kitty_mod+e>c kitten hints --type regex --regex '[a-zA-Z0-9/_-]:[a-zA-Z0-9/_-]' --program - --program @ --multiple
+        # ip
+        map kitty_mod+e>i kitten hints --type ip --program - --program @ --multiple
+
+
         #: }}}
       ''
       ## MISC
@@ -2729,4 +2747,4 @@
   };
 }
 
-# vim: sw=2:expandtab
+# vim: ts=2:sw=2:expandtab:syntax=nix
