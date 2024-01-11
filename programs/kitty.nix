@@ -2527,7 +2527,8 @@
         # copy to both current prompt and clipboard
         # allow multi-select until escape is hit
 
-        # paths
+        # paths/files
+        map kitty_mod+p>f kitten hints --type path --program - --program @ --multiple
         map kitty_mod+p>p kitten hints --type path --program - --program @ --multiple
         # hash/digest
         map kitty_mod+p>h kitten hints --type hash --program - --program @ --multiple
