@@ -6,13 +6,13 @@
   #
   # WARNING: homebrew should be installed before this is included in the custom.nix file
 
-  zsh.initExtra = lib.concatLines [
+  programs.zsh.initExtra = lib.concatLines [
     ''
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     ''
   ];
 
-  bash.initExtra = lib.concatLines [
+  programs.bash.initExtra = lib.concatLines [
     ''
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     ''
