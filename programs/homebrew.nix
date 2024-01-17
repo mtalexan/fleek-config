@@ -10,13 +10,13 @@
     ''
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     ''
-  ]
+  ];
 
   bash.initExtra = lib.concatLines [
     ''
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     ''
-  ]
+  ];
 }
 
 # vim: sw=2:expandtab
