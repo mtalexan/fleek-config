@@ -12,11 +12,11 @@
     # extra packages that should be installed only on this host
     home.packages = [
       pkgs.distrobox
-      #pkgs.podman
-      # need to include catatonit if using he custom.podman.config.ubuntu=true so the --init option works to podman
-      #pkgs.catatonit
-      #pkgs.skopeo
       pkgs.rename
+      # don't use podman or skopeo from nix,
+      # podman is suddenly experiencing a bug where 'podman run --userns:keep-id ...' isn't properly linking
+      #   the overlay folders together and fails to start any containers.
+      # skopeo wasn't built with glibc-static and CGO, so it can't parse users or groups from LDAP.
     ];
 
     #####################################
@@ -31,11 +31,6 @@
         docker_sock = true;
       };
       config.engine = "docker";
-    };
-
-    custom.podman.config = {
-      ubuntu = true;
-      shortnames = true;
     };
 
     #####################################
