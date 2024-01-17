@@ -10,15 +10,14 @@
   programs.zsh = {
     initExtraBeforeCompInit = lib.concatLines [
       ''
-      if command -v brew &>/dev/null; then
-        FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
-      fi
-      ''
-    ];
-    initExtra = lib.concatLines [
-      ''
-      if command -v brew &>/dev/null; then
-        eval "$($(brew --prefix)/bin/brew shellenv)"
+      # put 'brew' in the path
+      if [ -e /home/linuxbrew/.linuxbrew/bin/brew ] ; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+        # add completions from brew-installed tools
+        if command -v brew &>/dev/null; then
+          FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
+        fi
       fi
       ''
     ];
@@ -26,10 +25,11 @@
 
   programs.bash.initExtra = lib.concatLines [
     ''
-    if command -v brew &>/dev/null; then
-      homebrew_prefix="$(brew --prefix)"
+    # put 'brew' in the path
+    if [ -e /home/linuxbrew/.linuxbrew/bin/brew ] ; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-      eval "$($homebrew_prefix/bin/brew shellenv)"
+      homebrew_prefix="$(brew --prefix)"
 
       # add completions
 
