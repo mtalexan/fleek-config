@@ -4,7 +4,10 @@
   imports = [
     ../programs/terminator.nix
     ../programs/kitty.nix
+    # just adds an existing install to the PATH
     ../programs/homebrew.nix
+    # just adds an existing install to the PATH
+    ../programs/rustup.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -42,21 +45,16 @@
       "$HOME/DevTools/bin"
     ];
 
-    programs.bash.initExtra = ''
-      
-      if [ -e "$HOME/.cargo/env" ] ; then
-        source $HOME/.cargo/env
-      fi
+    programs.bash.initExtra = lib.concatLines [
+      ''
       if [ -e "$HOME/DevTools/.bashrc" ] ; then
         source $HOME/DevTools/.bashrc
       fi
-    '';
-    programs.zsh.initExtra = ''
+      ''
+    ];
 
-      if [ -e "$HOME/.cargo/env" ] ; then
-        source $HOME/.cargo/env
-      fi
-    '';
+    #programs.zsh.initExtra = lib.concatLines [
+    #];
   };
 }
 
