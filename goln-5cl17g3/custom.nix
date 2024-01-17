@@ -11,10 +11,10 @@
     # extra packages that should be installed only on this host
     home.packages = [
       pkgs.distrobox
-      pkgs.podman
+      #pkgs.podman
       # need to include catatonit if using he custom.podman.config.ubuntu=true so the --init option works to podman
-      pkgs.catatonit
-      pkgs.skopeo
+      #pkgs.catatonit
+      #pkgs.skopeo
       pkgs.rename
     ];
 
