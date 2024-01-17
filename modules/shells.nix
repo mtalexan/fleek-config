@@ -330,12 +330,17 @@
       # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
       "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
 
+      # create a cache folder for zsh
+      "mkdir -p ~/.cache/zsh"
+
       # the completionInit gets ignored when prezto is enabled because it's trying to be efficient and not call it twice.
-      # but we customized it, so we have to add it manually
-      "autoload -U +X -z compinit && compinit"
+      # but we customized it, so we have to add it manually.
+      # Make sure to specify a location to write the compdump so it can be cached instead of regeenrated on each load
+      "autoload -U +X -z compinit && compinit -d ~/.cache/zsh/zcompdump"
       # Need to enable the bash completion options very early so the functions are defined when sourcing completion scripts in the initExtra
       # allow bash-style completion to be parsed as well
-      "autoload -U +X bashcompinit && bashcompinit"
+      # Make sure to specify a location to write the compdump so it can be cached instead of regeenrated on each load
+      "autoload -U +X bashcompinit && bashcompinit -d ~/.cache/zsh/zbashcompdump"
 
       ''
       ####################################################
