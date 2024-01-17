@@ -11,7 +11,7 @@
     initExtraBeforeCompInit = lib.concatLines [
       ''
       if command -v brew &>/dev/null; then
-        FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+        FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
       fi
       ''
     ];
