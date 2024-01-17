@@ -4,6 +4,7 @@
   imports = [
     ../programs/terminator.nix
     ../programs/kitty.nix
+    ../programs/homebrew.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
