@@ -100,10 +100,10 @@
       # hitting up or down will use the currently typed string in the back into history
     };
 
-    # using prezto syntax highlighting instead
+    # use a plugin for a different highlighter instead
     #syntaxHighlighting = {
     #  enable = true;
-    #  styles = "";
+    ##  styles = "";
     #};
 
     # instead of a plugin manager, use the plugins directly in nix recipes.
@@ -132,6 +132,19 @@
           # use this to generate an error that shows the real value
           #  sha256 = lib.fakeSha256;
           sha256 = "sha256-yUWmKi95l7UFcjk/9Cfy/dDXQD3K/m2Q+q72YLZvZak=";
+        };
+      }
+      {
+        # uses a better syntax highlighter
+
+        # will source fast-syntax-highlighting.plugin.zsh
+        name = "fast-syntax-highlighting";
+        src = pkgs.fetchFromGitHub {
+          owner = "zdharma-continuum";
+          repo = "fast-syntax-highlighting";
+          # post v1.55, there is no v1.56 yet
+          rev = "cf318e06a9b7c9f2219d78f41b46fa6e06011fd9";
+          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
       }
     ];
