@@ -143,7 +143,7 @@
           owner = "zdharma-continuum";
           repo = "fast-syntax-highlighting";
           rev = "v1.55";
-          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          sha256 = "sha256-DWVFBoICroKaKgByLmDEo4O+xo6eA8YO792g8t8R7kA=";
         };
       }
     ];
@@ -187,8 +187,8 @@
         "git"
         "python"
         "screen"
-        "syntax-highlighting"
-        # autosuggestions don't work via prezto unless you use the prezto prompt.
+        # autosuggestions and syntax highlighting don't work via prezto unless you use the prezto prompt.
+        #"syntax-highlighting"
         #"autosuggestions"
         # using starship instead
         #"prompt"
