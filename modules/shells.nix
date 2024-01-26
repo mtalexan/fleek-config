@@ -104,9 +104,8 @@
       enable = true;
       highlighters = [
         # from the list https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-        main
-        brackets
-        #cursor
+        "brackets"
+        #"cursor"
       ];
       # overrides for default colors
       #styles = {};
