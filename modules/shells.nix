@@ -159,7 +159,7 @@
           owner = "jirutka";
           repo = "zsh-shift-select";
           rev = "v0.1.1";
-          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          sha256 = "sha256-4kUUBH2GTMb/d6PUNiSNFogkvDUSwMX823j4xsroJKs=";
         };
       }
       {
