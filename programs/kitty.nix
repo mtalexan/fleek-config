@@ -2334,6 +2334,10 @@
         # map shift+cmd+[    previous_tab
         # map ctrl+shift+tab previous_tab
 
+        # explicitly unmap these so we can use them in zsh
+        map ctrl+shift+right no_op
+        map ctrl+shift+left no_op
+
         #: New tab
 
         # map kitty_mod+t new_tab

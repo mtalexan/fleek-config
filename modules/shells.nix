@@ -153,6 +153,8 @@
       {
         # keybindings for shift selection in CLI
 
+        # WARNING: kitty can conflict with some of these.
+
         # will source zsh-shift-select.plugin.zsh
         name = "zsh-shift-select";
         src = pkgs.fetchFromGitHub {
