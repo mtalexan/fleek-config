@@ -131,7 +131,7 @@
           owner = "MichaelAquilina";
           repo = "zsh-auto-notify";
           rev = "0.8.1";
-          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
         };
       }
       {
@@ -378,6 +378,19 @@
       
       # pink foreground for completion, with underline
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
+      ''
+
+      ''
+      ##############################################################
+      # Auto notify plugin settings
+      ##############################################################
+      
+      # only notify if it took longer than 30 seconds (default=10)
+      AUTO_NOTIFY_THRESHOLD=30
+      # make the notifications expire after 20 seconds (default=8)
+      AUTO_NOTIFY_EXPIRE_TIME=20000
+      # extra commands to ignore (see variable for defaults)
+      AUTO_NOTIFY_IGNORE+=("bat")
       ''
 
       ''
