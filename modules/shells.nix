@@ -141,103 +141,102 @@
       }
     ];
 
-    prezto = {
-      enable = true;
-      # fish-like autosuggestions
-      # Set the color for the found portion (implies it's enabled)
-      autosuggestions.color = "fg=bright-blue";
-      # Set case-sensitivity for completion, history lookup, etc.
-      caseSensitive = true;
-      # color output
-      color = true;
-
-      editor = {
-        # Do NOT use dotExpansion.  It conflicts with git needing to use .. vs ... when diffing.
-        ## Auto convert .... to ../..
-        #dotExpansion = true;
-        keymap = "emacs";
-        # Allow the zsh prompt context to be shown.  Really only relevant to VI
-        promptContext = true;
-      };
-
-      # prezto modules.  Order matters.
-      #  'autosuggestions' must be after 'syntax-highlighting'
-      #  'autosuggestions' must be after 'history-substring-search'
-      #  'completion' must be after 'utility'
-      #  'environment' must be loaded first
-      #  'syntax-highlighting' must be second to last, right before 'prompt'
-      #    unless 'history-substring-search' is also used, then right before
-      #    it as well.
-      #  'fasd' must be after 'completion'
-      pmodules = [
-        "environment"
-        "terminal"
-        "editor"
-        "history"
-        "spectrum"
-        "utility"
-        "completion"
-        "git"
-        "python"
-        "screen"
-        # autosuggestions and syntax highlighting don't work via prezto unless you use the prezto prompt.
-        #"syntax-highlighting"
-        #"autosuggestions"
-        # using starship instead
-        #"prompt"
-      ];
-
-      # pmodule configurations
-
-      # Using starship instead, which means prezto prompt has to be disabled
-      #prompt = {
-      #  theme = "starship";
-      #  # set the pwd type to 'short', 'long' (no ~ expansion), or 'full' (~ expansion)
-      #  pwdLength = "long";
-      #  # don't show return values in the prompt
-      #  showReturnVal = false;
-      #};
-
-      python = {
-        # Auto switch the Python virtualenv on directory change.
-        virtualenvAutoSwitch = true;
-        # Automatically initialize virtualenvwrapper if pre-requisites are met.
-        virtualenvInitialize = true;
-      };
-
-      syntaxHighlighting = {
-        highlighters = [
-          "main"
-          "brackets"
-          "pattern"
-          "line"
-          "root"
-          # do NOT include 'cursor' here.  It makes block cursors disappear when moving over text
-          #"cursor"
-        ];
-
-        # special command-patterns to highlight
-        pattern = {
-          "rm*-rf*" = "fg=white,bold,bg=red";
-        };
-      };
-
-      terminal = {
-        # Auto set the tab and window titles.
-        autoTitle = true;
-        # Set the window title format.
-        windowTitleFormat = "%n@%m: %s";
-        # Set the tab title format.
-        tabTitleFormat = "%m: %s";
-        # Set the terminal multiplexer title format.
-        multiplexerTitleFormat = "%s";
-      };
-
-      # Enabled safe options? This aliases cp, ln, mv and rm so that they prompt
-      # before deleting or overwriting files. Set to 'no' to disable this safer
-      # behavior.
-      utility.safeOps = false;
-    };
+    # prezto only works if we use it for the prompt.
+    # we're using starship instead
+    #prezto = {
+    #  enable = true;
+    #  # fish-like autosuggestions
+    #  # Set the color for the found portion (implies it's enabled)
+    #  autosuggestions.color = "fg=bright-blue";
+    #  # Set case-sensitivity for completion, history lookup, etc.
+    #  caseSensitive = true;
+    #  # color output
+    #  color = true;
+    #
+    #  editor = {
+    #    # Do NOT use dotExpansion.  It conflicts with git needing to use .. vs ... when diffing.
+    #    ## Auto convert .... to ../..
+    #    #dotExpansion = true;
+    #    keymap = "emacs";
+    #    # Allow the zsh prompt context to be shown.  Really only relevant to VI
+    #    promptContext = true;
+    #  };
+    #
+    #  # prezto modules.  Order matters.
+    #  #  'autosuggestions' must be after 'syntax-highlighting'
+    #  #  'autosuggestions' must be after 'history-substring-search'
+    #  #  'completion' must be after 'utility'
+    #  #  'environment' must be loaded first
+    #  #  'syntax-highlighting' must be second to last, right before 'prompt'
+    #  #    unless 'history-substring-search' is also used, then right before
+    #  #    it as well.
+    #  #  'fasd' must be after 'completion'
+    #  pmodules = [
+    #    "environment"
+    #    "terminal"
+    #    "editor"
+    #    "history"
+    #    "spectrum"
+    #    "utility"
+    #    "completion"
+    #    "git"
+    #    "python"
+    #    "screen"
+    #    "syntax-highlighting"
+    #    "autosuggestions"
+    #    "prompt"
+    #  ];
+    #
+    #  # pmodule configurations
+    #
+    #  prompt = {
+    #    theme = "starship";
+    #    # set the pwd type to 'short', 'long' (no ~ expansion), or 'full' (~ expansion)
+    #    pwdLength = "long";
+    #    # don't show return values in the prompt
+    #    showReturnVal = false;
+    #  };
+    #
+    #  python = {
+    #    # Auto switch the Python virtualenv on directory change.
+    #    virtualenvAutoSwitch = true;
+    #    # Automatically initialize virtualenvwrapper if pre-requisites are met.
+    #    virtualenvInitialize = true;
+    #  };
+    #
+    #  syntaxHighlighting = {
+    #    highlighters = [
+    #      "main"
+    #      "brackets"
+    #      "pattern"
+    #      "line"
+    #      "root"
+    #      # do NOT include 'cursor' here.  It makes block cursors disappear when moving over text
+    #      #"cursor"
+    #    ];
+    #
+    #    # special command-patterns to highlight
+    #    pattern = {
+    #      "rm*-rf*" = "fg=white,bold,bg=red";
+    #    };
+    #  };
+    #
+    #  terminal = {
+    #    # Auto set the tab and window titles.
+    #    autoTitle = true;
+    #    # Set the window title format.
+    #    windowTitleFormat = "%n@%m: %s";
+    #    # Set the tab title format.
+    #    tabTitleFormat = "%m: %s";
+    #    # Set the terminal multiplexer title format.
+    #    multiplexerTitleFormat = "%s";
+    #  };
+    #
+    #  # Enabled safe options? This aliases cp, ln, mv and rm so that they prompt
+    #  # before deleting or overwriting files. Set to 'no' to disable this safer
+    #  # behavior.
+    #  utility.safeOps = false;
+    #};
 
 
     initExtraBeforeCompInit = ''
