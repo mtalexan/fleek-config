@@ -125,6 +125,16 @@
         };
       }
       {
+        # will source auto-notify.plugin.zsh
+        name = "auto-notify";
+        src = pkgs.fetchFromGitHub {
+          owner = "MichaelAquilina";
+          repo = "zsh-auto-notify";
+          rev = "0.8.1";
+          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        };
+      }
+      {
         # Adds the 'up' command
 
         # will source up.plugin.zsh
