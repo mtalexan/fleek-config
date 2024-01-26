@@ -100,11 +100,17 @@
       # hitting up or down will use the currently typed string in the back into history
     };
 
-    # use a plugin for a different highlighter instead
-    #syntaxHighlighting = {
-    #  enable = true;
-    ##  styles = "";
-    #};
+    syntaxHighlighting = {
+      enable = true;
+      highlighters = [
+        # from the list https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+        main
+        brackets
+        #cursor
+      ];
+      # overrides for default colors
+      #styles = {};
+    };
 
     # instead of a plugin manager, use the plugins directly in nix recipes.
     # see examples: https://nix-community.github.io/home-manager/options.html#opt-programs.zsh.plugins
@@ -132,18 +138,6 @@
           # use this to generate an error that shows the real value
           #  sha256 = lib.fakeSha256;
           sha256 = "sha256-yUWmKi95l7UFcjk/9Cfy/dDXQD3K/m2Q+q72YLZvZak=";
-        };
-      }
-      {
-        # uses a better syntax highlighter
-
-        # will source fast-syntax-highlighting.plugin.zsh
-        name = "fast-syntax-highlighting";
-        src = pkgs.fetchFromGitHub {
-          owner = "zdharma-continuum";
-          repo = "fast-syntax-highlighting";
-          rev = "v1.55";
-          sha256 = "sha256-DWVFBoICroKaKgByLmDEo4O+xo6eA8YO792g8t8R7kA=";
         };
       }
     ];
