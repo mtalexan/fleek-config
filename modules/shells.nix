@@ -116,6 +116,8 @@
     plugins = [
       {# MUST BE FIRST
 
+        # replaces zsh default completion menu prompt with an fzf one
+
         # will source fzf-tab.plugin.zsh
         name = "fzf-tab";
         src = pkgs.fetchFromGitHub {
@@ -137,6 +139,8 @@
         };
       }
       {
+        # sets bell w/ message when long running things complete
+
         # will source auto-notify.plugin.zsh
         name = "auto-notify";
         src = pkgs.fetchFromGitHub {
@@ -144,6 +148,18 @@
           repo = "zsh-auto-notify";
           rev = "0.8.1";
           sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
+        };
+      }
+      {
+        # keybindings for shift selection in CLI
+
+        # will source zsh-shift-select.plugin.zsh
+        name = "zsh-shift-select";
+        src = pkgs.fetchFromGitHub {
+          owner = "jirutka";
+          repo = "zsh-shift-select";
+          rev = "v0.1.1";
+          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
       }
       {
@@ -397,8 +413,8 @@
       # Auto notify plugin settings
       ##############################################################
 
-      # only notify if it took longer than 30 seconds (default=10)
-      AUTO_NOTIFY_THRESHOLD=30
+      # only notify if it took longer than 10 seconds (default=10)
+      AUTO_NOTIFY_THRESHOLD=10
       # make the notifications expire after 10 seconds (default=8)
       AUTO_NOTIFY_EXPIRE_TIME=10000
       # extra commands to ignore (see variable for defaults)
