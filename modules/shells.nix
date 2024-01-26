@@ -114,6 +114,18 @@
     # instead of a plugin manager, use the plugins directly in nix recipes.
     # see examples: https://nix-community.github.io/home-manager/options.html#opt-programs.zsh.plugins
     plugins = [
+      {# MUST BE FIRST
+
+        # will source fzf-tab.plugin.zsh
+        name = "fzf-tab";
+        src = pkgs.fetchFromGitHub {
+          owner = "Aloxaf";
+          repo = "fzf-tab";
+          # latest master as of 2024-01-26
+          rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
+          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        };
+      }
       {
         # will source zsh-autosuggestions.plugin.zsh
         name = "zsh-autosuggestions";
@@ -384,11 +396,11 @@
       ##############################################################
       # Auto notify plugin settings
       ##############################################################
-      
+
       # only notify if it took longer than 30 seconds (default=10)
       AUTO_NOTIFY_THRESHOLD=30
-      # make the notifications expire after 20 seconds (default=8)
-      AUTO_NOTIFY_EXPIRE_TIME=20000
+      # make the notifications expire after 10 seconds (default=8)
+      AUTO_NOTIFY_EXPIRE_TIME=10000
       # extra commands to ignore (see variable for defaults)
       AUTO_NOTIFY_IGNORE+=("bat")
       ''
