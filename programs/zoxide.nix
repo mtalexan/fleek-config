@@ -22,7 +22,7 @@
       # Default is 'z' and 'zi' (interactive)
       #"--cmd=cd"
       # don't add any commands, custom commands/aliases will need to use __zoxide_z and __zoxide_zi
-       --no-cmd
+       "--no-cmd"
     ];
     # The following environment variables have to be set manually in the home.sessionVariables if needed
     # _ZO_ECHO = 1 ; to print matched dir before jumping
