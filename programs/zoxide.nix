@@ -1,16 +1,28 @@
 { pkgs, misc, lib, ... }: {
-  # 'z' and 'zi' commands for directory jumps based on frecency.  
-  # Uses fzf to select options if using 'z <pattern> '+tab
+  # A rust-based attempt to be like z.lua, but missing all the useful functionality from it.
+  # Instead it's a global path frecency jump tool that pays no attention to the current folder.
+  # It also uses clock-time for frecency, unlike z.lua.
+  #
+  # It wants to use a 'z' and 'zi' alias, but since it doesn't actually do what z.lua does (that already use thes),
+  # we need to block these mappings.
+  # It uses fzf for interactive search.
+  #
+  # Implemented mapping is to provide 'za' as an interactive fzf lookup.
   programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
     # options to pass to the 'zoxide init' command
     options = [
-      # update directory scores on every folder change
-      "--hook=pwd"
-      # replace the cd command with zoxide if set.  Default is 'z' and 'zi'
+      # update directory scores on every prompt redraw ('prmopt') instead of only when dir is changed ('pwd').
+      # clock time is used to degrade frecency, so for a global lookup list we want to know if we were
+      # running a bunch of commands in one directory for an extended period of time.
+      "--hook=prompt"
+      # Command to trigger the function. If set to 'cd' it will replace the cd command.
+      # Default is 'z' and 'zi' (interactive)
       #"--cmd=cd"
+      # don't add any commands, custom commands/aliases will need to use __zoxide_z and __zoxide_zi
+       --no-cmd
     ];
     # The following environment variables have to be set manually in the home.sessionVariables if needed
     # _ZO_ECHO = 1 ; to print matched dir before jumping
@@ -44,6 +56,14 @@
       "--cycle" 
       "--layout=reverse"
     ];
+  };
+  programs.bash.shellAliases = {
+    # custom command alias to do interactive global frecency search. Args are passed to the function
+    za = "__zoxide_zi";
+  };
+  programs.zsh.shellAliases = {
+    # custom command alias to do interactive global frecency search. Args are passed to the function
+    za = "__zoxide_zi";
   };
 }
 
