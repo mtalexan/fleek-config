@@ -96,8 +96,10 @@
     zf = "zf_custom -c";
     zi = "zf_custom -c";
     # do upward search. w/ 0-args it goes to git root, 1-arg it looks for upward match, 2-args it does match subst
-    zb = "command z -b";
+    # Note: 'z -b' doesn't work, we have to force it with -l or -e and then manually move.
+    zb = "zb_go_custom";
     # the interactive version of upward search
+    # Note: 'z -b -I' doesn't work, we have to force it with -l or -e and then manually move)
     zbi = "zf_custom -b";
     zbf = "zf_custom -b";
   };
@@ -111,6 +113,14 @@
     #}
     #''
 
+    # the 'z -b' and 'z -b -I' commands don't actually change directories (bug) or prompt, so wrap them with a custom script
+    ''
+    function zb_go_custom() {
+      local $dir="$(z -e -b "$@")
+      [ -n "$dir" ] && cd "$dir"
+    }
+    ''
+
     # the default function for zf, we have to customize it if we want custom FZF functionality
     ''
     function zf_custom() {
@@ -120,8 +130,8 @@
     # 'z -I' always passes the score then the folder name with some leading indentation.
     # Carefully echo the string, parse it thru awk to get only the second column, and then use
     # the result in an eza --tree command that shows colors and only 2 dirs deep in each tree
-    "         --preview 'eza --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')' \\"
     ''
+              --preview "eza --tree -L2 --color=always \$( echo {} | sed -e 's@^\S*\s*@@')" \
               --preview-window right,border-vertical \
               --bind 'ctrl-/:toggle-preview' \
               --scheme=path \
@@ -131,7 +141,8 @@
               --tabstop=4 \
               --color=dark \
               --cycle)"
-      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's/^\S*\s*//')"
+      # make sure to strip the ranking score and spaces off the front
+      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's@^\S*\s*@@')"
     }
     ''
   ];
@@ -144,6 +155,14 @@
     #}
     #''
 
+    # the 'z -b' command without any other arguments doesn't actually change directories (bug), so wrap it with a custom script
+    ''
+    function zb_go_custom() {
+      local $dir="$(z -e -b "$@")
+      [ -n "$dir" ] && cd "$dir"
+    }
+    ''
+
     # the default function for zf, we have to customize it if we want custom FZF functionality
     ''
     function zf_custom() {
@@ -153,8 +172,8 @@
     # 'z -I' always passes the score then the folder name with some leading indentation.
     # Carefully echo the string, parse it thru awk to get only the second column, and then use
     # the result in an eza --tree command that shows colors and only 2 dirs deep in each tree
-    "         --preview 'eza --tree -L2 --color=always \\$( echo {} | awk '\\''{ print \\$2 }'\\'')' \\"
     ''
+              --preview "eza --tree -L2 --color=always \$( echo {} | sed -e 's@^\S*\s*@@')" \
               --preview-window right,border-vertical \
               --bind 'ctrl-/:toggle-preview' \
               --scheme=path \
@@ -164,7 +183,8 @@
               --tabstop=4 \
               --color=dark \
               --cycle)"
-      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's/^\S*\s*//')"
+      # make sure to strip the ranking score and spaces off the front
+      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's@^\S*\s*@@')"
     }
     ''
   ];
