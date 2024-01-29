@@ -86,7 +86,7 @@
     #  "-e"
     #];
   };
-  home.sessionAliases = {
+  home.shellAliases = {
     # the base function provided is z(), so we need to explicitly use that defined function
     # in these aliases
 
