@@ -123,7 +123,7 @@
               --tabstop=4 \
               --color=dark \
               --cycle)"
-      [ -n "$dir" ] && cd "$(echo $dri | sed -e s/^\S*\s*//')"
+      [ -n "$dir" ] && cd "$(echo $dri | sed -e 's/^\S*\s*//')"
     }
     ''
   ];
@@ -151,7 +151,7 @@
               --tabstop=4 \
               --color=dark \
               --cycle)"
-      [ -n "$dir" ] && cd "$(echo $dri | sed -e s/^\S*\s*//')"
+      [ -n "$dir" ] && cd "$(echo $dri | sed -e 's/^\S*\s*//')"
     }
     ''
   ];
