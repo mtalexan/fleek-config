@@ -90,11 +90,14 @@
     # the base function provided is z(), so we need to explicitly use that defined function
     # in these aliases
 
-    # do sub-dir relative searches
-    z = "command z -c";
-    # sub-dir relative fzf searches
-    zf = "zf_custom -c";
-    zi = "zf_custom -c";
+    # sub-directory moves/searches work better with the built-in FZF directory search
+
+    ## do sub-dir relative searches
+    #z = "command z -c";
+    ## sub-dir relative fzf searches
+    #zf = "zf_custom -c";
+    #zi = "zf_custom -c";
+
     # do upward search. w/ 0-args it goes to git root, 1-arg it looks for upward match, 2-args it does match subst
     # Note: 'z -b' doesn't work, we have to force it with -l or -e and then manually move.
     zb = "zb_go_custom";

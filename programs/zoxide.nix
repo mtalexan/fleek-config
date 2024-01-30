@@ -1,4 +1,6 @@
 { pkgs, misc, lib, ... }: {
+  # NOT USED: doesn't really work
+  #
   # A rust-based attempt to be like z.lua, but missing all the useful functionality from it.
   # Instead it's a global path frecency jump tool that pays no attention to the current folder.
   # It also uses clock-time for frecency, unlike z.lua.

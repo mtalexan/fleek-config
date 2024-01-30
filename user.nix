@@ -26,7 +26,8 @@
     #./programs/terminator.nix
     ./programs/tmux.nix
     ./programs/z-lua.nix
-    ./programs/zoxide.nix
+    # doesn't do anything useful
+    #./programs/zoxide.nix
 
     ./modules/prompt.nix
     ./modules/shells.nix
