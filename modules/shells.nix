@@ -152,20 +152,21 @@
           sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
         };
       }
-      {
-        # keybindings for shift selection in CLI
-
-        # WARNING: kitty can conflict with some of these.
-
-        # will source zsh-shift-select.plugin.zsh
-        name = "zsh-shift-select";
-        src = pkgs.fetchFromGitHub {
-          owner = "jirutka";
-          repo = "zsh-shift-select";
-          rev = "v0.1.1";
-          sha256 = "sha256-4kUUBH2GTMb/d6PUNiSNFogkvDUSwMX823j4xsroJKs=";
-        };
-      }
+      # conflicts with Ctrl+left/right for fwd/back word, and selection doesn't work with kitty
+      #{
+      #  # keybindings for shift selection in CLI
+      #
+      #  # WARNING: kitty can conflict with some of these.
+      #
+      #  # will source zsh-shift-select.plugin.zsh
+      #  name = "zsh-shift-select";
+      #  src = pkgs.fetchFromGitHub {
+      #    owner = "jirutka";
+      #    repo = "zsh-shift-select";
+      #    rev = "v0.1.1";
+      #    sha256 = "sha256-4kUUBH2GTMb/d6PUNiSNFogkvDUSwMX823j4xsroJKs=";
+      #  };
+      #}
       {
         # Adds the 'up' command
 
