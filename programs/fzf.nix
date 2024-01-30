@@ -98,7 +98,7 @@
     ''
       fzf-file-args-widget() {
         if [ $# -gt 0 ]; then
-          FZF_DEFAULT_OPTS+="--query='$@'"
+          FZF_DEFAULT_OPTS+=" --query='$@'"
         fi
         # doesn't follow bash naming convention, the name was copied from the zsh code
         fzf-file-widget
@@ -107,7 +107,7 @@
 
       fzf-cd-args-widget() {
         if [ $# -gt 0 ]; then
-          FZF_DEFAULT_OPTS+="--query='$@'"
+          FZF_DEFAULT_OPTS+=" --query='$@'"
         fi
         __fzf_cd__
         return $?
