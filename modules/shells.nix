@@ -100,16 +100,17 @@
       # hitting up or down will use the currently typed string in the back into history
     };
 
-    syntaxHighlighting = {
-      enable = true;
-      highlighters = [
-        # from the list https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-        "brackets"
-        #"cursor"
-      ];
-      # overrides for default colors
-      #styles = {};
-    };
+    # Using F-Sy-H plugin instead
+    #syntaxHighlighting = {
+    #  enable = true;
+    #  highlighters = [
+    #    # from the list https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+    #    "brackets"
+    #    #"cursor"
+    #  ];
+    #  # overrides for default colors
+    #  #styles = {};
+    #};
 
     # instead of a plugin manager, use the plugins directly in nix recipes.
     # see examples: https://nix-community.github.io/home-manager/options.html#opt-programs.zsh.plugins
@@ -177,6 +178,21 @@
           # use this to generate an error that shows the real value
           #  sha256 = lib.fakeSha256;
           sha256 = "sha256-yUWmKi95l7UFcjk/9Cfy/dDXQD3K/m2Q+q72YLZvZak=";
+        };
+      }
+      {
+        # Better/faster syntax highlighting
+
+        # will source F-Sy-H.plugin.zsh
+        name = "F-Sy-H";
+        src = pkgs.fetchFromGitHub {
+          owner = "z-shell";
+          repo = "F-Sy-H";
+          # latest commit as of 2023-08-01, already 7+ years old
+          rev = "v1.67";
+          # use this to generate an error that shows the real value
+          #  sha256 = lib.fakeSha256;
+          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
       }
     ];
