@@ -188,11 +188,10 @@
         src = pkgs.fetchFromGitHub {
           owner = "z-shell";
           repo = "F-Sy-H";
-          # latest commit as of 2023-08-01, already 7+ years old
           rev = "v1.67";
           # use this to generate an error that shows the real value
           #  sha256 = lib.fakeSha256;
-          sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          sha256 = lib.fakeSha256;
         };
       }
     ];
