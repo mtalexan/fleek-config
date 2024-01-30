@@ -74,7 +74,7 @@
     ''
       fzf-file-args-widget() {
         if [ $# -gt 0 ]; then
-          FZF_DEFAULT_OPTS+="--query='$@'"
+          FZF_DEFAULT_OPTS+=" --query='$@'"
         fi
         fzf-file-widget
         return $?
@@ -82,7 +82,7 @@
 
       fzf-cd-args-widget() {
         if [ $# -gt 0 ]; then
-          FZF_DEFAULT_OPTS+="--query='$@'"
+          FZF_DEFAULT_OPTS+=" --query='$@'"
         fi
         fzf-cd-widget
         return $?
