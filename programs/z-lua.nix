@@ -1,4 +1,6 @@
 { pkgs, misc, lib, ... }: {
+  # NOT USED: doesn't work
+  #
   # An older alternative to zoxide.
   # 'z' commands for directory jumps based on frecency.  
   # 'z' for jump down dirs, 'zb' for jump up dirs, 'zf' for fzf prompt, 'zi' for non-FZF interactive,

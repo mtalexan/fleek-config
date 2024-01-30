@@ -25,8 +25,8 @@
     # this is a GUI app, so individual hosts must add it manually
     #./programs/terminator.nix
     ./programs/tmux.nix
-    ./programs/z-lua.nix
     # doesn't do anything useful
+    #./programs/z-lua.nix
     #./programs/zoxide.nix
 
     ./modules/prompt.nix
