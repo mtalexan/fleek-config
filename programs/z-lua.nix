@@ -116,7 +116,7 @@
     # the 'z -b' and 'z -b -I' commands don't actually change directories (bug) or prompt, so wrap them with a custom script
     ''
     function zb_go_custom() {
-      local $dir="$(z -e -b "$@")
+      local $dir="$(z -e -b "$@")"
       [ -n "$dir" ] && cd "$dir"
     }
     ''
@@ -158,7 +158,7 @@
     # the 'z -b' command without any other arguments doesn't actually change directories (bug), so wrap it with a custom script
     ''
     function zb_go_custom() {
-      local $dir="$(z -e -b "$@")
+      local $dir="$(z -e -b "$@")"
       [ -n "$dir" ] && cd "$dir"
     }
     ''
