@@ -109,7 +109,7 @@
     #''
     #function zf() {
     #  local $dir="$(z -l "$@" | fzf --nth 2.. --reverse --inline-info --tac +s -e --height 35%)"
-    #  [ -n "$dir" ] && cd "$(echo $dri | sed -e s/^\S*\s*//')"
+    #  [ -n "$dir" ] && cd "$(echo $dri | sed -e s@^\s*\S*\s*@@')"
     #}
     #''
 
@@ -142,7 +142,7 @@
               --color=dark \
               --cycle)"
       # make sure to strip the ranking score and spaces off the front
-      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's@^\S*\s*@@')"
+      [ -n "$dir" ] && cd "$(echo "$dir" | sed -e 's@^\s*\S*\s*@@')"
     }
     ''
   ];
@@ -151,7 +151,7 @@
     #''
     #function zf() {
     #  local $dir="$(z -l "$@" | fzf --nth 2.. --reverse --inline-info --tac +s -e --height 35%)"
-    #  [ -n "$dir" ] && cd "$(echo $dri | sed -e s/^\S*\s*//')"
+    #  [ -n "$dir" ] && cd "$(echo $dri | sed -e s@^\s\S*\s*@@')"
     #}
     #''
 
@@ -184,7 +184,7 @@
               --color=dark \
               --cycle)"
       # make sure to strip the ranking score and spaces off the front
-      [ -n "$dir" ] && cd "$(echo $dir | sed -e 's@^\S*\s*@@')"
+      [ -n "$dir" ] && cd "$(echo "$dir" | sed -e 's@^\s*\S*\s*@@')"
     }
     ''
   ];
