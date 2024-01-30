@@ -191,7 +191,7 @@
           rev = "v1.67";
           # use this to generate an error that shows the real value
           #  sha256 = lib.fakeSha256;
-          sha256 = lib.fakeSha256;
+          sha256 = "sha256-zhaXjrNL0amxexbZm4Kr5Y/feq1+2zW0O6eo9iZhmi0=";
         };
       }
     ];
