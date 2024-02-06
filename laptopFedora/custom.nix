@@ -34,7 +34,6 @@
       # Flatpaks
       "code" = "flatpak run com.visualstudio.code ";
       "meld" = "flatpak run org.gnome.meld ";
-      "wireshark" = "flatpak run org.wireshark.Wireshark ";
     };
   };
 }
