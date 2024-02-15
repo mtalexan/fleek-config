@@ -540,12 +540,16 @@
 
       # Alt+Shift+l
       ''bindkey '^[L' emacs-forward-word''
+      # Ctrl+Right
+      ''bindkey '^[[1;5C' emacs-forward-word''
 
       # Alt+l
       ''bindkey '^[j' backward-char''
 
       # Alt+Shift+j
       ''bindkey '^[J' emacs-backward-word''
+      # Ctrl+Left
+      ''bindkey '^[[1;5D' emacs-backward-word''
 
       # Ctrl+Backspace
       ''bindkey '^^?' backward-kill-word''
