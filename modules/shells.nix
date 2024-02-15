@@ -528,6 +528,8 @@
       zle -N x-kill-line
       ''
 
+      # To figure out what the keybinding is, press Ctrl+v and then the key combo you're interested in.
+      # That will print shell key code you need to provide to bindkey.
 
       # Alt+u
       ''bindkey '^[u' beginning-of-line''
