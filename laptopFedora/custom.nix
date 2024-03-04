@@ -33,6 +33,7 @@
 
       # Flatpaks
       "code" = "flatpak run com.visualstudio.code ";
+      "codium" = "flatpak run com.vscodium.codeium";
       "meld" = "flatpak run org.gnome.meld ";
     };
   };
