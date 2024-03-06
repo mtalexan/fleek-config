@@ -141,6 +141,17 @@ systems:
         ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
         username: mike
       username: mike
+    - arch: x86_64
+      home: ""
+      hostname: vm-gol-422Q533
+      os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: Mike
+        ssh_private_key_file: ~/.ssh/github_personal_ed25519
+        ssh_public_key_file: ~/.ssh/github_personal_ed25519.pub
+        username: dev
+      username: dev
 track: nixos-unstable
 unfree: true
 users:
