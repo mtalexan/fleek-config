@@ -40,11 +40,6 @@
     # Programs
     #####################################
 
-    custom.kitty = {
-      # this must be set to false during first time install, then it can be changed to true after kitty has been installed for nix
-      desktop_files = false;
-    };
-
     # add the extra DevTools path, just in case it's there.  If it is, it's relevant
     home.sessionPath = [
       "$HOME/DevTools/bin"

@@ -6,6 +6,7 @@
   #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
   home.sessionVariables = {
     GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
+    XDG_DATA_DIRS = "$HOME/.nix-profile/share:$XDG_DATA_DIRS";
   };
 
   programs.bash = {
