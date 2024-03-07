@@ -40,7 +40,7 @@
     # Programs
     #####################################
 
-    cutom.kitty = {
+    custom.kitty = {
       # this must be set to false during first time install, then it can be changed to true after kitty has been installed for nix
       desktop_files = false;
     };
