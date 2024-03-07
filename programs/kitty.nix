@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, ... }: {
+{ pkgs, misc, lib, config, options, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
   # WARNING: Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
   #          An sd command is provided to ease this 'sd install kitty'
