@@ -10,32 +10,32 @@
   };
 
   config = {
-    # install the desktop files
-    home.file = {
-      # The recommended way to do this is to copy the files from the kitty install folder into the desktop folder,
-      # then do sed replacements.  We do the equivalent by reading the text of the files from our nix install location,
-      # then doing string replacement and specifying it as raw text for a new file.
-
-      ".local/share/applications/kitty.desktop" = {
-        enable = config.custom.kitty.desktop_files;
-        executable = false;
-        # take the file from the nix kitty install and replace the Icon, Exec, and TryExec portions of the lines saying where to find kitty
-        text = (builtins.replaceStrings
-                  ["Icon=kitty" "Exec=kitty"]
-                  ["Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png" "Exec=${pkgs.kitty}/bin/kitty"]
-                  (builtins.readFile "${pkgs.kitty}/share/applications/kitty.desktop"));
-      };
-
-      ".local/share/applications/kitty-open.desktop" = {
-        enable = config.custom.kitty.desktop_files;
-        executable = false;
-        # take the file from the nix kitty install and replace the Icon, Exec, and TryExec portions of the lines saying where to find kitty
-        text = (builtins.replaceStrings
-                  ["Icon=kitty" "Exec=kitty"]
-                  ["Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png" "Exec=${pkgs.kitty}/bin/kitty"]
-                  (builtins.readFile "${pkgs.kitty}/share/applications/kitty-open.desktop"));
-      };
-    };
+    ## install the desktop files
+    #home.file = {
+    #  # The recommended way to do this is to copy the files from the kitty install folder into the desktop folder,
+    #  # then do sed replacements.  We do the equivalent by reading the text of the files from our nix install location,
+    #  # then doing string replacement and specifying it as raw text for a new file.
+    #
+    #  ".local/share/applications/kitty.desktop" = {
+    #    enable = config.custom.kitty.desktop_files;
+    #    executable = false;
+    #    # take the file from the nix kitty install and replace the Icon, Exec, and TryExec portions of the lines saying where to find kitty
+    #    text = (builtins.replaceStrings
+    #              ["Icon=kitty" "Exec=kitty"]
+    #              ["Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png" "Exec=${pkgs.kitty}/bin/kitty"]
+    #              (builtins.readFile "${pkgs.kitty}/share/applications/kitty.desktop"));
+    #  };
+    #
+    #  ".local/share/applications/kitty-open.desktop" = {
+    #    enable = config.custom.kitty.desktop_files;
+    #    executable = false;
+    #    # take the file from the nix kitty install and replace the Icon, Exec, and TryExec portions of the lines saying where to find kitty
+    #    text = (builtins.replaceStrings
+    #              ["Icon=kitty" "Exec=kitty"]
+    #              ["Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png" "Exec=${pkgs.kitty}/bin/kitty"]
+    #              (builtins.readFile "${pkgs.kitty}/share/applications/kitty-open.desktop"));
+    #  };
+    #};
 
     # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
     # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
