@@ -56,6 +56,7 @@ packages:
     - bash-completion
     - nix-bash-completions
     - yq
+    - kitty
 paths:
     - $HOME/bin
     - $HOME/.local/bin
