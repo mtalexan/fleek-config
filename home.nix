@@ -28,6 +28,7 @@
     pkgs.jq
     pkgs.less
     pkgs.man
+    pkgs.nix-index
     pkgs.noti
     pkgs.bashInteractive
     pkgs.zsh-completions
