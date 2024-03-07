@@ -3,7 +3,7 @@
 
   imports = [
     ../programs/terminator.nix
-    #../programs/kitty.nix
+    ../programs/kitty.nix
     # just adds an existing install to the PATH
     ../programs/homebrew.nix
     # just adds an existing install to the PATH
