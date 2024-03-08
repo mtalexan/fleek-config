@@ -7,7 +7,7 @@
     # just adds an existing install to the PATH
     ../programs/homebrew.nix
     # just adds an existing install to the PATH
-    ../programs/rustup.nix
+    ../programs/rustup.nix 
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
