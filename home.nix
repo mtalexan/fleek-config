@@ -38,6 +38,7 @@
     pkgs.bash-completion
     pkgs.nix-bash-completions
     pkgs.yq
+    pkgs.riffdiff
     # Fleek Bling
     pkgs.git
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })

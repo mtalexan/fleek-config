@@ -45,8 +45,6 @@ packages:
     - jq
     - less
     - man
-    # don't include this. It's really big to add, and never seems to actually work right.
-    #- nix-index
     - noti
     - bashInteractive
     - zsh-completions
@@ -57,6 +55,7 @@ packages:
     - bash-completion
     - nix-bash-completions
     - yq
+    - riffdiff
 paths:
     - $HOME/bin
     - $HOME/.local/bin
