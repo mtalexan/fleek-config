@@ -20,7 +20,6 @@
       "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
       "kbash" = "kitten run-shell --shell=bash";
       "kzsh" = "kitten run-shell --shell=.";
-      ""
     };
   };
   programs.bash = {
