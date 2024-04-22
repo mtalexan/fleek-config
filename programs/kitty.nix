@@ -6,31 +6,36 @@
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
-    #initExtra = ''
-    #  if test -n "$KITTY_INSTALLATION_DIR"; then
-    #      export KITTY_SHELL_INTEGRATION="enabled"
-    #      autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-    #      kitty-integration
-    #      unfunction kitty-integration
-    #  fi
-    #'';
+    initExtra = ''
+      if test -n "$KITTY_INSTALLATION_DIR"; then
+          export KITTY_SHELL_INTEGRATION="enabled"
+          autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+          kitty-integration
+          unfunction kitty-integration
+      fi
+    '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
       "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
+      "kbash" = "kitten run-shell --shell=bash";
+      "kzsh" = "kitten run-shell --shell=.";
+      ""
     };
   };
   programs.bash = {
-    #initExtra = ''
-    #  if test -n "$KITTY_INSTALLATION_DIR"; then
-    #      export KITTY_SHELL_INTEGRATION="enabled"
-    #      source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
-    #  fi
-    #'';
+    initExtra = ''
+      if test -n "$KITTY_INSTALLATION_DIR"; then
+          export KITTY_SHELL_INTEGRATION="enabled"
+          source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+      fi
+    '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
       "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
+      "kbash" = "kitten run-shell --shell=.";
+      "kzsh" = "kitten run-shell --shell=zsh";
     };
   };
 
