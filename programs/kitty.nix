@@ -7,9 +7,10 @@
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
     initExtra = ''
-      if test -n "$KITTY_INSTALLATION_DIR"; then
+      if test -n "${pkg.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
+          echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
-          autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+          autoload -Uz -- "${pkg.kitty}"/shell-integration/zsh/kitty-integration
           kitty-integration
           unfunction kitty-integration
       fi
@@ -24,9 +25,10 @@
   };
   programs.bash = {
     initExtra = ''
-      if test -n "$KITTY_INSTALLATION_DIR"; then
+      if test -n "${pkg.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
+          echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
-          source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+          source "${pkg.kitty}/shell-integration/bash/kitty.bash"
       fi
     '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
