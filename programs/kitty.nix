@@ -10,7 +10,7 @@
       if test -n "${pkgs.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
-          autoload -Uz -- "${pkgs.kitty}"/shell-integration/zsh/kitty-integration
+          autoload -Uz -- "${pkgs.kitty}"/lib/kitty/shell-integration/zsh/kitty-integration
           kitty-integration
           unfunction kitty-integration
       fi
@@ -28,7 +28,7 @@
       if test -n "${pkgs.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
-          source "${pkgs.kitty}/shell-integration/bash/kitty.bash"
+          source "${pkgs.kitty}/lib/kitty/shell-integration/bash/kitty.bash"
       fi
     '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
