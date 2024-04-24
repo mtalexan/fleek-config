@@ -87,7 +87,7 @@
           use_system_font = false;
           copy_on_selection = true;
           split_to_group = true;
-          font = "DejaVuSansMono Nerd Font 11";
+          font = "DejaVuSansM Nerd Font Mono Regular 11";
         };
       };
       layouts = {
