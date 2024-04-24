@@ -7,7 +7,8 @@
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
     initExtra = ''
-      if test -n "${pkgs.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
+      # if kitty is installed, we're rnning in a kitty window, and shell integration isn't already enabled
+      if test -n "${pkgs.kitty}" -a -n "$KITTY_WINDOW_ID" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
           autoload -Uz -- "${pkgs.kitty}"/lib/kitty/shell-integration/zsh/kitty-integration
@@ -25,7 +26,8 @@
   };
   programs.bash = {
     initExtra = ''
-      if test -n "${pkgs.kitty}" -a -z "$KITTY_SHELL_INTEGRATION"; then
+      # if kitty is installed, we're rnning in a kitty window, and shell integration isn't already enabled
+      if test -n "${pkgs.kitty}" -a -n "$KITTY_WINDOW_ID" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
           source "${pkgs.kitty}/lib/kitty/shell-integration/bash/kitty.bash"
