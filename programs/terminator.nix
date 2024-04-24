@@ -12,7 +12,7 @@
         enabled_plugins = "ActivityWatch, InactivityWatch, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler";
         always_split_with_profile = true;
         title_use_system_font = false;
-        title_font = "DejaVu Sans Mono for Powerline 12";
+        title_font = "DejaVuSansM Nerd Font Mono Regular 12";
         focus = "system";
       };
       keybindings = {
