@@ -32,8 +32,6 @@
       # end all aliases in a space so completion on arguments works for them
 
       # Flatpaks
-      "code" = "flatpak run com.visualstudio.code ";
-      "codium" = "flatpak run com.vscodium.codium";
       "meld" = "flatpak run org.gnome.meld ";
     };
   };
