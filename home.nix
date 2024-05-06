@@ -29,6 +29,7 @@
     pkgs.less
     pkgs.man
     pkgs.nix-index
+    pkgs.nixGLDefault
     pkgs.noti
     pkgs.bashInteractive
     pkgs.zsh-completions
