@@ -15,13 +15,14 @@
           kitty-integration
           unfunction kitty-integration
       fi
+
+      # alias plain ssh to force set the TERM if it would otherwise be set to kitty
+      [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
     '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
-      "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
-      "kbash" = "kitten run-shell --shell=bash";
-      "kzsh" = "kitten run-shell --shell=.";
+      "sshk" = "kitty +kitten ssh ";
     };
   };
   programs.bash = {
@@ -32,13 +33,14 @@
           export KITTY_SHELL_INTEGRATION="enabled"
           source "${pkgs.kitty}/lib/kitty/shell-integration/bash/kitty.bash"
       fi
+
+      # alias plain ssh to force set the TERM if it would otherwise be set to kitty
+      [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
     '';
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
-      "sshk" = "kitty +kitten ssh --kitten shell_integration=no-rc ";
-      "kbash" = "kitten run-shell --shell=.";
-      "kzsh" = "kitten run-shell --shell=zsh";
+      "sshk" = "kitty +kitten ssh ";
     };
   };
 
