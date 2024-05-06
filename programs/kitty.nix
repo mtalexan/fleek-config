@@ -44,40 +44,32 @@
     };
   };
 
-  home.file.kitty-nix = {
-    enable = true;
-    target = ".local/share/applications/kitty-nix.desktop";
-    text = lib.concatLines [
-      ''[Desktop Entry]''
-      ''Version=1.0''
-      ''Type=Application''
-      ''Name=kitty-nix''
-      ''GenericName=Terminal emulator''
-      ''Comment=Fast, feature-rich, GPU based terminal''
-      ''TryExec=${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty''
-      ''Exec=${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty''
-      ''Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png''
-      ''Categories=System;TerminalEmulator;''
-    ];
-  };
+  xdg.desktopEntries = {
 
-  home.file.kitty-nix-open = {
-    enable = true;
-    target = ".local/share/applications/kitty-nix-open.desktop";
-    text = lib.concatLines [
-      ''[Desktop Entry]''
-      ''Version=1.0''
-      ''Type=Application''
-      ''Name=kitty-nix URL Launcher''
-      ''GenericName=Terminal emulator''
-      ''Comment=Fast, feature-rich, GPU based terminal''
-      ''TryExec=${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty''
-      ''Exec=${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U''
-      ''Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png''
-      ''Categories=System;TerminalEmulator;''
-      ''NoDisplay=true''
-      ''MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;''
-    ];
+    kitty-nix = {
+      type = ''Application'';
+      name = ''kitty-nix'';
+      genericName = ''Terminal emulator'';
+      comment = ''Fast, feature-rich, GPU based terminal'';
+      tryExec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
+      terminal = false;
+      categories = [ "System" "TerminalEmulator"];
+    };
+    kitty-nix-open = {
+      type = ''Application'';
+      name = ''kitty-nix URL Launcher'';
+      genericName = ''Terminal emulator'';
+      comment = ''Fast, feature-rich, GPU based terminal'';
+      tryExec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
+      icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
+      terminal = false;
+      categories = [ "System" "TerminalEmulator"];
+      noDisplay = true;
+      mimeType = [ "image/*" "application/x-sh" "application/x-shellscript" "inode/directory" "text/*" "x-scheme-handler/kitty" "x-scheme-handler/ssh"];
+    };
   };
 
   programs.kitty = {
