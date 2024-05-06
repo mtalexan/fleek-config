@@ -51,7 +51,6 @@
       name = ''kitty-nix'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      tryExec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
       exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
@@ -62,7 +61,6 @@
       name = ''kitty-nix URL Launcher'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      tryExec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
       exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
