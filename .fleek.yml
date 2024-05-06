@@ -48,6 +48,10 @@ packages:
     - jq
     - less
     - man
+    - nix-cache
+    # needs to be installed impure, so manually
+    #   nix profile install github:guibou/nixGL --impure
+    #- nixGL
     - noti
     - bashInteractive
     - zsh-completions

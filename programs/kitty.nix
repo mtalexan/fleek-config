@@ -44,6 +44,42 @@
     };
   };
 
+  home.file.kitty-nix = {
+    enable = true;
+    target = .local/share/applications/kitty-nix.desktop;
+    text = [
+      ''[Desktop Entry]''
+      ''Version=1.0''
+      ''Type=Application''
+      ''Name=kitty-nix''
+      ''GenericName=Terminal emulator''
+      ''Comment=Fast, feature-rich, GPU based terminal''
+      ''TryExec=nixGL ${pkgs.kitty}/bin/kitty''
+      ''Exec=nixGL ${pkgs.kitty}/bin/kitty''
+      ''Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png''
+      ''Categories=System;TerminalEmulator;''
+    ];
+  };
+
+  home.file.kitty-nix-open = {
+    enable = true;
+    target = .local/share/applications/kitty-nix-open.desktop;
+    text = [
+      ''[Desktop Entry]''
+      ''Version=1.0''
+      ''Type=Application''
+      ''Name=kitty-nix URL Launcher''
+      ''GenericName=Terminal emulator''
+      ''Comment=Fast, feature-rich, GPU based terminal''
+      ''TryExec=nixGL ${pkgs.kitty}/bin/kitty''
+      ''Exec=nixGL ${pkgs.kitty}/bin/kitty +open %U''
+      ''Icon=${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png''
+      ''Categories=System;TerminalEmulator;''
+      ''NoDisplay=true''
+      ''MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;''
+    ];
+  };
+
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
     # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
