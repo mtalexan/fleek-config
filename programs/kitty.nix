@@ -47,7 +47,7 @@
   home.file.kitty-nix = {
     enable = true;
     target = ".local/share/applications/kitty-nix.desktop";
-    text = concatLines [
+    text = lib.concatLines [
       ''[Desktop Entry]''
       ''Version=1.0''
       ''Type=Application''
@@ -64,7 +64,7 @@
   home.file.kitty-nix-open = {
     enable = true;
     target = ".local/share/applications/kitty-nix-open.desktop";
-    text = concatLines [
+    text = lib.concatLines [
       ''[Desktop Entry]''
       ''Version=1.0''
       ''Type=Application''
