@@ -44,9 +44,9 @@
     };
   };
 
-  home.file."kitty-nix" = {
+  home.file.kitty-nix = {
     enable = true;
-    target = .local/share/applications/kitty-nix.desktop;
+    target = ".local/share/applications/kitty-nix.desktop";
     text = [
       ''[Desktop Entry]''
       ''Version=1.0''
@@ -61,9 +61,9 @@
     ];
   };
 
-  home.file."kitty-nix-open" = {
+  home.file.kitty-nix-open = {
     enable = true;
-    target = .local/share/applications/kitty-nix-open.desktop;
+    target = ".local/share/applications/kitty-nix-open.desktop";
     text = [
       ''[Desktop Entry]''
       ''Version=1.0''
