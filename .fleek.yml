@@ -52,7 +52,7 @@ packages:
     # needs to be installed impure, so manually
     #   nix profile install github:guibou/nixGL --impure
     #- nixGL
-    - nixGLDefault
+    - nixGLIntel
     - noti
     - bashInteractive
     - zsh-completions
