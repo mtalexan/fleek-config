@@ -44,7 +44,7 @@
     };
   };
 
-  home.file.kitty-nix = {
+  home.file."kitty-nix" = {
     enable = true;
     target = .local/share/applications/kitty-nix.desktop;
     text = [
@@ -61,7 +61,7 @@
     ];
   };
 
-  home.file.kitty-nix-open = {
+  home.file."kitty-nix-open" = {
     enable = true;
     target = .local/share/applications/kitty-nix-open.desktop;
     text = [
