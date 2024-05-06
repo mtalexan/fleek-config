@@ -50,7 +50,7 @@ packages:
     - man
     - nix-index
     # install the default from nixgl overlay
-    - nixgl.default
+    - nixgl
     #- nixgl.nixGLIntel
     - noti
     - bashInteractive
