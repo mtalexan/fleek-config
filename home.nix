@@ -29,7 +29,7 @@
     pkgs.less
     pkgs.man
     pkgs.nix-index
-    pkgs.nixgl.nixGLIntel
+    pkgs.nixgl.default
     pkgs.noti
     pkgs.bashInteractive
     pkgs.zsh-completions

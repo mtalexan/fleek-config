@@ -49,10 +49,9 @@ packages:
     - less
     - man
     - nix-index
-    # needs to be installed impure, so manually
-    #   nix profile install github:guibou/nixGL --impure
-    #- nixGL
-    - nixgl.nixGLIntel
+    # install the default from nixgl overlay
+    - nixgl.default
+    #- nixgl.nixGLIntel
     - noti
     - bashInteractive
     - zsh-completions
