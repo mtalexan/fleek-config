@@ -49,9 +49,8 @@ packages:
     - less
     - man
     - nix-index
-    # install the default from nixgl overlay
-    - nixgl.auto.nixGLDefault
-    #- nixgl.nixGLIntel
+    # TODO: Move this and it's use by kitty into it's own module
+    - nixgl.nixGLIntel
     - noti
     - bashInteractive
     - zsh-completions

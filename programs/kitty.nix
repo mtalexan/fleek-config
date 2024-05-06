@@ -46,12 +46,13 @@
 
   xdg.desktopEntries = {
 
+    # TODO: Create a nixGL wrapper and use that for the programs.kitty.package instead, then call the wrapper here
     kitty-nix = {
       type = ''Application'';
       name = ''kitty-nix'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL ${pkgs.kitty}/bin/kitty'';
+      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -61,7 +62,7 @@
       name = ''kitty-nix URL Launcher'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL ${pkgs.kitty}/bin/kitty +open %U'';
+      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -75,6 +76,10 @@
     # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
     # installation location, so manual installation will work.
     enable = true;
+
+    # TODO: Create a nixGL wrapper like this https://github.com/nix-community/nixGL/issues/44#issuecomment-2080393839
+    #program = ;
+
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
       # injected kitty integration (set by mode=).  Instead we use the enable{Bash,Zsh}Integration options that add only the necessary
