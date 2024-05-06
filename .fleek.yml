@@ -48,6 +48,7 @@ packages:
     - jq
     - less
     - man
+    # for some reason it's not included by the home.programs.nix-index.enable like every other package is
     - nix-index
     # TODO: Using the default only works for impure builds. Move the nixGL into a host-specific config so we can explicitly pick the right one
     # nixgl.auto.nixGLDefault
