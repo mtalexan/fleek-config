@@ -50,7 +50,7 @@
     # installation location, so manual installation will work.
     enable = true;
     # don't actually install the package, it doesn't work without nixGL
-    package = pkgs.emptyFile;
+    package = null;
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
       # injected kitty integration (set by mode=).  Instead we use the enable{Bash,Zsh}Integration options that add only the necessary
