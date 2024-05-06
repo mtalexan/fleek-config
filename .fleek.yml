@@ -48,7 +48,7 @@ packages:
     - jq
     - less
     - man
-    - nix-cache
+    - nix-index
     # needs to be installed impure, so manually
     #   nix profile install github:guibou/nixGL --impure
     #- nixGL

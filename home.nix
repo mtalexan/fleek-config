@@ -28,7 +28,7 @@
     pkgs.jq
     pkgs.less
     pkgs.man
-    pkgs.nix-cache
+    pkgs.nix-index
     pkgs.noti
     pkgs.bashInteractive
     pkgs.zsh-completions
