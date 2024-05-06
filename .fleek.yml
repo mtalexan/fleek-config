@@ -35,7 +35,10 @@ git:
     enabled: true
 min_version: 0.8.4
 name: Fleek Configuration
-overlays: {}
+overlays:
+  nixgl:
+    url: github:nix-community/nixGL
+    follow: true
 packages:
     - helix
     - nerdfonts

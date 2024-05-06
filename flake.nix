@@ -15,6 +15,9 @@
 
     # Overlays
     
+    nixgl.url = "github:nix-community/nixGL";
+    nixgl.inputs.nixpkgs.follows = "nixpkgs";
+    
 
   };
 
@@ -46,7 +49,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -72,7 +75,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -98,7 +101,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -124,7 +127,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -150,7 +153,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -176,7 +179,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -202,7 +205,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -228,7 +231,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
@@ -254,7 +257,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [];
+           nixpkgs.overlays = [inputs.nixgl.overlay ];
           })
 
         ];
