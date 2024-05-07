@@ -52,7 +52,7 @@ packages:
     - nix-index
     # TODO: Using the default only works for impure builds. Move the nixGL into a host-specific config so we can explicitly pick the right one
     # nixgl.auto.nixGLDefault
-    - nixgl.nixGLIntel
+    #- nixgl.nixGLIntel
     - noti
     - bashInteractive
     - zsh-completions
