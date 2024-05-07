@@ -1,4 +1,7 @@
 { pkgs, misc, lib, ... }: {
+  # TODO: populate this so the Nix one is available on the system. Use nixGL in the calls.
+  #xdg.desktopEntries = {};
+
   programs.terminator = {
     enable = true;
     config = {

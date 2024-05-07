@@ -1,9 +1,5 @@
-{ pkgs, misc, lib, config, ... }:
+{ pkgs, misc, lib, config, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
-let
-  # from list https://github.com/nix-community/nixGL, used in the imports
-  nixGL = "nixGLNvidia";
-in {
   imports = [
     ../programs/terminator.nix
     ../programs/kitty.nix
