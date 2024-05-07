@@ -2,7 +2,7 @@
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 let
   # from list https://github.com/nix-community/nixGL, used in the imports
-  nixGL = nixGLNvidia;
+  nixGL = "nixGLNvidia";
 in {
   imports = [
     ../programs/terminator.nix
