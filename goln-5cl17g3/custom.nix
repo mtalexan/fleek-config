@@ -13,7 +13,6 @@
   config = {
     # extra packages that should be installed only on this host
     home.packages = [
-      pkgs.nixgl.${nixGL}
       pkgs.distrobox
       pkgs.rename
       # don't use podman or skopeo from nix,
