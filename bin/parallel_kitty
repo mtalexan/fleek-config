@@ -37,7 +37,7 @@ readonly KITTY_CMD="${KITTY_CMD:-${HOME}/.local/kitty.app/bin/kitty}"
 if ! command -v parallel &>/dev/null; then
     echo >&2 "ERROR: GNU 'parallel' is required but cannot be found"
     exit 1
-elif parallel --version | head -n1 | grep -qE '^GNU parallel' &>/dev/null; then
+elif ! parallel --version | head -n1 | grep -qE '^GNU parallel' &>/dev/null; then
     echo >&2 "ERROR: GNU 'parallel' is required, only non-GNU parallel was found."
     echo >&2 "       Do you need to run 'parallel --cite' for first usage?"
     exit 1
