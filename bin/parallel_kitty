@@ -19,12 +19,10 @@
 #     manually run in the background by the caller.
 #   --max
 #     optional. Maximize the new kitty os-window(s). By default they're the size of the last opened windows. Ignored if --bg or --min
-#   --???
-#     Anything else starting with a '-' that appears before the first argument that doesn't start with a '-' are presumed to be options to the parallel command,
-#     and are passed to it. The set of what makes sense is very limited, and mostly restricted to options that change how the replacements are parsed.  The parallel
-#     command is always prefixed with extras needed for the kitty session that's being generated, so the actions parallel would run in parallel are instead passed
-#     as commands to parallel subshells.
-#
+#   --
+#     After a stand-alone ' -- ', everything is passed to 'parallel', and the output of a modified '--dry-run' is printed.
+#     Options telling how parallel to parse are detected by looking thru these for anything starting with a '-', up until the first argument that doesn't.
+#     Those are separated and passed to parallel before the modified body.
 # Environment:
 #   KITTY_CMD - optional. if set, should be the command to run to invoke kitty.  All quoting is stripped, so it can be multiple commands. Expansion of '~' will not occur.
 #               Default=${HOME}/.local/kitty.app/bin/kitty
@@ -111,6 +109,13 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+if ${DRY_RUN} &>/dev/null; then
+    echo >&2 "Got options for parallel:"
+    printf >&2 "\t%s\n" "${EXTRA_OPTS[@]}"
+    echo >&2 "Got arguments for parallel:"
+    printf >&2 "\t%s\n" "${ALL_OTHER_ARGS[@]}"
+fi
 
 PARALLEL_ARGS=()
 
