@@ -1,0 +1,191 @@
+#!/bin/bash
+#
+# Takes arguments that mostly look like GNU parallel, and launches a new kitty window to run them all in parallel.
+# This is roughly similar to the --tmux or --tmuxpanes option to parallel.
+# Example:
+#   $0 --title='{1}-{3} MATURITY={2}' make DOCKER=podman RELVER={1} MATURITY={2} ARCH={3} all_rel ::: 37 39 ::: staging unstable ::: amd64 arm64
+#
+# Options:
+#   --dry-run
+#     optional. prints what would be passed to the kitty session after expansion rather than actually running it.
+#   --title=
+#     optional. string can contain variables from parallel resolution, sets the title of the window, tab, os-window.
+#   --type=
+#     optional. one of 'window'/'pane', 'tab', or 'os-window'. Default=window.
+#     What to put each command into when running them all in parallel.
+#   --bg
+#   --min
+#     optional. Minimize the windows as soon as they're opened so they run in the background without taking focus. This script is still blocking and must also be
+#     manually run in the background by the caller.
+#   --max
+#     optional. Maximize the new kitty os-window(s). By default they're the size of the last opened windows. Ignored if --bg or --min
+#   --???
+#     Anything else starting with a '-' that appears before the first argument that doesn't start with a '-' are presumed to be options to the parallel command,
+#     and are passed to it. The set of what makes sense is very limited, and mostly restricted to options that change how the replacements are parsed.  The parallel
+#     command is always prefixed with extras needed for the kitty session that's being generated, so the actions parallel would run in parallel are instead passed
+#     as commands to parallel subshells.
+#
+# Environment:
+#   KITTY_CMD - optional. if set, should be the command to run to invoke kitty.  All quoting is stripped, so it can be multiple commands. Expansion of '~' will not occur.
+#               Default=${HOME}/.local/kitty.app/bin/kitty
+#
+# Requires:
+#   GNU 'parallel'
+
+readonly KITTY_CMD="${KITTY_CMD:-${HOME}/.local/kitty.app/bin/kitty}"
+
+if ! command -v parallel &>/dev/null; then
+    echo >&2 "ERROR: GNU 'parallel' is required but cannot be found"
+    exit 1
+elif parallel --version | head -n1 | grep -qE '^GNU parallel' &>/dev/null; then
+    echo >&2 "ERROR: GNU 'parallel' is required, only non-GNU parallel was found."
+    echo >&2 "       Do you need to run 'parallel --cite' for first usage?"
+    exit 1
+fi
+
+
+OPTS=$(getopt -n "${0##*/}" -o '' --long dry-run,title:,type:,bg,min,max -- "$@")
+# Reorder the positional parameters
+eval set -- "$OPTS"
+
+# Initialize variables
+DRY_RUN=false
+TITLE=""
+TYPE="window"
+BG=false
+MAX=false
+REST_ARE_ARGS=false
+ALL_OTHER_ARGS=()
+EXTRA_OPTS=()
+
+# Parse the options
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dry-run )
+            DRY_RUN=true
+            shift
+            ;;
+        --title )
+            TITLE="$2"
+            shift 2
+            ;;
+        --type )
+            case "$2" in
+                window|pane )
+                    TYPE="window"
+                    ;;
+                tab )
+                    TYPE="tab"
+                    ;;
+                os-window )
+                    TYPE="os-window"
+                    ;;
+                * )
+                    echo >&2 "ERROR: Not a recognized --type=(window|pane|tab|os-window)"
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
+        --bg | --min )
+            BG=true
+            shift
+            ;;
+        --max )
+            MAX=true
+            shift
+            ;;
+        -- )
+            shift
+            ;;
+        * )
+            # if it starts with a '-' and we haven't gotten any other extra opts yet, then it's an option to parallel.
+            # Once we have non-options to parallel, everything else is an argument to it regardless of whether it starts with '-' or not
+            if ! ${REST_ARE_ARGS} &>/dev/null && [[ $1 == -* ]]; then
+                EXTRA_OPTS+=("$1")
+            else
+                REST_ARE_ARGS=true
+                ALL_OTHER_ARGS+=("$1")
+            fi
+            shift
+            ;;
+    esac
+done
+
+PARALLEL_ARGS=()
+
+case "$TYPE" in
+    window )
+        # must be last since the actual command parallel is going to populate comes at the end
+        PARALLEL_ARGS+=("launch" "--hold" "--type=${TYPE}")
+        if [ -n "${TITLE}" ]; then
+            PARALLEL_ARGS+=("--title='${TITLE}'")
+        fi
+        ;;
+    tab )
+        PARALLEL_ARGS+=("new_tab" "${TITLE}\\n")
+        PARALLEL_ARGS+=("cd" "$(pwd)\\n")
+        # must be last since the actual command parallel is going to populate comes at the end
+        PARALLEL_ARGS+=("launch" "--hold")
+        ;;
+    os-window )
+        PARALLEL_ARGS+=("new_os_window\\n")
+        PARALLEL_ARGS+=("cd" "$(pwd)\\n")
+
+        # --bg beats --max
+        if ${BG} &>/dev/null; then
+            PARALLEL_ARGS+=("os_window_state" "minimized")
+        elif ${MAX} &>/dev/null; then
+            PARALLEL_ARGS+=("os_window_state" "maximized")
+        fi
+
+        # must be last since the actual command parallel is going to populate comes at the end
+        PARALLEL_ARGS+=("launch" "--hold")
+        if [ -n "${TITLE}" ]; then
+            PARALLEL_ARGS+=("--title='${TITLE}'")
+        fi
+        ;;
+esac
+PARALLEL_ARGS+=("${ALL_OTHER_ARGS[@]}")
+
+# if it's a dry-run, just print what would be passed
+if ${DRY_RUN} &>/dev/null; then
+    command_to_exec=("cat")
+else
+    command_to_exec=("${KITTY_CMD}" "--hold" "--session" "-")
+fi
+
+{
+    # sets the working dir for all windows in the tab.
+    if [ "$TYPE" == "window" ]; then
+        echo "cd $(pwd)"
+    fi
+    if [ "$TYPE" != "os-window" ]; then
+        # --bg beats --max
+        if ${BG} &>/dev/null; then
+            echo "os_window_state minimized"
+        elif ${MAX} &>/dev/null; then
+            echo "os_window_state maximized"
+        fi
+    fi
+
+    # parallel will print everything, but we may have embedded escaped newlines that need to be expanded, and we have extra modifications to what is generated
+    parallel_out="$(parallel --dry-run "${EXTRA_OPTS[@]}" "${PARALLEL_ARGS[@]}")"
+    if [ -z "${parallel_out}" ] ; then
+        echo >&2 "No commands to run generated by parallel"
+        exit 1
+    fi
+
+    # print what parallel generated so escaped newlines get converted to real newlines
+    if [ "${TYPE}" == "os-window" ]; then
+        # remove the first occurence of the 'new_os_window' so the commands up until the second occurence apply to the initially created os-window
+        echo -e "${parallel_out}" | sed -E '0,/^new_os_window/{//d}'
+    else
+        echo -e "${parallel_out}"
+    fi
+
+    # set the window layout in the tab after they're all created so they get equally balanced
+    if [ "$TYPE" == "window" ]; then
+        echo 'layout grid'
+    fi
+} | ${command_to_exec[@]}
