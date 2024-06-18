@@ -152,8 +152,8 @@
           owner = "MichaelAquilina";
           repo = "zsh-auto-notify";
           rev = "0.10.1";
-          #sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
-          sha256 = lib.fakeSha256;
+          sha256 = "sha256-l5nXzCC7MT3hxRQPZv1RFalXZm7uKABZtfEZSMdVmro=";
+          #sha256 = lib.fakeSha256;
         };
       }
       # conflicts with Ctrl+left/right for fwd/back word, and selection doesn't work with kitty
