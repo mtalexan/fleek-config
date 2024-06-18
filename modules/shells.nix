@@ -129,6 +129,7 @@
           # latest master as of 2024-01-26
           rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
           sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
+          #sha256 = lib.fakeSha256;
         };
       }
       {
@@ -139,6 +140,7 @@
           repo = "zsh-autosuggestions";
           rev = "v0.7.0";
           sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
+          #sha256 = lib.fakeSha256;
         };
       }
       {
@@ -149,8 +151,9 @@
         src = pkgs.fetchFromGitHub {
           owner = "MichaelAquilina";
           repo = "zsh-auto-notify";
-          rev = "0.8.1";
-          sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
+          rev = "0.10.1";
+          #sha256 = "sha256-4PH7g7OY5hASgq4xdswYaCDnys4pz/wyIVkGgaPcgBI=";
+          sha256 = lib.fakeSha256;
         };
       }
       # conflicts with Ctrl+left/right for fwd/back word, and selection doesn't work with kitty
@@ -166,6 +169,7 @@
       #    repo = "zsh-shift-select";
       #    rev = "v0.1.1";
       #    sha256 = "sha256-4kUUBH2GTMb/d6PUNiSNFogkvDUSwMX823j4xsroJKs=";
+      #    #sha256 = lib.fakeSha256;
       #  };
       #}
       {
@@ -178,9 +182,8 @@
           repo = "up.zsh";
           # latest commit as of 2023-08-01, already 7+ years old
           rev = "c8cc0d0edd6be2d01f467267e3ed385c386a0acb";
-          # use this to generate an error that shows the real value
-          #  sha256 = lib.fakeSha256;
           sha256 = "sha256-yUWmKi95l7UFcjk/9Cfy/dDXQD3K/m2Q+q72YLZvZak=";
+          #sha256 = lib.fakeSha256;
         };
       }
     ];
@@ -420,11 +423,11 @@
       ##############################################################
 
       # only notify if it took longer than 10 seconds (default=10)
-      AUTO_NOTIFY_THRESHOLD=10
+      AUTO_NOTIFY_THRESHOLD=30
       # make the notifications expire after 10 seconds (default=8)
       AUTO_NOTIFY_EXPIRE_TIME=10000
       # extra commands to ignore (see variable for defaults)
-      AUTO_NOTIFY_IGNORE+=("bat")
+      AUTO_NOTIFY_IGNORE+=("bat" "code" "kitty")
       ''
 
       ''
