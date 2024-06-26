@@ -285,6 +285,11 @@
     #  utility.safeOps = false;
     #};
 
+    # loaded for ALL session types, env variables exclusive to zsh
+    envExtra = lib.concatLines [
+      # make sure our SHELL is set to zsh so it's used by default.
+      ''SHELL=$(command -v zsh)''
+    ];
 
     initExtraBeforeCompInit = ''
       # See man zshcompsys for details on completers and their options

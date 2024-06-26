@@ -1490,7 +1490,7 @@
         #: Advanced {{{
 
         # shell .
-        shell $(which zsh 2>/dev/null || bash)
+        shell zsh
 
         #: The shell program to execute. The default value of . means to use
         #: whatever shell is set as the default shell for the current user.
