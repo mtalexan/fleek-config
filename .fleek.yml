@@ -36,9 +36,9 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays:
-  nixgl:
-    url: github:nix-community/nixGL
-    follow: true
+    nixgl:
+        follow: true
+        url: github:nix-community/nixGL
 packages:
     - helix
     - nerdfonts
@@ -48,11 +48,7 @@ packages:
     - jq
     - less
     - man
-    # for some reason it's not included by the home.programs.nix-index.enable like every other package is
     - nix-index
-    # Using the default only works for impure builds. Move the nixGL into a host-specific config so we can explicitly pick the right one
-    # nixgl.auto.nixGLDefault
-    # TODO: make this host-specific and usable by different modules somehow
     - nixgl.nixGLIntel
     - noti
     - bashInteractive
@@ -172,6 +168,17 @@ systems:
         ssh_public_key_file: ~/.ssh/id_ed25519_github.pub
         username: aaravchen2
       username: aaravchen2
+    - arch: x86_64
+      home: ""
+      hostname: WINDOWS-GAMING
+      os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: aaravchen
+        ssh_private_key_file: ~/.ssh/id_github_ed25519
+        ssh_public_key_file: ~/.ssh/id_github_ed25519.pub
+        username: aaravchen
+      username: aaravchen
 track: nixos-unstable
 unfree: true
 users:
