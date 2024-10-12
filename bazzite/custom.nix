@@ -2,7 +2,7 @@
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
 
   imports = [
-    #../modules/fedora_shells.nix
+    ../modules/fedora_shells.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
   ];
