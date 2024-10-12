@@ -9,7 +9,7 @@
             graph = "log --decorate --oneline --graph";
             add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
         };
-        userName = "Mike";
+        userName = "aaravchen";
         userEmail = "github@trackit.fe80.email";
         extraConfig = {
             feature.manyFiles = true;
@@ -18,8 +18,8 @@
         };
 
         signing = {
-            key = "~/.ssh/id_ed25519_github";
-            signByDefault = builtins.stringLength "~/.ssh/id_ed25519_github" > 0;
+            key = "~/.ssh/github_ed25519";
+            signByDefault = builtins.stringLength "~/.ssh/github_ed25519" > 0;
         };
 
         lfs.enable = true;
