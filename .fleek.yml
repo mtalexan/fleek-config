@@ -179,6 +179,17 @@ systems:
         ssh_public_key_file: ~/.ssh/id_github_ed25519.pub
         username: aaravchen
       username: aaravchen
+    - arch: x86_64
+      home: ""
+      hostname: bazzite
+      os: linux
+      user:
+        email: github@trackit.fe80.email
+        name: aaravchen
+        ssh_private_key_file: ~/.ssh/github_ed25519
+        ssh_public_key_file: ~/.ssh/github_ed25519.pub
+        username: aaravchen
+      username: aaravchen
 track: nixos-unstable
 unfree: true
 users:
