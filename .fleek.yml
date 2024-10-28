@@ -1,3 +1,4 @@
+# vim: ts=4;sw=4;et
 aliases:
     bathelp: bat --plain --language=help
     batpretty: prettybat
@@ -37,10 +38,13 @@ min_version: 0.8.4
 name: Fleek Configuration
 overlays:
     nixgl:
-        follow: true
         url: github:nix-community/nixGL
+        follow: true
+    emacs:
+        url: github:nix-community/emacs-overlay
+        # Only provides master, it doesn't follow the nix version.
+        follow: false
 packages:
-    - helix
     - nerdfonts
     - git
     - fd
