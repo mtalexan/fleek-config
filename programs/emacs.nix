@@ -13,8 +13,6 @@
 
   programs.emacs = {
     enabled = true;
-    # make it available, but don't make it the default editor
-    defaultEditor = false;
 
     # optional alternative
     # package = pkgs.emacs-gtk;
