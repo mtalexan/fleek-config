@@ -12,7 +12,7 @@
   #}
 
   programs.emacs = {
-    enabled = true;
+    enable = true;
 
     # optional alternative
     # package = pkgs.emacs-gtk;
