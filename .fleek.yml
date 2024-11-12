@@ -66,6 +66,8 @@ packages:
     - yq
     - riffdiff
 paths:
+    # this is abruptly missing now somehow, so nix tools aren't included properly unless this is manually listed
+    - $HOME/.nix-profile/bin
     - $HOME/bin
     - $HOME/.local/bin
     - $HOME/.local/share/fleek/bin
