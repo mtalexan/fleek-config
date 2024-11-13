@@ -542,25 +542,39 @@
 
       # Alt+u
       ''bindkey '^[u' beginning-of-line''
+      # Home
+      ''bindkey '\e[H' beginning-of-line''
+      ''bindkey '\eOH' beginning-of-line''
 
       # Alt+o
       ''bindkey '^[o' end-of-line''
-      
+      # End
+      ''bindkey '\e[F' end-of-line''
+      ''bindkey '\eOF' end-of-line''
+
       # Alt+l
       ''bindkey '^[l' forward-char''
+      # Right
+      ''bindkey '\e[C' forward-char''
+      ''bindkey '\eOC' forward-char''
 
       # Alt+Shift+l
       ''bindkey '^[L' emacs-forward-word''
       # Ctrl+Right
       ''bindkey '^[[1;5C' emacs-forward-word''
+      ''bindkey '\e[1;5C' emacs-forward-word''
 
       # Alt+l
       ''bindkey '^[j' backward-char''
+      # Left
+      ''bindkey '\e[D' backward-char''
+      ''bindkey '\eOD' backward-char''
 
       # Alt+Shift+j
       ''bindkey '^[J' emacs-backward-word''
       # Ctrl+Left
       ''bindkey '^[[1;5D' emacs-backward-word''
+      ''bindkey '\e[1;5D' emacs-backward-word''
 
       # Ctrl+Backspace
       ''bindkey '^^?' backward-kill-word''
