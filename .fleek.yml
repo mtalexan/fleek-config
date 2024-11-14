@@ -1,4 +1,3 @@
-# vim: ts=4;sw=4;et
 aliases:
     bathelp: bat --plain --language=help
     batpretty: prettybat
@@ -37,13 +36,12 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays:
-    nixgl:
-        url: github:nix-community/nixGL
-        follow: true
     emacs:
-        url: github:nix-community/emacs-overlay
-        # Only provides master, it doesn't follow the nix version.
         follow: false
+        url: github:nix-community/emacs-overlay
+    nixgl:
+        follow: true
+        url: github:nix-community/nixGL
 packages:
     - nerdfonts
     - git
@@ -65,8 +63,8 @@ packages:
     - nix-bash-completions
     - yq
     - riffdiff
+    - dive
 paths:
-    # this is abruptly missing now somehow, so nix tools aren't included properly unless this is manually listed
     - $HOME/.nix-profile/bin
     - $HOME/bin
     - $HOME/.local/bin
