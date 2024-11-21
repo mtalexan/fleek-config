@@ -1,3 +1,4 @@
+# Update everything by calling 'fleek update' then 'fleek apply'
 aliases:
     bathelp: bat --plain --language=help
     batpretty: prettybat
@@ -5,7 +6,7 @@ aliases:
     catp: bat -P
     # This will download it every time, and masks the built-in fleek with an always-up-to-date version.
     #fleek: nix run github:ublue-os/fleek --
-    fleeks: cd ${HOME}/.local/share/fleek
+    fleeks: cd ~/.local/share/fleek
     gbc: git branch --show-current
     gbvv: git branch -vv
     gcm: git commit

@@ -27,7 +27,7 @@ Your actual aliases are listed below:
 
     catp = "bat -P";
 
-    fleeks = "cd ${HOME}/.local/share/fleek";
+    fleeks = "cd ~/.local/share/fleek";
 
     gbc = "git branch --show-current";
 
