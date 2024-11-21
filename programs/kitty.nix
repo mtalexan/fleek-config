@@ -95,17 +95,17 @@
     #  size = ???;
     #};
 
-    # See theme options with 'kitty +kitten themes'.
-    # These change the color name definitions, so using 'red' or 'bright-green' have different meanings.
-    #theme = "Glacier";
-    theme = "Gruvbox Material Dark Hard";
-    #theme = "Neowave";
-    #theme = "Nightfox";
-    #theme = "Relaxed Afterglow";
-    #theme = "Renault Style";
-    #theme = "Space Gray Eighties";
-    #theme = "Space Gray Eighties Dull";
-    #theme = "Warm Neon";
+    # Takes the name of a theme file without the .conf extension from the themes folder.
+    # See theme options with 'kitty +kitten themes', and find the files from https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+    #themeFile = "Glacier";
+    themeFile = "GruvboxMaterialDarkHard";
+    #themeFile = "Neowave";
+    #themeFile = "Nightfox";
+    #themeFile = "Relaxed_Afterglow";
+    #themeFile = "Renault_Style";
+    #themeFile = "SpaceGray_Eighties";
+    #themeFile = "SpaceGray_Eighties_Dull";
+    #themeFile = "WarmNeon";
 
     # while it's possible to set keybindings, environment, and settings as Nix structures, the translation into the output file
     # can reorder (environment and keybindings), and isn't always a direct 1-to-1 (keybindings, settings).

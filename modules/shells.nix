@@ -82,7 +82,12 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion =  {
+      enable = true;
+      # pink foreground for completion, with underline
+      highlight = "fg=#ff00ff,bg=underline";
+      # strategy = [ "history" ]; #default
+    };
     enableVteIntegration = true;
     autocd = false;
     defaultKeymap = "emacs";
@@ -411,15 +416,6 @@
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
       unset __HM_SESS_VARS_SOURCED
       . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-      ''
-
-      ''
-      ##############################################################
-      # Auto suggestion plugin settings
-      ##############################################################
-      
-      # pink foreground for completion, with underline
-      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
       ''
 
       ''
