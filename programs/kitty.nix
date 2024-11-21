@@ -79,8 +79,9 @@
     # installation location, so manual installation will work.
     enable = true;
 
+    # TODO: Use the lib.nixGL.wrap function(s) instead, as per: https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
     # wrap the command with nixGL
-    package = lib.nixGL.wrap pkgs.kitty;
+    package = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}";
 
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
