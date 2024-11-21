@@ -9,6 +9,7 @@
     ./programs/bat.nix
     ./programs/dircolors.nix
     ./programs/eza.nix
+    ./programs/fd.nix
     ./programs/fzf.nix
     ./programs/git.nix
     ./programs/jq.nix

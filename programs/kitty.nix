@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, ... }: {
+{ pkgs, misc, lib, nixgl, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
   # WARNING: Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
   #          An sd command is provided to ease this 'sd install kitty'
@@ -52,7 +52,8 @@
       name = ''kitty-nix'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      exec = ''${pkgs.kitty}/bin/kitty'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -62,7 +63,8 @@
       name = ''kitty-nix URL Launcher'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
+      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
+      exec = ''${pkgs.kitty}/bin/kitty +open %U'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -77,8 +79,8 @@
     # installation location, so manual installation will work.
     enable = true;
 
-    # TODO: Create a nixGL wrapper like this https://github.com/nix-community/nixGL/issues/44#issuecomment-2080393839
-    #program = ;
+    # wrap the command with nixGL
+    package = config.lib.nixGL.wrap pkgs.kitty;
 
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
