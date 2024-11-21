@@ -3,7 +3,8 @@ aliases:
     batpretty: prettybat
     cat: bat
     catp: bat -P
-    fleek: nix run github:ublue-os/fleek --
+    # Archived by ublue-os/fleek, so use my personal fork instead
+    fleek: nix run github:mtalexan/fleek --
     fleeks: cd ~/.local/share/fleek
     gbc: git branch --show-current
     gbvv: git branch -vv

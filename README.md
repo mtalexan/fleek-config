@@ -27,7 +27,7 @@ Your actual aliases are listed below:
 
     catp = "bat -P";
 
-    fleek = "nix run github:ublue-os/fleek --";
+    fleek = "nix run github:mtalexan/fleek --";
 
     fleeks = "cd ~/.local/share/fleek";
 
