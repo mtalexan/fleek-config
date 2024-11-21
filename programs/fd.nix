@@ -21,7 +21,7 @@
       ".git/"
       "*.bak"
     ];
-  }
+  };
 }
 
 # vim: sw=2:expandtab
