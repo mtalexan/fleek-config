@@ -40,6 +40,7 @@ overlays:
     emacs:
         follow: false
         url: github:nix-community/emacs-overlay
+    # TODO: figure out how to do this https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
     nixgl:
         follow: true
         url: github:nix-community/nixGL
