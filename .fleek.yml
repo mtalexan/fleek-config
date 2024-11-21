@@ -3,9 +3,9 @@ aliases:
     batpretty: prettybat
     cat: bat
     catp: bat -P
-    # Archived by ublue-os/fleek, so use my personal fork instead
-    fleek: nix run github:mtalexan/fleek --
-    fleeks: cd ~/.local/share/fleek
+    # This will download it every time, and masks the built-in fleek with an always-up-to-date version.
+    #fleek: nix run github:ublue-os/fleek --
+    fleeks: cd ${HOME}/.local/share/fleek
     gbc: git branch --show-current
     gbvv: git branch -vv
     gcm: git commit

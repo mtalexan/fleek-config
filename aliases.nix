@@ -9,9 +9,7 @@
     
     "catp" = "bat -P";
     
-    "fleek" = "nix run github:mtalexan/fleek --";
-    
-    "fleeks" = "cd ~/.local/share/fleek";
+    "fleeks" = "cd ${HOME}/.local/share/fleek";
     
     "gbc" = "git branch --show-current";
     
