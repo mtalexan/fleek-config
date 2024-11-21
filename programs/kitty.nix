@@ -80,7 +80,7 @@
     enable = true;
 
     # wrap the command with nixGL
-    package = config.lib.nixGL.wrap pkgs.kitty;
+    package = lib.nixGL.wrap pkgs.kitty;
 
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
