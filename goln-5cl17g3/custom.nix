@@ -7,13 +7,13 @@
     ../programs/homebrew.nix
     # just adds an existing install to the PATH
     ../programs/rustup.nix
+    ../programs/distrobox.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
     # extra packages that should be installed only on this host
     home.packages = [
-      pkgs.distrobox
       pkgs.rename
       # don't use podman or skopeo from nix,
       # podman is suddenly experiencing a bug where 'podman run --userns:keep-id ...' isn't properly linking
@@ -25,7 +25,7 @@
     # Files (arbitrary)
     #####################################
 
-    # The primary distrobox config file
+    # The primary distrobox config file, defined in modules/files.nix
     custom.distrobox = {
       hooks = {
         enable = true;
