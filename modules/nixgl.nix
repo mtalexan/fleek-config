@@ -37,13 +37,13 @@
     # and the *Prime only if there's two GPUs and it should explicitly be the non-default dGPU.
     defaultWrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
     offloadWrapper = if config.custom.nixGL.gpu then "nvidiaPrime" else "mesa";
-    # Install callable commands 'nixGL{name}' for manual running.
+    # Install callable commands 'nixGL{Name}' for manual running things from a terminal
     installScripts = [
-      "mesa"
+      "mesa" # nixGLMesa
     ] ++
     ( if config.custom.nixGL.gpu then [
-        "nvidia"
-        "nvidiaPrime"
+        "nvidia" # nixGLNvidia
+        "nvidiaPrime" # nixGLNvidiaPrime
       ]
       else []
     );

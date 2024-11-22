@@ -1,13 +1,11 @@
 { pkgs, misc, lib, config, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
-  # WARNING: Kitty must be manually installed instead, following the directions here: https://sw.kovidgoyal.net/kitty/binary/#binary-install
-  #          An sd command is provided to ease this 'sd install kitty'
 
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
     initExtra = ''
-      # if kitty is installed, we're rnning in a kitty window, and shell integration isn't already enabled
+      # if kitty is installed, we're running in a kitty window, and shell integration isn't already enabled
       if test -n "${pkgs.kitty}" -a -n "$KITTY_WINDOW_ID" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
@@ -27,7 +25,7 @@
   };
   programs.bash = {
     initExtra = ''
-      # if kitty is installed, we're rnning in a kitty window, and shell integration isn't already enabled
+      # if kitty is installed, we're running in a kitty window, and shell integration isn't already enabled
       if test -n "${pkgs.kitty}" -a -n "$KITTY_WINDOW_ID" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
           export KITTY_SHELL_INTEGRATION="enabled"
@@ -45,14 +43,11 @@
   };
 
   xdg.desktopEntries = {
-
-    # TODO: Create a nixGL wrapper and use that for the programs.kitty.package instead, then call the wrapper here
     kitty-nix = {
       type = ''Application'';
       name = ''kitty-nix'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
       exec = ''${pkgs.kitty}/bin/kitty'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
@@ -63,7 +58,6 @@
       name = ''kitty-nix URL Launcher'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
       exec = ''${pkgs.kitty}/bin/kitty +open %U'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
