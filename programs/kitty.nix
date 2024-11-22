@@ -52,8 +52,8 @@
       name = ''kitty-nix'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
-      #exec = ''${pkgs.kitty}/bin/kitty'';
+      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty'';
+      exec = ''${pkgs.kitty}/bin/kitty'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -63,8 +63,8 @@
       name = ''kitty-nix URL Launcher'';
       genericName = ''Terminal emulator'';
       comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
-      #exec = ''${pkgs.kitty}/bin/kitty +open %U'';
+      #exec = ''${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.kitty}/bin/kitty +open %U'';
+      exec = ''${pkgs.kitty}/bin/kitty +open %U'';
       icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
       terminal = false;
       categories = [ "System" "TerminalEmulator"];
@@ -79,9 +79,8 @@
     # installation location, so manual installation will work.
     enable = true;
 
-    # TODO: Use the lib.nixGL.wrap function(s) instead, as per: https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
     # wrap the command with nixGL
-    #package = lib.nixGL.wrap pkgs.kitty;
+    package = lib.nixGL.wrap pkgs.kitty;
 
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically

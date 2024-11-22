@@ -4,6 +4,7 @@
   # split up into separate files in the modules folder
   imports = [
     ./modules/files.nix
+    ./modules/nixgl.nix
 
     ./programs/atuin.nix
     ./programs/bat.nix

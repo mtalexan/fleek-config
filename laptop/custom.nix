@@ -9,6 +9,8 @@
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
+    custom.nixGL.gpu = false;
+
     # extra packages that should be installed only on this host
     #home.packages = [
     #];
