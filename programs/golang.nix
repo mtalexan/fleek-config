@@ -2,7 +2,7 @@
   # Doesn't actually install golang
 
     home.sessionPath = [
-      "/usr/local/go"
+      "/usr/local/go/bin"
     ];
 }
 
