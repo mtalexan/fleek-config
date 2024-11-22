@@ -30,7 +30,7 @@
     gpu = mkEnableOption(mdDoc "Is there a dGPU in the system that should be used for GPU-capable programs?");
   };
 
-  config.home.nixGL = {
+  config.nixGL = {
     # Can be "mesa", "mesaPrime", "nvidia", or "nvidiaPrime".
     # Poorly documented but "mesa" should be used for non-NVIDIA graphics,
     # the non-*Prime refers to the primary GPU (dGPU takes precendece over iGPU when both are present),
