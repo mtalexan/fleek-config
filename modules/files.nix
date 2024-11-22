@@ -9,6 +9,7 @@
   # expliictly specify it, this file sets 'options' as well so everything else needs to indicate 'config'.
 
   # ALSO SEE:
+  #  modules/nixgl.nix
   #  programs/distrobox.nix
   #  programs/podman.nix
 
