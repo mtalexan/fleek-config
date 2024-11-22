@@ -35,7 +35,7 @@
     # Poorly documented but "mesa" should be used for non-NVIDIA graphics,
     # the non-*Prime refers to the primary GPU (dGPU takes precendece over iGPU when both are present),
     # and the *Prime only if there's two GPUs and it should explicitly be the non-default dGPU.
-    default.wrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
+    defaultWrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
     offloadWrapper = if config.custom.nixGL.gpu then "nvidiaPrime" else "mesa";
     # Install callable commands 'nixGL{name}' for manual running.
     installScripts = [
