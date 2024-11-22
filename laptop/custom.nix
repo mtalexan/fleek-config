@@ -4,14 +4,14 @@
   imports = [
     ../modules/fedora_shells.nix
     ../programs/terminator.nix
+    ../programs/distrobox.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
     # extra packages that should be installed only on this host
-    home.packages = [
-      pkgs.distrobox
-    ];
+    #home.packages = [
+    #];
 
     #####################################
     # Files (arbitrary)
