@@ -1,12 +1,9 @@
 { pkgs, misc, lib, config, ... }: {
   # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
   imports = [
+    ../programs/ks-dev-tools.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
-    # just adds an existing install to the PATH
-    ../programs/homebrew.nix
-    # just adds an existing install to the PATH
-    ../programs/rustup.nix
     ../programs/distrobox.nix
   ];
 
@@ -38,32 +35,6 @@
     #####################################
     # Programs
     #####################################
-
-    # add the extra DevTools path, just in case it's there.  If it is, it's relevant
-    home.sessionPath = [
-      "$HOME/DevTools/bin"
-    ];
-
-    home.sessionVariables = {
-      # use the system certs for Node clients like VSCode
-      NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
-      # use the system certs for Python code using the Requests module
-      REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
-      # use the system certs for other Python code
-      SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-
-    };
-
-    programs.bash.initExtra = lib.concatLines [
-      ''
-      if [ -e "$HOME/DevTools/.bashrc" ] ; then
-        source $HOME/DevTools/.bashrc
-      fi
-      ''
-    ];
-
-    #programs.zsh.initExtra = lib.concatLines [
-    #];
   };
 }
 
