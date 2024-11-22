@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, ... }: {
+{ pkgs, misc, lib, inputs, ... }: {
   # Various settings for home-manager itself
   manual = {
     # This causes an error, so disable it
