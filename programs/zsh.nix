@@ -9,6 +9,8 @@
     pkgs.zsh-fzf-tab
     # Nix integration
     pkgs.nix-zsh-completions
+    # provides notify-send that we need for long task completion notification
+    pkgs.libnotify
   ];
   programs.zsh = {
     enable = true;
