@@ -1,5 +1,9 @@
 { pkgs, misc, lib, ... }: {
-# some per-system config is in the {system-name}/{username}.nix file
+  home.packages = [
+    pkgs.git
+  ];
+
+  # some per-system config is in the {system-name}/{username}.nix file also
   programs.git = {
     aliases = {
       unstage = "restore --staged";

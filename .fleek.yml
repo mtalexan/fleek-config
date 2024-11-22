@@ -47,23 +47,12 @@ overlays:
         url: github:nix-community/nixGL
 packages:
     - nerdfonts
-    - git
-    - fd
     - manix
     - jq
     - less
     - man
-    - nix-index
     - nixgl.nixGLIntel
     - noti
-    - bashInteractive
-    - zsh-completions
-    - zsh-fzf-tab
-    - nix-zsh-completions
-    - zsh-autosuggestions
-    - zsh-fast-syntax-highlighting
-    - bash-completion
-    - nix-bash-completions
     - yq
     - riffdiff
 paths:
