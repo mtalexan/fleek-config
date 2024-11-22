@@ -27,6 +27,8 @@ Your actual aliases are listed below:
 
     catp = "bat -P";
 
+    fleek = "nix run github:ublue-os/fleek --";
+
     fleeks = "cd ~/.local/share/fleek";
 
     gbc = "git branch --show-current";
