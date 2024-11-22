@@ -2,7 +2,7 @@
   # Various settings for home-manager itself
   manual = {
     # adds a home-manager-helper command that opens a web page of the options
-    html.enable = true;
+    #html.enable = true;
     # adds 'man home-manager.nix'
     manpages.enable = true;
   };
