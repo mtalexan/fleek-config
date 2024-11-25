@@ -6,8 +6,8 @@ aliases:
     catp: bat -P
     # This will download it every time, and masks the built-in fleek with an always-up-to-date version.
     # NOTE: Use this before it's installed: nix run github:ublue-os/fleek --
-    fleek-apply: 'NIXPKGS_ALLOW_UNFREE=1 nix run --no-wrtie-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" '
-    fleek-impure: 'fleek-apply --impure '
+    # fleek-apply: # See the bin/fleek-apply script instead
+    fleek-impure: fleek-apply --impure
     fleeks: cd ~/.local/share/fleek
     gbc: git branch --show-current
     gbvv: git branch -vv

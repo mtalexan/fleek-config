@@ -27,9 +27,7 @@ Your actual aliases are listed below:
 
     catp = "bat -P";
 
-    fleek-apply = "NIXPKGS_ALLOW_UNFREE=1 nix run --no-wrtie-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" ";
-
-    fleek-impure = "fleek-apply --impure ";
+    fleek-impure = "fleek-apply --impure";
 
     fleeks = "cd ~/.local/share/fleek";
 
