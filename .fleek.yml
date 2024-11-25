@@ -41,7 +41,9 @@ overlays:
     emacs:
         follow: false
         url: github:nix-community/emacs-overlay
-    # TODO: figure out how to do this https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
+    # WARNING: Fleek doesn't support --impure, which is the requried for nixGL support.
+    #          Must first manually run: 'NIX_ALLOW_UNFREE=1 nix profile install github:nix-community/nixGL --impure'
+    #          Then the 'fleek apply' will work.
     nixgl:
         follow: true
         url: github:nix-community/nixGL
