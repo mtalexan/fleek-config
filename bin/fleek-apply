@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -o pipefail
+# print what's being run, but also exit immediately on errrors
+set -ex
+
+# Nix command must be called from this folders
+cd ${HOME}/.local/share/fleek
+
 # This command is copied from the fleek code in internal/flake/flake.go:568 for how it switches to the new home-manager.
 # Except this hardcodes the NIXPKGS_ALLOW_UNFREE=1 and allows extra options like '--impure' to be passed to it and passed-thru.
 NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
