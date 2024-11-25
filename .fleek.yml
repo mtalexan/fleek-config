@@ -5,7 +5,9 @@ aliases:
     cat: bat
     catp: bat -P
     # This will download it every time, and masks the built-in fleek with an always-up-to-date version.
-    #fleek: nix run github:ublue-os/fleek --
+    # NOTE: Use this before it's installed: nix run github:ublue-os/fleek --
+    fleek-apply: 'NIXPKGS_ALLOW_UNFREE=1 nix run --no-wrtie-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" '
+    fleek-impure: 'fleek-apply --impure '
     fleeks: cd ~/.local/share/fleek
     gbc: git branch --show-current
     gbvv: git branch -vv
@@ -41,9 +43,7 @@ overlays:
     emacs:
         follow: false
         url: github:nix-community/emacs-overlay
-    # WARNING: Fleek doesn't support --impure, which is the requried for nixGL support.
-    #          Must first manually run: 'NIX_ALLOW_UNFREE=1 nix profile install github:nix-community/nixGL --impure'
-    #          Then the 'fleek apply' will work.
+    # WARNING: This requires 'home-manager switch --impure'.  See the alias added above since 'fleek apply' can't do this
     nixgl:
         follow: true
         url: github:nix-community/nixGL
