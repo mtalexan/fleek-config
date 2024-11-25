@@ -21,23 +21,12 @@
   home.packages = [
     # user selected packages
     pkgs.nerdfonts
-    pkgs.git
-    pkgs.fd
     pkgs.manix
     pkgs.jq
     pkgs.less
     pkgs.man
-    pkgs.nix-index
     pkgs.nixgl.nixGLIntel
     pkgs.noti
-    pkgs.bashInteractive
-    pkgs.zsh-completions
-    pkgs.zsh-fzf-tab
-    pkgs.nix-zsh-completions
-    pkgs.zsh-autosuggestions
-    pkgs.zsh-fast-syntax-highlighting
-    pkgs.bash-completion
-    pkgs.nix-bash-completions
     pkgs.yq
     pkgs.riffdiff
     # Fleek Bling
