@@ -1,3 +1,8 @@
+# WARNING: Fleek is unmaintained now!
+# WARNING: Using nixGL as part of Home-manager requires doing 'home-manager switch --impure', which isn't supported by Fleek.
+#          Run 'fleek apply' to get changes updated but a failed switch, then run the fleek-impure alias to call the fleek-apply
+#          script from bin/ to complete the home-manager switch.
+
 # Update everything by calling 'fleek update' then 'fleek apply'
 aliases:
     bathelp: bat --plain --language=help
