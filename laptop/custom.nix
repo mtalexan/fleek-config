@@ -9,11 +9,19 @@
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
+<<<<<<< Updated upstream
     custom.nixGL.gpu = false;
 
     # extra packages that should be installed only on this host
     #home.packages = [
     #];
+||||||| Stash base
+    # extra packages that should be installed only on this host
+    home.packages = [
+      pkgs.distrobox
+    ];
+=======
+>>>>>>> Stashed changes
 
     #####################################
     # Files (arbitrary)
