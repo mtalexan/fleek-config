@@ -27,25 +27,31 @@
   # Supports some basic nixGL wrapper customizations.
   #   gpu : bool : Does the system have a dGPU that should be used for GPU-capable programs?
   options.custom.nixGL = with lib; {
-    gpu = mkEnableOption(mdDoc "Is there a dGPU in the system that should be used for GPU-capable programs?");
+    # TODO: Fix assumption that gpu=true means iGPU + dGPU.
+    # TODO: Fix assumption that gpu=true means NVIDIA dGPU
+    gpu = mkEnableOption(mdDoc "Is there an NVIDIA dGPU in the system that should be used for GPU-capable programs?");
   };
 
   config.nixGL = {
     # Can be "mesa", "mesaPrime", "nvidia", or "nvidiaPrime".
     # Poorly documented but "mesa" should be used for non-NVIDIA graphics,
-    # the non-*Prime refers to the primary GPU (dGPU takes precendece over iGPU when both are present),
-    # and the *Prime only if there's two GPUs and it should explicitly be the non-default dGPU.
-    defaultWrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
+    # the non-*Prime refers to the primary GPU (iGPU takes precendece over dGPU when both are present),
+    # and the *Prime only if there's two GPUs and it should explicitly be the non-default GPU.
+
+    # assume there's always an iGPU, so a dGPU has to use *Prime.
+    # assume a dGPU means an NVIDIA dGPU
+    defaultWrapper = if config.custom.nixGL.gpu then "nvidiaPrime" else "mesa";
     offloadWrapper = if config.custom.nixGL.gpu then "nvidiaPrime" else "mesa";
     # Install callable commands 'nixGL{Name}' for manual running things from a terminal
     installScripts = [
       "mesa" # nixGLMesa
     ] ++
-    ( if config.custom.nixGL.gpu then [
-        "nvidia" # nixGLNvidia
-        "nvidiaPrime" # nixGLNvidiaPrime
-      ]
-      else []
+    ( if config.custom.nixGL.gpu then
+        [
+          "nvidiaPrime" # nixGLNvidiaPrime
+        ]
+      else
+        []
     );
   };
 }
