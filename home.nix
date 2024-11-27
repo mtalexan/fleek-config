@@ -25,6 +25,7 @@
     pkgs.jq
     pkgs.less
     pkgs.man
+    pkgs.nixgl.nixGLIntel
     pkgs.noti
     pkgs.yq
     pkgs.riffdiff
