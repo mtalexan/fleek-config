@@ -6,6 +6,7 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/distrobox.nix
+    # vscode is provided by the system
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well

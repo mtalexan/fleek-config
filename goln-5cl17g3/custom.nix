@@ -5,6 +5,7 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/distrobox.nix
+    ../programs/vscode.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
