@@ -1,8 +1,11 @@
 { pkgs, misc, lib, ... }: {
+  # already includes it's own *.desktop entry file, you just have to restart the gnome session to get it to show up
+
   programs.vscode = {
     enable = true;
     enableExtensionUpdateCheck = true;
-    enableUpdateCheck = true;
+    # it always says it's out of date, disable it
+    enableUpdateCheck = false;
     # could be vscodium, or something else. There are a few options
     package = pkgs.vscode;
 
