@@ -56,7 +56,7 @@ overlays:
         follow: true
         url: github:nix-community/nixGL
 packages:
-    - nerd-fonts.firacode
+    - nerd-fonts.fira-code
     - manix
     - jq
     - less

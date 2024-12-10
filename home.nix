@@ -20,7 +20,7 @@
   # programs are installed and configuration applied to dotfiles
   home.packages = [
     # user selected packages
-    pkgs.nerd-fonts.firacode
+    pkgs.nerd-fonts.fira-code
     pkgs.manix
     pkgs.jq
     pkgs.less
