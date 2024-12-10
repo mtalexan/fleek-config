@@ -1,6 +1,14 @@
 { pkgs, misc, lib, config, ... }: {
   # A terminal multiplexer with lots of features, but also high speed.
 
+  # Kitty uses FiraCode as the default, but seems to use other random fonts sometimes too, so you have to make sure those are installed as well.
+  home.packages = [
+    pkgs.nerd-fonts.fira-code
+    pkgs.nerd-fonts.caskaydia-cove
+    pkgs.nerd-fonts.dejavu-sans-mono
+    pkgs.nerd-fonts.noto
+  ];
+
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
@@ -42,30 +50,31 @@
     };
   };
 
-  xdg.desktopEntries = {
-    kitty-nix = {
-      type = ''Application'';
-      name = ''kitty-nix'';
-      genericName = ''Terminal emulator'';
-      comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.kitty}/bin/kitty'';
-      icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
-      terminal = false;
-      categories = [ "System" "TerminalEmulator"];
-    };
-    kitty-nix-open = {
-      type = ''Application'';
-      name = ''kitty-nix URL Launcher'';
-      genericName = ''Terminal emulator'';
-      comment = ''Fast, feature-rich, GPU based terminal'';
-      exec = ''${pkgs.kitty}/bin/kitty +open %U'';
-      icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
-      terminal = false;
-      categories = [ "System" "TerminalEmulator"];
-      noDisplay = true;
-      mimeType = [ "image/*" "application/x-sh" "application/x-shellscript" "inode/directory" "text/*" "x-scheme-handler/kitty" "x-scheme-handler/ssh"];
-    };
-  };
+  # Use these only if you don't set  'programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty' and need to use a manual call instead.
+  #xdg.desktopEntries = {
+  #  kitty-nix = {
+  #    type = ''Application'';
+  #    name = ''kitty-nix'';
+  #    genericName = ''Terminal emulator'';
+  #    comment = ''Fast, feature-rich, GPU based terminal'';
+  #    exec = ''${pkgs.kitty}/bin/kitty'';
+  #    icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
+  #    terminal = false;
+  #    categories = [ "System" "TerminalEmulator"];
+  #  };
+  #  kitty-nix-open = {
+  #    type = ''Application'';
+  #    name = ''kitty-nix URL Launcher'';
+  #    genericName = ''Terminal emulator'';
+  #    comment = ''Fast, feature-rich, GPU based terminal'';
+  #    exec = ''${pkgs.kitty}/bin/kitty +open %U'';
+  #    icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
+  #    terminal = false;
+  #    categories = [ "System" "TerminalEmulator"];
+  #    noDisplay = true;
+  #    mimeType = [ "image/*" "application/x-sh" "application/x-shellscript" "inode/directory" "text/*" "x-scheme-handler/kitty" "x-scheme-handler/ssh"];
+  #  };
+  #};
 
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
@@ -84,11 +93,15 @@
       enableZshIntegration = true;
     };
 
+    # WARNING: You cannot use 'kitty list-fonts' unless you have all nerd-fonts installed. It tries to load every nerd font to show a preview and
+    #          crashes immediately.  Use 'kitty --debug-font-fallback' to debug problems with font symbols not loading.
+    # Kitty seems to use other random fonts sometimes too, so you have to make sure those are installed as well.
     #font = {
     #  # package to install in the nix profile to ensure the font is available.  Set to 'null' (default) if it's guaranteed to be there already.
-    #  package = pkgs.nerdfonts;
-    #  name = ???;
-    #  size = ???;
+    #  package = pkgs.nerd-fonts.fira-code;
+    #  name = "FiraCode";
+    #  # home-manager docs are wrong, this is a number not a string
+    #  size = 12;
     #};
 
     # Takes the name of a theme file without the .conf extension from the themes folder.

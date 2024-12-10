@@ -1,4 +1,10 @@
 { pkgs, misc, lib, ... }: {
+  # the default fonts for the prompt
+  home.packages  = [
+    pkgs.nerd-fonts.fira-code
+    pkgs.nerd-fonts.fira-mono
+  ];
+
   # The configuration for the prompt goes in here
   programs.starship = {
     enable = true;
