@@ -8,6 +8,18 @@
 #
 # Update everything by calling 'fleek update' then 'fleek apply'
 aliases:
+  # Ejected!
+    # See fleek-apply script instead, or fleek-impure.
+    #apply-WINDOWS-GAMING: nix run --impure home-manager/master -- -b bak switch --flake .#aaravchen@WINDOWS-GAMING
+    #apply-bazzite: nix run --impure home-manager/master -- -b bak switch --flake .#aaravchen@bazzite
+    #apply-cloud-t610: nix run --impure home-manager/master -- -b bak switch --flake .#mike@cloud-t610
+    #apply-fedora: nix run --impure home-manager/master -- -b bak switch --flake .#aaravchen@fedora
+    #apply-goln-5cl17g3: nix run --impure home-manager/master -- -b bak switch --flake .#mtalexander@goln-5cl17g3
+    #apply-goln-422q533: nix run --impure home-manager/master -- -b bak switch --flake .#mtalexander@goln-422q533
+    #apply-kubic-730xd: nix run --impure home-manager/master -- -b bak switch --flake .#mike@kubic-730xd
+    #apply-laptop: nix run --impure home-manager/master -- -b bak switch --flake .#aaravchen@laptop
+    #apply-laptopFedora: nix run --impure home-manager/master -- -b bak switch --flake .#aaravchen2@laptopFedora
+    #apply-vm-gol-422Q533: nix run --impure home-manager/master -- -b bak switch --flake .#dev@vm-gol-422Q533
     bathelp: bat --plain --language=help
     batpretty: prettybat
     cat: bat
@@ -38,13 +50,13 @@ auto_gc: true
 bling: none
 blocklist: []
 byo_git: false
-ejected: false
+ejected: true
 flakedir: .local/share/fleek
 git:
-    autocommit: true
-    autopull: true
-    autopush: true
-    enabled: true
+    autocommit: false
+    autopull: false
+    autopush: false
+    enabled: false
 min_version: 0.8.4
 name: Fleek Configuration
 overlays:

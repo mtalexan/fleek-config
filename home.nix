@@ -14,8 +14,6 @@
   };
 
   
-  # managed by fleek, modify ~/.fleek.yml to change installed packages
-  
   # packages are just installed (no configuration applied)
   # programs are installed and configuration applied to dotfiles
   home.packages = [
@@ -30,7 +28,8 @@
     pkgs.riffdiff
     # Fleek Bling
     pkgs.git
-    (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
+# This no longer works, nerdfonts has been split up and this is installed as pkgs.nerd-fonts.fira-code
+#    (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
   fonts.fontconfig.enable = true; 
   home.stateVersion =
