@@ -101,7 +101,7 @@
     #  package = pkgs.nerd-fonts.fira-code;
     #  name = "FiraCode";
     #  # home-manager docs are wrong, this is a number not a string
-    #  size = 12;
+    #  size = 11;
     #};
 
     # Takes the name of a theme file without the .conf extension from the themes folder.
