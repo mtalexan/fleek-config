@@ -50,40 +50,25 @@
     };
   };
 
-  # Use these only if you don't set  'programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty' and need to use a manual call instead.
-  #xdg.desktopEntries = {
-  #  kitty-nix = {
-  #    type = ''Application'';
-  #    name = ''kitty-nix'';
-  #    genericName = ''Terminal emulator'';
-  #    comment = ''Fast, feature-rich, GPU based terminal'';
-  #    exec = ''${pkgs.kitty}/bin/kitty'';
-  #    icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
-  #    terminal = false;
-  #    categories = [ "System" "TerminalEmulator"];
-  #  };
-  #  kitty-nix-open = {
-  #    type = ''Application'';
-  #    name = ''kitty-nix URL Launcher'';
-  #    genericName = ''Terminal emulator'';
-  #    comment = ''Fast, feature-rich, GPU based terminal'';
-  #    exec = ''${pkgs.kitty}/bin/kitty +open %U'';
-  #    icon = ''${pkgs.kitty}/share/icons/hicolor/256x256/apps/kitty.png'';
-  #    terminal = false;
-  #    categories = [ "System" "TerminalEmulator"];
-  #    noDisplay = true;
-  #    mimeType = [ "image/*" "application/x-sh" "application/x-shellscript" "inode/directory" "text/*" "x-scheme-handler/kitty" "x-scheme-handler/ssh"];
-  #  };
-  #};
-
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
     # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
     # installation location, so manual installation will work.
     enable = true;
 
-    # wrap the command with nixGL
-    package = config.lib.nixGL.wrap pkgs.kitty;
+    # wrap the command with nixGL.
+    # If nerd-fonts is found in the wrong location:
+    #  1. change which of these is set
+    #  2. install kitty manually
+    #  3. rebuild and switch
+    #  4. open the manually installed kitty
+    #  5. close it
+    #  6. change this back
+    #  7. rebuild and switch again
+    #  8. verify the nix one is found by the PATH
+    #  9. open the nix kitty
+    #  10. for some reason it will now work.
+    package = config.lib.nixGL.wrap pkgs.kitty; # pkgs.emptyDirectory;
 
     shellIntegration = {
       # don't set mode=, none of the kitty built-in integration works with subshells and the like, so we have to disable the automatically
