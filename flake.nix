@@ -7,36 +7,35 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Home manager
-    home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1.tar.gz";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "https://flakehub.com/f/nix-community/home-manager/0.1.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Fleek
     fleek.url = "https://flakehub.com/f/ublue-os/fleek/*.tar.gz";
 
     # Overlays
-    
-    emacs.url = "github:nix-community/emacs-overlay";
-    
-    
-    nixgl.url = "github:nix-community/nixGL";
-    nixgl.inputs.nixpkgs.follows = "nixpkgs";
-    
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
   outputs = { self, nixpkgs, home-manager, fleek, ... }@inputs: {
-    
+
      packages.x86_64-linux.fleek = fleek.packages.x86_64-linux.default;
-    
+
     # Available through 'home-manager --flake .#your-username@your-hostname'
-    
     homeConfigurations = {
-    
+
       "aaravchen@fedora" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
-          ./home.nix 
+          ./home.nix
           ./path.nix
           ./shell.nix
           ./user.nix
@@ -52,12 +51,12 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
       };
-      
+
       "mtalexander@goln-5cl17g3" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
@@ -78,12 +77,12 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
       };
-      
+
       "aaravchen@laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
@@ -104,7 +103,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -130,7 +129,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -156,7 +155,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -182,7 +181,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -208,7 +207,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -234,7 +233,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -260,7 +259,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -286,7 +285,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];
@@ -312,7 +311,7 @@
             ];
           }
           ({
-           nixpkgs.overlays = [inputs.emacs.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
           })
 
         ];

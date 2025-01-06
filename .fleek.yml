@@ -60,7 +60,7 @@ git:
 min_version: 0.8.4
 name: Fleek Configuration
 overlays:
-    emacs:
+    emacs-overlay:
         follow: false
         url: github:nix-community/emacs-overlay
     # WARNING: This requires 'home-manager switch --impure'.  See the alias added above since 'fleek apply' can't do this
