@@ -20,7 +20,10 @@
     
     "catp" = "bat -P";
     
+    # runs a custom shell script named fleek-apply
     "fleek-impure" = "fleek-apply --impure";
+
+    "fleek-update" = "cd ~/.local/share/fleek && nix flake update";
     
     "fleeks" = "cd ~/.local/share/fleek";
     
@@ -40,7 +43,8 @@
     
     "la" = "eza -a";
     
-    "latest-fleek-version" = "nix run https://getfleek.dev/latest.tar.gz -- version";
+    # Ejected from fleek
+    #"latest-fleek-version" = "nix run https://getfleek.dev/latest.tar.gz -- version";
     
     "ll" = "eza -l";
     
@@ -58,6 +62,7 @@
     
     "tree" = "eza --tree";
     
-    "update-fleek" = "nix run https://getfleek.dev/latest.tar.gz -- update";
+    # Ejected from fleek
+    #"update-fleek" = "nix run https://getfleek.dev/latest.tar.gz -- update";
     };
 }
