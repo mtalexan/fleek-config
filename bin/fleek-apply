@@ -7,6 +7,14 @@ set -ex
 # Nix command must be called from this folders
 cd ${HOME}/.local/share/fleek
 
-# This command is copied from the fleek code in internal/flake/flake.go:568 for how it switches to the new home-manager.
-# Except this hardcodes the NIXPKGS_ALLOW_UNFREE=1 and allows extra options like '--impure' to be passed to it and passed-thru.
-NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
+## This command is copied from the fleek code in internal/flake/flake.go:568 for how it switches to the new home-manager.
+## Except this hardcodes the NIXPKGS_ALLOW_UNFREE=1 and allows extra options like '--impure' to be passed to it and passed-thru.
+#NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
+
+# The above command is copied directly from the fleek code, but is intended to be used with the --impure option to allow the NIXPKGS_ALLOW_UNFREE=1
+# and optionally do things like depend on the host system NVIDIA graphics (for nixGL).
+# However the hardcoded command is always using the latest master version of home-manager as defined by the current nix install.  We'd rather use
+# the version of home-manager that's locked by the flake we're updating, since that's what we're using to provide the config functions.
+# According to this: https://discourse.nixos.org/t/using-flake-input-with-nix-shell/14147 we can do that by using the '--inputs-from .'
+# while in our fleek flake folder to get it to use the locked home-manager flake input as the home-manager flake definition.
+NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure --inputs-from . home-manager -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
