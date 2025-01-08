@@ -22,8 +22,7 @@
     
     # runs a custom shell script named fleek-apply
     "fleek-impure" = "fleek-apply --impure";
-
-    "fleek-update" = "cd ~/.local/share/fleek && nix flake update";
+    # Also see fleek-update, which is a directly callable script
     
     "fleeks" = "cd ~/.local/share/fleek";
     
