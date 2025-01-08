@@ -19,23 +19,41 @@
   programs.emacs = {
     enable = true;
 
-    # Warning: the emacsPgtk ("pure gtk") is really buggy with copy-paste, always opens with a warning dialog, and won't retain resize.
-    # Use emacs-unstable for all the standard stuff and rely on XWayland, without a GTK dependency (GTK version is also slightly older).
-    package = pkgs.emacs-unstable;
+    # Use the emacsWithPackagesFromUsePackage wrapper so the use-package calls in the config will
+    # be parsed and the package automatically included as if they'd been listed under extraPackages.
+    package = (pkgs.emacsWithPackagesFromUsePackage {
+      # Warning: the emacsPgtk ("pure gtk") is really buggy with copy-paste, always opens with a warning dialog, and won't retain resize.
+      # Use emacs-unstable for all the standard stuff and rely on XWayland, without a GTK dependency (GTK version is also slightly older).
+      package = pkgs.emacs-unstable;
+      # This can be a *.org file named either init.org, or config.org that has tangle code blocks enabled in it.
+      # If using org mode with tangling, set 'tangle: t' and do not specify the file name since the builder will expect the
+      # tangled output to always match the base name of the *.org file (which is what that setting does when no file name is specified).
+      # Alternatively it can just be a direct init.el or config.el.
+      # Path is relative to this file.
+      config = config.org;
 
-    # lines to add to the default init file
-    #extraConfig = ''
-    #'';
+      # Extra packages to add via nix.  These are all pkgs.emacsPackages.* or Elpa/Melpa packages.
+      # Only add if there isn't a use-package definition for it in the config file.
+      extraPackages = epkgs: [
+        epkgs.use-package
 
-    # extra packages to add via nix.  These are all pkgs.emacsPackages.* or Elpa/Melpa packages
-    extraPackages = epkgs: [
-      epkgs.lsp-bridge
-    ];
+        # TODO: Move these into the config.org file
+        epkgs.lsp-bridge
+        epkgs.treesit-auto
+        epgks.treemacs
+        epkgs.treemacs-nerd-icons
+        epkgs.treemacs-magit
+        epkgs.treemacs-icons-dired
+        epkgs.treemacs-all-the-icons
+      ];
 
-    # Override packages from the emacs package set
-    #overrides = self: super: {
-    #  haskell-mode = self.melpaPackages.haskell-mode;
-    #};
+      ## Optionally override derivations.
+      #override = epkgs: epkgs // {
+      #  somePackage = epkgs.melpaPackages.somePackage.overrideAttrs(old: {
+      #     # Apply fixes here
+      #  });
+      #};
+    });
   };
 }
 

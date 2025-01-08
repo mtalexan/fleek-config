@@ -1,0 +1,117 @@
+:DOC-CONFIG:
+# Tangle by default to an el file of the same basename as this file. Assume all code blocks are 
+# elisp that should be tangled unless specified otherwise.
+#+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle t :comments no
+:END:
+
+#+title Emacs Config
+
+Opening comment for the file so editing it will detect the language properly
+#+begin_src emacs-lisp
+;;; -*- lexical-binding: t -*-
+#+end_src
+
+* General Config
+
+** startup
+
+Faster startup by allowing larger build up of garbage before collection.
+
+#+begin_src emacs-lisp
+;; The default is 800 KB. Measured in B.
+(setq gc-cons-threashold (* 50 1000 1000))
+#+end_src
+
+Now load the packages.
+#+begin_src emacs-lisp
+;; Initialize package sources
+(require 'package)
+
+(package-initialize)
+#+end_src
+
+Setup =use-package=, which we assume is installed by Nix.
+
+#+begin_src macs-lisp
+;; Assumed to always be present from outside sources
+(require 'use-package)
+(setq use-package-always-ensure t)
+#+end_src
+
+** Basic Settings
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(Buffer-menu-group-by nil)
+ '(Buffer-menu-group-sort-by 'Buffer-menu-group-sort-alphabetically)
+ '(acm-backend-codeium-accept t)
+ '(acm-enable-codeium t)
+ '(acm-enable-tabnine nil)
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(context-menu-mode t)
+ '(cua-enable-cua-keys nil)
+ '(cua-enable-cursor-indications t)
+ '(cua-enable-modeline-indications t)
+ '(cua-enable-region-auto-help t)
+ '(cua-keep-region-after-copy t)
+ '(cua-paste-pop-rotate-temporarily t)
+ '(cua-remap-control-v nil)
+ '(custom-enabled-themes '(deeper-blue))
+ '(delete-selection-mode t)
+ '(delete-trailing-lines nil)
+ '(display-line-numbers t)
+ '(duplicate-line-final-position 1)
+ '(duplicate-region-final-position -1)
+ '(edt-top-scroll-margin 15)
+ '(electric-pair-delete-adjacent-pairs nil)
+ '(electric-pair-mode t)
+ '(global-display-line-numbers-mode t)
+ '(global-tab-line-mode t)
+ '(global-whitespace-mode nil)
+ '(global-window-tool-bar-mode t)
+ '(isearch-allow-scroll 'unlimited)
+ '(isearch-resume-in-command-history t)
+ '(isearch-wrap-pause t)
+ '(isearch-yank-on-move nil)
+ '(kill-append-merge-undo t)
+ '(kill-do-not-save-duplicates t)
+ '(lsp-bridge-enable-hover-diagnostic t)
+ '(lsp-bridge-enable-inlay-hint t)
+ '(lsp-bridge-python-lsp-server "basedpyright")
+ '(package-selected-packages '(acm dockerfile-mode lsp-bridge yasnippet))
+ '(save-interprogram-paste-before-kill t)
+ '(save-place-mode t)
+ '(scroll-bar-mode 'right)
+ '(show-trailing-whitespace t)
+ '(speedbar-default-position 'left)
+ '(tab-width 4)
+ '(tty-select-active-regions t)
+ '(viper-auto-indent t)
+ '(viper-delete-backwards-in-replace t)
+ '(viper-no-multiple-ESC t)
+ '(viper-syntax-preference 'extended)
+ '(windmove-allow-all-windows nil)
+ '(yank-pop-change-selection t))
+#+end_src
+
+** Theme
+
+#+begin_src emacs-lisp
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+#+end_src
+
+* LSP-Bridge
+#+begin_src emacs-lisp
+(use-package )
+
+#+end_src
