@@ -4,11 +4,28 @@
   imports = [
     ../modules/fedora_shells.nix
     ../programs/terminator.nix
-    ../programs/kitty.nix
+    ../programs/distrobox.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
+    # Host-specific username and home location
+    home.username = "aaravchen";
+    home.homeDirectory = "/home/aaravchen";
+
+    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
+    programs.git = {
+      # optional override uniquely for the host
+      #userName = "Mike";
+      #userEmail = "github@trackit.fe80.email";
+
+      # SSH default signing key location
+      signing = {
+          key = "~/.ssh/id_ed25519_github";
+          signByDefault = builtins.stringLength "~/.ssh/id_ed25519_github" > 0;
+      };
+    };
+
     # extra packages that should be installed only on this host
     home.packages = [
       pkgs.distrobox
@@ -17,6 +34,8 @@
     #####################################
     # Files (arbitrary)
     #####################################
+
+    custom.nixGL.gpu = false;
 
     # The primary distrobox config file
     custom.distrobox.hooks = {
@@ -27,15 +46,8 @@
     #####################################
     # Programs
     #####################################
-
-    home.shellAliases = {
-      # end all aliases in a space so completion on arguments works for them
-
-      # Flatpaks
-      "meld" = "flatpak run org.gnome.meld ";
-    };
   };
 }
 
+# vim:ts=2;sw=2
 
-# vim:sw=2:expandtab

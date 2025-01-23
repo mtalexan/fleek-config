@@ -1,8 +1,13 @@
 { pkgs, misc, lib, config, options, ... }: {
-  # FEEL FREE TO EDIT: This file is NOT managed by fleek.
+  # Include all modules/*.nix files here somewhere, and include the programs/*.nix files for programs
+  # that should be included by all hosts.
+  # Host-specific settings should go in hosts/$hostname.nix
 
   # split up into separate files in the modules folder
   imports = [
+    # Common initial git settings fleek originally setup. We override some of it in program/git.nix
+    ./modules/fleek-git.nix
+
     ./modules/files.nix
     ./modules/nixgl.nix
 

@@ -39,11 +39,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./fedora/aaravchen.nix
-          ./fedora/custom.nix
+          ./fedora_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -65,11 +61,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./goln-5cl17g3/mtalexander.nix
-          ./goln-5cl17g3/custom.nix
+          ./hosts/goln-5cl17g3_mtalexander.nix
           # self-manage fleek
           {
             home.packages = [
@@ -91,11 +83,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./laptop/aaravchen.nix
-          ./laptop/custom.nix
+          ./hosts/laptop_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -117,11 +105,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./laptopFedora/aaravchen.nix
-          ./laptopFedora/custom.nix
+          ./hosts/laptopFedora_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -143,11 +127,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./goln-422q533/mtalexander.nix
-          ./goln-422q533/custom.nix
+          ./hosts/goln-422q533_mtalexander.nix
           # self-manage fleek
           {
             home.packages = [
@@ -169,11 +149,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./kubic-730xd/mike.nix
-          ./kubic-730xd/custom.nix
+          ./hosts/kubic-730xd_mike.nix
           # self-manage fleek
           {
             home.packages = [
@@ -195,11 +171,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./cloud-t610/mike.nix
-          ./cloud-t610/custom.nix
+          ./hosts/cloud-t610_mike.nix
           # self-manage fleek
           {
             home.packages = [
@@ -221,11 +193,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./vm-gol-422Q533/dev.nix
-          ./vm-gol-422Q533/custom.nix
+          ./hosts/vm-gol-422Q533_dev.nix
           # self-manage fleek
           {
             home.packages = [
@@ -247,11 +215,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./laptopFedora/aaravchen2.nix
-          ./laptopFedora/custom.nix
+          ./hosts/laptopFedora_aaravchen2.nix
           # self-manage fleek
           {
             home.packages = [
@@ -273,11 +237,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./WINDOWS-GAMING/aaravchen.nix
-          ./WINDOWS-GAMING/custom.nix
+          ./hosts/WINDOWS-GAMING_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -299,11 +259,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./bazzite/aaravchen.nix
-          ./bazzite/custom.nix
+          ./hosts/bazzite_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -325,11 +281,7 @@
           ./path.nix
           ./shell.nix
           ./user.nix
-          ./aliases.nix
-          ./programs.nix
-          # Host Specific configs
-          ./laptopFedora/aaravchen.nix
-          ./laptopFedora/custom.nix
+          ./hosts/helios300_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [

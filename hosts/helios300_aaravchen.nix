@@ -9,9 +9,23 @@
     # vscode is provided by the system
   ];
 
+
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
-    custom.nixGL.gpu = false;
+
+    # Host Specific username and home location
+    home.username = "aaravchen";
+    home.homeDirectory = "/home/aaravchen";
+
+    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
+    programs.git = {
+        userName = "Mike";
+        userEmail = "github@trackit.fe80.email";
+        signing = {
+            key = "~/.ssh/github_ed25519";
+            signByDefault = builtins.stringLength "~/.ssh/github_ed25519" > 0;
+        };
+    };
 
     # extra packages that should be installed only on this host
     #home.packages = [
@@ -20,6 +34,8 @@
     #####################################
     # Files (arbitrary)
     #####################################
+
+    custom.nixGL.gpu = false;
 
     # The primary distrobox config file
     custom.distrobox.hooks = {

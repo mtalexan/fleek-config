@@ -3,25 +3,34 @@
 
   imports = [
     ../modules/fedora_shells.nix
-    ../programs/terminator.nix
-    ../programs/distrobox.nix
+    ../modules/distrobox.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
-<<<<<<< Updated upstream
-    custom.nixGL.gpu = false;
+
+    # Host-specific username and home location
+    home.username = "aaravchen";
+    home.homeDirectory = "/home/aaravchen";
+
+    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
+    programs.git = {
+      # optional override uniquely for the host
+      #userName = "Mike";
+      #userEmail = "github@trackit.fe80.email";
+
+      # SSH default signing key location
+      signing = {
+          key = "~/.ssh/id_ed25519_github";
+          signByDefault = builtins.stringLength "~/.ssh/id_ed25519_github" > 0;
+      };
+    };
 
     # extra packages that should be installed only on this host
     #home.packages = [
     #];
-||||||| Stash base
-    # extra packages that should be installed only on this host
-    home.packages = [
-      pkgs.distrobox
-    ];
-=======
->>>>>>> Stashed changes
+
+    custom.nixGL.gpu = false;
 
     #####################################
     # Files (arbitrary)
@@ -39,5 +48,5 @@
   };
 }
 
-# vim:ts=2;sw=2
+# vim:sw=2:expandtab
 
