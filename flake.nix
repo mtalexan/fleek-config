@@ -1,5 +1,4 @@
 {
-  # DO NOT EDIT: This file is managed by fleek. Manual changes will be overwritten.
   description = "Fleek Configuration";
 
   inputs = {
@@ -31,28 +30,6 @@
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
 
-      "aaravchen@fedora" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./path.nix
-          ./shell.nix
-          ./user.nix
-          ./fedora_aaravchen.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
-          ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
-          })
-
-        ];
-      };
-
       "mtalexander@goln-5cl17g3" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
@@ -62,50 +39,6 @@
           ./shell.nix
           ./user.nix
           ./hosts/goln-5cl17g3_mtalexander.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
-          ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
-          })
-
-        ];
-      };
-
-      "aaravchen@laptop" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix 
-          ./path.nix
-          ./shell.nix
-          ./user.nix
-          ./hosts/laptop_aaravchen.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
-          ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
-          })
-
-        ];
-      };
-      
-      "aaravchen@laptopFedora" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix 
-          ./path.nix
-          ./shell.nix
-          ./user.nix
-          ./hosts/laptopFedora_aaravchen.nix
           # self-manage fleek
           {
             home.packages = [
@@ -297,3 +230,5 @@
     };
   };
 }
+
+# vim: ts=2:sw=2:expandtab

@@ -1,8 +1,7 @@
-{ pkgs, misc, ... }: {
-  # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
+{ pkgs, misc, lib, config, options, ... }: {
 
   imports = [
-    #../modules/fedora_shells.nix
+    ../identities/personal.nix # set the default git identity
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/distrobox.nix
@@ -13,38 +12,31 @@
     # Host Specific username and home location
     home.username = "aaravchen";
     home.homeDirectory = "/home/aaravchen";
+    # where to find the git SSH key on this system
+    programs.git.signing.key = "~/.ssh/id_github_ed25519";
 
-    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
-    programs.git = {
-      # optional override uniquely for the host
-      #userName = "Mike";
-      #userEmail = "github@trackit.fe80.email";
+    #####################################
+    # Extra host-unique non-configurable packages
+    #####################################
 
-      # SSH default signing key location
-      signing = {
-          key = "~/.ssh/id_github_ed25519";
-          signByDefault = builtins.stringLength "~/.ssh/id_github_ed25519" > 0;
-      };
-    };
-
-    # extra packages that should be installed only on this host
     #home.packages = [
     #];
 
     #####################################
-    # Files (arbitrary)
+    # Custom defined config settings
     #####################################
+    custom = {
+      nixGL.gpu = true;
 
-    custom.nixGL.gpu = true;
-
-    # The primary distrobox config file
-    custom.distrobox.hooks = {
-      enable = true;
-      docker_sock = true;
+      # The primary distrobox config file
+      distrobox.hooks = {
+        enable = true;
+        docker_sock = true;
+      };
     };
 
     #####################################
-    # Programs
+    # One-off Program Settings
     #####################################
 
     home.shellAliases = {

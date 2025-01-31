@@ -1,39 +1,33 @@
-{ pkgs, misc, ... }: {
-  # extra programs/*.nix to include for this host
-  #imports = [];
+{ pkgs, misc, lib, config, options, ... }: {
 
+  imports = [
+    ../identities/personal.nix # set the default git identity
+  ];
+
+  # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
-    # Host-specific username and home location
+    # Host Specific username and home location
     home.username = "mike";
     home.homeDirectory = "/home/mike";
-
-    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
-    programs.git = {
-      # optional override uniquely for the host
-      #userName = "Mike";
-      #userEmail = "github@trackit.fe80.email";
-
-      # SSH default signing key location
-      signing = {
-          key = "~/.ssh/id_ed25519_github";
-          signByDefault = builtins.stringLength "~/.ssh/id_ed25519_github" > 0;
-      };
-    };
-
-    # extra packages that should be installed only on this host
-    #home.packages = [];
+    # where to find the git SSH key on this system
+    programs.git.signing.key = "~/.ssh/id_ed25519_github";
 
     #####################################
-    # Files (arbitrary)
+    # Extra host-unique non-configurable packages
     #####################################
 
-    custom.nixGL.gpu = true;
-
+    #home.packages = [
+    #];
 
     #####################################
-    # Programs
+    # Custom defined config settings
     #####################################
 
+    custom.nixGL.gpu = false;
+
+    #####################################
+    # One-off Program Settings
+    #####################################
   };
 }
 

@@ -1,7 +1,7 @@
-{ pkgs, misc, ... }: {
-  # FEEL FREE TO EDIT: This file is NOT managed by fleek. 
+{ pkgs, misc, lib, config, options, ... }: {
 
   imports = [
+    ../identities/personal.nix # set the default git identity
     #../modules/fedora_shells.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
@@ -12,39 +12,35 @@
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   config = {
-
     # Host Specific username and home location
     home.username = "aaravchen";
     home.homeDirectory = "/home/aaravchen";
+    # where to find the git SSH key on this system
+    programs.git.signing.key = "~/.ssh/github_ed25519";
 
-    # Host-specific default git settings.  Expanded on in the modules/git.nix and programs/git.nix
-    programs.git = {
-        userName = "Mike";
-        userEmail = "github@trackit.fe80.email";
-        signing = {
-            key = "~/.ssh/github_ed25519";
-            signByDefault = builtins.stringLength "~/.ssh/github_ed25519" > 0;
-        };
-    };
+    #####################################
+    # Extra host-unique non-configurable packages
+    #####################################
 
-    # extra packages that should be installed only on this host
     #home.packages = [
     #];
 
     #####################################
-    # Files (arbitrary)
+    # Custom defined config settings
     #####################################
+    custom = {
+      # the GPU doesn't always appear as available because it uses NvidiaPrime, so disable this to avoid build errors when it's not visible.
+      nixGL.gpu = false;
 
-    custom.nixGL.gpu = false;
-
-    # The primary distrobox config file
-    custom.distrobox.hooks = {
-      enable = true;
-      docker_sock = true;
+      # The primary distrobox config file
+      distrobox.hooks = {
+        enable = true;
+        docker_sock = true;
+      };
     };
 
     #####################################
-    # Programs
+    # One-off Program Settings
     #####################################
 
     home.shellAliases = {

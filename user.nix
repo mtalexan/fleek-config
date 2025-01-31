@@ -5,10 +5,6 @@
 
   # split up into separate files in the modules folder
   imports = [
-    # Common initial git settings fleek originally setup. We override some of it in program/git.nix
-    ./modules/fleek-git.nix
-
-    ./modules/files.nix
     ./modules/nixgl.nix
 
     ./programs/atuin.nix
@@ -50,4 +46,4 @@
   ];
 }
 
-# vim: sw=2:expandtab
+# vim: ts=2:sw=2:expandtab

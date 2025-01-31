@@ -7,3 +7,4 @@
   programs.zsh.enableCompletion = true;
   programs.zsh.enable = true;
 }
+# vim: ts=2:sw=2:expandtab

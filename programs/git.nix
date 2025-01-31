@@ -1,10 +1,15 @@
-{ pkgs, misc, lib, ... }: {
-  home.packages = [
-    pkgs.git
+{ pkgs, misc, lib, config, options, ... }: {
+
+   home.packages = [
+    # allow encrypting individual files in a repo using an SSH key-pair. See https://github.com/vlaci/git-agecrypt
+    pkgs.git-agecrypt
+    #automatically handled by programs.git.lfs.enable=true below
+    #pkgs.git-lfs
   ];
 
-  # some per-system config is in the {system-name}/{username}.nix file also
   programs.git = {
+    enable = true;
+
     aliases = {
       unstage = "restore --staged";
       #added by default because it's so common
@@ -14,6 +19,26 @@
       bvv = "branch -vv";
       last = "log -1 HEAD";
       update = "pull --no-rebase --ff --no-commit --ff-only";
+    };
+    lfs.enable = true;
+
+    # maintenance isn't normally run on repos and usually has to be turned on manually per repo.
+    # this automatically adds systemd timers for it and will run on any that are explicit registered
+    # with 'git maintenance register' from within the repo
+    maintenance.enable = true;
+
+    extraConfig = {
+      feature.manyFiles = true;
+      gpg.format = "ssh";
+
+      # diff and merge settings to use delta for diffs.
+      diff = {
+        colorMoved = "default";
+        colorMovedWS = "allow-indentation-change";
+      };
+      merge = {
+        conflictStyle = "diff3";
+      };
     };
     delta = {
       # automatically sets itself as the pager for git
@@ -42,19 +67,7 @@
         width = "variable";
       };
     };
-    extraConfig = {
-      diff = {
-        colorMoved = "default";
-        colorMovedWS = "allow-indentation-change";
-      };
-      merge = {
-        conflictStyle = "diff3";
-      };
-    };
-    lfs = {
-      enable = true;
-    };
   };
 }
 
-# vim: sw=2:expandtab
+# vim: ts=2:sw=2:expandtab
