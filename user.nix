@@ -1,8 +1,4 @@
 { pkgs, misc, lib, config, options, ... }: {
-  # import the manually configurable file of global settings
-  import = [
-    ./modules/all.nix
-  ];
 
   # These are mandatory
 
