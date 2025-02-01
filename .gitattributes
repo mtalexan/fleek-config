@@ -1,1 +1,2 @@
-identities/** filter=git-agecrypt diff=git-agecrypt
+identities/ks.nix filter=git-agecrypt diff=git-agecrypt
+identities/personal.nix filter=git-agecrypt diff=git-agecrypt
