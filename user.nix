@@ -1,4 +1,5 @@
 { pkgs, misc, lib, config, options, ... }: {
+  # This file includes only definitions that are mandatory for things to function.
 
   # These are mandatory
 

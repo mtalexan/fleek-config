@@ -1,5 +1,8 @@
 { pkgs, misc, lib, config, options, ... }: {
-  # Settings shared by all hosts
+  # Settings shared by all hosts.
+  # WARNING: Import depth matters if options are used in files, so this file is included directly
+  #          into the flake.nix to reduce the import depth. That *should* let you use options from
+  #          files imported here in your host-specific files.
 
   # globally included packages that have no home-manager config
   home.packages = [
@@ -15,10 +18,9 @@
     pkgs.riffdiff
   ];
 
-  # "includes". By convention programs/ are for individual programs, while modules/ are less specific
+  # "includes". By convention programs/ are for individual programs, while modules/ are less specific.
+  # WARNING: If any of these have options defined the import 
   imports = [
-    ./nixgl.nix
-
     ../programs/bash.nix
     ../programs/zsh.nix
 
