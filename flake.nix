@@ -35,8 +35,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/goln-5cl17g3_mtalexander.nix
           # self-manage fleek
@@ -57,8 +55,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/goln-422q533_mtalexander.nix
           # self-manage fleek
@@ -79,8 +75,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/kubic-730xd_mike.nix
           # self-manage fleek
@@ -101,8 +95,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/cloud-t610_mike.nix
           # self-manage fleek
@@ -123,8 +115,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/vm-gol-422Q533_dev.nix
           # self-manage fleek
@@ -145,8 +135,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/laptopFedora_aaravchen2.nix
           # self-manage fleek
@@ -167,8 +155,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/WINDOWS-GAMING_aaravchen.nix
           # self-manage fleek
@@ -189,8 +175,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/bazzite_aaravchen.nix
           # self-manage fleek
@@ -211,8 +195,6 @@
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         modules = [
           ./home.nix 
-          ./path.nix
-          ./shell.nix
           ./user.nix
           ./hosts/helios300_aaravchen.nix
           # self-manage fleek

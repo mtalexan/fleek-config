@@ -1,6 +1,4 @@
 { pkgs, misc, lib, ... }: {
-  # Included by modules/shells.nix
-  
   # ZSH plugins added separately as packages
   home.packages = [
     pkgs.zsh-autosuggestions

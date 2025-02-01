@@ -1,6 +1,4 @@
 { pkgs, misc, lib, ... }: {
-  # Included by modules/shells.nix
-
   # Extra packages needed for Bash Integration
   home.packages = [
     pkgs.bashInteractive
