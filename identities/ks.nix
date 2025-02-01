@@ -3,7 +3,24 @@
   # Set the programs.git.signing.key on each system
 
   programs.git = {
-    # Intentionally not setting private details (yet)!
+    userName = "Alexander, Michael";
+    userEmail = "michael.alexander@karlstorz.com";
+
+    extraConfig = {
+      url = {
+        # force SSH cloning from GitHub repos, never HTTPS
+        "ssh://git@github.com" = {
+              insteadOf = "https://github.com";
+        };
+        # force SSH cloning from GitHub repos, never HTTPS
+        "ssh://git@scm-02.karlstorz.com" = {
+              insteadOf = "https://scm-02.karlstorz.com";
+        };
+        "ssh://git@scm-01.karlstorz.com" = {
+              insteadOf = "https://scm-01.karlstorz.com";
+        };
+      };
+    };
 
     signing = {
         # Presumes the SSH key path is set per-host
@@ -12,9 +29,7 @@
         # on whether the specific host has actually set the key.
         # signByDefault = builtins.stringLength key > 0;
         # Assume a key will eventually be set, even if not thru nix
-        
-        # not yet
-        #signByDefault = true;
+        signByDefault = true;
     };
   };
 }

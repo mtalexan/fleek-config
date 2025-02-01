@@ -34,14 +34,12 @@
     ./programs/rustup.nix
     ./programs/script-directory.nix
     ./programs/tealdear.nix
-    # this is a GUI app, so individual hosts must add it manually
-    #./programs/terminator.nix
     ./programs/tmux.nix
     # doesn't do anything useful
     #./programs/z-lua.nix
     #./programs/zoxide.nix
 
-    ./modules/prompt.nix
+    ./programs/starship.nix
     ./modules/shells.nix
   ];
 }

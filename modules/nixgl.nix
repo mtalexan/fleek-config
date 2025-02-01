@@ -19,10 +19,6 @@
   # Every per-system custom.nix file should include a block that looks like:
   #   config.custom.nixGL.gpu = true; # or false
 
-  # Integrate nixGL into the home-manager. This requires the nixGL overlay to be enabled in Fleek.
-  # Fleek maps each overlay as an input flake, but then passes the input flakes weirdly to the config
-  # files without giving them a nicer name. So we have to reference them directly from 'inputs'
-  config.nixGL.packages = inputs.nixgl.packages;
 
   # Supports some basic nixGL wrapper customizations.
   #   gpu : bool : Does the system have a dGPU that should be used for GPU-capable programs?
@@ -33,6 +29,10 @@
   };
 
   config.nixGL = {
+    # Integrate nixGL into the home-manager. This requires the nixGL overlay to be enabled in Fleek.
+    # Fleek maps each overlay as an input flake, but then passes the input flakes weirdly to the config
+    # files without giving them a nicer name. So we have to reference them directly from 'inputs'
+    packages = inputs.nixgl.packages;
     # Can be "mesa", "mesaPrime", "nvidia", or "nvidiaPrime".
     # Poorly documented but "mesa" should be used for non-NVIDIA graphics,
     # the non-*Prime refers to the primary GPU (iGPU takes precendece over dGPU when both are present),
