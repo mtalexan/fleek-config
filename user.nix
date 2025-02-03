@@ -1,6 +1,10 @@
 { pkgs, misc, lib, config, options, ... }: {
   # This file includes only definitions that are mandatory for things to function.
 
+  imports = [
+    ./modules/all.nix
+  ];
+
   # These are mandatory
 
   home.sessionPath = [

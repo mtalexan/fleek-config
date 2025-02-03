@@ -36,7 +36,6 @@
         modules = [
           ./home.nix 
           ./user.nix
-          ./modules/all.nix
           ./hosts/goln-5cl17g3_mtalexander.nix
           # self-manage fleek
           {
@@ -57,7 +56,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/goln-422q533_mtalexander.nix
           # self-manage fleek
           {
@@ -78,7 +76,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/kubic-730xd_mike.nix
           # self-manage fleek
           {
@@ -99,7 +96,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/cloud-t610_mike.nix
           # self-manage fleek
           {
@@ -120,7 +116,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/vm-gol-422Q533_dev.nix
           # self-manage fleek
           {
@@ -141,7 +136,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/laptopFedora_aaravchen2.nix
           # self-manage fleek
           {
@@ -162,7 +156,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/WINDOWS-GAMING_aaravchen.nix
           # self-manage fleek
           {
@@ -183,7 +176,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/bazzite_aaravchen.nix
           # self-manage fleek
           {
@@ -204,7 +196,6 @@
         modules = [
           ./home.nix
           ./user.nix
-          ./modules/all.nix
           ./hosts/helios300_aaravchen.nix
           # self-manage fleek
           {
