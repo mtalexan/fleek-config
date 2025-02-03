@@ -61,7 +61,7 @@
     # installation location, so manual installation will work.
     enable = true;
 
-    # wrap the command with nixGL.
+    # Use the light-duty HW rendering.
     package = config.lib.nixGL.wrap pkgs.kitty; # pkgs.emptyDirectory;
 
     shellIntegration = {

@@ -5,19 +5,22 @@
   #   config.custom.nixGL.gpu = true; # or false
   # This indicates whether the system has an NVIDIA dGPU or not.
   # Programs/tools that support HW rendering should use the wrappers:
-  #   config.nixGL.wrappers.mesa = for HW rendering that only requires minimal power
-  #   config.nixGL.wrap = for HW rendering that should use best available
-  #   config.nixGL.wrapOffload = for HW rendering that requires a powerful NVIDIA GPU
+  #   config.nixGL.wrap = for ligh-use HW rendering.
+  #   config.nixGL.wrapOffload = for heavy-use HW rendering that uses the best available but can fallback to weaker GPUs.
+  #   confuig.nixGL.wrappers.nvidia = for heavy-use HW rendering that always requires an NVIDIA dGPU.
 
   # Supports some basic nixGL wrapper customizations.
   #   gpu : bool : Does the system have an NVIDIA dGPU that should be used for GPU-capable programs?
   options.custom.nixGL = with lib; {
-    gpu = mkEnableOption("Is there an NVIDIA dGPU in the system that should be used by default?");
+    # TODO: Don't assume there's always a 
+    gpu = mkEnableOption("Is there an NVIDIA dGPU that we should use for heavy-duty HW rendering? If not, we fallback to the iGPU as well.");
   };
 
   config.nixGL = {
     # Reference: https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
     # Incredibly poor and misleading documention.
+    # WARNING: The home-manager implementation forces impure evaluation to set defaults for values that only
+    #          affect functions we don't make use of.
     #
     # Home-manager adds a 'wrapper' field to the config.lib.nixGL brought in by the normal nixGL overlay
     # and defines 4 pre-defined wrappers: "mesa", "nvidia", "mesaPrime", "nvidiaPrime",
@@ -57,12 +60,11 @@
     # Tell it where to find the nixgl from the overlay.
     packages = inputs.nixgl.packages;
 
-    # We can technically set and use these however we want. We've chosen to make "wrap" (defaultWrapper) point to the default GPU, and
-    # "wrapOffload" (offloadWrapper) always point to a dGPU.
-    # We expect tools that must have a dGPU to use wrapOffload, tools that need whatever the best available is to use wrap, and tools that
-    # use a minimum renderer to directly use wrappers.mesa.
-    defaultWrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
-    offloadWrapper = "nvidia";
+    # We can technically set and use these however we want. We've chosen to make "wrap" (defaultWrapper) point to the light-use GPU, and
+    # "wrapOffload" (offloadWrapper) point to the heavy-use GPU.
+    # We expect tools that can do HW rendering but don't need a lot of power to use "wrap", and those that need a lot of power to use "wrapOffload".
+    defaultWrapper = "mesa";
+    offloadWrapper = if config.custom.nixGL.gpu then "nvidia" else "mesa";
     # Install callable commands 'nixGL{Name}' for manual running things from a terminal
     installScripts = [
       "mesa" # nixGLMesa
