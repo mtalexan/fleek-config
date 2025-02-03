@@ -3,6 +3,11 @@
 
   # Kitty uses FiraCode as the default, but seems to use other random fonts sometimes too, so you have to make sure those are installed as well.
   home.packages = [
+    # If nerd-fonts is found in the wrong location due to the split-up:
+    #  1. 'sudo fc-cache -rv'
+    #  2. 'fc-cache -rv'
+    #  3. cd ${here} && nix run --input-from . 'nixpkgs#fontconfig' -- fc-cache -rv
+    # These will wipe and rebuild the font cache for the host system, host user, and currently in-use nix flake.
     pkgs.nerd-fonts.fira-code
     pkgs.nerd-fonts.caskaydia-cove
     pkgs.nerd-fonts.dejavu-sans-mono
@@ -57,17 +62,6 @@
     enable = true;
 
     # wrap the command with nixGL.
-    # If nerd-fonts is found in the wrong location:
-    #  1. change which of these is set
-    #  2. install kitty manually
-    #  3. rebuild and switch
-    #  4. open the manually installed kitty
-    #  5. close it
-    #  6. change this back
-    #  7. rebuild and switch again
-    #  8. verify the nix one is found by the PATH
-    #  9. open the nix kitty
-    #  10. for some reason it will now work.
     package = config.lib.nixGL.wrap pkgs.kitty; # pkgs.emptyDirectory;
 
     shellIntegration = {
