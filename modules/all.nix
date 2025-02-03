@@ -21,6 +21,7 @@
   # "includes". By convention programs/ are for individual programs, while modules/ are less specific.
   # WARNING: If any of these have options defined the import 
   imports = [
+    ./nixgl.nix
     ../programs/bash.nix
     ../programs/zsh.nix
 

@@ -37,8 +37,6 @@
           ./home.nix 
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/goln-5cl17g3_mtalexander.nix
           # self-manage fleek
           {
@@ -60,8 +58,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/goln-422q533_mtalexander.nix
           # self-manage fleek
           {
@@ -83,8 +79,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/kubic-730xd_mike.nix
           # self-manage fleek
           {
@@ -106,8 +100,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/cloud-t610_mike.nix
           # self-manage fleek
           {
@@ -129,8 +121,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/vm-gol-422Q533_dev.nix
           # self-manage fleek
           {
@@ -152,8 +142,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/laptopFedora_aaravchen2.nix
           # self-manage fleek
           {
@@ -175,8 +163,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/WINDOWS-GAMING_aaravchen.nix
           # self-manage fleek
           {
@@ -198,8 +184,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/bazzite_aaravchen.nix
           # self-manage fleek
           {
@@ -221,8 +205,6 @@
           ./home.nix
           ./user.nix
           ./modules/all.nix
-          # must be included before use, which is everywhere
-          ./modules/nixgl.nix
           ./hosts/helios300_aaravchen.nix
           # self-manage fleek
           {
