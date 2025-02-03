@@ -37,7 +37,6 @@
 
     # already in fleek
     # profileExtra = "[ -r ~/.nix-profile/etc/profile.d/nix.sh ] && source  ~/.nix-profile/etc/profile.d/nix.sh";
-    # initExtra = "source <(fleek completion bash)";
     initExtra = lib.concatLines [
       # bash has a bug where it somehow evaluates and prints SHLVL in a subshell as off-by-one for the first
       # subshell.  We can't actually detect whether we're in a bash-in-bash case, so assume bash with SHLVL less than

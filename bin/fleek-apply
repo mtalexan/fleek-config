@@ -17,4 +17,4 @@ cd ${HOME}/.local/share/fleek
 # the version of home-manager that's locked by the flake we're updating, since that's what we're using to provide the config functions.
 # According to this: https://discourse.nixos.org/t/using-flake-input-with-nix-shell/14147 we can do that by using the '--inputs-from .'
 # while in our fleek flake folder to get it to use the locked home-manager flake input as the home-manager flake definition.
-NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure --inputs-from . home-manager -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
+NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --inputs-from . home-manager -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"

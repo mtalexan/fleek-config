@@ -1,5 +1,5 @@
 {
-  description = "Fleek Configuration";
+  description = "Home Configuration";
 
   inputs = {
     # Nixpkgs
@@ -11,9 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Fleek
-    fleek.url = "https://flakehub.com/f/ublue-os/fleek/*.tar.gz";
-
     # Overlays
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nixgl = {
@@ -23,9 +20,7 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, fleek, ... }@inputs: {
-
-     packages.x86_64-linux.fleek = fleek.packages.x86_64-linux.default;
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
 
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
@@ -37,16 +32,12 @@
           ./home.nix 
           ./user.nix
           ./hosts/goln-5cl17g3_mtalexander.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -57,16 +48,12 @@
           ./home.nix
           ./user.nix
           ./hosts/goln-422q533_mtalexander.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -77,16 +64,12 @@
           ./home.nix
           ./user.nix
           ./hosts/kubic-730xd_mike.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -97,16 +80,12 @@
           ./home.nix
           ./user.nix
           ./hosts/cloud-t610_mike.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -117,16 +96,12 @@
           ./home.nix
           ./user.nix
           ./hosts/vm-gol-422Q533_dev.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -137,16 +112,12 @@
           ./home.nix
           ./user.nix
           ./hosts/laptopFedora_aaravchen2.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -157,16 +128,12 @@
           ./home.nix
           ./user.nix
           ./hosts/WINDOWS-GAMING_aaravchen.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -177,16 +144,12 @@
           ./home.nix
           ./user.nix
           ./hosts/bazzite_aaravchen.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
       
@@ -197,16 +160,12 @@
           ./home.nix
           ./user.nix
           ./hosts/helios300_aaravchen.nix
-          # self-manage fleek
-          {
-            home.packages = [
-              fleek.packages.x86_64-linux.default
-            ];
-          }
           ({
-           nixpkgs.overlays = [inputs.emacs-overlay.overlay inputs.nixgl.overlay ];
+           nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay 
+              inputs.nixgl.overlay 
+            ];
           })
-
         ];
       };
     };
