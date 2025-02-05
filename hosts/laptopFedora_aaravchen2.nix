@@ -6,7 +6,6 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/distrobox.nix
-    ../programs/cloudflare-warp.nix
     # vscode is provided by the system
   ];
 
