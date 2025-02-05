@@ -20,155 +20,78 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: let
+    myOverlaysSet = [
+      # extra overlays need to be added here
+      inputs.emacs-overlay.overlay
+      inputs.nixgl.overlay
+      # Make all Golang applications build with CGO=1.
+      # Golang tried to re-invent the world but got lazy when it came to libc, including only a half-assed
+      # libc replacement.  Anything low-level, like querying a username from a UID, is implemented explicitly
+      # how you shouldn't implement it, and DOES NOT WORK.
+      # This uses CGO=1 so it actually uses the real libc implementation that does work.
+      (self: super: {
+        buildGoModule = args: super.buildGoModule (args // {
+          buildInputs = (args.buildInputs or []) ++ [ super.gcc ]; # Add GCC for CGO
+          goFlags = (args.goFlags or "") + " CGO_ENABLED=1"; # Set CGO_ENABLED=1
+        });
+      })
+    ];
 
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-
-      "mtalexander@goln-5cl17g3" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix 
-          ./user.nix
-          ./hosts/goln-5cl17g3_mtalexander.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "mtalexander@goln-422q533" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/goln-422q533_mtalexander.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "mike@kubic-730xd" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/kubic-730xd_mike.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "mike@cloud-t610" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/cloud-t610_mike.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "dev@vm-gol-422Q533" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/vm-gol-422Q533_dev.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "aaravchen2@laptopFedora" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/laptopFedora_aaravchen2.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "aaravchen@WINDOWS-GAMING" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/WINDOWS-GAMING_aaravchen.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "aaravchen@bazzite" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/bazzite_aaravchen.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
-      
-      "aaravchen@helios300" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        modules = [
-          ./home.nix
-          ./user.nix
-          ./hosts/helios300_aaravchen.nix
-          ({
-           nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay 
-              inputs.nixgl.overlay 
-            ];
-          })
-        ];
-      };
+    # Define a function to create `pkgs` with overlays added.
+    # Takes a system double (e.g. x86_64-linux) to use
+    pkgsForSystem = system: import nixpkgs {
+      inherit system;
+      overlays = myOverlaysSet;
     };
+
+    # Function to construct the hostFile path from the config name
+    hostFileFromName = configName: let
+      # split takes a regex pattern and interleaves unmatched sections with matched sections. So we want to grab the
+      # part before and after the split as the capture groups so they end up as indexes 0 and 1
+      parts = builtins.match "^(.*)@(.*)$" configName;
+      user = builtins.elemAt parts 0; # First capturing group is the user
+      host = builtins.elemAt parts 1; # Second capturing group is the host
+    in
+      ./hosts/${host}_${user}.nix; # Construct the file path
+
+    # default linux template 
+    linuxConfig = configName: home-manager.lib.homeManagerConfiguration {
+      pkgs = pkgsForSystem "x86_64-linux"; # Use the `pkgsForSystem` function for Linux
+      extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
+      modules = [
+        ./home.nix
+        ./user.nix
+        (hostFileFromName configName) # Dynamically generate the host file path
+        ({ nixpkgs.overlays = myOverlaysSet; })
+      ];
+    };
+
+    # List of configuration names with their respective config functions. The default configFunction is linuxConfig unless specified otherwise.
+    # Available through 'home-manager --flake .#your-username@your-hostname'
+    # Pulls in the hosts/${host}_${user}.nix file for the per-host config, parsed from the name.
+    configurations = [
+      # if configFunction isn't set, it defaults to linuxConfig
+      { name = "mtalexander@goln-5cl17g3"; configFunction = linuxConfig; }
+      { name = "mtalexander@goln-422q533c"; }
+      { name = "mike@kubic-730xd"; }
+      { name = "mike@cloud-t610"; }
+      { name = "dev@vm-gol-422Q533"; }
+      { name = "aaravchen2@laptopFedora"; }
+      { name = "aaravchen@WINDOWS-GAMING"; }
+      { name = "aaravchen@bazzite"; }
+      { name = "aaravchen@helios300"; }
+    ];
+
+  in {
+    # Dynamically generate homeConfigurations using the functions specified as the 'configFunction' for each item in the
+    # 'configurations' list. Sets a "${name}" = (${configFunction} "${name}"); for each item.
+    # For items where configFunction isn't set, assume linuxConfig.
+    # The ${configFunction} calculates the hosts/*.nix file as ${host}_${name}.nix by parsing the ${name} passed to it.
+    homeConfigurations = builtins.listToAttrs (map (entry: {
+        name = entry.name;
+        value = (entry.configFunction or linuxConfig) entry.name; # Default to linuxConfig if not set
+      }) configurations);
   };
 }
 
