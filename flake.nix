@@ -74,6 +74,7 @@
       # if configFunction isn't set, it defaults to linuxConfig
       { name = "mtalexander@goln-5cl17g3"; configFunction = linuxConfig; }
       { name = "mtalexander@goln-422q533c"; }
+      { name = "mtalexander@golw-12t4k74"; }
       { name = "mike@kubic-730xd"; }
       { name = "mike@cloud-t610"; }
       { name = "dev@vm-gol-422Q533"; }
