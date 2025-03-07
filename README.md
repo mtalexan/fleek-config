@@ -38,9 +38,27 @@ Note: You have to set the environment variable to the install command if you hav
 
 ### New System
 
-1. Clone the repo into `~/.local/share/fleek`
-2. Edit the `flake.nix`, copy-paste and then edit one of the blocks that config for the username and hostname.
-3. Copy then edit one of the hostname config files
+Note: Items marked with `(A)` only need to be performed if you need agecrypt identity decryption for your new host.
+
+1. (A) Temporarily install `git agecrypt` with low priority: `nix profile install --priority=7 'nixpkgs#git-agecrypt'`
+2. Clone the repo into `~/.local/share/fleek`
+3. Configure your git config `user.name` and `user.email` if you haven't already
+4. (A) Enable agecrypt in the cloned repo: `git agecrypt init`
+5. (A) Configure the private identity key(s) to use for agecrypt (repeat for all keys): `git agecrypt config add -i ~/.ssh/identity_private_key` 
+6. (A) Confirm everything is setup properly for agecrypt: `git agecrypt status`
+7. (A) Re-run the git smudge and textconv filtering on the files so the identities are decrypted
+```shell
+git rm --cached -r .
+# this command should end up listing only the files that were decrypted by agecrypt
+git reset
+git checkout .
+```
+8. Edit the `flake.nix`, copy-paste and then edit one of the blocks that config for the username and hostname.
+9. Copy then edit one of the hostname config files, naming the new one `$(hostname)_$(id -u).nix`
+10. Commit the changes so they're found by the nix build
+11. Manually run the update: `bin/fleek-apply --impure`
+12. Push the git commit
+13. Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
 
 ### Apply Changes
 
