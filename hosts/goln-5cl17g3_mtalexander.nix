@@ -13,8 +13,8 @@
     # Host-specific username and home location
     home.username = "mtalexander";
     home.homeDirectory = "/home/mtalexander";
-    # TODO: Set this to point to the work SSH key 
-    #programs.git.signing.key = "~/.ssh/github_personal_ed25519";
+    # location on this specific host where the default signing key is
+    programs.git.signing.key = "~/.ssh/gitlab_ed25519";
 
     #####################################
     # Extra host-unique non-configurable packages
