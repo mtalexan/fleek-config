@@ -32,7 +32,7 @@
     # Custom defined config settings
     #####################################
     custom = {
-      nixGL.gpu = false;
+      nixGL.gpu = true;
 
       distrobox = {
         hooks = {
