@@ -21,7 +21,7 @@
     # Technically has support for a home-manager module, but it only uses systemd to mount secrets.
     # That's only functional/possible on NixOS systems, not on non-NixOS systems using home-manager.
     # homeage (below) supports "activation" mode, which does decryption on home-manager switch rather than requiring a systemd mount.
-    inputs.agenix = {
+    agenix = {
       # Use ragenix instead of agenix.
       #url = "github:ryantm/agenix";
       url = "github:yaxitech/ragenix";
