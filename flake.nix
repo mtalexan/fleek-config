@@ -101,7 +101,6 @@
       { name = "aaravchen@bazzite"; }
       { name = "aaravchen@helios300"; }
     ];
-
   in {
     # Dynamically generate homeConfigurations using the functions specified as the 'configFunction' for each item in the
     # 'configurations' list. Sets a "${name}" = (${configFunction} "${name}"); for each item.

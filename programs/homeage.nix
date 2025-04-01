@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, options, ... }: {
+{ pkgs, misc, lib, config, options, inputs, ... }: {
   # WARNING: because we need an 'options.' key here, we have to use the verbose format with a 'config.home.' for home-manager things
 
   # Not configurable in home-manager itself, add the package generically and setup config.home.file's for what we need
@@ -6,7 +6,11 @@
     pkgs.ragenix
   ];
 
-  inputs.homeage = {
+  imports = [
+    inputs.homeage.homeManagerModules.homeage
+  ];
+
+  homeage = {
     # this is the (r)agenix package, not a homeage package. Make sure it's listed above
     pkg = pkgs.ragenix;
     # Where the decrypted secrets are mounted. Defaults to /run/user/$UID/secrets/
