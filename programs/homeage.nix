@@ -13,15 +13,17 @@
 
   homeage = {
     # this is the (r)agenix package, not a homeage package. Make sure it's listed above as a package to install.
-    # Note that ragenix also provides the tool name agenix.
-    pkg = pkgs.ragenix;
-    # Where the decrypted secrets are mounted. Defaults to /run/user/$UID/secrets/
-    # Unless a systemd mount is installed (not possible with home-manager directly), this must be
+    # Do NOT set this. It somehow doesn't work with ragenix and points to a tool without the -d option. But if left
+    # unset when ragenix is installed, it does work.
+    #pkg = pkgs.agenix;
+
+    # Folder the decrypted secrets are mounted into. Defaults to '/run/user/$UID/secrets'.
+    # Unless a systemd mount is installed (not possible with home-manager on non-NixOS), this must be
     # a non-volatile storage location.
-    mount = "/home/${config.home.username}/.secrets/homeage/";
-    # Not on NixOS so can't use systemd, this update secrets on home-manager switch.
-    # Requires 'mount' to be non-volatile since it will only update the secrets on switch and not on reboot.
-    installationType = "activation";
+    mount = "/home/${config.home.username}/.secrets/homeage";
+    # 'activation' or 'systemd' (NixOS-only). If used with 'activation' the 'mount' folder must be a non-volatile location
+    # or the decrypted secrets will be lost on reboot.
+    installationType = "systemd";
 
     # To use:
     # 1. Add an (r)agenix secret to the secrets/ folder (see secrets/secrets.nix for details).

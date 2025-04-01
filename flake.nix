@@ -22,16 +22,19 @@
     # That's only functional/possible on NixOS systems, not on non-NixOS systems using home-manager.
     # homeage (below) supports "activation" mode, which does decryption on home-manager switch rather than requiring a systemd mount.
     agenix = {
-      # Use ragenix instead of agenix.
+      # WARNING: homeage apparently uses an undocumented -d option that agenix supports but ragenix doesn't
       #url = "github:ryantm/agenix";
       url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
       # don't download download darwin deps (saves some resources on Linux)
+      # Note: this doesn't exist for ragenix, but it only generates a warning.
       inputs.darwin.follows = "";
     };
 
     homeage = {
-      url = "github:jordanisaacs/homeage";
+      # This is the orignal but the developer is unrespsonsive and hasn't merged a needed fix for jq --argfile from >2 years ago.
+      #url = "github:jordanisaacs/homeage";
+      url = "github:aarongpower/homeage";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -17,7 +17,7 @@
     programs.git.signing.key = "${config.home.username}/.ssh/gitlab_ed25519";
     # the locations of the SSH private keys to use for decrypting age secrets.
     homeage.identityPaths = [
-      "${config.home.username}/.ssh/fleek_agecrypt"
+      "~/.ssh/fleek_agecrypt"
     ];
 
     #####################################

@@ -1,11 +1,11 @@
 # do NOT import this into the flake.
 # This is just the config file for (r)agenix to manage the *.age files in this folder.
 
-# The ragenix commands must be run from this folder, or the '--rules=<path to this file>' must be used.
+# The (r)agenix commands must be run from this folder, or the '--rules=<path to this file>' must be used.
 
 # To add a secret:
 #  1. Add the intended name of the encrypted file to this list with the set of publicKeys that can decrypt it.
-#  2. Run 'ragenix --identify=<path to private key> -e <path to encrypted file name>' for the new encrypted file name.
+#  2. Run 'agenix --identify=<path to private key> -e <path to encrypted file name>' for the new encrypted file name.
 #  3. Paste the content to encrypt into the editor, then save and exit
 
 let
