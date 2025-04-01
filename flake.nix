@@ -18,18 +18,36 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Technically has support for a home-manager module, but it only uses systemd to mount secrets.
+    # That's only functional/possible on NixOS systems, not on non-NixOS systems using home-manager.
+    # homeage (below) supports "activation" mode, which does decryption on home-manager switch rather than requiring a systemd mount.
+    inputs.agenix = {
+      # Use ragenix instead of agenix.
+      #url = "github:ryantm/agenix";
+      url = "github:yaxitech/ragenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # don't download download darwin deps (saves some resources on Linux)
+      inputs.darwin.follows = "";
+    };
+
+    homeage = {
+      url = "github:jordanisaacs/homeage";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, agenix, homeage, ... }@inputs: let
     myOverlaysSet = [
       # extra overlays need to be added here
       inputs.emacs-overlay.overlay
       inputs.nixgl.overlay
       # Make all Golang applications build with CGO=1.
-      # Golang tried to re-invent the world but got lazy when it came to libc, including only a half-assed
-      # libc replacement.  Anything low-level, like querying a username from a UID, is implemented explicitly
-      # how you shouldn't implement it, and DOES NOT WORK.
-      # This uses CGO=1 so it actually uses the real libc implementation that does work.
+      # Golang tried to re-invent the world but got lazy when it came to libc, having only a half-assed
+      # libc replacement.  Anything low-level, like querying a username from a UID, is implemented how you
+      # explicitly shouldn't, and DOES NOT WORK (especially with LDAP users).
+      # This sets CGO=1 as part of all golang tool builds so it actually uses the real libc implementation
+      # that works properly.
       (self: super: {
         buildGoModule = args: super.buildGoModule (args // {
           buildInputs = (args.buildInputs or []) ++ [ super.gcc ]; # Add GCC for CGO

@@ -1,5 +1,3 @@
 [config]
 "identities/ks.nix" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
 "identities/personal.nix" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
-"identities/ks/atuin/key" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
-"identities/ks/atuin/session" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
