@@ -14,10 +14,10 @@
     home.username = "mtalexander";
     home.homeDirectory = "/home/mtalexander";
     # the location on this specific machine where the default SSH  key is to use for signing
-    programs.git.signing.key = "~/.ssh/gitlab_ed25519";
+    programs.git.signing.key = "${config.home.username}/.ssh/gitlab_ed25519";
     # the locations of the SSH private keys to use for decrypting age secrets.
     homeage.identityPaths = [
-      "/home/mtalexander/.ssh/fleek_agecrypt"
+      "${config.home.username}/.ssh/fleek_agecrypt"
     ];
 
     #####################################
