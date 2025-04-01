@@ -7,7 +7,7 @@
       "--disable-up-arrow"
     ];
     settings = {
-      auto_sync = false;
+      update_check = false;
       # fzf-style search syntax
       search_mode = "fuzzy";
       # look at history of just the one session by default, hitting Ctrl+R again will give host
@@ -23,6 +23,8 @@
       show_preview = true;
       # return-original doesn't work, it always wipes it
       exit_mode = "return-query";
+      # per-git-repo mode
+      workspaces = "true";
     };
   };
 }
