@@ -15,14 +15,6 @@
     home.homeDirectory = "/home/mtalexander";
     # the location on this specific machine where the default SSH  key is to use for signing
     programs.git.signing.key = "~/.ssh/gitlab_ed25519";
-    programs.atuin.settings = {
-      # enable syncing using the E2EE default server
-      #auto_sync = true;
-      # sync after every command
-      sync_frequency = "0";
-      #key_path = ;
-      #session_path = ;
-    }
 
 
     #####################################
