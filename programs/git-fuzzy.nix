@@ -1,4 +1,5 @@
 { pkgs, misc, lib, config, options, ... }: {
+  # Uses fzf to display some interactive info from git lists (status, diff, log, branch, reflog, stash, etc)
 
   home.packages = [
     # create an ad-hoc package derivation for git-fuzzy
