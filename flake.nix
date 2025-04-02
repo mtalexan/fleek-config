@@ -18,29 +18,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Technically has support for a home-manager module, but it only uses systemd to mount secrets.
-    # That's only functional/possible on NixOS systems, not on non-NixOS systems using home-manager.
-    # homeage (below) supports "activation" mode, which does decryption on home-manager switch rather than requiring a systemd mount.
     agenix = {
-      # WARNING: homeage apparently uses an undocumented -d option that agenix supports but ragenix doesn't
-      #url = "github:ryantm/agenix";
-      url = "github:yaxitech/ragenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      # don't download download darwin deps (saves some resources on Linux)
-      # Note: this doesn't exist for ragenix, but it only generates a warning.
-      inputs.darwin.follows = "";
-    };
-
-    homeage = {
-      # This is the orignal but the developer is unrespsonsive and hasn't merged a needed fix for jq --argfile from >2 years ago.
-      #url = "github:jordanisaacs/homeage";
-      url = "github:aarongpower/homeage";
+      # includes undocumented support for a home-manager module that despite using systemd is able to be used on a non-NixOS system.
+      # See https://github.com/ryantm/agenix/issues/50#issuecomment-1633579069
+      url = "github:ryantm/agenix";
+      # ragenix doesn't have the home-manager module, so stick with agenix
+      #url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, homeage, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, agenix, ... }@inputs: let
     myOverlaysSet = [
       # extra overlays need to be added here
       inputs.emacs-overlay.overlay
@@ -79,8 +67,12 @@
     # default linux template 
     linuxConfig = configName: home-manager.lib.homeManagerConfiguration {
       pkgs = pkgsForSystem "x86_64-linux"; # Use the `pkgsForSystem` function for Linux
-      extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
+      extraSpecialArgs = {
+        inherit inputs; # Pass flake inputs to our config
+        system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
+       };
       modules = [
+        agenix.homeManagerModules.default # Include agenix module
         ./home.nix
         ./user.nix
         (hostFileFromName configName) # Dynamically generate the host file path

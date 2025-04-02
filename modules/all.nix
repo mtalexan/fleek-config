@@ -26,7 +26,7 @@
     ../programs/bash.nix
     ../programs/zsh.nix
 
-    ../programs/homeage.nix
+    ../programs/agenix.nix
 
     ../programs/atuin.nix
     ../programs/bat.nix

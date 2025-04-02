@@ -27,7 +27,7 @@ There are also top-level folders:
 - `bin/` this folder is added to the PATH so in-place scripts and tools can be put in here.
 - `home_files/` directory structures of files that may need to be copied into place in the home folder by home-manager config settings. 
 - `sd_scripts/` for the `sd` tool, the help text files and the scripts in the directories implicitly define a set of subcommands that are part of the path and include auto-complete.
-- `secrets/` are the (r)agenix secrets for decryption with `homeage`.
+- `secrets/` are the (r)agenix secrets for decryption with `agenix` home-manager module.
 - `snippets/` are shell script files that get sourced into the shellrc files by home-manager config settings.
 
 
@@ -86,8 +86,8 @@ Then apply the changes.
 Secret files that don't need to be sourced by the home-manager config itself should be encrypted with (r)agenix in the `secrets/` folder. Unlike `identities/` files that have to be on-disk-readable at home-manager build time and therefore must use the very brittle `git-agecrypt`, secrets that are only needed at run time (like passwords or encryption keys) should use `agenix`/`ragenix`.  
 
 1. Add the encrypted secret to the `secrets/` folder (see [secrets/secrets.nix](./secrets/secrets.nix) for details)
-2. Ensure the `hosts/` file has a `homeage.identityPaths` value pointing to the location of an out-of-band private key matching one of the public keys listed in the `secrets.nix` for the file(s).
-3. Add `homeage.file."secretname"` definition block to a *.nix file, making sure the `source` value is the path to the encrypted age file in the repo.
-4. Use the `config.homeage.file."secretname".path` as a file path to the decrypted path.
+2. Ensure the `hosts/` file has a `age.identityPaths` value pointing to the location of an out-of-band private key matching one of the public keys listed in the `secrets.nix` for the file(s).
+3. Add `age.secrets."secretname"` definition block to a *.nix file, making sure the `file` value is the path to the encrypted age file in the repo.
+4. Use the `config.age.secrets."secretname".path` as a file path to the decrypted path.
 
-See [programs/homeage.nix](./programs/homeage.nix) for a detailed breakdown of these steps.
+See [programs/agenix.nix](./programs/agenix.nix) for a detailed breakdown of these steps.

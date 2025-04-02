@@ -8,16 +8,18 @@
     ../programs/vscode.nix
   ];
 
-  # declare it explicitly so we can access the config.custom.files section to set options as well
-  config = {
+  # declare it explicitly so we can access the config.custom.files section to set options as well.
+  # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
+  # for construcing absolute paths to files.
+  config = rec {
     # Host-specific username and home location
     home.username = "mtalexander";
-    home.homeDirectory = "/home/mtalexander";
+    home.homeDirectory = "/home/${config.home.username}";
     # the location on this specific machine where the default SSH  key is to use for signing
-    programs.git.signing.key = "${config.home.username}/.ssh/gitlab_ed25519";
+    programs.git.signing.key = "${config.home.homeDirectory}/.ssh/gitlab_ed25519";
     # the locations of the SSH private keys to use for decrypting age secrets.
-    homeage.identityPaths = [
-      "~/.ssh/fleek_agecrypt"
+    age.identityPaths = [
+      "${config.home.homeDirectory}/.ssh/fleek_agecrypt"
     ];
 
     #####################################

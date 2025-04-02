@@ -14,8 +14,8 @@ let
 in
 {
   # Each file in this folder needs to be listed here, with a list of public keys specified for encrypting it.
-  # One of the matching private keys needs to be part of the homeage.identityPaths in the home-manager config
-  # for a given to file to be decrypted. Files listed here that are encrypted with a key-pair homeage doesn't
+  # One of the matching private keys needs to be part of the age.identityPaths in the home-manager config
+  # for a given file to be decrypted. Files listed here that are encrypted with a key-pair age doesn't
   # point to will silently not be decrypted.
 
   "atuin_key.age".publicKeys = [ fleek_key ];

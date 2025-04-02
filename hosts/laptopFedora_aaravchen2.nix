@@ -10,12 +10,14 @@
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
-  config = {
+  # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
+  # for construcing absolute paths to files.
+  config = rec {
     # Host-specific username and home location
     home.username = "aaravchen2";
-    home.homeDirectory = "/home/aaravchen2";
+    home.homeDirectory = "/var/home/${config.home.username}";
     # where to find the git SSH key on this system
-    programs.git.signing.key = "~/.ssh/id_ed25519_github";
+    programs.git.signing.key = "${config.home.homeDirectory}/.ssh/id_ed25519_github";
 
     #####################################
     # Extra host-unique non-configurable packages

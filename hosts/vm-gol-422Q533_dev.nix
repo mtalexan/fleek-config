@@ -8,12 +8,14 @@
     ../programs/vscode.nix
   ];
 
-  config = {
+  # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
+  # for construcing absolute paths to files.
+  config = rec {
     # Host Specific username and home location
     home.username = "dev";
-    home.homeDirectory = "/home/dev";
+    home.homeDirectory = "/home/${config.home.username}";
     # TODO: Set this to point to the work SSH key 
-    #programs.git.signing.key = "~/.ssh/github_personal_ed25519";
+    #programs.git.signing.key = "${config.home.homeDirectory}/.ssh/github_personal_ed25519";
 
     #####################################
     # Extra host-unique non-configurable packages
