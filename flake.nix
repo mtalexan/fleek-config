@@ -90,7 +90,6 @@
       { name = "mtalexander@golw-12t4k74"; }
       { name = "mike@kubic-730xd"; }
       { name = "mike@cloud-t610"; }
-      { name = "dev@vm-gol-422Q533"; }
       { name = "aaravchen2@laptopFedora"; }
       { name = "aaravchen@WINDOWS-GAMING"; }
       { name = "aaravchen@bazzite"; }
