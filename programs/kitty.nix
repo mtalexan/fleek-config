@@ -1545,7 +1545,7 @@
         #: See rc_custom_auth <https://sw.kovidgoyal.net/kitty/remote-
         #: control/#rc-custom-auth> for details.
 
-        # allow_remote_control no
+        # allow_remote_control yes
 
         #: Allow other programs to control kitty. If you turn this on, other
         #: programs can control all aspects of kitty, including sending text
@@ -2414,6 +2414,7 @@
         map kitty_mod+alt+t>7 goto_tab 7
         map kitty_mod+alt+t>8 goto_tab 8
         map kitty_mod+alt+t>9 goto_tab 9
+        map kitty_mod+alt+t>t select_tab
 
         map alt+1 goto_tab 1
         map alt+2 goto_tab 2

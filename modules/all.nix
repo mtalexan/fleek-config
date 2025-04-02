@@ -37,6 +37,7 @@
     ../programs/fd.nix
     ../programs/fzf.nix
     ../programs/git.nix
+    ../programs/git-fuzzy.nix
     # just adds to the path if already installed
     ../programs/golang.nix
     # adds the homebrew path and completions if already installed
