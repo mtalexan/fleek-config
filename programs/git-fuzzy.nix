@@ -15,10 +15,12 @@
           };
 
           dontBuild = true; # it's just a shell script, nothing to build
-          # install is just copying the files from the src bin folder into the output bin folder and making it executable
+          # It has both a lib and bin directory, but the lib directory is scripts for internal use only.
           installPhase = ''
-            mkdir -p $out/bin
-            cp -r $src/bin/* $out/bin/
+            mkdir -p $out/
+            cp -r $src/lib $out/
+            chmod +x $out/lib/*
+            cp -r $src/bin $out/
             chmod +x $out/bin/*
           '';
       }
