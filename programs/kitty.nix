@@ -2370,6 +2370,7 @@
 
         #: New tab
 
+        # remapped to a prefix
         # map kitty_mod+t new_tab
         # map cmd+t       new_tab
 
@@ -2402,19 +2403,20 @@
         #:     map ctrl+alt+1 goto_tab 1
         #:     map ctrl+alt+2 goto_tab 2
 
-        # remap the ctrl+shift+alt+t to a prefix
-        map kitty_mod+alt+t>n set_tab_title
-        map kitty_mod+alt+t>k close_tab
-        map kitty_mod+alt+t>1 goto_tab 1
-        map kitty_mod+alt+t>2 goto_tab 2
-        map kitty_mod+alt+t>3 goto_tab 3
-        map kitty_mod+alt+t>4 goto_tab 4
-        map kitty_mod+alt+t>5 goto_tab 5
-        map kitty_mod+alt+t>6 goto_tab 6
-        map kitty_mod+alt+t>7 goto_tab 7
-        map kitty_mod+alt+t>8 goto_tab 8
-        map kitty_mod+alt+t>9 goto_tab 9
-        map kitty_mod+alt+t>t select_tab
+        # remap the ctrl+shift+t to a prefix
+        map kitty_mod+t>t new_tab
+        map kitty_mod+t>n set_tab_title
+        map kitty_mod+t>k close_tab
+        map kitty_mod+t>1 goto_tab 1
+        map kitty_mod+t>2 goto_tab 2
+        map kitty_mod+t>3 goto_tab 3
+        map kitty_mod+t>4 goto_tab 4
+        map kitty_mod+t>5 goto_tab 5
+        map kitty_mod+t>6 goto_tab 6
+        map kitty_mod+t>7 goto_tab 7
+        map kitty_mod+t>8 goto_tab 8
+        map kitty_mod+t>9 goto_tab 9
+        map kitty_mod+t>? select_tab
 
         map alt+1 goto_tab 1
         map alt+2 goto_tab 2
