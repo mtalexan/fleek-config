@@ -19,5 +19,4 @@ in
   # point to will silently not be decrypted.
 
   "atuin_key.age".publicKeys = [ fleek_key ];
-  "atuin_session.age".publicKeys = [ fleek_key ];
 }
