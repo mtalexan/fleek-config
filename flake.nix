@@ -22,9 +22,9 @@
       # includes undocumented support for a home-manager module that despite using systemd is able to be used on a non-NixOS system.
       # See https://github.com/ryantm/agenix/issues/50#issuecomment-1633579069
       url = "github:ryantm/agenix";
-      # ragenix doesn't have the home-manager module, so stick with agenix
-      #url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
+      # we don't have any darwin targets, so disable it to save a bit of size
+      inputs.darwin.follows = "";
     };
   };
 
