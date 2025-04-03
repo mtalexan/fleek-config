@@ -1,4 +1,5 @@
-{ pkgs, misc, lib, ... }: {
+{ pkgs, misc, lib, config, ... }: {
+
   # ZSH plugins added separately as packages
   home.packages = [
     pkgs.zsh-autosuggestions
@@ -10,15 +11,18 @@
     # provides notify-send that we need for long task completion notification
     pkgs.libnotify
   ];
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion =  {
-      enable = true;
-      # pink foreground for completion, with underline
-      highlight = "fg=#ff00ff,bg=underline";
-      # strategy = [ "history" ]; #default
-    };
+    # We need autosuggest included after fzf-tab custom plugin, so we can't use this block.
+    # Instead we add zsh-autosuggest to the custom plugins list, and manually define our settings in the initExtra.
+    #autosuggestion =  {
+    #  enable = true;
+    #  # pink foreground for completion, with underline
+    #  highlight = "fg=#ff00ff,bg=underline";
+    #  # strategy = [ "history" ]; #default
+    #};
     enableVteIntegration = true;
     autocd = false;
     defaultKeymap = "emacs";
@@ -62,9 +66,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "Aloxaf";
           repo = "fzf-tab";
-          # latest master as of 2024-01-26
-          rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
-          sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
+          rev = "v1.2.0";
+          sha256 = "sha256-q26XVS/LcyZPRqDNwKKA9exgBByE0muyuNb0Bbar2lY=";
           #sha256 = lib.fakeSha256;
         };
       }
@@ -74,8 +77,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-autosuggestions";
-          rev = "v0.7.0";
-          sha256 = "sha256-KLUYpUu4DHRumQZ3w59m9aTW6TBKMCXl2UcKi4uMd7w=";
+          rev = "v0.7.1";
+          sha256 = "sha256-vpTyYq9ZgfgdDsWzjxVAE7FZH4MALMNZIFyEOBLm5Qo=";
           #sha256 = lib.fakeSha256;
         };
       }
@@ -124,110 +127,38 @@
       }
     ];
 
-    # prezto only works if we use it for the prompt.
-    # we're using starship instead
-    #prezto = {
-    #  enable = true;
-    #  # fish-like autosuggestions
-    #  # Set the color for the found portion (implies it's enabled)
-    #  autosuggestions.color = "fg=bright-blue";
-    #  # Set case-sensitivity for completion, history lookup, etc.
-    #  caseSensitive = true;
-    #  # color output
-    #  color = true;
-    #
-    #  editor = {
-    #    # Do NOT use dotExpansion.  It conflicts with git needing to use .. vs ... when diffing.
-    #    ## Auto convert .... to ../..
-    #    #dotExpansion = true;
-    #    keymap = "emacs";
-    #    # Allow the zsh prompt context to be shown.  Really only relevant to VI
-    #    promptContext = true;
-    #  };
-    #
-    #  # prezto modules.  Order matters.
-    #  #  'autosuggestions' must be after 'syntax-highlighting'
-    #  #  'autosuggestions' must be after 'history-substring-search'
-    #  #  'completion' must be after 'utility'
-    #  #  'environment' must be loaded first
-    #  #  'syntax-highlighting' must be second to last, right before 'prompt'
-    #  #    unless 'history-substring-search' is also used, then right before
-    #  #    it as well.
-    #  #  'fasd' must be after 'completion'
-    #  pmodules = [
-    #    "environment"
-    #    "terminal"
-    #    "editor"
-    #    "history"
-    #    "spectrum"
-    #    "utility"
-    #    "completion"
-    #    "git"
-    #    "python"
-    #    "screen"
-    #    "syntax-highlighting"
-    #    "autosuggestions"
-    #    "prompt"
-    #  ];
-    #
-    #  # pmodule configurations
-    #
-    #  prompt = {
-    #    theme = "starship";
-    #    # set the pwd type to 'short', 'long' (no ~ expansion), or 'full' (~ expansion)
-    #    pwdLength = "long";
-    #    # don't show return values in the prompt
-    #    showReturnVal = false;
-    #  };
-    #
-    #  python = {
-    #    # Auto switch the Python virtualenv on directory change.
-    #    virtualenvAutoSwitch = true;
-    #    # Automatically initialize virtualenvwrapper if pre-requisites are met.
-    #    virtualenvInitialize = true;
-    #  };
-    #
-    #  syntaxHighlighting = {
-    #    highlighters = [
-    #      "main"
-    #      "brackets"
-    #      "pattern"
-    #      "line"
-    #      "root"
-    #      # do NOT include 'cursor' here.  It makes block cursors disappear when moving over text
-    #      #"cursor"
-    #    ];
-    #
-    #    # special command-patterns to highlight
-    #    pattern = {
-    #      "rm*-rf*" = "fg=white,bold,bg=red";
-    #    };
-    #  };
-    #
-    #  terminal = {
-    #    # Auto set the tab and window titles.
-    #    autoTitle = true;
-    #    # Set the window title format.
-    #    windowTitleFormat = "%n@%m: %s";
-    #    # Set the tab title format.
-    #    tabTitleFormat = "%m: %s";
-    #    # Set the terminal multiplexer title format.
-    #    multiplexerTitleFormat = "%s";
-    #  };
-    #
-    #  # Enabled safe options? This aliases cp, ln, mv and rm so that they prompt
-    #  # before deleting or overwriting files. Set to 'no' to disable this safer
-    #  # behavior.
-    #  utility.safeOps = false;
-    #};
-
     # loaded for ALL session types, env variables exclusive to zsh
     envExtra = lib.concatLines [
       # make sure our SHELL is set to zsh so it's used by default.
       ''SHELL=$(command -v zsh)''
     ];
 
-    initExtraBeforeCompInit = ''
+    initExtraFirst = lib.concatLines [
+      ''
+      ####################################################
+      # Start initExtraFirst
+      ####################################################
+      ''
+
+      # these don't have home-manager options to enable
+      # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
+      "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
+
+      ''
+      ####################################################
+      # End initExtraFirst
+      ####################################################
+      ''
+    ];
+
+    initExtraBeforeCompInit = lib.concatLines [
+      ''
+      ####################################################
+      # Start initExtraBeforeCompInit
+      ####################################################
+      ''
+
+      ''
       # See man zshcompsys for details on completers and their options
 
       # Ordered list of completion engines to try. 
@@ -253,12 +184,18 @@
       # warnings and messages format from the completion engine
       zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
       zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-      
-      # bring up a selection menu to pick the completion if the list is long.
-      # if selecting one isn't supported by the completion engine, just bring up the menu for scrolling instead.
-      # 'interactive' means the search pattern can be interactively adjusted in real time to update the results 
+
+      ''
+
+      # set list-colors to enable filename colorizing
+      "zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}"
+
+      ''
+
+      # Bring up a selection menu to pick the completion if the list is long.
+      # If selecting one isn't supported by the completion engine, just bring up the menu for scrolling instead.
+      # 'interactive' means the search pattern can be interactively adjusted in real time to update the results
       # in the list rather than needing a keypress to do it first.
-      # TODO: Investigate fzf-tab instead
       zstyle ':completion:*' menu select=long-list interactive
 
       # cache results so the same thing again is faster
@@ -297,31 +234,59 @@
       zstyle ':completion:*:approximate:*' original yes
       # add descriptions to the grouping of approximate matches in green
       #zstyle ':completion:*:approximate:*:*:*:descriptions' format '%F{green}-- $d --%f'
+      ''
 
+      ''
+      # WARNING: fzf-tab ignores FZF_DEFAULT_OPTS by default, and even if told to follow them it overrides some of the FZF settings anyway.
+      #          See: https://github.com/Aloxaf/fzf-tab/blob/master/lib/-ftb-fzf#L90 for what it overrides.
+
+      # General fzf-tab settings
+
+      # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+      zstyle ':completion:*' menu no
+
+      # fzf-tab does not follow FZF_DEFAULT_OPTS by default because some options break it.
+      # to set custom flags
+      #    zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+      # to follow FZF_DEFAULT_OPTS anyway. May lead to unexpected behavior, see https://github.com/Aloxaf/fzf-tab/issues/455 (about --tmux)
+      zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+      # the keybindings in this value, even if left as default, override the FZF_DEFAULT_OPTS even when use-fzf-default-opts is 'yes', so we have to set it again
+      zstyle ':fzf-tab:*' fzf-bindings '${lib.concatStringsSep "," config.custom.fzf.keybindings}'
+      # the switch-group (2 keys) are separate and overridden from the bindings option.
+      #zstyle ':fzf-tab:*' switch-group 'F1' 'F2'
+      ''
+
+      ''
       # Completion settings for specific applicatons
 
       zstyle ':completion:*:*:kill:*' verbose yes
-    '';
+
+      # disable sort when completing git checkout 
+      zstyle ':completion:*:git-checkout:*' sort false
+      ''
+
+      ''
+      # Completion settings w/ fzf-tab for specific commands.
+      # The preview command is passed to FZF, who then runs it in a bash shell, not a zsh shell, so we can't reference any functions we wrote.
+      # Just define them inline here instead.
+
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}'
+      zstyle ':fzf-tab:complete:pushd:*' fzf-preview '${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}'
+
+      zstyle ':fzf-tab:complete:ls:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "N/A"; fi'
+      zstyle ':fzf-tab:complete:eza:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "N/A"; fi'
+      ''
+
+      ''
+      ####################################################
+      # End initExtraBeforeCompInit
+      ####################################################
+      ''
+    ];
 
     # this gets disregarded when prezto is enabled because prezto already includes loading compinit.
     completionInit = lib.concatLines [
-      # allow more advanced completion functionality
-      "autoload -U +X -z compinit && compinit"
-      # allow bash-style completion to be parsed as well
-      "autoload -U +X bashcompinit && bashcompinit"
-    ];
-
-    initExtraFirst = lib.concatLines [
-      ''
-      ####################################################
-      # Start initExtraFirst
-      ####################################################
-      ''
-
-      # these don't have home-manager options to enable
-      # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
-      "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
-
       # create a cache folder for zsh
       "mkdir -p ~/.cache/zsh"
 
@@ -333,12 +298,6 @@
       # allow bash-style completion to be parsed as well
       # Make sure to specify a location to write the compdump so it can be cached instead of regeenrated on each load
       "autoload -U +X bashcompinit && bashcompinit -d ~/.cache/zsh/zbashcompdump"
-
-      ''
-      ####################################################
-      # End initExtraFirst
-      ####################################################
-      ''
     ];
 
     initExtra = lib.concatLines [
@@ -346,7 +305,21 @@
       # home-manager puts sessionVariables in a file only sourced during login.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
       unset __HM_SESS_VARS_SOURCED
-      . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      ''
+
+      # We can't use the regular programs.zsh.autosuggest because that requires us to set enable=true
+      # which will source the plugin before any custom plugins. fzf-tab has to be sourced before it,
+      # and can only be a custom plugin, so we have to manually replicate the autosuggest setup.
+      ''
+      ##############################################################
+      # Autosuggest plugin settings
+      ##############################################################
+
+      # normal default
+      ZSH_AUTOSUGGEST_STRATEGY=(history)
+      # custom colors
+      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
       ''
 
       ''
@@ -370,6 +343,8 @@
 
       # mark tracking functions so we can properly handle
       # Ctrl+g as unset mark if the mark is set
+      # WARNING: The space after the name and before the '()' is CRITICAL for zle widgets.  It will cause all kinds of weird
+      #          behaviors if you forget it and declare the function a widget with 'zle -n <name>'.
       ''
       unset-mark-command () {
           zle set-mark-command -n -1
@@ -467,41 +442,63 @@
       # To figure out what the keybinding is, press Ctrl+v and then the key combo you're interested in.
       # That will print shell key code you need to provide to bindkey.
 
+      # 'menuselect' and 'listscroll' key maps are present only if the complist widget is enabled by setting zstyle 'menu' to interactive.
+      # Comment them out otherwise.
+
       # Alt+u
       ''bindkey '^[u' beginning-of-line''
+      #''bindkey -M menuselect '^[u' beginning-of-line''
       # Home
       ''bindkey '\e[H' beginning-of-line''
       ''bindkey '\eOH' beginning-of-line''
+      #''bindkey -M menuselect '\e[H' beginning-of-line''
+      #''bindkey -M menuselect '\eOH' beginning-of-line''
 
       # Alt+o
       ''bindkey '^[o' end-of-line''
+      #''bindkey -M menuselect '^[o' end-of-line''
+
       # End
       ''bindkey '\e[F' end-of-line''
       ''bindkey '\eOF' end-of-line''
+      #''bindkey -M menuselect '\e[F' end-of-line''
+      #''bindkey -M menuselect '\eOF' end-of-line''
 
       # Alt+l
       ''bindkey '^[l' forward-char''
+      #''bindkey -M menuselect '^[l' forward-char''
       # Right
       ''bindkey '\e[C' forward-char''
       ''bindkey '\eOC' forward-char''
+      #''bindkey -M menuselect '\e[C' forward-char''
+      #''bindkey -M menuselect '\eOC' forward-char''
 
       # Alt+Shift+l
       ''bindkey '^[L' emacs-forward-word''
+      #''bindkey -M menuselect '^[L' emacs-forward-word''
       # Ctrl+Right
       ''bindkey '^[[1;5C' emacs-forward-word''
       ''bindkey '\e[1;5C' emacs-forward-word''
+      #''bindkey -M menuselect '^[[1;5C' emacs-forward-word''
+      #''bindkey -M menuselect '\e[1;5C' emacs-forward-word''
 
       # Alt+l
       ''bindkey '^[j' backward-char''
+      #''bindkey -M menuselect '^[j' backward-char''
       # Left
       ''bindkey '\e[D' backward-char''
       ''bindkey '\eOD' backward-char''
+      #''bindkey -M menuselect '\e[D' backward-char''
+      #''bindkey -M menuselect '\eOD' backward-char''
 
       # Alt+Shift+j
       ''bindkey '^[J' emacs-backward-word''
+      #''bindkey -M menuselect '^[J' emacs-backward-word''
       # Ctrl+Left
       ''bindkey '^[[1;5D' emacs-backward-word''
       ''bindkey '\e[1;5D' emacs-backward-word''
+      #''bindkey -M menuselect '^[[1;5D' emacs-backward-word''
+      #''bindkey -M menuselect '\e[1;5D' emacs-backward-word''
 
       # Ctrl+Backspace
       ''bindkey '^^?' backward-kill-word''
@@ -523,22 +520,36 @@
 
       # Alt+space
       ''bindkey '^[ ' set-mark-command-tracked''
+      #''bindkey -M menuselect '^[ ' accept-and-hold''
 
       # Ctrl+space
       # conflicts with tmux copy-mode set mark
       #''bindkey '^ ' set-mark-command-tracked''
+      ##''bindkey -M menuselect '^ ' accept-and-hold''
 
       # Ctrl+@ (what's actually sent on Ctrl+space)
       ''bindkey '^@' set-mark-command-tracked''
+      #''bindkey -M menuselect '^@' accept-and-hold''
 
       # Ctrl+Shift+-
       ''bindkey '^_' undo''
+      #''bindkey -M menuselect '^_' undo''
 
       # Ctrl+x Ctrl+x
       ''bindkey '^x^x' exchange-point-and-mark''
 
       # Ctrl+g
       ''bindkey '^g' unset-or-break-mark-command''
+
+      # WARNING: Tab is interpreted the same as Ctrl+Shift+i
+
+      # Alt+i
+      #''bindkey -M menuselect '^[i' up-line-or-history''
+      #''bindkey -M listscroll '^[i' up-line-or-history''
+
+      # Alt+k
+      #''bindkey -M menuselect '^[k' down-line-or-history''
+      #''bindkey -M listscroll '^[k' down-line-or-history''
 
       ''
       ##############################################################

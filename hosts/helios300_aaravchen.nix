@@ -1,7 +1,7 @@
 { pkgs, misc, lib, config, options, ... }: {
 
   imports = [
-    ../identities/personal.nix # set the default git identity
+    ../identities/personal.nix # set the default identities and secrets
     #../modules/fedora_shells.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
@@ -17,8 +17,8 @@
     # Host Specific username and home location
     home.username = "aaravchen";
     home.homeDirectory = "/home/${config.home.username}";
-    # where to find the git SSH key on this system
-    programs.git.signing.key = "${config.home.homeDirectory}/.ssh/github_ed25519";
+
+    # see below in the custom.git_keys for the git SSH key setup
 
     #####################################
     # Extra host-unique non-configurable packages
@@ -33,6 +33,12 @@
     custom = {
       # the GPU doesn't always appear as available because it uses NvidiaPrime, so disable this to avoid build errors when it's not visible.
       nixGL.gpu = false;
+
+      # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
+      # populate the git-identity config keys.  Personal is mandatory.
+      git_keys = {
+        personal = "${config.home.homeDirectory}/.ssh/github_ed25519";
+      };
 
       # The primary distrobox config file
       distrobox.hooks = {

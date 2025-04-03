@@ -1,3 +1,4 @@
 [config]
+# Make sure you also add these files to the .gitattributes file manually before you commit them!
 "identities/ks.nix" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
 "identities/personal.nix" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICnXa5Rrvr/A2wqt/4En+mKFLV/5+3WDGIV0nOx2INWE"]
