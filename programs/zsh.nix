@@ -271,11 +271,11 @@
       # The preview command is passed to FZF, who then runs it in a bash shell, not a zsh shell, so we can't reference any functions we wrote.
       # Just define them inline here instead.
 
-      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}'
-      zstyle ':fzf-tab:complete:pushd:*' fzf-preview '${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}'
+      # default all tools to use fzf-preview that tries files or folders
+      zstyle ':fzf-tab:complete:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "Unknown"; fi'
 
-      zstyle ':fzf-tab:complete:ls:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "N/A"; fi'
-      zstyle ':fzf-tab:complete:eza:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "N/A"; fi'
+      # add any other specific preview types
+      #zstyle ':fzf-tab:complete:toolname:*' fzf-preview 'my_cmd $realpath'
       ''
 
       ''
