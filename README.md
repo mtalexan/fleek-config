@@ -133,3 +133,4 @@ To add files, you need to (**BEFORE** committing the file):
 - Register the file with git-agecrypt (`git agecrypt config add -r $(cat ~/.ssh/my_public_key.pub | awk '{print $1 $2 }') -p path/to/file_to_add`)
 - Manually add the file to the `.gitattributes` so it gets smudged (see existing examples)
 
+**WARNING:** If `git-agecrypt` gets updated, you must re-run `git agecrypt init` in your clone again to update the absolute path to the binary it will use!
