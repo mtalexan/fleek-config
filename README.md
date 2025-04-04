@@ -41,9 +41,9 @@ Note: You have to set the environment variable to the install command if you hav
 
 Note: Items marked with `(A)` only need to be performed if you need agecrypt identity decryption for your new host.
 
-1. (A) Temporarily install `git agecrypt` with low priority: `nix profile install --priority=7 'nixpkgs#git-agecrypt'`
-2. Clone the repo into `~/.local/share/fleek`
-3. Configure your git config `user.name` and `user.email` if you haven't already
+1. Clone the repo into `~/.local/share/fleek`
+2. Configure your git config `user.name` and `user.email` if you haven't already (these will be overridden later)
+3. (A) Temporarily install `git agecrypt` with low priority using the version specified in the repo's `flake.lock`: `nix profile install --priority=7 --inputs-from . 'nixpkgs#git-agecrypt'`
 4. (A) Enable agecrypt in the cloned repo: `git agecrypt init`
 5. (A) Configure the private identity key(s) to use for agecrypt (repeat for all keys): `git agecrypt config add -i ~/.ssh/identity_private_key` 
 6. (A) Confirm everything is setup properly for agecrypt: `git agecrypt status`
@@ -54,12 +54,13 @@ git rm --cached -r .
 git reset
 git checkout .
 ```
-8. Edit the `flake.nix`, copy-paste and then edit one of the blocks that config for the username and hostname.
-9. Copy then edit one of the hostname config files, naming the new one `$(hostname)_$(id -u).nix`
-10. Commit the changes so they're found by the nix build
-11. Manually run the update: `bin/fleek-apply --impure`
-12. Push the git commit
-13. Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
+1. Edit the `flake.nix`, copy-paste and edit one of the blocks that supply the config for a username and hostname, setting your `$(hostname)` and `$(id -u)`.
+2. Copy then edit one of the `hosts/` config files, naming the new one `$(hostname)_$(id -u).nix`
+3. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc
+4. Stage all files, especially the new ones, so they can be found by the `nix build`
+5. Manually run the update (`--impure` is requried to use the new files without commiting them yet): `bin/fleek-apply --impure`
+6. Commit all changes and push them to GitHub
+7. Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
 
 ### Apply Changes
 
@@ -70,18 +71,33 @@ fleek-impure
 ~/.local/share/fleek/bin/fleek-apply --impure
 ```
 
+The `--impure` is required if you want uncommited (but tracked) files from this git repo to be included in the build.  
+The `--impure` is also required if you use nixGL (i.e. `custom.nixGL.gpu = true` in your `hosts/*.nix` for the current system).
+
+
+The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake defintiion is used, and UNFREE packages are allowed.
+
 ### Update Everything
 
 ```shell
 fleeks
 nix flake update
 ```
-This updates the flake.lock with knowledge of the newer tools.
+This updates the flake.lock with knowledge of the newer tools.  Changes still need to be applied with `fleek-apply`.  
 
-Then apply the changes.
-
+Recommended to test the changes before commiting and pushing them, by doing `fleek-apply --impure` and verifying everything works as expected first.
 
 ### Secrets
+
+Secrets come in two forms:
+- Secrets used by tools installed by home-manager
+- Secret `*.nix` files in the git repo that define the home-manager config
+
+Shared secret keys used by tools home-manager installs might not be convenient to configure manually on every system. These make use of `agenix` to manually add them as encrypted `*.age` files in the `secrets/` folder.
+
+Files that are part of the home-manager config itselt (*.nix files), but that contain private or secret values make use of `git-agecrypt` to automatically store them in git as encrypted `*.age` files, but make them visible unencrypted in your working directory.
+
+#### Agenix Secrets
 
 Secret files that don't need to be sourced by the home-manager config itself should be encrypted with (r)agenix in the `secrets/` folder. Unlike `identities/` files that have to be on-disk-readable at home-manager build time and therefore must use the very brittle `git-agecrypt`, secrets that are only needed at run time (like passwords or encryption keys) should use `agenix`/`ragenix`.  
 
@@ -91,3 +107,29 @@ Secret files that don't need to be sourced by the home-manager config itself sho
 4. Use the `config.age.secrets."secretname".path` as a file path to the decrypted path.
 
 See [programs/agenix.nix](./programs/agenix.nix) for a detailed breakdown of these steps.
+
+#### Git-Agecrypt Secrets
+
+These secrets are hard to verify they're doing what you want becuse they make use of git smudge filters to do automatic encryption/decryption of the files whenever the working copy of the repo is updated.  Effectively it automatically encrypts the files when you commit them, storing only the encrypted copy in the repo, and automatically decrypts them when you check the files out into your working copy.  
+
+We make use of SSH keys as the asymmetric encryption/decryption keys for convenience. It's worth mentioning that you don't have to be able to decrypt every secret on every system, it will only decrypt the ones you have the keys for.
+
+You must:
+- Have `git-agecrypt` installed.
+- Have one/some of the SSH key-pairs for the files to be decrypted
+- Have run `git agecrypt init` in the cloned repo at least once
+- Have configured one/some "identities" in the repo, pointing to the SSH private key(s) to use for decryption (`git agecrypt config add -i ~/.ssh/my_private_key`)
+
+
+If you cloned the repo before doing these things, you'll need to force git to re-smudge all the files (this will wipe out any local changes!):
+```shell
+git rm --cached -r .
+# this command should end up listing only the files that were decrypted by agecrypt
+git reset
+git checkout .
+```
+
+To add files, you need to (**BEFORE** committing the file):
+- Register the file with git-agecrypt (`git agecrypt config add -r $(cat ~/.ssh/my_public_key.pub | awk '{print $1 $2 }') -p path/to/file_to_add`)
+- Manually add the file to the `.gitattributes` so it gets smudged (see existing examples)
+

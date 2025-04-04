@@ -1,8 +1,11 @@
 { pkgs, misc, lib, config, options, ... }: {
 
-   home.packages = [
+  imports = [
     # allow encrypting individual files in a repo using an SSH key-pair. See https://github.com/vlaci/git-agecrypt
-    pkgs.git-agecrypt
+    ./git-agecrypt.nix
+  ];
+
+   home.packages = [
     #automatically handled by programs.git.lfs.enable=true below
     #pkgs.git-lfs
   ];

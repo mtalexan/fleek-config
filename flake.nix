@@ -11,13 +11,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Overlays
+    # adds the emacs packages from ELPA/MELPA
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    # adds nixgl tools so we can use the GPU
     nixgl = {
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # custom forked and patched version of git-agecrypt that fixes a major bug. Needs to be used as an overlay
+    git-agecrypt = {
+      url = "github:mtalexan/git-agecrypt/fixed";
+      #inputs.nixpkgs.follows = "nixpkgs"; # do NOT set this, it causes the one from the nixpkgs store to be used instead of this overlay
+    };
+
+    # secrets encryption tool for secrets handled during home-manager switch rather than git commit/checkout (like git-agecrypt)
     agenix = {
       # includes undocumented support for a home-manager module that despite using systemd is able to be used on a non-NixOS system.
       # See https://github.com/ryantm/agenix/issues/50#issuecomment-1633579069
@@ -28,11 +37,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, git-agecrypt, agenix, ... }@inputs: let
     myOverlaysSet = [
       # extra overlays need to be added here
       inputs.emacs-overlay.overlay
       inputs.nixgl.overlay
+      inputs.git-agecrypt.overlay
       # Make all Golang applications build with CGO=1.
       # Golang tried to re-invent the world but got lazy when it came to libc, having only a half-assed
       # libc replacement.  Anything low-level, like querying a username from a UID, is implemented how you
