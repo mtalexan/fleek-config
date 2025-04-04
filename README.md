@@ -43,24 +43,26 @@ Note: Items marked with `(A)` only need to be performed if you need agecrypt ide
 
 1. Clone the repo into `~/.local/share/fleek`
 2. Configure your git config `user.name` and `user.email` if you haven't already (these will be overridden later)
-3. (A) Temporarily install `git agecrypt` with low priority using the version specified in the repo's `flake.lock`: `nix profile install --priority=7 --inputs-from . 'nixpkgs#git-agecrypt'`
+3. (A) Temporarily install `git agecrypt` with low priority using the repo's flake version: `nix profile install --priority 7 --inputs-from . 'git-agecrypt'`
 4. (A) Enable agecrypt in the cloned repo: `git agecrypt init`
-5. (A) Configure the private identity key(s) to use for agecrypt (repeat for all keys): `git agecrypt config add -i ~/.ssh/identity_private_key` 
-6. (A) Confirm everything is setup properly for agecrypt: `git agecrypt status`
-7. (A) Re-run the git smudge and textconv filtering on the files so the identities are decrypted
+5. (A) Add the SSH encryption key for the `identities/*.nix` files to your `~/.ssh` (manual out-of-band process, make sure the private key has `600` permissions)
+6. (A) Configure the private identity key(s) to use for agecrypt (repeat for all keys): `git agecrypt config add -i ~/.ssh/identity_private_key` 
+7. (A) Confirm everything is setup properly for agecrypt: `git agecrypt status`
+8. (A) Re-run the git smudge and textconv filtering on the files so the identities are decrypted
 ```shell
 git rm --cached -r .
-# this command should end up listing only the files that were decrypted by agecrypt
+# this next command should end up listing only the files that were decrypted by agecrypt
 git reset
 git checkout .
 ```
-1. Edit the `flake.nix`, copy-paste and edit one of the blocks that supply the config for a username and hostname, setting your `$(hostname)` and `$(id -u)`.
-2. Copy then edit one of the `hosts/` config files, naming the new one `$(hostname)_$(id -u).nix`
-3. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc
-4. Stage all files, especially the new ones, so they can be found by the `nix build`
-5. Manually run the update (`--impure` is requried to use the new files without commiting them yet): `bin/fleek-apply --impure`
-6. Commit all changes and push them to GitHub
-7. Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
+9. Edit the `flake.nix`, copy-paste and edit one of the blocks that supply the config for a username and hostname, setting your `$(hostname)` and `$(id -u)`.
+10. Copy then edit one of the `hosts/` config files, naming the new one `$(hostname)_$(id -u).nix`
+11. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc
+12. Stage all files, especially the new ones, so they can be found by the `nix build`
+13. (A) Manually run the update, which will fail the first time because it doesn't see the decrypted files for some reason: `bin/fleek-apply --impure`
+14. Manually run the update (`--impure` is requried to use the new files without commiting them yet): `bin/fleek-apply --impure`
+15. Commit all changes and push them to GitHub
+16. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
 
 ### Apply Changes
 
