@@ -18,6 +18,23 @@
     manpages.enable = true;
   };
 
+  # A user systemd service to automatically clean up old home-manager generations.
+  # It can also do nix store automatic cleanup as well
+  services.home-manager.autoExpire = {
+    enable = true;
+    # how often to run the cleanup check
+    frequency = "weekly"; # see systemd.timer syntax
+    # how old of generations to clean up
+    timestamp = "-7 days"; # see 'date' tool '-d' syntax
+    store = {
+      cleanup = true;
+      # Extra options to the nix-collect-garbage command.
+      # It already cleans up unreachable packages, but using --delete-old or --delete-older-than= can
+      # also have it cleanup unused profiles as well.
+      options = "--delete-old";
+    };
+  };
+
   # silent, notify, or show
   news.display = "notify";
 

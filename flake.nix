@@ -11,6 +11,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # a wrapper for nix-index, which indexes the files provided by the nixpkgs, that
+    # includes a pre-generated database.
+    nix-index-database ={
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # adds the emacs packages from ELPA/MELPA
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
@@ -37,7 +44,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, git-agecrypt, agenix, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nix-index-database, git-agecrypt, agenix, ... }@inputs: let
     myOverlaysSet = [
       # extra overlays need to be added here
       inputs.emacs-overlay.overlay
@@ -82,7 +89,8 @@
         system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
        };
       modules = [
-        agenix.homeManagerModules.default # Include agenix module
+        nix-index-database.hmModules.nix-index # Include teh nix-index-database home-manager module
+        agenix.homeManagerModules.default # Include agenix home-manager module
         ./home.nix
         ./user.nix
         (hostFileFromName configName) # Dynamically generate the host file path
