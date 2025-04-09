@@ -1,4 +1,10 @@
-{ pkgs, misc, lib, config, ... }: {
+{ pkgs, misc, lib, config, ... }:
+let
+  # Folder within ${config.home.homeDirectory} kitty puts the remote control sockets.
+  # Used to match the listenSocketDir in the kitty-save-session module. to the 'listen_on' setting in kitty.conf,
+  # and to create a home.file.".../.keep" file to ensure it always exists.
+  kittyListenSocketDir = ".cache/kitty/sessions";
+in {
   # A terminal multiplexer with lots of features, but also high speed.
 
   # Kitty uses FiraCode as the default, but seems to use other random fonts sometimes too, so you have to make sure those are installed as well.
@@ -55,6 +61,20 @@
     };
   };
 
+  # configuring custom-modules/kitty-save-session.nix
+  services.kitty-save-session = {
+    enable = true;
+    interval = "5m"; # systemd-timer format
+    # Directory kitty is configured to put the remote control socket files in.
+    listenSockDir = "${config.home.homeDirectory}/${kittyListenSocketDir}"; 
+    # directory to save the kitty session files so they can be restored
+    saveDir = "${config.home.homeDirectory}/.cache/kitty/saved-sessions"; 
+  };
+
+  # Make sure the socket folder always exists, or we won't be able to open kitty.
+  # Do this by creating a blank .keep file in it.
+  home.file."${kittyListenSocketDir}/.keep".text = "";
+
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
     # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
@@ -97,7 +117,7 @@
 
     # while it's possible to set keybindings, environment, and settings as Nix structures, the translation into the output file
     # can reorder (environment and keybindings), and isn't always a direct 1-to-1 (keybindings, settings).
-    # The theme, shellIntegration.mode, and font however have other uses that make them useful still however.
+    # The theme, shellIntegration.mode, and font however have other uses that make them useful still.
     # So use extraConfig to directly set most of the .conf file to avoid all the translation issues.
 
     extraConfig = lib.concatLines [
@@ -1545,7 +1565,8 @@
         #: See rc_custom_auth <https://sw.kovidgoyal.net/kitty/remote-
         #: control/#rc-custom-auth> for details.
 
-        # allow_remote_control yes
+        # this is needed for most interesting tools.
+        allow_remote_control yes
 
         #: Allow other programs to control kitty. If you turn this on, other
         #: programs can control all aspects of kitty, including sending text
@@ -1574,7 +1595,7 @@
         #: yes
         #:     Remote control requests are always accepted.
 
-        # listen_on none
+        listen_on unix:${config.home.homeDirectory}/${kittyListenSocketDir}/{kitty_pid}.sock
 
         #: Listen to the specified socket for remote control connections. Note
         #: that this will apply to all kitty instances. It can be overridden

@@ -25,6 +25,7 @@ Settings are split up into `modules/` and `programs/` that each of specific conf
 
 There are also top-level folders:
 - `bin/` this folder is added to the PATH so in-place scripts and tools can be put in here.
+- `custom-modules/` contains manually written home-manager modules that don't exist upstream
 - `home_files/` directory structures of files that may need to be copied into place in the home folder by home-manager config settings. 
 - `sd_scripts/` for the `sd` tool, the help text files and the scripts in the directories implicitly define a set of subcommands that are part of the path and include auto-complete.
 - `secrets/` are the (r)agenix secrets for decryption with `agenix` home-manager module.

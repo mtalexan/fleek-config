@@ -23,6 +23,11 @@
   # WARNING: If any of these have options defined the import 
   imports = [
     ./nixgl.nix
+
+  # custom modules that define new home-manager configurations
+    ../custom-modules/kitty-save-session.nix
+
+  # configurations
     ../programs/bash.nix
     ../programs/zsh.nix
 
