@@ -33,7 +33,7 @@
     #####################################
     custom = {
       # the GPU doesn't always appear as available because it uses NvidiaPrime, so disable this to avoid build errors when it's not visible.
-      nixGL.gpu = true;
+      nixGL.gpu = false;
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
