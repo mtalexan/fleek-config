@@ -6,6 +6,7 @@
     ../programs/distrobox.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
+    ../programs/vscode.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -23,8 +24,9 @@
     # Extra host-unique non-configurable packages
     #####################################
 
-    #home.packages = [
-    #];
+    home.packages = [
+      pkgs.rename
+    ];
 
     #####################################
     # Custom defined config settings
@@ -39,9 +41,12 @@
       };
 
       # The primary distrobox config file
-      distrobox.hooks = {
-        enable = true;
-        docker_sock = true;
+      distrobox = {
+        hooks = {
+          enable = true;
+          docker_sock = true;
+        };
+        config.engine = "docker";
       };
     };
 
