@@ -32,13 +32,20 @@
 
     signing = {
       # key gets set per identity/*.nix file
-      format = "ssh";
+      # WARNING: Do NOT set this. It sets gpg.ssh.program to point to a nix ssh-keygen tool that doesn't use Linux PAM
+      #          and breaks when the UID isn't in the /etc/passwd file (it does exactly what you're not allowed to do).
+      #          Instead we set gpg.format below directly.
+      #format = "ssh";
+
+      # sets tag.gpgsign and commit.gpgsign to true
       signByDefault = true;
     };
 
     extraConfig = {
       feature.manyFiles = true;
-      gpg.format = "ssh"; # probably not needed with the signing.format now anymore, but better to be safe
+
+      # set signing settings directly, let it use the default gpg program.
+      gpg.format = "ssh";
 
       # diff and merge settings to use delta for diffs.
       diff = {

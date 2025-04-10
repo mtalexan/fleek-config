@@ -13,12 +13,12 @@ in {
       type = types.package;
       default = pkgs.stdenv.mkDerivation {
         name = "kitty-save-session";
-        version = "bc656f2682758f1ba85dd106ddcb10b1e0a63b7c"; # match to the rev
+        version = "b4ec1876d615baee8dd0a41dabd04bb08d877816"; # match to the rev
         src = pkgs.fetchFromGitHub {
           owner = "mtalexan";
           repo = "kitty-save-session";
-          rev = "bc656f2682758f1ba85dd106ddcb10b1e0a63b7c"; # current head of 'main' branch
-          sha256 = "sha256-CUCtjrDgVDY0hOF6h+y3dVk/CzX9dpsJOzWivOHc07k=";
+          rev = "b4ec1876d615baee8dd0a41dabd04bb08d877816"; # current head of 'main' branch
+          sha256 = "sha256-oqZoTIBqQbPDXbNWm+7jFiFO+tTEsl6IT9hM4dNeRVQ=";
           #sha256 = lib.fakeSha256;
         };
 
