@@ -6,7 +6,6 @@
     ../programs/distrobox.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
-    ../programs/vscode.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -46,7 +45,6 @@
           enable = true;
           docker_sock = true;
         };
-        config.engine = "docker";
       };
     };
 

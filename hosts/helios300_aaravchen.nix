@@ -6,7 +6,7 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/distrobox.nix
-    # vscode is provided by the system
+    ../programs/vscode.nix
   ];
 
 
@@ -24,15 +24,16 @@
     # Extra host-unique non-configurable packages
     #####################################
 
-    #home.packages = [
-    #];
+    home.packages = [
+      pkgs.rename
+    ];
 
     #####################################
     # Custom defined config settings
     #####################################
     custom = {
       # the GPU doesn't always appear as available because it uses NvidiaPrime, so disable this to avoid build errors when it's not visible.
-      nixGL.gpu = false;
+      nixGL.gpu = true;
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
@@ -41,9 +42,12 @@
       };
 
       # The primary distrobox config file
-      distrobox.hooks = {
-        enable = true;
-        docker_sock = true;
+      distrobox = {
+        hooks = {
+          enable = true;
+          docker_sock = true;
+        };
+        config.engine = "docker";
       };
     };
 
