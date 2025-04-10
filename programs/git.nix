@@ -30,9 +30,15 @@
     # with 'git maintenance register' from within the repo
     maintenance.enable = true;
 
+    signing = {
+      # key gets set per identity/*.nix file
+      format = "ssh";
+      signByDefault = true;
+    };
+
     extraConfig = {
       feature.manyFiles = true;
-      gpg.format = "ssh";
+      gpg.format = "ssh"; # probably not needed with the signing.format now anymore, but better to be safe
 
       # diff and merge settings to use delta for diffs.
       diff = {
