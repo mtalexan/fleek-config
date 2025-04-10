@@ -32,7 +32,7 @@
     # Custom defined config settings
     #####################################
     custom = {
-      nixGL.gpu = false;
+      nixGL.gpu = true;
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
