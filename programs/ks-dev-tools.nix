@@ -1,21 +1,29 @@
 { pkgs, misc, lib, config, ... }: {
-  config = {
-    # add the extra DevTools path, just in case it's there.  If it is, it's relevant
-    home.sessionPath = [
-      "$HOME/DevTools/bin"
-    ];
+  # Normally the instructions are to source the ${HOME}/DevTools/.bashrc file, but
+  # all that does is add the ${HOME}/DevTools/bin folder to the PATH, and
+  # source all the bash-completion files in ${HOME}/DevTools/bash-completion.d.
 
-    programs.bash.initExtra = lib.concatLines [
-      ''
-      if [ -e "$HOME/DevTools/.bashrc" ] ; then
-        source $HOME/DevTools/.bashrc
-      fi
-      ''
-    ];
+  # add the extra DevTools path, just in case it's there.  If it is, it's relevant
+  home.sessionPath = [
+    "$HOME/DevTools/bin"
+  ];
 
-    #programs.zsh.initExtra = lib.concatLines [
-    #];
-  };
+  programs.bash.initExtra = ''
+    if [[ -d $HOME/DevTools/bash-completion.d ]]; then
+      for f in "$HOME/DevTools/bash-completion.d/"* ; do
+        source "$f"
+      done
+    fi
+  '';
+
+  # we have bash-completion compatiblity enabled in zsh, so source the bash-completion files too
+  programs.zsh.initExtra = ''
+    if [[ -d $HOME/DevTools/bash-completion.d ]]; then
+      for f in "$HOME/DevTools/bash-completion.d/"* ; do
+        source "$f"
+      done
+    fi
+  '';
 }
 
 # vim: ts=2:sw=2:expandtab
