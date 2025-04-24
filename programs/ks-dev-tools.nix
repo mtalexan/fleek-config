@@ -16,14 +16,15 @@
     fi
   '';
 
-  # we have bash-completion compatiblity enabled in zsh, so source the bash-completion files too
-  programs.zsh.initExtra = ''
+  # We have bash-completion compatiblity enabled in zsh, so source the bash-completion files too.
+  # default priority, formerly initExtra
+  programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 ''
     if [[ -d $HOME/DevTools/bash-completion.d ]]; then
       for f in "$HOME/DevTools/bash-completion.d/"* ; do
         source "$f"
       done
     fi
-  '';
+  '')];
 }
 
 # vim: ts=2:sw=2:expandtab

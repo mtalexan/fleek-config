@@ -1,9 +1,7 @@
 { pkgs, misc, lib, config, ... }:
 let
-  # Folder within ${config.home.homeDirectory} kitty puts the remote control sockets.
-  # Used to match the listenSocketDir in the kitty-save-session module. to the 'listen_on' setting in kitty.conf,
-  # and to create a home.file.".../.keep" file to ensure it always exists.
-  kittyListenSocketDir = ".cache/kitty/sessions";
+  # This is the socket pattern we use for the listen_on in the kitty.conf, but also need to set as part of the kitty-save-session.
+  kittyListenSocketPattern = "@kitty-{kitty_pid}.sock";
 in {
   # A terminal multiplexer with lots of features, but also high speed.
 
@@ -23,7 +21,8 @@ in {
   # manual kitty integration into the shell is required since automatic injection doesn't work for subshells, multiplexers, etc
   # See https://sw.kovidgoyal.net/kitty/shell-integration/#manual-shell-integration
   programs.zsh = {
-    initExtra = ''
+    # default priority is 1000, formerly initExtra
+    initContent = lib.mkMerge [ (lib.mkOrder 1000 ''
       # if kitty is installed, we're running in a kitty window, and shell integration isn't already enabled
       if test -n "${pkgs.kitty}" -a -n "$KITTY_WINDOW_ID" -a -z "$KITTY_SHELL_INTEGRATION"; then
           echo "loading kitty integration"
@@ -35,7 +34,7 @@ in {
 
       # alias plain ssh to force set the TERM if it would otherwise be set to kitty
       [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
-    '';
+    '')];
     # Assume we will be using kitty as the primary terminal, so alias ssh
     shellAliases = {
       # trailing space to allow for tab completion. Explicitly enable shell integration with the target.
@@ -66,14 +65,11 @@ in {
     enable = true;
     interval = "5m"; # systemd-timer format
     # Directory kitty is configured to put the remote control socket files in.
-    listenSockDir = "${config.home.homeDirectory}/${kittyListenSocketDir}"; 
-    # directory to save the kitty session files so they can be restored
-    saveDir = "${config.home.homeDirectory}/.cache/kitty/saved-sessions"; 
+    listenSockPattern = "${kittyListenSocketPattern}";
+    # Use a datagram socket. This gets 
+    saveDir = "${config.home.homeDirectory}/.cache/kitty/saved-sessions";
+    notifyOnFailure = true;
   };
-
-  # Make sure the socket folder always exists, or we won't be able to open kitty.
-  # Do this by creating a blank .keep file in it.
-  home.file."${kittyListenSocketDir}/.keep".text = "";
 
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
@@ -1595,7 +1591,7 @@ in {
         #: yes
         #:     Remote control requests are always accepted.
 
-        listen_on unix:${config.home.homeDirectory}/${kittyListenSocketDir}/{kitty_pid}.sock
+        listen_on unix:${kittyListenSocketPattern}
 
         #: Listen to the specified socket for remote control connections. Note
         #: that this will apply to all kitty instances. It can be overridden

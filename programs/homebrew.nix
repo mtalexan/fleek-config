@@ -7,21 +7,20 @@
   # WARNING: homebrew should be installed before this is included in the custom.nix file
   #          https://brew.sh/
 
-  programs.zsh = {
-    initExtraBeforeCompInit = lib.concatLines [
-      ''
-      # put 'brew' in the path
-      if [ -e /home/linuxbrew/.linuxbrew/bin/brew ] ; then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  # Priority order 550 is formerly initExtraBeforeCompInit
+  programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 550 (lib.concatLines [
+    ''
+    # put 'brew' in the path
+    if [ -e /home/linuxbrew/.linuxbrew/bin/brew ] ; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-        # add completions from brew-installed tools
-        if command -v brew &>/dev/null; then
-          FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
-        fi
+      # add completions from brew-installed tools
+      if command -v brew &>/dev/null; then
+        FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
       fi
-      ''
-    ];
-  };
+    fi
+    ''
+  ]))];
 
   programs.bash.initExtra = lib.concatLines [
     ''

@@ -16,7 +16,7 @@
     enable = true;
     enableCompletion = true;
     # We need autosuggest included after fzf-tab custom plugin, so we can't use this block.
-    # Instead we add zsh-autosuggest to the custom plugins list, and manually define our settings in the initExtra.
+    # Instead we add zsh-autosuggest to the custom plugins list, and manually define our settings in the initContent/initExtra.
     #autosuggestion =  {
     #  enable = true;
     #  # pink foreground for completion, with underline
@@ -133,159 +133,6 @@
       ''SHELL=$(command -v zsh)''
     ];
 
-    initExtraFirst = lib.concatLines [
-      ''
-      ####################################################
-      # Start initExtraFirst
-      ####################################################
-      ''
-
-      # these don't have home-manager options to enable
-      # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
-      "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
-
-      ''
-      ####################################################
-      # End initExtraFirst
-      ####################################################
-      ''
-    ];
-
-    initExtraBeforeCompInit = lib.concatLines [
-      ''
-      ####################################################
-      # Start initExtraBeforeCompInit
-      ####################################################
-      ''
-
-      ''
-      # See man zshcompsys for details on completers and their options
-
-      # Ordered list of completion engines to try. 
-      # Do NOT use _expand which does partial expansion.
-      # _approximate lists possible corrections only if nothing else matches
-      # _manuals adds manpage completion
-      # _complete is the standard completion function where functions are installed/defined explicitly
-      # _ignored re-adds results from other completers that were removed by 'ignore-patterns' option
-      # _list waits on results and calls completion a second time without modifying the current word/line. This ensures the _match and _approximate results actually
-      #       only get used if nothing else matches.
-      # _match Treats the original as a glob match pattern against possible completion candidates.
-      # _prefix ignores any suffix after the cursor and tries again. Can set a different list of completers to use when trying again.
-      #         Usually needs COMPLETE_IN_WORD set to be useful.
-      # WARNING: _expand, _expand_alias, and _correct are intended for point-expansion/replacement and not for real use here
-      zstyle ':completion:*' completer _list _complete _ignored _manuals _approximate
-      # expand unambiguous prefixes from any/all completers
-      zstyle ':completion:*' expand _prefix
-      # highlight the first ambiguous character in the match. If set 'yes' the default is used, otherwise a color or style may be
-      zstyle ':completion:*' show-ambiguity yes
-
-      # set the style to use when _approximate offers corrections
-      zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-      # warnings and messages format from the completion engine
-      zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-      zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-
-      ''
-
-      # set list-colors to enable filename colorizing
-      "zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}"
-
-      ''
-
-      # Bring up a selection menu to pick the completion if the list is long.
-      # If selecting one isn't supported by the completion engine, just bring up the menu for scrolling instead.
-      # 'interactive' means the search pattern can be interactively adjusted in real time to update the results
-      # in the list rather than needing a keypress to do it first.
-      zstyle ':completion:*' menu select=long-list interactive
-
-      # cache results so the same thing again is faster
-      zstyle ':completion:*' use-cache yes
-
-      # _match
-
-      # Insert prefixes that are shared by all possible matches.
-      zstyle ':completion:*:match:*' insert-unambiguous true
-
-      # _ignored
-
-      # if there's only 1 match from the _ignored completer, show it with the original but don't insert it
-      zstyle ':completion:*:ignored:*' single-ignored show
-
-      # _expand
-
-      # disable expansion of nested subshell commands into their resulting values when using the _expand completer
-      zstyle ':completion:*:expand:*' substitute no
-
-      # _manuals
-
-      # when completing man pages, set the specific page (e.g. 'man 5') using the suffix syntax (e.g. 'man <cmd>.5') so it can be easily changed if there's multiple section matches
-      # alternative: insert the 'man 5 ' as a prefix when that's the only match
-      zstyle ':completion:*:manuals.*' insert-sections suffix
-
-      # _approximate
-      # The name of the completer is set to approximate-N where N is the number of corrections, but just 'approximate' applies to all of them
-
-      # limit the number of corrections allowed. It iterates thru the number of possible corrections, and stops if any matches are found, this sets the upper bound.
-      zstyle ':completion:*:approximate:*' max-errors 4
-      # Insert prefixes that are shared by all possible matches.
-      zstyle ':completion:*:approximate:*' insert-unambiguous true
-      # Always show the unmodified original as an option, even if there's only 1 unambiguous match. Without this set, 
-      # the original is already an option, but only if there's no single unambiguous match.
-      zstyle ':completion:*:approximate:*' original yes
-      # add descriptions to the grouping of approximate matches in green
-      #zstyle ':completion:*:approximate:*:*:*:descriptions' format '%F{green}-- $d --%f'
-      ''
-
-      ''
-      # WARNING: fzf-tab ignores FZF_DEFAULT_OPTS by default, and even if told to follow them it overrides some of the FZF settings anyway.
-      #          See: https://github.com/Aloxaf/fzf-tab/blob/master/lib/-ftb-fzf#L90 for what it overrides.
-
-      # General fzf-tab settings
-
-      # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-      zstyle ':completion:*' menu no
-
-      # fzf-tab does not follow FZF_DEFAULT_OPTS by default because some options break it.
-      # to set custom flags
-      #    zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
-      # to follow FZF_DEFAULT_OPTS anyway. May lead to unexpected behavior, see https://github.com/Aloxaf/fzf-tab/issues/455 (about --tmux)
-      zstyle ':fzf-tab:*' use-fzf-default-opts yes
-
-      # the keybindings in this value, even if left as default, override the FZF_DEFAULT_OPTS even when use-fzf-default-opts is 'yes', so we have to set it again
-      zstyle ':fzf-tab:*' fzf-bindings '${lib.concatStringsSep "," config.custom.fzf.keybindings}'
-      # the switch-group (2 keys) are separate and overridden from the bindings option.
-      #zstyle ':fzf-tab:*' switch-group 'F1' 'F2'
-      ''
-
-      ''
-      # Completion settings for specific applicatons
-
-      zstyle ':completion:*:*:kill:*' verbose yes
-
-      # disable sort when completing git checkout 
-      zstyle ':completion:*:git-checkout:*' sort false
-      ''
-
-      ''
-      # Completion settings w/ fzf-tab for specific commands.
-      # The preview command is passed to FZF, who then runs it in a bash shell, not a zsh shell, so we can't reference any functions we wrote.
-      # Just define them inline here instead.
-
-      # default all tools to use fzf-preview that tries files or folders
-      zstyle ':fzf-tab:complete:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "Unknown"; fi'
-
-      # add any other specific preview types
-      #zstyle ':fzf-tab:complete:toolname:*' fzf-preview 'my_cmd $realpath'
-      ''
-
-      ''
-      ####################################################
-      # End initExtraBeforeCompInit
-      ####################################################
-      ''
-    ];
-
-    # this gets disregarded when prezto is enabled because prezto already includes loading compinit.
     completionInit = lib.concatLines [
       # create a cache folder for zsh
       "mkdir -p ~/.cache/zsh"
@@ -294,269 +141,436 @@
       # but we customized it, so we have to add it manually.
       # Make sure to specify a location to write the compdump so it can be cached instead of regeenrated on each load
       "autoload -U +X -z compinit && compinit -d ~/.cache/zsh/zcompdump"
-      # Need to enable the bash completion options very early so the functions are defined when sourcing completion scripts in the initExtra
+      # Need to enable the bash completion options very early so the functions are defined when sourcing completion scripts in the initContent/initExtra
       # allow bash-style completion to be parsed as well
       # Make sure to specify a location to write the compdump so it can be cached instead of regeenrated on each load
       "autoload -U +X bashcompinit && bashcompinit -d ~/.cache/zsh/zbashcompdump"
     ];
 
-    initExtra = lib.concatLines [
-      ''
-      # home-manager puts sessionVariables in a file only sourced during login.
-      # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
-      unset __HM_SESS_VARS_SOURCED
-      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-      ''
+    # this is virtually all content that goes in the .zshrc file. Since order is important, the lib.mkOrder functions need to be used
+    # to the order the snipets are configured in.
+    # The main checkpoints are:
+    #   500 (equivalent to mkBefore): Early initialization (formerly initExtraFirst)
+    #   550 Before the completion initialization (formerly initExtraBeforeCompInit)
+    #   1000 (default) (formerly initExtra)
+    #   1500 (equivlaent to mkAfter): Last to run
+    # WARNING: Despite what the documentation all says, you CAN call mkMerge here without losing the priority order of the values
+    #          because of how home-manager does attribute merging. The list passed to the mkMerge call gets merged by home-manager
+    #          with the other lists or values before the lib.mkMerge itself actually resolves it all into a single string.
+    initContent = lib.mkMerge [
+      # Formerly initExtraFirst
+      (lib.mkOrder 500 ( lib.concatLines [
+        ''
+        ####################################################
+        # Start initExtraFirst
+        ####################################################
+        ''
 
-      # We can't use the regular programs.zsh.autosuggest because that requires us to set enable=true
-      # which will source the plugin before any custom plugins. fzf-tab has to be sourced before it,
-      # and can only be a custom plugin, so we have to manually replicate the autosuggest setup.
-      ''
-      ##############################################################
-      # Autosuggest plugin settings
-      ##############################################################
+        # these don't have home-manager options to enable
+        # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
+        "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
 
-      # normal default
-      ZSH_AUTOSUGGEST_STRATEGY=(history)
-      # custom colors
-      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
-      ''
+        ''
+        ####################################################
+        # End initExtraFirst
+        ####################################################
+        ''
+      ]))
 
-      ''
-      ##############################################################
-      # Auto notify plugin settings
-      ##############################################################
+      # Formerly initExtraBeforeCompInit
+      (lib.mkOrder 550 (lib.concatLines [
+        ''
+        ####################################################
+        # Start initExtraBeforeCompInit
+        ####################################################
+        ''
 
-      # only notify if it took longer than 10 seconds (default=10)
-      AUTO_NOTIFY_THRESHOLD=30
-      # make the notifications expire after 10 seconds (default=8)
-      AUTO_NOTIFY_EXPIRE_TIME=10000
-      # extra commands to ignore (see variable for defaults)
-      AUTO_NOTIFY_IGNORE+=("bat" "code" "kitty")
-      ''
+        ''
+        # See man zshcompsys for details on completers and their options
 
-      ''
-      ##############################################################
-      # Start custom keymap
-      ##############################################################
-      ''
+        # Ordered list of completion engines to try. 
+        # Do NOT use _expand which does partial expansion.
+        # _approximate lists possible corrections only if nothing else matches
+        # _manuals adds manpage completion
+        # _complete is the standard completion function where functions are installed/defined explicitly
+        # _ignored re-adds results from other completers that were removed by 'ignore-patterns' option
+        # _list waits on results and calls completion a second time without modifying the current word/line. This ensures the _match and _approximate results actually
+        #       only get used if nothing else matches.
+        # _match Treats the original as a glob match pattern against possible completion candidates.
+        # _prefix ignores any suffix after the cursor and tries again. Can set a different list of completers to use when trying again.
+        #         Usually needs COMPLETE_IN_WORD set to be useful.
+        # WARNING: _expand, _expand_alias, and _correct are intended for point-expansion/replacement and not for real use here
+        zstyle ':completion:*' completer _list _complete _ignored _manuals _approximate
+        # expand unambiguous prefixes from any/all completers
+        zstyle ':completion:*' expand _prefix
+        # highlight the first ambiguous character in the match. If set 'yes' the default is used, otherwise a color or style may be
+        zstyle ':completion:*' show-ambiguity yes
 
-      # mark tracking functions so we can properly handle
-      # Ctrl+g as unset mark if the mark is set
-      # WARNING: The space after the name and before the '()' is CRITICAL for zle widgets.  It will cause all kinds of weird
-      #          behaviors if you forget it and declare the function a widget with 'zle -n <name>'.
-      ''
-      unset-mark-command () {
-          zle set-mark-command -n -1
-          MARKISSET=false
-      }
-      zle -N unset-mark-command
-      ''
+        # set the style to use when _approximate offers corrections
+        zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+        # warnings and messages format from the completion engine
+        zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+        zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 
-      ''
-      copy-region-as-kill-unmark () {
+        ''
+
+        # set list-colors to enable filename colorizing
+        "zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}"
+
+        ''
+
+        # Bring up a selection menu to pick the completion if the list is long.
+        # If selecting one isn't supported by the completion engine, just bring up the menu for scrolling instead.
+        # 'interactive' means the search pattern can be interactively adjusted in real time to update the results
+        # in the list rather than needing a keypress to do it first.
+        zstyle ':completion:*' menu select=long-list interactive
+
+        # cache results so the same thing again is faster
+        zstyle ':completion:*' use-cache yes
+
+        # _match
+
+        # Insert prefixes that are shared by all possible matches.
+        zstyle ':completion:*:match:*' insert-unambiguous true
+
+        # _ignored
+
+        # if there's only 1 match from the _ignored completer, show it with the original but don't insert it
+        zstyle ':completion:*:ignored:*' single-ignored show
+
+        # _expand
+
+        # disable expansion of nested subshell commands into their resulting values when using the _expand completer
+        zstyle ':completion:*:expand:*' substitute no
+
+        # _manuals
+
+        # when completing man pages, set the specific page (e.g. 'man 5') using the suffix syntax (e.g. 'man <cmd>.5') so it can be easily changed if there's multiple section matches
+        # alternative: insert the 'man 5 ' as a prefix when that's the only match
+        zstyle ':completion:*:manuals.*' insert-sections suffix
+
+        # _approximate
+        # The name of the completer is set to approximate-N where N is the number of corrections, but just 'approximate' applies to all of them
+
+        # limit the number of corrections allowed. It iterates thru the number of possible corrections, and stops if any matches are found, this sets the upper bound.
+        zstyle ':completion:*:approximate:*' max-errors 4
+        # Insert prefixes that are shared by all possible matches.
+        zstyle ':completion:*:approximate:*' insert-unambiguous true
+        # Always show the unmodified original as an option, even if there's only 1 unambiguous match. Without this set, 
+        # the original is already an option, but only if there's no single unambiguous match.
+        zstyle ':completion:*:approximate:*' original yes
+        # add descriptions to the grouping of approximate matches in green
+        #zstyle ':completion:*:approximate:*:*:*:descriptions' format '%F{green}-- $d --%f'
+        ''
+
+        ''
+        # WARNING: fzf-tab ignores FZF_DEFAULT_OPTS by default, and even if told to follow them it overrides some of the FZF settings anyway.
+        #          See: https://github.com/Aloxaf/fzf-tab/blob/master/lib/-ftb-fzf#L90 for what it overrides.
+
+        # General fzf-tab settings
+
+        # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+        zstyle ':completion:*' menu no
+
+        # fzf-tab does not follow FZF_DEFAULT_OPTS by default because some options break it.
+        # to set custom flags
+        #    zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+        # to follow FZF_DEFAULT_OPTS anyway. May lead to unexpected behavior, see https://github.com/Aloxaf/fzf-tab/issues/455 (about --tmux)
+        zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+        # the keybindings in this value, even if left as default, override the FZF_DEFAULT_OPTS even when use-fzf-default-opts is 'yes', so we have to set it again
+        zstyle ':fzf-tab:*' fzf-bindings '${lib.concatStringsSep "," config.custom.fzf.keybindings}'
+        # the switch-group (2 keys) are separate and overridden from the bindings option.
+        #zstyle ':fzf-tab:*' switch-group 'F1' 'F2'
+        ''
+
+        ''
+        # Completion settings for specific applicatons
+
+        zstyle ':completion:*:*:kill:*' verbose yes
+
+        # disable sort when completing git checkout 
+        zstyle ':completion:*:git-checkout:*' sort false
+        ''
+
+        ''
+        # Completion settings w/ fzf-tab for specific commands.
+        # The preview command is passed to FZF, who then runs it in a bash shell, not a zsh shell, so we can't reference any functions we wrote.
+        # Just define them inline here instead.
+
+        # default all tools to use fzf-preview that tries files or folders
+        zstyle ':fzf-tab:complete:*' fzf-preview 'if [ -d $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.dirPreviewCmd}; elif [ -f $realpath ] ; then ${builtins.replaceStrings ["{}"] ["$realpath"] config.custom.fzf.filePreviewCmd}; else echo "Unknown"; fi'
+
+        # add any other specific preview types
+        #zstyle ':fzf-tab:complete:toolname:*' fzf-preview 'my_cmd $realpath'
+        ''
+
+        ''
+        ####################################################
+        # End initExtraBeforeCompInit
+        ####################################################
+        ''
+      ]))
+
+      # Formerly initExtra
+      (lib.mkOrder 1000 (lib.concatLines [
+        ''
+        # home-manager puts sessionVariables in a file only sourced during login.
+        # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
+        unset __HM_SESS_VARS_SOURCED
+        source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        ''
+
+        # We can't use the regular programs.zsh.autosuggest because that requires us to set enable=true
+        # which will source the plugin before any custom plugins. fzf-tab has to be sourced before it,
+        # and can only be a custom plugin, so we have to manually replicate the autosuggest setup.
+        ''
+        ##############################################################
+        # Autosuggest plugin settings
+        ##############################################################
+
+        # normal default
+        ZSH_AUTOSUGGEST_STRATEGY=(history)
+        # custom colors
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=underline"
+        ''
+
+        ''
+        ##############################################################
+        # Auto notify plugin settings
+        ##############################################################
+
+        # only notify if it took longer than 10 seconds (default=10)
+        AUTO_NOTIFY_THRESHOLD=30
+        # make the notifications expire after 10 seconds (default=8)
+        AUTO_NOTIFY_EXPIRE_TIME=10000
+        # extra commands to ignore (see variable for defaults)
+        AUTO_NOTIFY_IGNORE+=("bat" "code" "kitty")
+        ''
+
+        ''
+        ##############################################################
+        # Start custom keymap
+        ##############################################################
+        ''
+
+        # mark tracking functions so we can properly handle
+        # Ctrl+g as unset mark if the mark is set
+        # WARNING: The space after the name and before the '()' is CRITICAL for zle widgets.  It will cause all kinds of weird
+        #          behaviors if you forget it and declare the function a widget with 'zle -n <name>'.
+        ''
+        unset-mark-command () {
+            zle set-mark-command -n -1
+            MARKISSET=false
+        }
+        zle -N unset-mark-command
+        ''
+
+        ''
+        copy-region-as-kill-unmark () {
+            zle copy-region-as-kill
+            # also unset mark like it should
+            zle unset-mark-command
+            MARKISSET=false
+        }
+        zle -N copy-region-as-kill-unmark
+        ''
+
+        ''
+        kill-region-tracked () {
+            zle kill-region
+            MARKISSET=false
+        }
+        zle -N kill-region-tracked
+        ''
+
+        ''
+        set-mark-command-tracked () {
+            zle set-mark-command
+            MARKISSET=true
+        }
+        zle -N set-mark-command-tracked
+        ''
+
+        # uses MARKISSET from other commands
+        ''
+        unset-or-break-mark-command () {
+            if $${MARKISSET} >/dev/null
+            then
+                zle unset-mark-command
+            else
+                zle send-break
+            fi
+        }
+        zle -N unset-or-break-mark-command
+        ''
+
+        # define functions to share clipboard with X11
+        # breaks yank-pop
+
+        # uses CUTBUFFER from x-yank
+        ''
+        x-backward-kill-word () {
+          zle backward-kill-word
+          print -rn $${CUTBUFFER} | xsel -i
+        }
+        zle -N x-backward-kill-word
+        ''
+
+        # uses CUTBUFFER from x-yank
+        ''
+        x-copy-region-as-kill () {
           zle copy-region-as-kill
-          # also unset mark like it should
-          zle unset-mark-command
-          MARKISSET=false
-      }
-      zle -N copy-region-as-kill-unmark
-      ''
+          print -rn $${CUTBUFFER} | xsel -i
+        }
+        zle -N x-copy-region-as-kill
+        ''
 
-      ''
-      kill-region-tracked () {
+        # uses CUTBUFFER from x-yank
+        ''
+        x-kill-region () {
           zle kill-region
-          MARKISSET=false
-      }
-      zle -N kill-region-tracked
-      ''
+          print -rn $${CUTBUFFER} | xsel -i
+        }
+        zle -N x-kill-region
+        ''
 
-      ''
-      set-mark-command-tracked () {
-          zle set-mark-command
-          MARKISSET=true
-      }
-      zle -N set-mark-command-tracked
-      ''
+        ''
+        x-yank () {
+          CUTBUFFER=$(xsel -o </dev/null)
+          zle yank
+        }
+        zle -N x-yank
+        ''
 
-      # uses MARKISSET from other commands
-      ''
-      unset-or-break-mark-command () {
-          if $${MARKISSET} >/dev/null
-          then
-              zle unset-mark-command
-          else
-              zle send-break
-          fi
-      }
-      zle -N unset-or-break-mark-command
-      ''
+        # uses CUTBUFFER from x-yank
+        ''
+        x-kill-line () {
+          zle kill-line
+          print -rn $${CUTBUFFER} | xsel -i
+        }
+        zle -N x-kill-line
+        ''
 
-      # define functions to share clipboard with X11
-      # breaks yank-pop
+        # To figure out what the keybinding is, press Ctrl+v and then the key combo you're interested in.
+        # That will print shell key code you need to provide to bindkey.
 
-      # uses CUTBUFFER from x-yank
-      ''
-      x-backward-kill-word () {
-        zle backward-kill-word
-        print -rn $${CUTBUFFER} | xsel -i
-      }
-      zle -N x-backward-kill-word
-      ''
+        # 'menuselect' and 'listscroll' key maps are present only if the complist widget is enabled by setting zstyle 'menu' to interactive.
+        # Comment them out otherwise.
 
-      # uses CUTBUFFER from x-yank
-      ''
-      x-copy-region-as-kill () {
-        zle copy-region-as-kill
-        print -rn $${CUTBUFFER} | xsel -i
-      }
-      zle -N x-copy-region-as-kill
-      ''
+        # Alt+u
+        ''bindkey '^[u' beginning-of-line''
+        #''bindkey -M menuselect '^[u' beginning-of-line''
+        # Home
+        ''bindkey '\e[H' beginning-of-line''
+        ''bindkey '\eOH' beginning-of-line''
+        #''bindkey -M menuselect '\e[H' beginning-of-line''
+        #''bindkey -M menuselect '\eOH' beginning-of-line''
 
-      # uses CUTBUFFER from x-yank
-      ''
-      x-kill-region () {
-        zle kill-region
-        print -rn $${CUTBUFFER} | xsel -i
-      }
-      zle -N x-kill-region
-      ''
+        # Alt+o
+        ''bindkey '^[o' end-of-line''
+        #''bindkey -M menuselect '^[o' end-of-line''
 
-      ''
-      x-yank () {
-        CUTBUFFER=$(xsel -o </dev/null)
-        zle yank
-      }
-      zle -N x-yank
-      ''
+        # End
+        ''bindkey '\e[F' end-of-line''
+        ''bindkey '\eOF' end-of-line''
+        #''bindkey -M menuselect '\e[F' end-of-line''
+        #''bindkey -M menuselect '\eOF' end-of-line''
 
-      # uses CUTBUFFER from x-yank
-      ''
-      x-kill-line () {
-        zle kill-line
-        print -rn $${CUTBUFFER} | xsel -i
-      }
-      zle -N x-kill-line
-      ''
+        # Alt+l
+        ''bindkey '^[l' forward-char''
+        #''bindkey -M menuselect '^[l' forward-char''
+        # Right
+        ''bindkey '\e[C' forward-char''
+        ''bindkey '\eOC' forward-char''
+        #''bindkey -M menuselect '\e[C' forward-char''
+        #''bindkey -M menuselect '\eOC' forward-char''
 
-      # To figure out what the keybinding is, press Ctrl+v and then the key combo you're interested in.
-      # That will print shell key code you need to provide to bindkey.
+        # Alt+Shift+l
+        ''bindkey '^[L' emacs-forward-word''
+        #''bindkey -M menuselect '^[L' emacs-forward-word''
+        # Ctrl+Right
+        ''bindkey '^[[1;5C' emacs-forward-word''
+        ''bindkey '\e[1;5C' emacs-forward-word''
+        #''bindkey -M menuselect '^[[1;5C' emacs-forward-word''
+        #''bindkey -M menuselect '\e[1;5C' emacs-forward-word''
 
-      # 'menuselect' and 'listscroll' key maps are present only if the complist widget is enabled by setting zstyle 'menu' to interactive.
-      # Comment them out otherwise.
+        # Alt+l
+        ''bindkey '^[j' backward-char''
+        #''bindkey -M menuselect '^[j' backward-char''
+        # Left
+        ''bindkey '\e[D' backward-char''
+        ''bindkey '\eOD' backward-char''
+        #''bindkey -M menuselect '\e[D' backward-char''
+        #''bindkey -M menuselect '\eOD' backward-char''
 
-      # Alt+u
-      ''bindkey '^[u' beginning-of-line''
-      #''bindkey -M menuselect '^[u' beginning-of-line''
-      # Home
-      ''bindkey '\e[H' beginning-of-line''
-      ''bindkey '\eOH' beginning-of-line''
-      #''bindkey -M menuselect '\e[H' beginning-of-line''
-      #''bindkey -M menuselect '\eOH' beginning-of-line''
+        # Alt+Shift+j
+        ''bindkey '^[J' emacs-backward-word''
+        #''bindkey -M menuselect '^[J' emacs-backward-word''
+        # Ctrl+Left
+        ''bindkey '^[[1;5D' emacs-backward-word''
+        ''bindkey '\e[1;5D' emacs-backward-word''
+        #''bindkey -M menuselect '^[[1;5D' emacs-backward-word''
+        #''bindkey -M menuselect '\e[1;5D' emacs-backward-word''
 
-      # Alt+o
-      ''bindkey '^[o' end-of-line''
-      #''bindkey -M menuselect '^[o' end-of-line''
+        # Ctrl+Backspace
+        ''bindkey '^^?' backward-kill-word''
 
-      # End
-      ''bindkey '\e[F' end-of-line''
-      ''bindkey '\eOF' end-of-line''
-      #''bindkey -M menuselect '\e[F' end-of-line''
-      #''bindkey -M menuselect '\eOF' end-of-line''
+        # Ctrl+w
+        ''bindkey '^w' kill-region-tracked''
 
-      # Alt+l
-      ''bindkey '^[l' forward-char''
-      #''bindkey -M menuselect '^[l' forward-char''
-      # Right
-      ''bindkey '\e[C' forward-char''
-      ''bindkey '\eOC' forward-char''
-      #''bindkey -M menuselect '\e[C' forward-char''
-      #''bindkey -M menuselect '\eOC' forward-char''
+        # Alt+w
+        ''bindkey '^[w' copy-region-as-kill-unmark''
 
-      # Alt+Shift+l
-      ''bindkey '^[L' emacs-forward-word''
-      #''bindkey -M menuselect '^[L' emacs-forward-word''
-      # Ctrl+Right
-      ''bindkey '^[[1;5C' emacs-forward-word''
-      ''bindkey '\e[1;5C' emacs-forward-word''
-      #''bindkey -M menuselect '^[[1;5C' emacs-forward-word''
-      #''bindkey -M menuselect '\e[1;5C' emacs-forward-word''
+        # Ctrl+k
+        ''bindkey '^k' kill-line''
 
-      # Alt+l
-      ''bindkey '^[j' backward-char''
-      #''bindkey -M menuselect '^[j' backward-char''
-      # Left
-      ''bindkey '\e[D' backward-char''
-      ''bindkey '\eOD' backward-char''
-      #''bindkey -M menuselect '\e[D' backward-char''
-      #''bindkey -M menuselect '\eOD' backward-char''
+        # Ctrl+y
+        ''bindkey '^y' yank''
 
-      # Alt+Shift+j
-      ''bindkey '^[J' emacs-backward-word''
-      #''bindkey -M menuselect '^[J' emacs-backward-word''
-      # Ctrl+Left
-      ''bindkey '^[[1;5D' emacs-backward-word''
-      ''bindkey '\e[1;5D' emacs-backward-word''
-      #''bindkey -M menuselect '^[[1;5D' emacs-backward-word''
-      #''bindkey -M menuselect '\e[1;5D' emacs-backward-word''
+        # Alt+y
+        ''bindkey '^[y' yank-pop''
 
-      # Ctrl+Backspace
-      ''bindkey '^^?' backward-kill-word''
+        # Alt+space
+        ''bindkey '^[ ' set-mark-command-tracked''
+        #''bindkey -M menuselect '^[ ' accept-and-hold''
 
-      # Ctrl+w
-      ''bindkey '^w' kill-region-tracked''
+        # Ctrl+space
+        # conflicts with tmux copy-mode set mark
+        #''bindkey '^ ' set-mark-command-tracked''
+        ##''bindkey -M menuselect '^ ' accept-and-hold''
 
-      # Alt+w
-      ''bindkey '^[w' copy-region-as-kill-unmark''
+        # Ctrl+@ (what's actually sent on Ctrl+space)
+        ''bindkey '^@' set-mark-command-tracked''
+        #''bindkey -M menuselect '^@' accept-and-hold''
 
-      # Ctrl+k
-      ''bindkey '^k' kill-line''
+        # Ctrl+Shift+-
+        ''bindkey '^_' undo''
+        #''bindkey -M menuselect '^_' undo''
 
-      # Ctrl+y
-      ''bindkey '^y' yank''
+        # Ctrl+x Ctrl+x
+        ''bindkey '^x^x' exchange-point-and-mark''
 
-      # Alt+y
-      ''bindkey '^[y' yank-pop''
+        # Ctrl+g
+        ''bindkey '^g' unset-or-break-mark-command''
 
-      # Alt+space
-      ''bindkey '^[ ' set-mark-command-tracked''
-      #''bindkey -M menuselect '^[ ' accept-and-hold''
+        # WARNING: Tab is interpreted the same as Ctrl+Shift+i
 
-      # Ctrl+space
-      # conflicts with tmux copy-mode set mark
-      #''bindkey '^ ' set-mark-command-tracked''
-      ##''bindkey -M menuselect '^ ' accept-and-hold''
+        # Alt+i
+        #''bindkey -M menuselect '^[i' up-line-or-history''
+        #''bindkey -M listscroll '^[i' up-line-or-history''
 
-      # Ctrl+@ (what's actually sent on Ctrl+space)
-      ''bindkey '^@' set-mark-command-tracked''
-      #''bindkey -M menuselect '^@' accept-and-hold''
+        # Alt+k
+        #''bindkey -M menuselect '^[k' down-line-or-history''
+        #''bindkey -M listscroll '^[k' down-line-or-history''
 
-      # Ctrl+Shift+-
-      ''bindkey '^_' undo''
-      #''bindkey -M menuselect '^_' undo''
-
-      # Ctrl+x Ctrl+x
-      ''bindkey '^x^x' exchange-point-and-mark''
-
-      # Ctrl+g
-      ''bindkey '^g' unset-or-break-mark-command''
-
-      # WARNING: Tab is interpreted the same as Ctrl+Shift+i
-
-      # Alt+i
-      #''bindkey -M menuselect '^[i' up-line-or-history''
-      #''bindkey -M listscroll '^[i' up-line-or-history''
-
-      # Alt+k
-      #''bindkey -M menuselect '^[k' down-line-or-history''
-      #''bindkey -M listscroll '^[k' down-line-or-history''
-
-      ''
-      ##############################################################
-      # End custom keymap
-      ##############################################################
-      ''
-    ]; # end programs.zsh.initExtras = lib.concatLines
+        ''
+        ##############################################################
+        # End custom keymap
+        ##############################################################
+        ''
+      ]))
+    ]; # end programs.zsh.initContent
   }; # end programs.zsh
 }
 

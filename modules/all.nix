@@ -24,10 +24,11 @@
   imports = [
     ./nixgl.nix
 
-  # custom modules that define new home-manager configurations
-    ../custom-modules/kitty-save-session.nix
+  # Custom home-manager modules that aren't upstream.
+    # this one requires the kitty-save-session.nix overlay to be included in the flake.nix
+    ../custom-modules/home-manager/kitty-save-session.nix
 
-  # configurations
+  # Configurations
     ../programs/bash.nix
     ../programs/zsh.nix
 

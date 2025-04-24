@@ -128,7 +128,8 @@
       ];
     };
 
-    programs.zsh.initExtra = lib.concatLines [
+    # default priority, formerly initExtra
+    programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 (lib.concatLines [
       # the fzf-file-widget and fzf-cd-widget don't take arguments like the fzf-history-widget does.
       # The technique used by the fzf-history-widget is to add the '--query="$@"' to the FZF_DEFAULT_OPTS.
       # Since we have FZF_DEFAULT_OPTS defined and aren't relying on built-in defaults when FZF_DEFAULT_OPTS is blank,
@@ -154,7 +155,7 @@
         }
         zle -N fzf-cd-args-widget
       ''
-    ];
+    ]))];
 
     programs.bash.initExtra = lib.concatLines [
       # the fzf-file-widget and __fzf_cd__ don't take arguments like the __fzf_history__ does.

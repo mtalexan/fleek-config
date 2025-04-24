@@ -81,11 +81,12 @@
       "source $HOME/.config/extraterm/integrations/setup_extraterm_bash.sh"
     ])
   );
-  config.programs.zsh.initExtra = (lib.mkIf config.custom.extraterm.config.enableZshIntegration
+  # default priority, formerly initExtra
+  config.programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 (lib.mkIf config.custom.extraterm.config.enableZshIntegration
     (lib.concatLines [
       "source $HOME/.config/extraterm/integrations/setup_extraterm_zsh.zsh"
     ])
-  );
+  ))];
 }
 
 # vim: ts=2:sw=2:expandtab

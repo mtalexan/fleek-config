@@ -151,7 +151,9 @@
     }
     ''
   ];
-  programs.zsh.initExtra = lib.concatLines [
+
+  # default priority, formerly initExtra
+  programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 (lib.concatLines [
     # the default function for zf, we have to customize it if we want custom FZF functionality
     #''
     #function zf() {
@@ -192,7 +194,7 @@
       [ -n "$dir" ] && cd "$(echo "$dir" | sed -e 's@^\s*\S*\s*@@')"
     }
     ''
-  ];
+  ]))];
 }
 
 # vim: ts=2:sw=2:expandtab

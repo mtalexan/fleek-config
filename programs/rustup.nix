@@ -10,13 +10,14 @@
   #];
 
   # source the cargo install
-  programs.zsh.initExtra = lib.concatLines [
+  # default priority, formerly initExtra
+  programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 (lib.concatLines [
     ''
       if [ -e "$HOME/.cargo/env" ] ; then
         source $HOME/.cargo/env
       fi
     ''
-  ];
+  ]))];
 
   programs.bash.initExtra = lib.concatLines [
     ''
