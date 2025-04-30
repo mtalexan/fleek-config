@@ -139,3 +139,31 @@ To add files, you need to (**BEFORE** committing the file):
 - Manually add the file to the `.gitattributes` so it gets smudged (see existing examples)
 
 **WARNING:** If `git-agecrypt` gets updated, you must re-run `git agecrypt init` in your clone again to update the absolute path to the binary it will use!
+
+## Troubleshooting
+
+### Cannot connect to socket after ostree upgrade
+
+After an ostree update you can no longer communicate with the nix-daemon socket.
+```
+error: cannot connect to socket at '/nix/var/nix/daemon-socket/socket': Connection refused
+```
+And the service isn't even found
+```shell
+$ sudo systemctl status nix-daemon.service
+Unit nix-daemon.service could not be found.
+```
+
+This is an issue how SELinux file labels are improperly applied by ostree updates.  
+You just need to manually tell SELinux to re-apply the file labels to the nix store, then tell systemd to rescan for service unit files, and re-enable the nix service unit that is now properly labeled.
+
+```shell
+sudo restorecon -Rv /nix
+sudo systemctl daemon-reload
+sudo systemctl enable nix-daemon.service
+sudo systemctl start nix-daemon.service
+```
+
+It should now be working again.
+
+_Source: https://github.com/DeterminateSystems/nix-installer/issues/829_
