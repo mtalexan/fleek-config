@@ -21,13 +21,13 @@ The top level folder must contain the following files for it to work properly in
 
 Settings are split up into `modules/` and `programs/` that each of specific configs.  
 - `programs/` are organized by the specific program they configure, and are only included if either the top-level `user.nix` or the host-specific Nix file list it.  
-- `modules/` are alway included and may cover a range of settings in each module.
+- `modules/` are always included and may cover a range of settings in each module.
 
 There are also top-level folders:
 - `bin/` this folder is added to the PATH so in-place scripts and tools can be put in here.
 - `custom-modules/` contains manually written modules that don't exist upstream
   - `home-manager/` are home-manager configuration modules
-  - `overlay-packages` are for importing into the overlays defintiion of the flake, either add packages, override packages, or modify build definitions (implicitly overriding packages).
+  - `overlay-packages` are for importing into the overlays definition of the flake, either add packages, override packages, or modify build definitions (implicitly overriding packages).
 - `home_files/` directory structures of files that may need to be copied into place in the home folder by home-manager config settings. 
 - `sd_scripts/` for the `sd` tool, the help text files and the scripts in the directories implicitly define a set of subcommands that are part of the path and include auto-complete.
 - `secrets/` are the (r)agenix secrets for decryption with `agenix` home-manager module.
@@ -63,7 +63,7 @@ git checkout .
 11. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc
 12. Stage all files, especially the new ones, so they can be found by the `nix build`
 13. (A) Manually run the update, which will fail the first time because it doesn't see the decrypted files for some reason: `bin/fleek-apply --impure`
-14. Manually run the update (`--impure` is requried to use the new files without commiting them yet): `bin/fleek-apply --impure`
+14. Manually run the update (`--impure` is required to use the new files without committing them yet): `bin/fleek-apply --impure`
 15. Commit all changes and push them to GitHub
 16. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
 
@@ -76,11 +76,11 @@ fleek-impure
 ~/.local/share/fleek/bin/fleek-apply --impure
 ```
 
-The `--impure` is required if you want uncommited (but tracked) files from this git repo to be included in the build.  
+The `--impure` is required if you want uncommitted (but tracked) files from this git repo to be included in the build.  
 The `--impure` is also required if you use nixGL (i.e. `custom.nixGL.gpu = true` in your `hosts/*.nix` for the current system).
 
 
-The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake defintiion is used, and UNFREE packages are allowed.
+The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake definition is used, and UNFREE packages are allowed.
 
 ### Update Everything
 
@@ -90,7 +90,7 @@ nix flake update
 ```
 This updates the flake.lock with knowledge of the newer tools.  Changes still need to be applied with `fleek-apply`.  
 
-Recommended to test the changes before commiting and pushing them, by doing `fleek-apply --impure` and verifying everything works as expected first.
+Recommended to test the changes before committing and pushing them, by doing `fleek-apply --impure` and verifying everything works as expected first.
 
 ### Secrets
 
@@ -100,7 +100,7 @@ Secrets come in two forms:
 
 Shared secret keys used by tools home-manager installs might not be convenient to configure manually on every system. These make use of `agenix` to manually add them as encrypted `*.age` files in the `secrets/` folder.
 
-Files that are part of the home-manager config itselt (*.nix files), but that contain private or secret values make use of `git-agecrypt` to automatically store them in git as encrypted `*.age` files, but make them visible unencrypted in your working directory.
+Files that are part of the home-manager config itself (*.nix files), but that contain private or secret values make use of `git-agecrypt` to automatically store them in git as encrypted `*.age` files, but make them visible unencrypted in your working directory.
 
 #### Agenix Secrets
 
@@ -115,7 +115,7 @@ See [programs/agenix.nix](./programs/agenix.nix) for a detailed breakdown of the
 
 #### Git-Agecrypt Secrets
 
-These secrets are hard to verify they're doing what you want becuse they make use of git smudge filters to do automatic encryption/decryption of the files whenever the working copy of the repo is updated.  Effectively it automatically encrypts the files when you commit them, storing only the encrypted copy in the repo, and automatically decrypts them when you check the files out into your working copy.  
+These secrets are hard to verify they're doing what you want because they make use of git smudge filters to do automatic encryption/decryption of the files whenever the working copy of the repo is updated.  Effectively it automatically encrypts the files when you commit them, storing only the encrypted copy in the repo, and automatically decrypts them when you check the files out into your working copy.  
 
 We make use of SSH keys as the asymmetric encryption/decryption keys for convenience. It's worth mentioning that you don't have to be able to decrypt every secret on every system, it will only decrypt the ones you have the keys for.
 

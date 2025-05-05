@@ -81,7 +81,7 @@
           system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
         };
         modules = [
-          nix-index-database.hmModules.nix-index # Include teh nix-index-database home-manager module
+          nix-index-database.hmModules.nix-index # Include the nix-index-database home-manager module
           agenix.homeManagerModules.default # Include agenix home-manager module
           ./home.nix
           ./user.nix

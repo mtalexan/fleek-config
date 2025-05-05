@@ -18,7 +18,7 @@
   home.file.".emacs.d" = {
     enable = true;
     force = true;
-    # create a symlink for every individual file. This lets us keep other things in teh directory
+    # create a symlink for every individual file. This lets us keep other things in the directory
     # that weren't part of the repo itself, like a qelpa package cache.
     recursive = true;
     source = pkgs.fetchFromGitHub {

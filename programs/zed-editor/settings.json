@@ -1,0 +1,79 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "icon_theme": "Colored Zed Icons Theme Dark",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Ayu Dark"
+  },
+  "wrap_guides": [80],
+  "show_whitespaces": "boundary",
+  "indent_guides": {
+    "active_line_width": 2,
+    "coloring": "indent_aware"
+  },
+  "seed_search_query_from_cursor": "selection",
+  "use_smartcase_search": true,
+  "project_panel": {
+    "entry_spacing": "standard"
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "message_editor": {
+    // Whether to automatically replace emoji shortcodes with emoji characters.
+    // For example: typing `:wave:` gets replaced with `👋`.
+    "auto_replace_emoji_shortcode": false
+  },
+  "autosave": { "after_delay": { "milliseconds": 500 } },
+  "tabs": {
+    // Show git status colors in the editor tabs.
+    "git_status": true,
+    "file_icons": true,
+    "show_diagnostics": "errors"
+  },
+  "file_finder": {
+    "modal_max_width": "large"
+  },
+  "remove_trailing_whitespace_on_save": false,
+  "ensure_final_newline_on_save": false,
+  "format_on_save": "off",
+  "soft_wrap": "editor_width",
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+      //only show inline errors, others are shown other ways
+      "max_severity": "error"
+    }
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true
+    }
+  },
+  "journal": {
+    "hour_format": "hour24"
+  },
+  "terminal": {
+    "shell": {
+      "program": "zsh"
+    },
+    "line_height": "standard",
+    "detect_venv": "off",
+    // max allowed is 100_000
+    "max_scroll_history_lines": 100000
+  }
+}
