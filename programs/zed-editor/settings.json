@@ -12,13 +12,17 @@
     "diagnostics": false,
     "metrics": false
   },
-  "ui_font_size": 16,
-  "buffer_font_size": 16,
+  "ui_font_size": 15,
+  "buffer_font_size": 14,
+  "buffer_line_height": "standard",
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Ayu Dark"
+    "dark": "BlackFox"
   },
+  "pane_split_direction_horizontal": "down",
+  // The direction that you want to split panes horizontally. Defaults to "left"
+  "pane_split_direction_vertical": "right",
   "wrap_guides": [80],
   "show_whitespaces": "boundary",
   "indent_guides": {
