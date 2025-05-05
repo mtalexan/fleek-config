@@ -6,11 +6,12 @@
     ../programs/kitty.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
+    ../programs/zed-editor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well.
   # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
-  # for construcing absolute paths to files.
+  # for constructing absolute paths to files.
   config = rec {
     # Host-specific username and home location
     home.username = "mtalexander";
@@ -61,6 +62,14 @@
     #####################################
     # One-off Program Settings
     #####################################
+    home.sessionVariables = {
+      # Using Ubuntu KDE that's only X11 still. Set this so all the Wayland-capable
+      # tools/libs know to fall back to X11 support instead.
+      WAYLAND_DISPLAY = "";
+      # Vulkan tools are only available on this host with Wayland support, so Zed only works
+      # with GPUs on Wayland for this. Disable the warning pop up on each zed startup about this.
+      ZED_ALLOW_EMULATED_GPU = "1";
+    };
   };
 }
 
