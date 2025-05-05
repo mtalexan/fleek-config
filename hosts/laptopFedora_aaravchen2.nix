@@ -7,12 +7,12 @@
     ../programs/kitty.nix
     ../programs/distrobox.nix
     # vscode is provided by the system
-    ../programs/emacs.nix
+    ../programs/zed-editor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
-  # for construcing absolute paths to files.
+  # for constructing absolute paths to files.
   config = rec {
     # Host-specific username and home location
     home.username = "aaravchen2";
