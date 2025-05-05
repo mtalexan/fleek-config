@@ -4,10 +4,12 @@
   # we set it here. And that also prevents us from manually overriding some settings
   # temporarily.
 
-  # install the package, but don't use the home-manager setting yet
-  home.packages = [
-    pkgs.zed-editor
-  ];
+  # Don't use the nix version of Zed, it doesn't work properly.
+  # Install it manually from https://zed.dev/download
+  ## install the package, but don't use the home-manager setting yet
+  ##home.packages = [
+  ##  pkgs.zed-editor
+  ##];
 
   # Create a symlink ~/.config/zed that redirects (thru a few different symlinks) to the real on-disk path of the 
   # zed-editor folder next to this file.
