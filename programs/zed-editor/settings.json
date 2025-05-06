@@ -7,6 +7,13 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "features": {
+    // "Undocumented" setting for AI assistant to use for completion.
+    // Can be set to any one of the providers in `assistant: show configuration`, or
+    // `zed`. But ONLY 1 GITHUB AUTHORIZATION WORKS PER INSTALL.
+    // Between Github CoPilot and Zed GitHub, the second will just silently fail to function.
+    "edit_prediction_provider": "zed"
+  },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "telemetry": {
     "diagnostics": false,
@@ -92,6 +99,7 @@
     "basedpyright": true,
     "basher": true,
     "bitbake": true,
+    "blackfox": true,
     "blueprint": true,
     "caddyfile": true,
     "cargo-appraiser": true,
