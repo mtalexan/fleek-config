@@ -6,16 +6,226 @@
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
+  // global bindings
   {
-    "context": "Workspace",
     "bindings": {
-      // "shift shift": "file_finder::Toggle"
+      // unmap ctrl+q as quit without prompt. It's too easy to hit accidentally
+      "ctrl-q": null,
+    }
+  },
+  // next/previous find match alt-n alt-p
+  {
+    "context": "Editor",
+    "bindings": {
+      // next find match
+      "alt-n": "search::SelectNextMatch",
+      // previous find match
+      "alt-p": "search::SelectPreviousMatch"
+    }
+  },
+  //correct "VSCode bindings" for block select. 
+  // It incorrectly believes it's shift-alt-*, but it's actually ctrl-alt-shift-*
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-shift-up": "editor::AddSelectionAbove",
+      "ctrl-alt-shift-down": "editor::AddSelectionBelow"
+    }
+  },
+  //allow tab switcher to pick using just arrow keys
+  {
+    "context": "TabSwitcher",
+    "bindings": {
+      //normally ctrl-up/down, allow pure directional
+      "up": "menu::SelectPrevious",
+      "down": "menu::SelectNext"
+    }
+  },
+  // ergo mode bindings. 
+  //   alt-i=up, alt-k=down, alt-j=left, alt-l=right
+  //   alt-ctrl-j=ctrl-left, alt-ctrl-l=ctrl-right
+  //   alt-shift-i=pageup, alt-shift-k=pagedown
+  {
+    "context": "Picker || menu",
+    "bindings": {
+      //up
+      "alt-i": "menu::SelectPrevious",
+      //down
+      "alt-k": "menu::SelectNext"
     }
   },
   {
     "context": "Editor",
     "bindings": {
-      // "j k": ["workspace::SendKeystrokes", "escape"]
+      //up
+      "alt-i": "editor::MoveUp",
+      //home
+      "alt-u": ["editor::MoveToBeginningOfLine", { "stop_at_soft_wraps": true, "stop_at_indent": true }],
+      //down
+      "alt-k": "editor::MoveDown",
+      //end
+      "alt-o": ["editor::MoveToEndOfLine", { "stop_at_soft_wraps": true }],
+      //left
+      "alt-j": "editor::MoveLeft",
+      //right
+      "alt-l": "editor::MoveRight",
+      //ctrl-left
+      "alt-ctrl-j": "editor::MoveToPreviousWordStart",
+      //ctrl-right
+      "alt-ctrl-l": "editor::MoveToNextWordEnd"
+      }
+  },
+  {
+    "context": "ContextStrip",
+    "bindings": {
+      //up
+      "alt-i": "agent::FocusUp",
+      //right
+      "alt-l": "agent::FocusRight",
+      //left
+      "alt-j": "agent::FocusLeft",
+      //down
+      "alt-k": "agent::FocusDown"
+    }
+  },
+  {
+    "context": "ProjectSearchBar > Editor",
+    "bindings": {
+      //up
+      "alt-i": "search::PreviousHistoryQuery",
+      //down
+      "alt-k": "search::NextHistoryQuery"
+    }
+  },
+  //ignore ApplicationMenu directions, the alt-* has a special meaning there
+  {
+    //sublime
+    "context": "Editor",
+    "bindings": {
+      //left
+      "ctrl-alt-j": "editor::MoveToPreviousSubwordStart",
+      //right
+      "ctrl-alt-l": "editor::MoveToNextSubwordEnd",
+      //left
+      "ctrl-alt-shift-j": "editor::SelectToPreviousSubwordStart",
+      //right
+      "ctrl-alt-shift-l": "editor::SelectToNextSubwordEnd"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "bindings": {
+      //alt-l is already configured, make "right" do the same
+      "right": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction_conflict",
+    "bindings": {
+      //alt-l is already configured, make "right" do the same
+      "right": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && (showing_code_actions || showing_completions)",
+    "bindings": {
+      //up
+      "alt-i": "editor::ContextMenuPrevious",
+      //down
+      "alt-k": "editor::ContextMenuNext",
+      //pgup
+      "alt-shift-i": "editor::ContextMenuFirst",
+      //home
+      "home": "editor::ContextMenuFirst",
+      "alt-u": "editor::ContextMenuFirst",
+      //pgdown
+      "alt-shift-k": "editor::ContextMenuLast",
+      //end
+      "end": "editor::ContextMenuLast",
+      "alt-o": "editor::ContextMenuLast"
+    }
+  },
+  {
+    //zed global bindings that are now used in contexts
+    "bindings": {
+      "ctrl-alt-i": null
+    }
+  },
+  {
+    "context": "Prompt",
+    "bindings": {
+      //left
+      "alt-j": "menu::SelectPrevious",
+      //right
+      "alt-l": "menu::SelectNext"
+    }
+  },
+  {
+    "context": "OutlinePanel && not_editing",
+    "bindings": {
+      //left
+      "alt-j": "outline_panel::CollapseSelectedEntry",
+      //right
+      "alt-l": "outline_panel::ExpandSelectedEntry",
+      //shift-down
+      "shift-alt-k": "menu::SelectNext",
+      //shift-up
+      "shift-alt-i": "menu::SelectPrevious"
+    }
+  },
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      //left
+      "alt-j": "project_panel::CollapseSelectedEntry",
+      //right
+      "alt-l": "project_panel::ExpandSelectedEntry",
+      //shift-down
+      "shift-alt-k": "menu::SelectNext",
+      //shift-up
+      "shift-alt-i": "menu::SelectPrevious"
+    }
+  },
+  {
+    "context": "GitPanel && ChangesList",
+    "bindings": {
+      //up
+      "alt-i": "menu::SelectPrevious",
+      //down
+      "alt-k": "menu::SelectNext"
+    }
+  },
+  {
+    "context": "GitCommit > Editor",
+    "bindings": {
+      //normally set to generate a commit message, but it conflicts with ergo keys
+      "alt-l": null
+    }
+  },
+  {
+    "context": "GitPanel > Editor",
+    "bindings": {
+      //normally set to generate a commit message, but it conflicts with ergo keys
+      "alt-l": null
+    }
+  },
+  {
+    "context": "Picker > Editor",
+    "bindings": {
+      //up
+      "alt-i": "menu::SelectPrevious",
+      //down
+      "alt-k": "menu::SelectNext"
+    }
+  },
+  {
+    "context": "TabSwitcher",
+    "bindings": {
+      //normally ctrl-up/down, we allowed pure directional too
+      //up
+      "alt-i": "menu::SelectPrevious",
+      //down
+      "alt-k": "menu::SelectNext"
     }
   }
 ]
