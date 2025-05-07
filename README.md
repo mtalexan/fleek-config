@@ -167,3 +167,31 @@ sudo systemctl start nix-daemon.service
 It should now be working again.
 
 _Source: https://github.com/DeterminateSystems/nix-installer/issues/829_
+
+### Builder for `luajit` or other neovim plugin dependency failed with exit code 2
+
+When you get an error that looks like this:
+
+```
+error: builder for '/nix/store/xjcycf4fb9d4k31yz9nqgi9a61n3mqxb-luajit2.1-fzf-lua-0.0.1848-1.drv' failed with exit code 2;
+       last 10 log lines:
+       >   24|
+       >   25|
+       >   26|
+       >   27|
+       >   28|
+       >   Traceback:
+       >     /build/source/lua/fzf-lua/test/helpers.lua:254
+       >     tests/file/ui_spec.lua:185
+       >
+       > make: *** [Makefile:15: test] Error 1
+       For full logs, run 'nix log /nix/store/xjcycf4fb9d4k31yz9nqgi9a61n3mqxb-luajit2.1-fzf-lua-0.0.1848-1.drv'.
+error: 1 dependencies of derivation '/nix/store/zckwv2vmraippx6wfnall9d4kj2jr2ly-vimplugin-luajit2.1-fzf-lua-0.0.1848-1-unstable-0.0.1848-1.drv' failed to build
+```
+
+It usually means that too many things were trying to build for your system at the same time, and you just need to keep retrying until it finally completes successfully:
+```shell
+while true; do fleek-impure ... && break; done
+```
+
+The Neovim plugins (like the one shown) seem to be the first to fail for some reason. It's unclear why an overloaded set of nix builders will cause build failures rather than just taking a long time, but that's what happens.  Some of the tools, like `emacs-unstable` and `zed-editor`, are quite large and can take a lot of time and resources to build. When this is needed during a rebuild, it can starve something and the neovim plugins (and their dependencies) are the first to fail out.
