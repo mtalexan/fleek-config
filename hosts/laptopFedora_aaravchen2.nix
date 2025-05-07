@@ -53,8 +53,7 @@
       
       # default non-static config for zed using nixpkgs version of zeditor
       zed-editor = {
-        external_zed = false; # the default
-        static_config = false; # the default
+        # automatically turns on nixGL.use_vulkan since we don't set no_vulkan here.
         assistant = "zed"; # the default, only applies if static_config=true
       };
     };

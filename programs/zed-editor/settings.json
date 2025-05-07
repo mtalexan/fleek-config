@@ -23,7 +23,7 @@
   "buffer_font_size": 14,
   "buffer_line_height": "standard",
   "theme": {
-    "mode": "system",
+    "mode": "dark",
     "light": "One Light",
     "dark": "Nebula Nova"
   },

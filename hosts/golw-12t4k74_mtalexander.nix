@@ -46,7 +46,6 @@
       nixGL = {
         has_dgpu = true;
         primary_gpu = "dGPU"; # NVIDIA dGPU is the primary renderer
-        use_vulkan = true; # needed by Zed
       };
 
       # the identity/*.nix file uses these to set the global git signing.key (to the work value), and
@@ -67,8 +66,7 @@
       
       # default non-static config for zed using nixpkgs version of zeditor
       zed-editor = {
-        external_zed = false; # the default
-        static_config = false; # the default
+        # automatically turns on nixGL.use_vulkan since we don't set no_vulkan here.
         assistant = "copilot"; # only applies if static_config=true
       };
     };

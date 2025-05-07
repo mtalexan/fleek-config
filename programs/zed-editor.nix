@@ -7,8 +7,9 @@
   # on every Zed startup if you don't have working Vulkan support natively, or via nixGL.
   
   options.custom.zed-editor = with lib; {
-    bad_vulkan = mkEnableOption ''
+    no_vulkan = mkEnableOption ''
       Vulkan support doesn't work or isn't sufficient on this system, so set the environment variable to disable the emulated GPU warning.
+      **WARNING: If this is NOT set, the config.custom.nixGL.use_vulkan option will be force-enabled!**
     '';
     external_zed = mkEnableOption ''
       Don't use the zed-editor package from the nixpkgs repo wrapped with the nixGL wrapper, use an externally installed version.
@@ -37,11 +38,14 @@
   };
   
   config = {
+    # set the nixGL value to true if no_vulkan isn't set, otherwise leave it as-is.
+    custom.nixGL.use_vulkan = if (!config.custom.zed-editor.no_vulkan) then true else config.custom.nixGL.use_vulkan;
+
     # If we're managing the config externally via the git repo folder, install the
     # packages zed needs to have externally installed.
     # Otherwise, these are part of the programs.zed-editor.extraPackages.
     home.packages =  lib.mkIf (!config.custom.zed-editor.static_config) (
-      [        
+      [
         # Nix language server has to be manually installed external to zed
         pkgs.nixd
         # needed by Basher extension
@@ -51,16 +55,24 @@
       # (which uses the 'zeditor' CLI name instead of 'zed') but make it a version that works
       # properly with GPUs.
       ( if (!config.custom.zed-editor.external_zed)
-        then 
-          [
-            (config.lib.nixGL.wrap pkgs.zed-editor)
-          ]
+        then
+          # don't wrap the zed-editor with nixGL if there's no vulkan support. It will get forced to
+          # use an incompatible GPU and won't even start
+          if (config.custom.zed-editor.no_vulkan)
+          then
+            [
+              pkgs.zed-editor
+            ]
+          else
+            [
+              (config.lib.nixGL.wrap pkgs.zed-editor)
+            ]
         else
           []
       )
     );
     
-    home.sessionVariables = lib.mkIf (config.custom.zed-editor.bad_vulkan) {
+    home.sessionVariables = lib.mkIf (config.custom.zed-editor.no_vulkan) {
       # If Vulkan support isn't available, working, or sufficient, this has to be set to disable the
       # pop up warning about using an emulated GPU that appears on every zed startup.
       ZED_ALLOW_EMULATED_GPU = "1";
