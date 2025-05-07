@@ -25,13 +25,17 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "BlackFox"
+    "dark": "Nebula Nova"
   },
   "pane_split_direction_horizontal": "down",
   // The direction that you want to split panes horizontally. Defaults to "left"
   "pane_split_direction_vertical": "right",
   "wrap_guides": [80],
   "show_whitespaces": "boundary",
+  "gutter": {
+    // Whether to show fold buttons in the gutter.
+    "folds": false
+  },
   "indent_guides": {
     "active_line_width": 2,
     "coloring": "indent_aware"
@@ -87,7 +91,7 @@
     // max allowed is 100_000
     "max_scroll_history_lines": 100000
   },
-  
+
   // The following is the list of installed extensions that we want installed by
   // all systems that use this same file. These have to be manually populated here by
   // running: `jq '.extensions | with_entries(.key=.value.manifest.id, .value=true)' ~/.local/share/zed/extensions/index.json`
@@ -122,6 +126,7 @@
     "gosum": true,
     "graphviz": true,
     "groovy": true,
+    "haku-dark-theme": true,
     "haskell": true,
     "helm": true,
     "html": true,
@@ -139,12 +144,15 @@
     "mermaid": true,
     "meson": true,
     "modest-dark": true,
+    "nebula-pulse": true,
     "neocmake": true,
     "nginx": true,
     "nickel": true,
+    "ninja": true,
     "nix": true,
     "one-dark-darkened": true,
     "one-dark-pro": true,
+    "one-dark-pro-max": true,
     "org": true,
     "perl": true,
     "php": true,
@@ -168,6 +176,8 @@
     "tmux": true,
     "toml": true,
     "typos": true,
+    "visual-assist-dark": true,
+    "vitesse-theme-refined": true,
     "xml": true,
     "zedokai": true,
     "zig": true

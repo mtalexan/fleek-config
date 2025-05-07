@@ -12,7 +12,7 @@
   # declare it explicitly so we can access the config.custom.files section to set options as well.
   # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
   # for constructing absolute paths to files.
-  config = rec {
+  config = {
     # Host-specific username and home location
     home.username = "mtalexander";
     home.homeDirectory = "/home/${config.home.username}";
@@ -40,7 +40,14 @@
     # Custom defined config settings
     #####################################
     custom = {
-      nixGL.gpu = true;
+      # the location of this cloned repo. Also set in env var FLEEK_CONFIG_DIR
+      configdir = "${config.home.homeDirectory}/.local/share/fleek";
+      
+      nixGL = {
+        has_dgpu = true;
+        primary_gpu = "dGPU"; # NVIDIA dGPU is the primary renderer
+        use_vulkan = true; # needed by Zed
+      };
 
       # the identity/*.nix file uses these to set the global git signing.key (to the work value), and
       # populate the git-identity config keys.  Personal is optional but work is mandatory for identity/ks.nix.
@@ -57,6 +64,13 @@
         };
         config.engine = "docker";
       };
+      
+      # default non-static config for zed using nixpkgs version of zeditor
+      zed-editor = {
+        external_zed = false; # the default
+        static_config = false; # the default
+        assistant = "copilot"; # only applies if static_config=true
+      };
     };
 
     #####################################
@@ -66,9 +80,6 @@
       # Using Ubuntu KDE that's only X11 still. Set this so all the Wayland-capable
       # tools/libs know to fall back to X11 support instead.
       WAYLAND_DISPLAY = "";
-      # Vulkan tools are only available on this host with Wayland support, so Zed only works
-      # with GPUs on Wayland for this. Disable the warning pop up on each zed startup about this.
-      ZED_ALLOW_EMULATED_GPU = "1";
     };
   };
 }

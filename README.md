@@ -1,6 +1,6 @@
-# Fleek Configuration
+# Nix Home Manager Configuration
 
-nix home-manager configs originally created by [fleek](https://github.com/ublue-os/fleek), but now ejected after it was deprecated.
+nix home-manager configs originally created using [fleek](https://github.com/ublue-os/fleek) (now deprecated), but significantly modified from the original state.
 
 ## Reference
 
@@ -9,7 +9,7 @@ nix home-manager configs originally created by [fleek](https://github.com/ublue-
 
 ## Structure
 
-The top level folder must contain the following files for it to work properly in different Nix use cases:
+The top level folder must contain the following files for it to work properly in different Nix use cases (**not sure what the non-`flake.*` are expected to provided!**):
 - flake.lock
 - flake.nix
 - home.nix
@@ -17,17 +17,17 @@ The top level folder must contain the following files for it to work properly in
 - shell.nix
 - user.nix
 
-`hosts/` contains the per-host config files. Under `fleek` these were `$hostname/custom.nix`.
+`hosts/` contains the per-host config files. Roughly equivalent to `fleek`'s `$hostname/custom.nix` files.
 
 Settings are split up into `modules/` and `programs/` that each of specific configs.  
-- `programs/` are organized by the specific program they configure, and are only included if either the top-level `user.nix` or the host-specific Nix file list it.  
-- `modules/` are always included and may cover a range of settings in each module.
+- `programs/` are organized by the specific program they configure, and are only included if `all.nix` or the host-specific Nix file list it.  
+- `modules/` are always included and may cover a range of settings in each module. The main one is `all.nix`.
 
 There are also top-level folders:
 - `bin/` this folder is added to the PATH so in-place scripts and tools can be put in here.
-- `custom-modules/` contains manually written modules that don't exist upstream
-  - `home-manager/` are home-manager configuration modules
-  - `overlay-packages` are for importing into the overlays definition of the flake, either add packages, override packages, or modify build definitions (implicitly overriding packages).
+- `custom-modules/` contains manually written modules that don't exist upstream.
+  - `home-manager/` are home-manager configuration modules, they define a set 
+  - `overlay-packages/` are for importing into the overlays definition of the flake, either add packages, override packages, or modify build definitions (implicitly overriding packages).
 - `home_files/` directory structures of files that may need to be copied into place in the home folder by home-manager config settings. 
 - `sd_scripts/` for the `sd` tool, the help text files and the scripts in the directories implicitly define a set of subcommands that are part of the path and include auto-complete.
 - `secrets/` are the (r)agenix secrets for decryption with `agenix` home-manager module.

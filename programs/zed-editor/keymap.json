@@ -28,8 +28,15 @@
   {
     "context": "Editor",
     "bindings": {
-      "ctrl-alt-shift-up": "editor::AddSelectionAbove",
-      "ctrl-alt-shift-down": "editor::AddSelectionBelow"
+      "ctrl-shift-up": "editor::AddSelectionAbove",
+      "ctrl-shift-down": "editor::AddSelectionBelow"
+    }
+  },
+  //correct Shift-tab as outdent (context-aware), not backtab (unaware)
+  {
+    "context": "Editor",
+    "bindings": {
+      "shift-tab": "editor::Outdent"
     }
   },
   //allow tab switcher to pick using just arrow keys
@@ -115,15 +122,15 @@
   {
     "context": "Editor && edit_prediction",
     "bindings": {
-      //alt-l is already configured, make "right" do the same
-      "right": "editor::AcceptEditPrediction"
+      //unbind alt-l, we don't want movement to the right to auto-complete
+      "alt-l": null
     }
   },
   {
     "context": "Editor && edit_prediction_conflict",
     "bindings": {
-      //alt-l is already configured, make "right" do the same
-      "right": "editor::AcceptEditPrediction"
+      //unbind alt-l, we don't want movement to the right to auto-complete
+      "alt-l": null
     }
   },
   {

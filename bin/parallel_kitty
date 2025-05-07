@@ -160,6 +160,7 @@ else
     command_to_exec=("${KITTY_CMD}" "--hold" "--session" "-")
 fi
 
+#shellcheck disable=SC2068 # requires word splitting of command_to_exec array values
 {
     # sets the working dir for all windows in the tab.
     if [ "$TYPE" == "window" ]; then
@@ -183,7 +184,7 @@ fi
 
     # print what parallel generated so escaped newlines get converted to real newlines
     if [ "${TYPE}" == "os-window" ]; then
-        # remove the first occurence of the 'new_os_window' so the commands up until the second occurence apply to the initially created os-window
+        # remove the first occurrence of the 'new_os_window' so the commands up until the second occurrence apply to the initially created os-window
         echo -e "${parallel_out}" | sed -E '0,/^new_os_window/{//d}'
     else
         echo -e "${parallel_out}"
