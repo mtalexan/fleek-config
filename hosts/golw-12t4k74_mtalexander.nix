@@ -74,11 +74,8 @@
     #####################################
     # One-off Program Settings
     #####################################
-    home.sessionVariables = {
-      # Using Ubuntu KDE that's only X11 still. Set this so all the Wayland-capable
-      # tools/libs know to fall back to X11 support instead.
-      WAYLAND_DISPLAY = "";
-    };
+    #home.sessionVariables = {
+    #};
   };
 }
 
