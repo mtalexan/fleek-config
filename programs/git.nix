@@ -47,18 +47,30 @@
       # set signing settings directly, let it use the default gpg program.
       gpg.format = "ssh";
 
-      # diff and merge settings to use delta for diffs.
+      # When using difftool, don't prompt for each file.
+      difftool.prompt = false;
+      # Also don't prompt for every file when using 'git mergetool'
+      mergetool.prompt = false;
+      
       diff = {
+        # make the default guitool (git difftool --gui) use Meld.
+        guitool = "meld";
+        
+        # settings for delta diffs
         colorMoved = "default";
         colorMovedWS = "allow-indentation-change";
       };
+      
       merge = {
+        # use the meld 3-way merge tool for the default gui tool (git mergetool --gui)
+        guitool = "meld";
+        # settings for delta diffs
         conflictStyle = "diff3";
       };
     };
     delta = {
-      # automatically sets itself as the pager for git
-      # and the interactive.diffFilter
+      # automatically sets itself as the pager for git and the interactive.diffFilter.
+      # The pager is the default for the gitconfig diff.tool if not otherwise set as well.
       enable = true;
       options = {
         # these options have to be put under a separate feature name so they don't get applied

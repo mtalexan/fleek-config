@@ -71,6 +71,15 @@ in {
     notifyOnFailure = true;
   };
 
+  # A kitty "diff" kitten is available, and can be used with git if a little config is added
+  # to "register" it as a difftool. This enables 'git difftool --tool=kitty --dir-diff' and '--tool=kitty.gui --dir-diff'
+  programs.git.extraConfig = {
+    difftool = {
+      "kitty".cmd = "kitten diff $LOCAL $REMOTE";
+      "kitty.gui".cmd = "kitten diff $LOCAL $REMOTE";
+    };
+  };
+  
   programs.kitty = {
     # we can't use the nix installation, but we also can't use our config without installing it.
     # Luckily the default installation location of ~/.local/bin has higher priority than .nix-profile or the home-manager
