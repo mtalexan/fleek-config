@@ -78,20 +78,36 @@
       ZED_ALLOW_EMULATED_GPU = "1";
     };
     
-    #####################################################
-    # Symlinked ~/.config/zed to git repo, if enabled
-    #####################################################
     
-    # Create a symlink ~/.config/zed that redirects (thru a few different symlinks) to the real on-disk path of the 
-    # zed-editor folder next to this file.
-    # The config.lib.file.mkoutOfStoreSymlink will do this for whatever file you pass it.
-    # However, nix paths (like ./zed-editor) can only refer to files within the flake after it's been captured into the nix-store.
-    # And since all flake evaluation only happens after the files have been copied into that nix-store, there is no way for nix to
-    # construct the path to the code the flake in the store was copied from. It just has to be hardcoded as a path to where the flake code is stored.
-    home.file = lib.mkIf (!config.custom.zed-editor.static_config) {
-      ".config/zed".source =  config.lib.file.mkOutOfStoreSymlink "${config.custom.configdir}/programs/zed-editor";
-    };
-    
+    home.file = {
+      # Setup the ~/.zed_server folder. This is used as the location for incoming clients to put their
+      # version of the zed server when doing remote connections, as well as the source of the binary
+      # for when making remote connections that have '"upload_binary_over_ssh": true' set.
+      # Zed uses SSH for actual connection and authentication, so this configuration has no effect on
+      # whether or not remote access is really allowed to this system.
+      ".zed_server" = {
+        # Set it up as a folder in the real location with everything relevant symlinked in.
+        # This allows clients to add their own server versions to this folder if the one already
+        # here doesn't match (client and server versions need to match exactly).
+        recursive = true;
+        source = "${pkgs.zed-editor.remote_server}/bin";
+      };
+    } //
+    (   
+      if ! config.custom.zed-editor.static_config
+      then
+      {
+        # Create a symlink ~/.config/zed that redirects (thru a few different symlinks) to the real on-disk path of the 
+        # zed-editor folder next to this file.
+        # The config.lib.file.mkoutOfStoreSymlink will do this for whatever file you pass it.
+        # However, nix paths (like ./zed-editor) can only refer to files within the flake after it's been captured into the nix-store.
+        # And since all flake evaluation only happens after the files have been copied into that nix-store, there is no way for nix to
+        # construct the path to the code the flake in the store was copied from. It just has to be hardcoded as a path to where the flake code is stored.
+        ".config/zed".source =  config.lib.file.mkOutOfStoreSymlink "${config.custom.configdir}/programs/zed-editor";
+      }
+      else 
+      {}
+    );
     
     #####################################################
     # Static home-manager config, if enabled
@@ -112,7 +128,12 @@
         #pkgs.shellfmt
       ];
     
-      # don't allow remote connections
+      # This would symlink the ~/.zed_server folder to our pkgs.zed-editor.remote-server folder,
+      # which has conflicts, so it's done manually above.
+      # That would prevent remote Zed clients from adding their own zed server version (which
+      # has to exactly match the client version).
+      # Either way, this doesn't actually enable remote connections, Zed clients use SSH connections
+      # to attach, setup, and then communicate with the server.
       installRemoteServer = false;
     
       # Custom theme definitions
