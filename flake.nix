@@ -21,6 +21,13 @@
     # adds the emacs packages from ELPA/MELPA
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
+    # This is updated a lot, so rather than needing to update all of nixpkgs to get the newer versions,
+    # include it as a flake so it can be updated independently.
+    zed-editor-overlay = {
+      url = "github:zed-industries/zed";
+      #inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     # adds nixgl tools so we can use the GPU
     nixgl = {
       url = "github:nix-community/nixGL";
@@ -51,6 +58,8 @@
         inputs.emacs-overlay.overlay
         inputs.nixgl.overlay
         inputs.git-agecrypt.overlay
+        # currently doesn't work, causes a git-lfs error during fetchGit of a dependency
+        #inputs.zed-editor-overlay.overlays.default # uses overlays instead of overlay
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];
