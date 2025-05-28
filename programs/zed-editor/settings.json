@@ -19,6 +19,8 @@
     "diagnostics": false,
     "metrics": false
   },
+  // Control this with nix home-manager instead
+  "auto_update": false,
   "ui_font_size": 15,
   "buffer_font_size": 14,
   "buffer_line_height": "standard",
@@ -32,6 +34,11 @@
   "pane_split_direction_vertical": "right",
   "wrap_guides": [80],
   "show_whitespaces": "boundary",
+  // Minimap related settings
+  "minimap": {
+    // always show the minimap, even if the content fits on one screen and the scrollbar isn't needed.
+    "show": "always"
+  },
   "gutter": {
     // Whether to show fold buttons in the gutter.
     "folds": false
@@ -42,12 +49,20 @@
   },
   "seed_search_query_from_cursor": "selection",
   "use_smartcase_search": true,
+  "inlay_hints": {
+    // e.g. parameters, types, etc
+    "enabled": true,
+    // use the completion background for inlay hints?
+    "show_background": false
+  },
   "project_panel": {
     "entry_spacing": "standard"
   },
   "collaboration_panel": {
     "button": false
   },
+  // Whether the screen sharing icon is shown in the os status bar.
+  "show_call_status_icon": false,
   "message_editor": {
     // Whether to automatically replace emoji shortcodes with emoji characters.
     // For example: typing `:wave:` gets replaced with `👋`.
@@ -70,13 +85,17 @@
   "diagnostics": {
     "inline": {
       "enabled": true,
+      // make it kind of line up on the right side
+      "min_column": 80,
       //only show inline errors, others are shown other ways
       "max_severity": "error"
     }
   },
   "git": {
     "inline_blame": {
-      "show_commit_summary": true
+      "show_commit_summary": true,
+      // make sure it has a minimum offset so it doesn't get in the way
+      "min_column": 80
     }
   },
   "journal": {
