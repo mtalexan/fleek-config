@@ -59,7 +59,7 @@
         inputs.nixgl.overlay
         inputs.git-agecrypt.overlay
         # currently doesn't work, causes a git-lfs error during fetchGit of a dependency
-        #inputs.zed-editor-overlay.overlays.default # uses overlays instead of overlay
+        inputs.zed-editor-overlay.overlays.default # uses overlays instead of overlay
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];

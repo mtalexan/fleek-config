@@ -79,20 +79,22 @@
     };
     
     
-    home.file = {
-      # Setup the ~/.zed_server folder. This is used as the location for incoming clients to put their
-      # version of the zed server when doing remote connections, as well as the source of the binary
-      # for when making remote connections that have '"upload_binary_over_ssh": true' set.
-      # Zed uses SSH for actual connection and authentication, so this configuration has no effect on
-      # whether or not remote access is really allowed to this system.
-      ".zed_server" = {
-        # Set it up as a folder in the real location with everything relevant symlinked in.
-        # This allows clients to add their own server versions to this folder if the one already
-        # here doesn't match (client and server versions need to match exactly).
-        recursive = true;
-        source = "${pkgs.zed-editor.remote_server}/bin";
-      };
-    } //
+    home.file = 
+    # Can't use this if using the Zeditor flake input instead of zeditor from nixpkgs, it doesn't have the remote_server target.
+    #{
+    #  # Setup the ~/.zed_server folder. This is used as the location for incoming clients to put their
+    #  # version of the zed server when doing remote connections, as well as the source of the binary
+    #  # for when making remote connections that have '"upload_binary_over_ssh": true' set.
+    #  # Zed uses SSH for actual connection and authentication, so this configuration has no effect on
+    #  # whether or not remote access is really allowed to this system.
+    #  ".zed_server" = {
+    #    # Set it up as a folder in the real location with everything relevant symlinked in.
+    #    # This allows clients to add their own server versions to this folder if the one already
+    #    # here doesn't match (client and server versions need to match exactly).
+    #    recursive = true;
+    #    source = "${pkgs.zed-editor.remote_server}/bin";
+    #  };
+    #} //
     (   
       if ! config.custom.zed-editor.static_config
       then
