@@ -36,9 +36,50 @@ There are also top-level folders:
 
 ## Usage
 
-Install Nix with the Determinate Nix Installer.
-Note: You have to set the environment variable to the install command if you have custom Root CAs that need to be used.
+Install Nix with the Determinate Nix Installer.  You MUST use the Determinate Nix fork of Nix!
 
+### Install Nix
+
+Determinate Nix has its own fork of Nix that is mostly fixes and feature additions to upstream Nix that haven't been merged yet.  It prioritizes user friendliness, unlike upstream Nix, and gets fixes for bugs faster.  
+
+**Note:** Using upstream Nix, or Lix will cause the `flake.lock` here to mismatch the source URLs of what's pinned and the `flake.lock` will have to be manually updated independently on any system that isn't using the same fork of the Nix tool.
+
+Instructions adapted from: https://github.com/DeterminateSystems/nix-installer?tab=readme-ov-file#installer-settings
+
+`ostree`-based distros are more complicated since they restrict the ability to modify `/`.  Unfortunately `nix` still has no good way to locate the system nix store anywhere other than `/nix`, so workarounds are difficult.  
+**WARNING:** ostree-based distros require you to manually create the `/nix` mountpoint before running the intaller since the installer can't do it for you on these system types.  When the distro uses composefs (e.g. anything based on Fedora >= 42) however, this is not possible without creating your own distro fork (see UBlue directions for doing this easily via GitHub actions).  
+
+1. If you're on an ostree-based distro without composefs, create the nix store mountpoint.
+```shell
+# for Fedora-based systems
+sudo ostree admin unlock --hotfix
+# for OpenSUSE based systems
+sudo transaction-manager --shell --continue
+
+sudo mkdir /nix
+# If this command fails with a permissions error, you're on a distro using composefs that requires you to create your own ostree fork build in order to add this folder instead.
+
+# for OpenSUSE, exit the subshell so the new ostree commit is applied and set as the next to boot
+exit
+
+# You MUST reboot immediately after the hotfix is created on Fedora-based systems, any additional changes to the unlocked system are also permanent.
+# For Fedora and OpenSUSE based systems, you need to reboot into the new ostree commit to see the changes (requires a clean reboot to work)
+sudo systemctl reboot
+```
+
+2. Run the installer, installing the Determinate Nix fork of `nix`, and using the host Root CAs
+```shell
+# non-ostree
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate --ssl-cert-file /etc/ssl/certs/ca-certificates.crt
+# or ostree (auto-detection doesn't work, so it must be specified manually)
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate --ssl-cert-file /etc/ssl/certs/ca-certificates.crt ostree
+```
+
+3. (on SELinux systems) Apply SELinux labels to the nix store
+```shell
+sudo restorecon -R /nix
+```
+**WARNING:** You may need to re-run this SELinux relabel command after every system update (esp. on OpenSUSE ostree distros).
 
 ### New System
 
@@ -195,3 +236,9 @@ while true; do fleek-impure ... && break; done
 ```
 
 The Neovim plugins (like the one shown) seem to be the first to fail for some reason. It's unclear why an overloaded set of nix builders will cause build failures rather than just taking a long time, but that's what happens.  Some of the tools, like `emacs-unstable` and `zed-editor`, are quite large and can take a lot of time and resources to build. When this is needed during a rebuild, it can starve something and the neovim plugins (and their dependencies) are the first to fail out.
+
+### Git-LFS error when using zed-editor flake
+
+If you're using the Lix fork of Nix, it has problems as of version 2.23 with its implementation of how it does the `git lfs fetch` portion of the `fetchGit` function.  It seems to be related specifically to Rust crates on flakes making use of Crane for the Crate-to-Nix support when the crate has GitLFS objects in it.  It gets an error from GitLFS for some reason, which causes a cloning failure.
+
+The work around is to not use Lix.
