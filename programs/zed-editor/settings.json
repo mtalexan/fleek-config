@@ -7,13 +7,24 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "features": {
-    // "Undocumented" setting for AI assistant to use for completion.
-    // Can be set to any one of the providers in `assistant: show configuration`, or
-    // `zed`. But ONLY 1 GITHUB AUTHORIZATION WORKS PER INSTALL.
-    // Between Github CoPilot and Zed GitHub, the second will just silently fail to function.
-    "edit_prediction_provider": "zed"
-  },
+  // This syntax changes a LOT. Comment these out to use the default Zed.ai.
+  // Sign in with the 'agent: open configuration' panel and then uncomment
+  // this block to use GitHub Copilot.
+  // The name of the provider for GitHub Copilot changes, make sure it matches in both
+  // spots.
+  // Start a new Agent Panel thread and check the drop down for the model types
+  // that can be set. The one below is just the default selected there. 
+  //"agent": {
+  //  "version": "2",
+  //  "preferred_completion_mode": "burn",
+  //  "default_model": {
+  //    "provider": "copilot_chat",
+  //    "model": "gpt-4o"
+  //  }
+  //},
+  //"feature": {
+  //  "edit_prediction_provider": "copilot_chat"
+  //},
   "icon_theme": "Colored Zed Icons Theme Dark",
   "telemetry": {
     "diagnostics": false,
