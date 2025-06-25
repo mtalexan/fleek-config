@@ -93,7 +93,9 @@
   "remove_trailing_whitespace_on_save": false,
   "ensure_final_newline_on_save": false,
   "format_on_save": "off",
-  "soft_wrap": "editor_width",
+  // softwrap now makes the wrapped lines appear indented, which is impossible to differentiate from hard wrap
+  // unless whitespace is shown. So disable it by default.
+  "soft_wrap": "none",
   "diagnostics": {
     "inline": {
       "enabled": true,
