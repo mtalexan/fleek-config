@@ -45,6 +45,15 @@
       [ "$SHLVL" -gt 2 ] || SHLVL=$((SHLVL + 1))
       ''
 
+      # For some reason the nix install on multi-user systems doesn't manage to include nix itself
+      ''
+        # Nix
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+            . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        fi
+        # End Nix
+      ''
+      
       # home-manager puts sessionVariables in a file only sourced during login.
       # fix it so we can actually verify changes by opening a new terminal rather than relogging in.
       ''
