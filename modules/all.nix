@@ -82,6 +82,8 @@
         pkgs.noti
         pkgs.yq
         pkgs.riffdiff
+        # GNU Parallel with full documentation
+        pkgs.parallel-full
     ];
     
     # shell aliases used by all shells

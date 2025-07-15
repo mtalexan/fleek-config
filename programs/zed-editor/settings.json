@@ -125,6 +125,14 @@
     "max_scroll_history_lines": 100000
   },
 
+  
+  "languages": {
+    "Markdown": {
+      // for some reason this is getting ignored in favor of the global override
+      "soft_wrap": "editor_width"
+    }
+  },
+  
   // The following is the list of installed extensions that we want installed by
   // all systems that use this same file. These have to be manually populated here by
   // running: `jq '.extensions | with_entries(.key=.value.manifest.id, .value=true)' ~/.local/share/zed/extensions/index.json`
