@@ -5,6 +5,7 @@
     #../modules/fedora_shells.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
+    ../programs/parallel_kitty.nix
     ../programs/distrobox.nix
     # vscode is provided by the system
     ../programs/zed-editor.nix

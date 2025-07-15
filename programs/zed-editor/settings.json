@@ -15,17 +15,16 @@
   // auto-assist completion here to discover the options actually available.
   // Start a new Agent Panel thread and check the drop down for the model types
   // that can be set. The one below is just the default selected there. 
-  //"agent": {
-  //  "version": "2",
-  //  "preferred_completion_mode": "burn",
-  //  "default_model": {
-  //    "provider": "copilot_chat",
-  //    "model": "gpt-4o"
-  //  }
-  //},
-  //"features": {
-  //  "edit_prediction_provider": "copilot"
-  //},
+  "agent": {
+    "preferred_completion_mode": "burn",
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    }
+  },
+  "features": {
+    "edit_prediction_provider": "copilot"
+  },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "telemetry": {
     "diagnostics": false,

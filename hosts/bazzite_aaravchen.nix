@@ -6,6 +6,7 @@
     ../programs/distrobox.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
+    ../programs/parallel_kitty.nix
   ];
   
   # declare it explicitly so we can access the config.custom.files section to set options as well

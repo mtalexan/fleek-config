@@ -4,6 +4,7 @@
     ../identities/ks.nix # set the default identities and secrets
     ../programs/ks-dev-tools.nix
     ../programs/kitty.nix
+    ../programs/parallel_kitty.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix

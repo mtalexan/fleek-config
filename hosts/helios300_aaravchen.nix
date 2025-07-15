@@ -5,6 +5,7 @@
     #../modules/fedora_shells.nix
     ../programs/terminator.nix
     ../programs/kitty.nix
+    ../programs/parallel_kitty.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix

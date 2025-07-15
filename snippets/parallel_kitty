@@ -25,12 +25,15 @@
 #     Those are separated and passed to parallel before the modified body.
 # Environment:
 #   KITTY_CMD - optional. if set, should be the command to run to invoke kitty.  All quoting is stripped, so it can be multiple commands. Expansion of '~' will not occur.
-#               Default=${HOME}/.local/kitty.app/bin/kitty
+#               Default=${KITTY_CMD_DEFAULT}
 #
 # Requires:
 #   GNU 'parallel'
 
-readonly KITTY_CMD="${KITTY_CMD:-${HOME}/.local/kitty.app/bin/kitty}"
+# do not rename this variable, the value gets replaced when kitty is installed by home-manager
+readonly KITTY_CMD_DEFAULT=${HOME}/.local/kitty.app/bin/kitty
+
+readonly KITTY_CMD="${KITTY_CMD:-${KITTY_CMD_DEFAULT}}"
 
 if ! command -v parallel &>/dev/null; then
     echo >&2 "ERROR: GNU 'parallel' is required but cannot be found"
