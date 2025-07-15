@@ -2,33 +2,8 @@
 #
 # Takes arguments that mostly look like GNU parallel, and launches a new kitty window to run them all in parallel.
 # This is roughly similar to the --tmux or --tmuxpanes option to parallel.
-# Example:
-#   $0 --title='{1}-{3} MATURITY={2}' make DOCKER=podman RELVER={1} MATURITY={2} ARCH={3} all_rel ::: 37 39 ::: staging unstable ::: amd64 arm64
 #
-# Options:
-#   --dry-run
-#     optional. prints what would be passed to the kitty session after expansion rather than actually running it.
-#   --title=
-#     optional. string can contain variables from parallel resolution, sets the title of the window, tab, os-window.
-#   --type=
-#     optional. one of 'window'/'pane', 'tab', or 'os-window'. Default=window.
-#     What to put each command into when running them all in parallel.
-#   --bg
-#   --min
-#     optional. Minimize the windows as soon as they're opened so they run in the background without taking focus. This script is still blocking and must also be
-#     manually run in the background by the caller.
-#   --max
-#     optional. Maximize the new kitty os-window(s). By default they're the size of the last opened windows. Ignored if --bg or --min
-#   --
-#     After a stand-alone ' -- ', everything is passed to 'parallel', and the output of a modified '--dry-run' is printed.
-#     Options telling how parallel to parse are detected by looking thru these for anything starting with a '-', up until the first argument that doesn't.
-#     Those are separated and passed to parallel before the modified body.
-# Environment:
-#   KITTY_CMD - optional. if set, should be the command to run to invoke kitty.  All quoting is stripped, so it can be multiple commands. Expansion of '~' will not occur.
-#               Default=${KITTY_CMD_DEFAULT}
-#
-# Requires:
-#   GNU 'parallel'
+# Requires GNU parallel to be installed.
 
 # do not rename this variable, the value gets replaced when kitty is installed by home-manager
 readonly KITTY_CMD_DEFAULT=${HOME}/.local/kitty.app/bin/kitty
@@ -44,8 +19,40 @@ elif ! parallel --version | head -n1 | grep -qE '^GNU parallel' &>/dev/null; the
     exit 1
 fi
 
+print_usage() {
+    cat <<-EOF
+	Example:
+	  ${0##*/} --title='{1}-{3} MATURITY={2}' make DOCKER=podman RELVER={1} MATURITY={2} ARCH={3} all_rel ::: 37 39 ::: staging unstable ::: amd64 arm64
+			
+	Options:
+	  --help | -h
+		Print this help text.
+	  --dry-run
+		Optional. prints what would be passed to the kitty session after expansion rather than actually running it.
+	  --title=
+		Optional. string can contain variables from parallel resolution, sets the title of the window, tab, os-window.
+	  --type=
+		Optional. one of 'window'/'pane', 'tab', or 'os-window'. Default=window.
+		What to put each command into when running them all in parallel.
+	  --bg
+	  --min
+		Optional. Minimize the windows as soon as they're opened so they run in the background without taking focus. This script is still blocking and must also be
+		manually run in the background by the caller.
+	  --max
+		Optional. Maximize the new kitty os-window(s). By default they're the size of the last opened windows. Ignored if --bg or --min
+	  --
+		After a stand-alone ' -- ', everything is passed to 'parallel', and the output of a modified '--dry-run' is printed.
+		Options telling parallel how to parse are detected by looking thru these for anything starting with a '-', up until the first argument that doesn't.
+		Those are separated and passed to parallel before the modified body.
+		
+	Environment:
+	  KITTY_CMD - optional. if set, should be the command to run to invoke kitty.  All quoting is stripped, so it can be multiple commands. Expansion of '~' will not occur.
+				  Default=${KITTY_CMD_DEFAULT}
+	EOF
+}
 
-OPTS=$(getopt -n "${0##*/}" -o '' --long dry-run,title:,type:,bg,min,max -- "$@")
+
+OPTS=$(getopt -n "${0##*/}" -o h --long help,dry-run,title:,type:,bg,min,max -- "$@")
 # Reorder the positional parameters
 eval set -- "$OPTS"
 
@@ -62,6 +69,10 @@ EXTRA_OPTS=()
 # Parse the options
 while [ $# -gt 0 ]; do
     case "$1" in
+        -h | --help )
+            print_usage
+            exit 0
+            ;;
         --dry-run )
             DRY_RUN=true
             shift
