@@ -15,7 +15,7 @@
       # builtins.match regex is required to match ALL of the string, and it will return
       # the match group(s) as a list of strings. If it doesn't match everything,
       # it returns null.
-      oldValue = builtins.match ".*(KITTY_CMD_DEFAULT=[^\\n]+).*" snippetContent;
+      oldValue = builtins.match ".*(KITTY_CMD_DEFAULT=[^\n]+).*" snippetContent;
       newValue = "KITTY_CMD_DEFAULT=${pkgs.kitty}/bin/kitty";
     in 
       # If we try to replace an empty string, it will cause issues, so only do replacement
