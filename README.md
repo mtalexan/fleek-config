@@ -69,10 +69,11 @@ sudo systemctl reboot
 
 2. Run the installer, installing the Determinate Nix fork of `nix`, and using the host Root CAs
 ```shell
+# WARNING: The install help text is wrong, none of the CLI options work when you have to specify the plan (e.g. ostree)
 # non-ostree
-curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate --ssl-cert-file /etc/ssl/certs/ca-certificates.crt
+NIX_INSTALLER_DETERMINATE=true NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 # or ostree (auto-detection doesn't work, so it must be specified manually)
-curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate --ssl-cert-file /etc/ssl/certs/ca-certificates.crt ostree
+NIX_INSTALLER_DETERMINATE=true NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt curl -fsSL https://install.determinate.systems/nix | sh -s -- install ostree
 ```
 
 3. (on SELinux systems) Apply SELinux labels to the nix store
