@@ -11,12 +11,12 @@
     enableBashIntegration = true;
     enableZshIntegration = true;
     settings = {
-      # Prompt preceeding where you type.
+      # Prompt preceding where you type.
       #
       # Defines 2-4 lines.  First line uses $fill to separate left and right halves.
-      # WARNING: The right side of all lines must end in a space if $fill-ing becauase the right_prompt adds one for some reason.
+      # WARNING: The right side of all lines must end in a space if $fill-ing because the right_prompt adds one for some reason.
       # WARNING: $all will always evaluate to something, so using "(|$all|)" will always end up as "||"
-      # TODO: curently no way to add "$fill[─┤ ](base_lines)" to the end of lines 2 and 3 without
+      # TODO: currently no way to add "$fill[─┤ ](base_lines)" to the end of lines 2 and 3 without
       #       making them always show up
       format = lib.concatStrings [
         "[╭─](base_lines)"
@@ -196,12 +196,10 @@
       };
 
       shell = {
-        # Only going to use it if the shell isn't the default,
-        # since it's likely starship will be available for more than one shell.
-        # Uncomment only the one that is the default shell
-        #bash_indicator = "";
-        #fish_indicator = "";
-        zsh_indicator = "";
+        # Can set this blank or comment it out for shells it should be hidden on.
+        bash_indicator = "💻";
+        #fish_indicator = "󰈺";
+        #zsh_indicator = "🚀";
         #powershell_indicator = "";
         #ion_indicator = "";
         #elvish_indicator = "";
@@ -336,9 +334,11 @@
 
       container = {
         # if inside a container that has starship installed.
-        # Only really applies to toolbx or distrobx
-        #symbol = "🛠 ";
-        format = "([\\[$name\\]]($style)) ";
+        # Only really applies to toolbx or distrobox
+        symbol = "🐋 ";
+        format = "([$symbol \\[$name\\]]($style)) ";
+        # distrobox and toolbx set CONTAINER_ID env var to the name
+        name = "$CONTAINER_ID";
         disabled = false;
       };
 
@@ -370,13 +370,13 @@
         disabled = true;
       };
 
-      guix_shell = { # can nly show a symbol
+      guix_shell = { # can only show a symbol
         format = "[$symbol]($style) ";
         disabled = true;
       };
 
       hg_branch = {
-        # Mercurial Bracnh
+        # Mercurial Branch
         style = "git_commitish";
         format = "([$symbol$branch(:$topic)]($style) )";
         disabled = false;
@@ -501,7 +501,7 @@
       };
 
       erlang = {
-        foramt = "[$symbol($version)]($style) ";
+        format = "[$symbol($version)]($style) ";
         disabled = true;
       };
 
