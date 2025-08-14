@@ -21,7 +21,7 @@
       format = lib.concatStrings [
         "[╭─](base_lines)"
         "$shell"
-        "($username@$hostname)($container)"
+        "($username@$hostname)($container)(\${custom.distrobox})"
         "$directory"
         "$fill"
         "$status"
@@ -332,14 +332,16 @@
         disabled = false;
       };
 
+      # Can only look up the name within podman and systemd-nspawn containers. For docker, it
+      # just sets the name to 'Docker', which is useless.
+      # Since it's only useful in a container that itself also has starship, that pretty much
+      # means it's toolbx and distrobox only.
       container = {
         # if inside a container that has starship installed.
         # Only really applies to toolbx or distrobox
         symbol = "🐋 ";
         format = "([$symbol \\[$name\\]]($style)) ";
-        # distrobox and toolbx set CONTAINER_ID env var to the name
-        name = "$CONTAINER_ID";
-        disabled = false;
+        disabled = true;
       };
 
       docker_context = {
@@ -652,6 +654,24 @@
       zig = {
         format = "[$symbol($version)]($style) ";
         disabled = true;
+      };
+      
+      # When using the docker engine, the 'container' module can't get the name of the container from inside.
+      # Since we'd only have this starship config witihn Distrobox or Toolbx containers, write a custom module for the
+      # Distrobox detection and printing that gets the name using the Distrobox-specific environment variables so it's
+      # engine agnostic.
+      custom.distrobox = {
+        description = "A custom version of the Containers module that gets the dynamic name of the Distrobox container.";
+        # This is always set when inside a running distrobox container.
+        # This value is printed into the file with single quotes, so the double quotes here only need to pass thru nix.
+        when = ''test -n "$DISTROBOX_ENTER_PATH"'';
+        # This is the default style for the 'container' module that we're replicating.
+        style = "red bold dimmed";
+        format = "[$symbol \\[$output\\]]($style) ";
+        symbol = "🐳";
+        # The CONTAINER_ID is always set to the name of the instance
+        command = "echo $CONTAINER_ID";
+        disabled = false;
       };
     };
   };
