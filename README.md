@@ -70,13 +70,24 @@ sudo systemctl reboot
 2. Run the installer, installing the Determinate Nix fork of `nix`, and using the host Root CAs
 ```shell
 # WARNING: The install help text is wrong, none of the CLI options work when you have to specify the plan (e.g. ostree)
+
+# Set the path to your system-specific Root CA Certificate bundle file so any custom Root CAs are respected.
+
+# On most systems
+export NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+# On OpenSUSE systems
+export NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/ca-bundle.pem
+
+# Make sure your system's curl is using the same path
+export CURL_CA_BUNDLE=$NIX_INSTALLER_SSL_CERT_FILE
+
 # non-ostree
-NIX_INSTALLER_DETERMINATE=true NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+NIX_INSTALLER_DETERMINATE=true curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 # or ostree (auto-detection doesn't work, so it must be specified manually)
-NIX_INSTALLER_DETERMINATE=true NIX_INSTALLER_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt curl -fsSL https://install.determinate.systems/nix | sh -s -- install ostree
+NIX_INSTALLER_DETERMINATE=true curl -fsSL https://install.determinate.systems/nix | sh -s -- install ostree
 ```
 
-3. (on SELinux systems) Apply SELinux labels to the nix store
+3. (on SELinux systems sometimes) Apply SELinux labels to the nix store
 ```shell
 sudo restorecon -R /nix
 ```

@@ -17,6 +17,8 @@
       REQUESTS_CA_BUNDLE = config.custom.certs.bundle;
       # use the system certs for other Python code
       SSL_CERT_FILE = config.custom.certs.bundle;
+      # curl uses yet another variable
+      CURL_CA_BUNDLE = config.custom.certs.bundle;
   };
 }
 
