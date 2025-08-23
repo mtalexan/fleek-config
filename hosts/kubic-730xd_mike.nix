@@ -18,8 +18,9 @@
     # Extra host-unique non-configurable packages
     #####################################
 
-    #home.packages = [
-    #];
+    home.packages = [
+      pkgs.inxi
+    ];
 
     #####################################
     # Custom defined config settings
@@ -30,6 +31,9 @@
       configdir = "${config.home.homeDirectory}/.local/share/fleek";
       
       nixGL.has_dgpu = false;
+
+      # OpenSUSE uses an unusual location for the bundle
+      certs.bundle = "/etc/ssl/ca-bundle.pem";
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
