@@ -4,7 +4,8 @@
   # Do NOT use the home-manager settings. It installs its own config that prevents the settings from being synced or modified in the GUI.
   # Instead, install only the package.  This still has the program and the desktop files, but doesn't try to manage the settings files.
   home.packages = [
-    pkgs.vscode
+    # use the one from a separate flake so we can update it separately
+    pkgs.vscode-independent
   ];
 
   #programs.vscode = {

@@ -25,7 +25,13 @@
     # include it as a flake so it can be updated independently.
     zed-editor-overlay = {
       url = "github:zed-industries/zed";
-      #inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.nixpkgs.follows = "nixpkgs"; # We need newer dependencies, so don't set this
+    };
+    
+    # Add VSCode as independent input, by pinning a second copy of nixpkgs
+    vscode-nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
     };
     
     # adds nixgl tools so we can use the GPU
@@ -51,15 +57,18 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-index-database, git-agecrypt, agenix, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nix-index-database, emacs-overlay, zed-editor-overlay, vscode-nixpkgs, nixgl, git-agecrypt, agenix, ... }@inputs:
     let
       myOverlaysSet = [
         # extra overlays need to be added here
         inputs.emacs-overlay.overlay
         inputs.nixgl.overlay
         inputs.git-agecrypt.overlay
-        # currently doesn't work, causes a git-lfs error during fetchGit of a dependency
         inputs.zed-editor-overlay.overlays.default # uses overlays instead of overlay
+        # VSCode from separate nixpkgs input
+        (final: prev: {
+          vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.system}.vscode;
+          })
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];

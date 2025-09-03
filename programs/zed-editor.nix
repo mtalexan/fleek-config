@@ -46,8 +46,9 @@
     # Otherwise, these are part of the programs.zed-editor.extraPackages.
     home.packages =  lib.mkIf (!config.custom.zed-editor.static_config) (
       [
-        # Nix language server has to be manually installed external to zed
+        # Nix language server has to be manually installed external to zed. Install both even though only one usually gets used.
         pkgs.nixd
+        pkgs.nil
         # needed by Basher extension
         pkgs.shellcheck
       ] ++
@@ -512,7 +513,7 @@
           # Undocumented setting for picking which provider is used for completion.
           # Can be set to any provider on `assistant: show configuration` or `zed`.
           # ONLY 1 GITHUB AUTHORIZATION WILL WORK PER INSTALL
-          # The Zed GtiHub sign in and the Copilot sign in will silently fail if you're
+          # The Zed GitHub sign in and the Copilot sign in will silently fail if you're
           # currently logged into GitHub with the other.
           edit_prediction_provider = if (config.custom.zed-editor.assistant == "copilot") then "copilot" else "zed";
         };
