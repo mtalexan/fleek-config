@@ -2,6 +2,8 @@
 # Programs that aren't the shell or the prompt are in here
 let
   # for fake hash, use "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+  # Example use:
+  #  plugin = (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=");
   vimPluginFromGitHub = owner: repo: rev: hash: pkgs.vimUtils.buildVimPlugin {
     pname = "${lib.strings.sanitizeDerivationName "${owner}/${repo}"}";
     version = "${rev}";
@@ -56,8 +58,7 @@ in
 
       # vscode colorscheme
       {
-        # latest rev as of 2023-08-01
-        plugin = (vimPluginFromGitHub "Mofiqul" "vscode.nvim" "05973862f95f85dd0564338a03baf61b56e1823f" "sha256-iY3S3NnFH80sMLXgPKNG895kcWpl/IjqHtFNOFNTMKg=");
+        plugin = vscode-nvim;
         config = ''
           :colorscheme vscode
         '';
