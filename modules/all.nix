@@ -110,6 +110,8 @@
         "lt" = "eza --tree";
         "rgfzf" = "sd rg-fzf";
         "tree" = "eza --tree";
+        # This preserves the current user's PATH, which allows use of the same tools as the current user (e.g. ~/.local/bin, home manager, nix profile, homebrew)
+        "sudoP" = ''sudo env "PATH=$PATH"'';
     };
     
     # add to PATH for all shells
