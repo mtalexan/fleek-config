@@ -21,8 +21,6 @@
       batdiff
       # man pages
       batman
-      # use for grep/ripgrep (limited rg options)
-      batgrep
       # pretty-print code from a file
       prettybat
     ];

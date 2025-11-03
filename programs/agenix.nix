@@ -1,4 +1,4 @@
-{ pkgs, misc, lib, config, options, inputs, system, ... }: {
+{ pkgs, misc, lib, config, options, inputs, stdenv, ... }: {
   # WARNING: Only include one of homeage.nix and agenix.nix
 
   # The Home Manager module for agenix is undocumented, see https://github.com/ryantm/agenix/issues/50#issuecomment-1633579069
@@ -26,9 +26,9 @@
 
   home.packages = [
     # agenix doesn't provide a nice pkgs.agenix. Instead we need to point to the package from the agenix inputs.
-    # This relies on 'inputs' and 'system' being part of the extraSpecialArgs of the config in flake.nix, and also listed
-    # at the top of this file.
-    inputs.agenix.packages.${system}.default
+    # This relies on 'inputs' and 'stdenv.hostPlatform.system' being part of the extraSpecialArgs of the config in flake.nix, and also 'inputs'
+    # and 'stdenv' being listed at the top of this file.
+    inputs.agenix.packages.${stdenv.hostPlatform.system}.default
   ];
 
   imports = [

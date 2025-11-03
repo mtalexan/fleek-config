@@ -6,6 +6,10 @@
   # NixGL with Vulkan=true is STRONGLY recommended for this package. You must set 'bad_vulkan = true' to avoid a pop up
   # on every Zed startup if you don't have working Vulkan support natively, or via nixGL.
   
+  # The Zed flake overlay has pkgs.zed-editor in it, but that's updated nightly and tends to be pretty unstable.
+  # It used to be that that was the only way to get an FHS that would allow installing extensions from an external source,
+  # but now the nixpkgs:unstable has zed-editor-fhs that's based on the weekly stable releases.
+
   options.custom.zed-editor = with lib; {
     no_vulkan = mkEnableOption ''
       Vulkan support doesn't work or isn't sufficient on this system, so set the environment variable to disable the emulated GPU warning.
@@ -62,11 +66,11 @@
           if (config.custom.zed-editor.no_vulkan)
           then
             [
-              pkgs.zed-editor
+              pkgs.zed-editor-fhs
             ]
           else
             [
-              (config.lib.nixGL.wrap pkgs.zed-editor)
+              (config.lib.nixGL.wrap pkgs.zed-editor-fhs)
             ]
         else
           []
@@ -93,7 +97,7 @@
     #    # This allows clients to add their own server versions to this folder if the one already
     #    # here doesn't match (client and server versions need to match exactly).
     #    recursive = true;
-    #    source = "${pkgs.zed-editor.remote_server}/bin";
+    #    source = "${pkgs.zed-editor-fhs.remote_server}/bin";
     #  };
     #} //
     (   
@@ -120,7 +124,7 @@
       enable = true;
       # Use the nixGL wrapper so the Vulkan support will theoretically work.
       # Also can enable integrated graphics offloading, which is far better than fallback emulated.
-      package = config.lib.nixGL.wrap pkgs.zed-editor;
+      package = config.lib.nixGL.wrap pkgs.zed-editor-fhs;
       
       extraPackages = [
         # the nix language server
@@ -131,7 +135,7 @@
         #pkgs.shellfmt
       ];
     
-      # This would symlink the ~/.zed_server folder to our pkgs.zed-editor.remote-server folder,
+      # This would symlink the ~/.zed_server folder to our pkgs.zed-editor-fhs.remote-server folder,
       # which has conflicts, so it's done manually above.
       # That would prevent remote Zed clients from adding their own zed server version (which
       # has to exactly match the client version).

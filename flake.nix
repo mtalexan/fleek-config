@@ -20,13 +20,6 @@
 
     # adds the emacs packages from ELPA/MELPA
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-
-    # This is updated a lot, so rather than needing to update all of nixpkgs to get the newer versions,
-    # include it as a flake so it can be updated independently.
-    zed-editor-overlay = {
-      url = "github:zed-industries/zed";
-      #inputs.nixpkgs.follows = "nixpkgs"; # We need newer dependencies, so don't set this
-    };
     
     # Add VSCode as independent input, by pinning a second copy of nixpkgs
     vscode-nixpkgs = {
@@ -57,14 +50,24 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-index-database, emacs-overlay, zed-editor-overlay, vscode-nixpkgs, nixgl, git-agecrypt, agenix, ... }@inputs:
+  outputs = {
+        self,
+        nixpkgs,
+        home-manager,
+        nix-index-database,
+        emacs-overlay,
+        vscode-nixpkgs,
+        nixgl,
+        git-agecrypt,
+        agenix,
+        ...
+      }@inputs:
     let
       myOverlaysSet = [
         # extra overlays need to be added here
         inputs.emacs-overlay.overlay
         inputs.nixgl.overlay
         inputs.git-agecrypt.overlay
-        inputs.zed-editor-overlay.overlays.default # uses overlays instead of overlay
         # VSCode from separate nixpkgs input
         (final: prev: {
           vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.system}.vscode;
@@ -96,10 +99,10 @@
         pkgs = pkgsForSystem "x86_64-linux"; # Use the `pkgsForSystem` function for Linux
         extraSpecialArgs = {
           inherit inputs; # Pass flake inputs to our config
-          system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
+          stdenv.hostPlatform.system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
         };
         modules = [
-          nix-index-database.hmModules.nix-index # Include the nix-index-database home-manager module
+          nix-index-database.homeModules.nix-index # Include the nix-index-database home-manager module
           agenix.homeManagerModules.default # Include agenix home-manager module
           ./home.nix
           ./user.nix

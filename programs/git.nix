@@ -13,16 +13,6 @@
   programs.git = {
     enable = true;
 
-    aliases = {
-      unstage = "restore --staged";
-      #added by default because it's so common
-      #graph = "log --oneline --decorate --graph";
-      co = "checkout";
-      cm = "commit";
-      bvv = "branch -vv";
-      last = "log -1 HEAD";
-      update = "pull --no-rebase --ff --no-commit --ff-only";
-    };
     lfs.enable = true;
 
     # maintenance isn't normally run on repos and usually has to be turned on manually per repo.
@@ -41,7 +31,18 @@
       signByDefault = true;
     };
 
-    extraConfig = {
+    settings = {
+      alias = {
+        unstage = "restore --staged";
+        #added by default because it's so common
+        #graph = "log --oneline --decorate --graph";
+        co = "checkout";
+        cm = "commit";
+        bvv = "branch -vv";
+        last = "log -1 HEAD";
+        update = "pull --no-rebase --ff --no-commit --ff-only";
+      };
+
       feature.manyFiles = true;
 
       # set signing settings directly, let it use the default gpg program.
@@ -68,32 +69,35 @@
         conflictStyle = "diff3";
       };
     };
-    delta = {
-      # automatically sets itself as the pager for git and the interactive.diffFilter.
-      # The pager is the default for the gitconfig diff.tool if not otherwise set as well.
-      enable = true;
-      options = {
-        # these options have to be put under a separate feature name so they don't get applied
-        # when using 'git add -i' or 'git add -p', that requires a specific text input format.
-        decorations = {
-          side-by-side = true;
-          # files in listings need a box
-          file-style = "bold yellow box";
-        };
-        features = "decorations";
-        # themese are set to mirror bat automatically
-        line-numbers = true;
-        navigate = true;
-        hyperlinks = true;
-        # this causes it to open in vscode when hyperlinks to commits are clicked
-        hyperlinks-file-link-format = "vscode://file/{path}:{line}" ;
-        # use relative paths for all file names
-        relative-paths = true;
-        # tab display width
-        tabs = 4;
-        # header blocks only extend to the end of the file section and not the entire terminal width
-        width = "variable";
+  };
+
+  programs.delta = {
+    enable = true;
+    # automatically sets itself as the pager for git and the interactive.diffFilter.
+    # The pager is the default for the gitconfig diff.tool if not otherwise set as well.
+    enableGitIntegration = true;
+
+    options = {
+      # these options have to be put under a separate feature name so they don't get applied
+      # when using 'git add -i' or 'git add -p', that requires a specific text input format.
+      decorations = {
+        side-by-side = true;
+        # files in listings need a box
+        file-style = "bold yellow box";
       };
+      features = "decorations";
+      # themese are set to mirror bat automatically
+      line-numbers = true;
+      navigate = true;
+      hyperlinks = true;
+      # this causes it to open in vscode when hyperlinks to commits are clicked
+      hyperlinks-file-link-format = "vscode://file/{path}:{line}" ;
+      # use relative paths for all file names
+      relative-paths = true;
+      # tab display width
+      tabs = 4;
+      # header blocks only extend to the end of the file section and not the entire terminal width
+      width = "variable";
     };
   };
 }

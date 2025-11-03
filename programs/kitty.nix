@@ -73,7 +73,7 @@ in {
 
   # A kitty "diff" kitten is available, and can be used with git if a little config is added
   # to "register" it as a difftool. This enables 'git difftool --tool=kitty --dir-diff' and '--tool=kitty.gui --dir-diff'
-  programs.git.extraConfig = {
+  programs.git.settings = {
     difftool = {
       "kitty".cmd = "kitten diff $LOCAL $REMOTE";
       "kitty.gui".cmd = "kitten diff $LOCAL $REMOTE";
