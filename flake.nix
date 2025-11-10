@@ -19,7 +19,15 @@
     };
 
     # adds the emacs packages from ELPA/MELPA
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    language-servers = {
+      url = "github:Feel-ix-343/language-servers";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     
     # Add VSCode as independent input, by pinning a second copy of nixpkgs
     vscode-nixpkgs = {
@@ -32,6 +40,7 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
 
     # custom forked and patched version of git-agecrypt that fixes a major bug. Needs to be used as an overlay
     git-agecrypt = {
@@ -56,6 +65,7 @@
         home-manager,
         nix-index-database,
         emacs-overlay,
+        language-servers,
         vscode-nixpkgs,
         nixgl,
         git-agecrypt,
