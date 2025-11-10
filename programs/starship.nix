@@ -196,10 +196,13 @@
       };
 
       shell = {
-        # Can set this blank or comment it out for shells it should be hidden on.
+        # If not set at all, it will default to the basename of the shell executable.
+        # Set it to an explicit empty string if you don't want it to show anything.
         bash_indicator = "💻";
         #fish_indicator = "󰈺";
+        # Set the indicator to an empty string since this is the default.
         #zsh_indicator = "🚀";
+        zsh_indicator = "";
         #powershell_indicator = "";
         #ion_indicator = "";
         #elvish_indicator = "";
