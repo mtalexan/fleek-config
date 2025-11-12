@@ -117,8 +117,15 @@ git checkout .
 12. Stage all files, especially the new ones, so they can be found by the `nix build`
 13. (A) Manually run the update, which will fail the first time because it doesn't see the decrypted files for some reason: `bin/fleek-apply --impure`
 14. Manually run the update (`--impure` is required to use the new files without committing them yet): `bin/fleek-apply --impure`
-15. Commit all changes and push them to GitHub
-16. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
+15. Setup GPU support. There will usually be a warning from home-manager about GPU support not being setup:
+```
+This non-NixOS system is not yet set up to use the GPU
+with Nix packages. To set up GPU drivers, run
+  sudo /nix/store/q8phx7jadr846rw1i7lr1m476h8iwhwp-non-nixos-gpu/bin/non-nixos-gpu-setup
+```
+Run the command you see in your specific warning to have it setup a root `non-nixos-gpu.service` that symlinks the GPU libraries into a `/run/` folder for Nix programs to use.
+16. Commit all changes and push them to GitHub
+17. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
 
 ### Apply Changes
 
@@ -130,7 +137,6 @@ fleek-impure
 ```
 
 The `--impure` is required if you want uncommitted (but tracked) files from this git repo to be included in the build.  
-The `--impure` is also required if you use nixGL (i.e. `custom.nixGL.gpu = true` in your `hosts/*.nix` for the current system).
 
 
 The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake definition is used, and UNFREE packages are allowed.

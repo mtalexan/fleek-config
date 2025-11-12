@@ -29,8 +29,6 @@
     custom = {
       # the location of this cloned repo. Also set in env var FLEEK_CONFIG_DIR
       configdir = "${config.home.homeDirectory}/.local/share/fleek";
-      
-      nixGL.has_dgpu = false;
 
       # OpenSUSE uses an unusual location for the bundle
       certs.bundle = "/etc/ssl/ca-bundle.pem";

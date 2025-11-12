@@ -34,11 +34,6 @@
     custom = {
       # the location of this cloned repo. Also set in env var FLEEK_CONFIG_DIR
       configdir = "${config.home.homeDirectory}/.local/share/fleek";
-      
-      nixGL = {
-        has_dgpu = false;
-        use_vulkan = true; # needed by Zed
-      };
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
@@ -50,12 +45,6 @@
       distrobox.hooks = {
         enable = true;
         docker_sock = true;
-      };
-      
-      # default non-static config for zed using nixpkgs version of zeditor
-      zed-editor = {
-        # automatically turns on nixGL.use_vulkan since we don't set no_vulkan here.
-        assistant = "zed"; # the default, only applies if static_config=true
       };
     };
 

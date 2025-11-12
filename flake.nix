@@ -29,19 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    # Add VSCode as independent input, by pinning a second copy of nixpkgs
-    vscode-nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-unstable";
-      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
-    };
-    
-    # adds nixgl tools so we can use the GPU
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-
     # custom forked and patched version of git-agecrypt that fixes a major bug. Needs to be used as an overlay
     git-agecrypt = {
       url = "github:mtalexan/git-agecrypt/fixed";
@@ -57,6 +44,18 @@
       # we don't have any darwin targets, so disable it to save a bit of size
       inputs.darwin.follows = "";
     };
+    
+    # Add VSCode as independent input, by pinning a second copy of nixpkgs
+    vscode-nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
+    };
+    
+    # Add Zed as independent input, by pinning a second copy of nixpkgs
+    zed-nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
+    };
   };
 
   outputs = {
@@ -66,21 +65,24 @@
         nix-index-database,
         emacs-overlay,
         language-servers,
-        vscode-nixpkgs,
-        nixgl,
         git-agecrypt,
         agenix,
+        vscode-nixpkgs,
+        zed-nixpkgs,
         ...
       }@inputs:
     let
       myOverlaysSet = [
         # extra overlays need to be added here
         inputs.emacs-overlay.overlay
-        inputs.nixgl.overlay
         inputs.git-agecrypt.overlay
-        # VSCode from separate nixpkgs input
+        # vscode from separate vscode-nixpkgs flake input
         (final: prev: {
           vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.system}.vscode;
+          })
+        # zed-editor-fhs from separate zed-nixpkgs flake input
+        (final: prev: {
+          zed-independent = inputs.zed-nixpkgs.legacyPackages.${prev.system}.zed-editor-fhs;
           })
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)

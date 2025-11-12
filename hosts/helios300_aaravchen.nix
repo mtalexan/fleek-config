@@ -36,9 +36,6 @@
     custom = {
       # the location of this cloned repo. Also set in env var FLEEK_CONFIG_DIR
       configdir = "${config.home.homeDirectory}/.local/share/fleek";
-      
-      # the GPU doesn't always appear as available because it uses NvidiaPrime, so disable this to avoid build errors when it's not visible.
-      nixGL.has_dgpu = false;
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.
@@ -53,13 +50,6 @@
           docker_sock = true;
         };
         config.engine = "docker";
-      };
-      
-      # default non-static config for zed using nixpkgs version of zeditor
-      zed-editor = {
-        external_zed = false; # the default
-        static_config = false; # the default
-        assistant = "zed"; # the default, only applies if static_config=true
       };
     };
 

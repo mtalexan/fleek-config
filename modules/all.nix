@@ -23,7 +23,7 @@
   # "includes". By convention programs/ are for individual programs, while modules/ are less specific.
   # WARNING: If any of these have options defined the import 
   imports = [
-      ./nixgl.nix
+      #./nixgl.nix
   
   # Custom home-manager modules that aren't upstream.
       # this one requires the kitty-save-session.nix overlay to be included in the flake.nix
@@ -70,6 +70,9 @@
   ];
   
   config = {
+    # This enables a lot of generic non-NixOS Linux support.
+    targets.genericLinux.enable = true;
+
     # globally included packages that have no home-manager config
     home.packages = [
         # user selected packages
@@ -124,7 +127,6 @@
     #   Special logic is added to the bash and zsh initExtra to force re-sourcing on each new terminal 
     home.sessionVariables = {
         GCC_COLORS = "error=01;31;warning=01;35:note=01;36:caret=01;32:locus=01:quote=01";
-        XDG_DATA_DIRS = "$HOME/.nix-profile/share:$XDG_DATA_DIRS";
         FLEEK_CONFIG_DIR = "${config.custom.configdir}";
     };
   };

@@ -28,8 +28,6 @@
     custom = {
       # the location of this cloned repo. Also set in env var FLEEK_CONFIG_DIR
       configdir = "${config.home.homeDirectory}/.local/share/fleek";
-      
-      nixGL.has_dgpu = false;
 
       # the identity/*.nix file uses these to set the global git signing.key (to the personal value), and
       # populate the git-identity config keys.  Personal is mandatory.

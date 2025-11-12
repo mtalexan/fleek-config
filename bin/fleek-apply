@@ -14,7 +14,7 @@ cd "${FLEEK_CONFIG_DIR}" || { echo >&2 "ERROR: Couldn't reach FLEEK_CONFIG_DIR=$
 #NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
 
 # The above command is copied directly from the fleek code, but is intended to be used with the --impure option to allow the NIXPKGS_ALLOW_UNFREE=1
-# and optionally do things like depend on the host system NVIDIA graphics (for nixGL).
+# and optionally allow using config files that aren't yet commited in git.
 # However the hardcoded command is always using the latest master version of home-manager as defined by the current nix install.  We'd rather use
 # the version of home-manager that's locked by the flake we're updating, since that's what we're using to provide the config functions.
 # According to this: https://discourse.nixos.org/t/using-flake-input-with-nix-shell/14147 we can do that by using the '--inputs-from .'

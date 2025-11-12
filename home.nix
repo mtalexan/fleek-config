@@ -49,8 +49,9 @@
     # add nix fonts to the system fontconfig
     enable = true;
   };
-  home.stateVersion =
-    "22.11"; # To figure this out (in-case it changes) you can comment out the line and see what version it expected.
+  # Do NOT update this. This is a compatibility version for the current config format and is recommended to leave it set
+  # to whatever version was first used to create the config. Update the flake instead to get updates.
+  home.stateVersion = "22.11";
   programs.home-manager.enable = true;
 }
 
