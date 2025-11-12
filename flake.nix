@@ -78,18 +78,18 @@
         inputs.git-agecrypt.overlay
         # vscode from separate vscode-nixpkgs flake input
         (final: prev: {
-          vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.system}.vscode;
+          vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}.vscode;
           })
         # zed-editor-fhs from separate zed-nixpkgs flake input
         (final: prev: {
-          zed-independent = inputs.zed-nixpkgs.legacyPackages.${prev.system}.zed-editor-fhs;
+          zed-independent = inputs.zed-nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}.zed-editor-fhs;
           })
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];
 
       # Define a function to create `pkgs` with overlays added.
-      # Takes a system double (e.g. x86_64-linux) to use
+      # Takes a stdenv.hostPlatform.system double (e.g. x86_64-linux) as argument 'system'to use
       pkgsForSystem = system: import nixpkgs {
         inherit system;
         overlays = myOverlaysSet;

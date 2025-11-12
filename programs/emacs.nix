@@ -30,7 +30,7 @@
       pkgs.nerd-fonts.symbols-only
 
       # Add all the language-servers from the flake
-      inputs.language-servers.packages.${pkgs.system}.default
+      inputs.language-servers.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     # WARNING: emacs installed via Nix suffers from an issue on SSSD systems where it's unaware of the SSSD users, so libnss lookups
