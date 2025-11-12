@@ -143,7 +143,9 @@ The `--impure` is required if you want uncommitted (but tracked) files from this
 
 The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake definition is used, and UNFREE packages are allowed.
 
-### Update Everything
+### Updates
+
+To update all the flakes, which effectively updates all packages, run the command:
 
 ```shell
 fleeks
@@ -152,6 +154,18 @@ nix flake update
 This updates the flake.lock with knowledge of the newer tools.  Changes still need to be applied with `fleek-apply`.  
 
 Recommended to test the changes before committing and pushing them, by doing `fleek-apply --impure` and verifying everything works as expected first.
+
+#### Only Specific Flakes
+
+The VSCode and Zed tools are split out into their own flakes specifically to allow them to be updated separately from the rest of the packages.  
+These can be updated to be newer, but there's a limit on how much newer since they still pull many of their common dependencies from the `nixpkgs` flake.
+
+```shell
+fleeks
+nix flake update vscode-nixpkgs zed-nixpkgs
+```
+
+Examine the `inputs` section of the `flake.nix` to find the names of the flakes. Notably, anything set to follow `nixpkgs` cannot be independently updated, it will instead need to be updated along with the `nixpkgs` flake.
 
 ### Secrets
 
