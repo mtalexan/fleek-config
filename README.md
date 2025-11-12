@@ -137,6 +137,7 @@ fleek-impure
 ~/.local/share/fleek/bin/fleek-apply --impure
 ```
 
+The `--impure` is required if the config for the specific host includes any non-free packages (e.g. VSCode).  
 The `--impure` is required if you want uncommitted (but tracked) files from this git repo to be included in the build.  
 
 
