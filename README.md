@@ -143,6 +143,9 @@ The `--impure` is required if you want uncommitted (but tracked) files from this
 
 The `fleek-apply` script will be in your path after the first home-manager switch and can be called directly. Any options passed to it are passed to the home-manager package, it simply acts as a wrapper to ensure the home-manager from this git repo's flake definition is used, and UNFREE packages are allowed.
 
+**WARNING:** You may need to re-run this after every host system update!  
+**WARNING:** Watch for build warnings, especially the home-manager GPU setup warning that can re-appear after a host system update!  
+
 ### Updates
 
 To update all the flakes, which effectively updates all packages, run the command:
