@@ -8,6 +8,7 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/emacs.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well.
@@ -35,6 +36,12 @@
       # podman is suddenly experiencing a bug where 'podman run --userns:keep-id ...' isn't properly linking
       #   the overlay folders together and fails to start any containers.
       # skopeo wasn't built with glibc-static and CGO, so it can't parse users or groups from LDAP.
+
+      # For sharing mouse/keyboard between machines. Requires external manual configuration between the
+      # individual machines running it.
+      # The Deskflow flatpak doesn't work on Ubuntu 24.04 Wayland due to the libie being too old.
+      # This nix install works when run with sudo though, i.e. 'sudo $(which deskflow)'.
+      pkgs.deskflow
     ];
 
     #####################################
