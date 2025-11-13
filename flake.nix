@@ -131,6 +131,7 @@
         { name = "mtalexander@goln-5cl17g3"; configFunction = linuxConfig; }
         { name = "mtalexander@goln-422q533c"; }
         { name = "mtalexander@golw-12t4k74"; }
+        { name = "mtalexander@goln-5wwdx54"; }
         { name = "mike@kubic-730xd"; }
         { name = "mike@cloud-t610"; }
         { name = "aaravchen2@laptopFedora"; }
