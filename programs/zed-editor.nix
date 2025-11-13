@@ -18,7 +18,7 @@
         pkgs.nil
         # needed by Basher extension
         pkgs.shellcheck
-        pkgs.zed-editor-fhs
+        pkgs.zed-editor
       ];
     home.file =
     #{
