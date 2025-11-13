@@ -114,7 +114,7 @@ git checkout .
 
 9. Edit the `flake.nix`, copy-paste and edit one of the blocks that supply the config for a username and hostname, setting your `$(hostname)` and `$(id -u)`.  
 10. Copy then edit one of the `hosts/` config files, naming the new one `$(hostname)_$(id -u).nix`  
-11. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc  
+11. Edit the newly created `hosts/` file to configure SSH key locations, desired tools, etc. Don't forget to set the GPU driver version to match your actual system's NVIDIA driver version!
 12. Stage all files, especially the new ones, so they can be found by the `nix build`  
 13. (A) Manually run the update, which will fail the first time because it doesn't see the decrypted files for some reason: `bin/fleek-apply --impure`  
 14. Manually run the update (`--impure` is required to use the new files without committing them yet): `bin/fleek-apply --impure`  
@@ -125,8 +125,16 @@ with Nix packages. To set up GPU drivers, run
   sudo /nix/store/q8phx7jadr846rw1i7lr1m476h8iwhwp-non-nixos-gpu/bin/non-nixos-gpu-setup
 ```
 Run the command you see in your specific warning to have it setup a root `non-nixos-gpu.service` that symlinks the GPU libraries into a `/run/` folder for Nix programs to use.  
-16. Commit all changes and push them to GitHub.  
-17. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`
+16. Double check the GPU setup by looking at the contents of `/run/opengl-driver/share/vulkan/icd.d/` to make sure your GPU type is included (especially for NVIDIA GPUs).  
+17. Commit all changes and push them to GitHub.  
+18. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`  
+
+
+### Host System Updates
+
+When you update your host system, the GPU integration will break.  
+If you have an NVIDIA GPU, you will need to modify the NVIDIA driver version in your `hosts/*.nix` file to match the new driver version.  
+Regardless of whether you have an NVIDIA GPU or not, you should also re-run the `fleek-apply --impure` commend so it will regenerate the host integration. This may warn you that you need to re-run the GPU setup script again.  
 
 ### Apply Changes
 

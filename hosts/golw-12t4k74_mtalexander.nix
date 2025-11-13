@@ -27,6 +27,23 @@
     ];
 
     #####################################
+    # NVIDIA GPU Support
+    #####################################
+    # If the system GPU is an NVIDIA GPU, the proprietary NVIDIA drivers have
+    # to be installed in the Nix config as well that exactly match the version
+    # installed on the host. This MUST be kept up to date manually.
+    # See https://nix-community.github.io/home-manager/index.xhtml#sec-usage-gpu-non-nixos
+    # 
+    # Run this to quickly calculate the sha256 to use below, and prepopulate the package in the nix-store:
+    # NVIDIA_VER="550.163.01"; nix store prefetch-file https://download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_VER}/NVIDIA-Linux-x86_64-${NVIDIA_VER}.run
+    #
+    targets.genericLinux.gpu.nvidia = {
+      enable = true;
+      version = "580.95.05";
+      sha256 = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
+    };
+    
+    #####################################
     # Extra host-unique non-configurable packages
     #####################################
 

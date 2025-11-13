@@ -22,6 +22,12 @@
     # see below in the custom.git_keys for the git SSH key setup
 
     #####################################
+    # NVIDIA GPU Support
+    #####################################
+    
+    # No NVIDIA GPU on this system
+    
+    #####################################
     # Extra host-unique non-configurable packages
     #####################################
 
