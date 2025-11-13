@@ -1,15 +1,19 @@
-#+TITLE: Writeable Emacs Configuration
+#+TITLE: Writeable User Emacs Configuration
 
 *WARNING*: Tangle output files are always exclusively next to the fully-resolved path to the org file unless a different output
 path is specified in the org file itself. While you can set a hardcoded output path as a =#+PROPERTY:=, you cannot set a dynamic
 one this way, it will simply be ignored.
-Instead we use a noweb refernece by defining a named src block here that has the code, then using it in each src block.
+
 *Be sure each src block to be tangled uses =:tangle (expand-file-name "writeable.el" user-emacs-directory)= to specify the output path.*
 
 * Introduction
-This file is used to define a tangled configuration that is modifiable without needint to rebuild the nix home-manager config.
+This file is used to define a tangled configuration that is modifiable without needing to rebuild the nix home-manager config. It should be used
+for testing changes before they're migrated into the nix config.
 
-This file is loaded last, of all the emacs configuration files so it takes precedence.
+This file is loaded last of all the emacs configuration files so it takes precedence.
+
+The =site-writeable.org= file is similar, but is loaded by the =site-lisp/default.el=, and some specific settings are not allowed to
+be set in those files. The =site-writeable.org= file should be preferred.
 
 #+begin_src emacs-lisp :tangle (expand-file-name "writeable.el" user-emacs-directory)
 ;; Placeholder so the generated el file isn't blank
