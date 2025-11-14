@@ -128,7 +128,7 @@ Run the command you see in your specific warning to have it setup a root `non-ni
 16. Double check the GPU setup by looking at the contents of `/run/opengl-driver/share/vulkan/icd.d/` to make sure your GPU type is included (especially for NVIDIA GPUs).  
 17. Commit all changes and push them to GitHub.  
 18. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`  
-
+19. Setup Atuin: `atuin account login` (keys are the same and already provisioned), then `atuin sync`.
 
 ### Host System Updates
 
