@@ -292,3 +292,18 @@ The Neovim plugins (like the one shown) seem to be the first to fail for some re
 If you're using the Lix fork of Nix, it has problems as of version 2.23 with its implementation of how it does the `git lfs fetch` portion of the `fetchGit` function.  It seems to be related specifically to Rust crates on flakes making use of Crane for the Crate-to-Nix support when the crate has GitLFS objects in it.  It gets an error from GitLFS for some reason, which causes a cloning failure.
 
 The work around is to not use Lix.
+
+### git-agecrypt error when updating the repo
+
+You get an error that looks something like this when you update the branch/commits in the cloned repo:
+```shell
+/nix/store/xh3hcnc210x77bb1hkyvg8vg7nn015lq-git-agecrypt-0.2.1/bin/git-agecrypt smudge -f 'identities/ks.nix': line 1: /nix/store/xh3hcnc210x77bb1hkyvg8vg7nn015lq-git-agecrypt-0.2.1/bin/git-agecrypt: No such file or directory
+error: external filter '/nix/store/xh3hcnc210x77bb1hkyvg8vg7nn015lq-git-agecrypt-0.2.1/bin/git-agecrypt smudge -f %f' failed 127
+error: external filter '/nix/store/xh3hcnc210x77bb1hkyvg8vg7nn015lq-git-agecrypt-0.2.1/bin/git-agecrypt smudge -f %f' failed
+fatal: identities/ks.nix: smudge filter git-agecrypt failed
+```
+
+This is caused by the `git-agecrypt` absolute path in git config referring to a version of `git-agecrypt` that has been garbaged collected from the nix store.  
+The path in the config is only updated when you run `git agecrypte init`, but as configurations change newer versions of `git-agecrypt` will be configured in the home-manager config. The older version get garbage collected.
+
+Solution: run `git agecrypt init` again. The config in the repo will be updated to point to the current version.
