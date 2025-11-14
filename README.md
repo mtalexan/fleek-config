@@ -91,7 +91,8 @@ NIX_INSTALLER_DETERMINATE=true curl -fsSL https://install.determinate.systems/ni
 ```shell
 sudo restorecon -R /nix
 ```
-**WARNING:** You may need to re-run this SELinux relabel command after every system update (esp. on OpenSUSE ostree distros).
+**WARNING:** You may need to re-run this SELinux relabel command after every system update (esp. on OpenSUSE ostree distros).  
+**WARNING:** After you run this, you will need to re-fix the SELinux context on the file pointed to by `/etc/systemd/system/non-nixos-gpu.service`
 
 ### New System
 
@@ -141,6 +142,9 @@ If your host system uses SELinux, your nix store will probably also break. You'l
 ```shell
 sudo restorecon -R /nix
 ```
+
+**WARNING:** After you run this, you will need to re-fix the SELinux context on the file pointed to by `/etc/systemd/system/non-nixos-gpu.service`
+
 
 ### Apply Changes
 
@@ -255,6 +259,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable nix-daemon.service
 sudo systemctl start nix-daemon.service
 ```
+
+**WARNING:** After you run this, you will need to re-fix the SELinux context on the file pointed to by `/etc/systemd/system/non-nixos-gpu.service`
 
 It should now be working again.
 
