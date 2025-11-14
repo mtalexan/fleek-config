@@ -125,6 +125,7 @@ with Nix packages. To set up GPU drivers, run
   sudo /nix/store/q8phx7jadr846rw1i7lr1m476h8iwhwp-non-nixos-gpu/bin/non-nixos-gpu-setup
 ```
 Run the command you see in your specific warning to have it setup a root `non-nixos-gpu.service` that symlinks the GPU libraries into a `/run/` folder for Nix programs to use.  
+WARNING: This command will fail on SELinux systems until you manually correct the SELinux context of the service file it symlinks to. See below.  
 16. Double check the GPU setup by looking at the contents of `/run/opengl-driver/share/vulkan/icd.d/` to make sure your GPU type is included (especially for NVIDIA GPUs).  
 17. Commit all changes and push them to GitHub.  
 18. (A) Remove `git-agecrypt` from your nix profile (it's provided by Home Manager now): `nix profile remove 'git-agecrypt'`  
@@ -307,3 +308,33 @@ This is caused by the `git-agecrypt` absolute path in git config referring to a 
 The path in the config is only updated when you run `git agecrypte init`, but as configurations change newer versions of `git-agecrypt` will be configured in the home-manager config. The older version get garbage collected.
 
 Solution: run `git agecrypt init` again. The config in the repo will be updated to point to the current version.
+
+### GPU Setup script errors out
+
+When running the GPU setup script in the warning message, an access denied error occurs:
+
+```
+$ sudo /nix/store/q8phx7jadr846rw1i7lr1m476h8iwhwp-non-nixos-gpu/bin/non-nixos-gpu-setup
+
+Failed to enable unit: Access denied
+```
+
+This is caused by the system using SELinux, and the home-manager generating the GPU configuration file without proper SELinux contexts.  
+
+Solution:
+1. Refresh the SELinux contexts on everything in `/nix`
+```shell
+sudo restorecon -Rv /nix
+```
+
+2. determine the correct SELinux context (which is assigned to the symlink that was created), and what the symlink points to:
+```
+ls -lZ /etc/systemd/system/non-nixos-gpu.service
+```
+
+3. Copy that context and symlink destination and use it as the arguments to the `chcon` command to set the proper SELinux context on the destination file:
+```
+sudo chcon unconfined_u:object_r:systemd_unit_file_t:s0 /nix/store/q8phx7jadr846rw1i7lr1m476h8iwhwp-non-nixos-gpu/resources/non-nixos-gpu.service
+```
+
+4. Re-run the GPU setup script.
