@@ -1,6 +1,8 @@
 { pkgs, misc, lib, ... }: {
   programs.atuin = {
     enable = true;
+    # run a daemon in the background so sync actually works
+    daemon.enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
     flags = [
