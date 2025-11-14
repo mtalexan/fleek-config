@@ -136,6 +136,11 @@ When you update your host system, the GPU integration will break.
 If you have an NVIDIA GPU, you will need to modify the NVIDIA driver version in your `hosts/*.nix` file to match the new driver version.  
 Regardless of whether you have an NVIDIA GPU or not, you should also re-run the `fleek-apply --impure` commend so it will regenerate the host integration. This may warn you that you need to re-run the GPU setup script again.  
 
+If your host system uses SELinux, your nix store will probably also break. You'll need to manually re-run:
+```shell
+sudo restorecon -R /nix
+```
+
 ### Apply Changes
 
 ```shell
