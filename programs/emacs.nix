@@ -22,6 +22,12 @@
 #     the GUI menus. The init.el is configured to load this file if it exists.
 #  5. writeable.org - A writeable tangled org-mode file for testing custom changes before they're included in the
 #     init.el. This file is loaded from the init.el itself, but lives in this config repo.
+#
+# WARNING: emacs installed via Nix suffers from an issue on SSSD systems where it's unaware of the SSSD users, so libnss lookups
+#          will get './~$USER' as the users home folder instead of what's correct.  To solve this specifcially for
+#          emacs, we can call 'emacs --user ""' and it works to find the correct home folder.
+#          Set in the host-specific config home.shellAliases:
+#             "emacs" = ''${config.programs.emacs.package}/bin/emacs --user "" '';
 let
   # This will create a copy of our siteConfigOrg text as a file in the nix store.
   # We need it in the store so it can be consumed at build-time by the emacsWithPackagesFromUsePackage.
@@ -142,14 +148,6 @@ in {
       # Add all the language-servers from the flake
       inputs.language-servers.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
-
-    # WARNING: emacs installed via Nix suffers from an issue on SSSD systems where it's unaware of the SSSD users, so libnss lookups
-    #          will get './~$USER' as the users home folder instead of what's correct.  To solve this specifcially for
-    #          emacs, we can call 'emacs --user ""' and it works to find the correct home folder.
-    home.shellAliases = {
-      # make sure we point to our fully-configured emacs package, otherwise it will fallback the underlying non-configured emacs.
-      "emacs" = ''${myEmacsPackageWithConfig}/bin/emacs --user "" '';
-    };
 
     # Just a nice to have so we can see what's in our generated site-config.org file. The file is read-only and in the nix store,
     # and the file was copied, tangled, and set as the site-lisp/default.el at build time, which is how it's actually consumed.
