@@ -33,13 +33,28 @@
   },
   // Control this with nix home-manager instead
   "auto_update": false,
-  "ui_font_size": 12,
-  "buffer_font_size": 11,
+  "ui_font_size": 14,
+  "buffer_font_size": 13,
   "buffer_line_height": "standard",
   "theme": {
     "mode": "dark",
     "light": "One Light",
     "dark": "Nebula Nova"
+  },
+  "experimental.theme_overrides": {
+    // Nebula Nova theme is here: https://github.com/foxoman/nebula-pulse-zed-theme/blob/main/themes/nebula-nova.json
+    
+    // as bright as possible. When jumping between search matches, the pane is dimmed and the highlighted line number is the only way to tell where we are
+    "editor.active_line_number": "#FFFFFF",
+    // Differences in search match vs selected search match is too low contrast.
+    // The player[0].selection is selection background and is too similar in the Nebula Nova theme to the unselected.
+    //"search.match_background": "#FF8888",
+    "players":[
+      {
+        // default is #75BEFF3D
+        "selection": "#75BEFF5D"
+      }
+    ]
   },
   "pane_split_direction_horizontal": "down",
   // The direction that you want to split panes horizontally. Defaults to "left"

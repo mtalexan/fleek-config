@@ -6,6 +6,7 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/parallel_kitty.nix
+    ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix

@@ -6,6 +6,7 @@
     ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/parallel_kitty.nix
+    ../programs/flameshot.nix
     ../programs/distrobox.nix
     # vscode is provided by the system
     ../programs/zed-editor.nix
