@@ -726,6 +726,8 @@ in {
         #: disable opening of URLs with a plain click::
 
         #:     mouse_map left click ungrabbed no_op
+        # Disable opening URLs with a plain click, and require Ctrl+click or Shift+click instead. See below.
+        mouse_map left click ungrabbed no_op
 
         #: See all the mappable actions including mouse actions here
         #: <https://sw.kovidgoyal.net/kitty/actions/>.
@@ -760,6 +762,8 @@ in {
         #: Click the link under the mouse cursor
 
         # mouse_map ctrl+shift+left release grabbed,ungrabbed mouse_handle_click link
+        # Also configure the same for ctrl+left-click
+        mouse_map ctrl+left release grabbed,ungrabbed mouse_handle_click link
 
         #::  Variant with Ctrl+Shift is present because the simple click based
         #::  version has an unavoidable delay of click_interval, to
