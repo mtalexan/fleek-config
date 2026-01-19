@@ -134,6 +134,7 @@
         { name = "mike@cloud-t610"; }
         { name = "aaravchen2@laptopFedora"; }
         { name = "aaravchen@helios300"; }
+        { name = "aaravchen@bazzite"; } # linked to helios3000
       ];
     in {
       # Dynamically generate homeConfigurations using the functions specified as the 'configFunction' for each item in the
