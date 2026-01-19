@@ -86,6 +86,8 @@
         pkgs.noti
         pkgs.yq
         pkgs.riffdiff
+        # the 'info' command
+        pkgs.texinfoInteractive
     ];
     
     # shell aliases used by all shells
