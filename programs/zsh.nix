@@ -15,14 +15,11 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    # We need autosuggest included after fzf-tab custom plugin, so we can't use this block.
-    # Instead we add zsh-autosuggest to the custom plugins list, and manually define our settings in the initContent/initExtra.
-    #autosuggestion =  {
-    #  enable = true;
-    #  # pink foreground for completion, with underline
-    #  highlight = "fg=#ff00ff,bg=underline";
-    #  # strategy = [ "history" ]; #default
-    #};
+    # This now defaults to ~/zsh/, but all external tools trying to use zsh look in ~/, so remap to the old default.
+    dotDir = config.home.homeDirectory;
+
+    # don't configure autosuggest here, it auto-adds the built in autosuggest plugin without order control, and we have specific order needs.
+
     enableVteIntegration = true;
     autocd = false;
     defaultKeymap = "emacs";

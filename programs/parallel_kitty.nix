@@ -1,4 +1,5 @@
 { pkgs, misc, lib, config, ... }: {
+  # Requires programs/parallel.nix
 
   home.packages = [
     # Full GNU parallel package including docs

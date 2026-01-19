@@ -59,6 +59,7 @@
       ../programs/neovim.nix
       ../programs/nix-index.nix
       ../programs/noti.nix
+      ../programs/parallel.nix
       ../programs/ripgrep.nix
       # just adds to the path/environment if cargo is already installed
       ../programs/rustup.nix
