@@ -167,6 +167,9 @@
         # 'completealiases' makes the aliases themselves separate completions not based on the commands they alias. Don't set it
         "setopt nomatch notify listambiguous pushdignoredups noautomenu nomenucomplete histsavenodups histverify noflowcontrol"
 
+        # Enable the RE_MATCH_PCRE option so PCRE is used for regexs from replace-regexp and similar.
+        "setopt rematchpcre"
+
         ''
         ####################################################
         # End initExtraFirst
@@ -458,8 +461,73 @@
         zle -N x-kill-line
         ''
 
+        # From zshcontrib, so have to be loaded manually.
+        ''autoload -U edit-command-line''
+        ''zle -N edit-command-line''
+
+        # From zshcontrib, so have to be loaded manually.
+        # The replace-string function for prompting for a replacement value in the input and then replacing it everywhere.
+        # It can be aliased to several names for different behaviors: replace-pattern[-again], replace-regex[p][-again]. 
+        # The -pattern does extglob replacement, and -regex[p] does regex.
+        # Regex is Posix Extended unless 'setopt rematchpcre' is set and zsh is linked against pcre.
+        ''autoload -U replace-string replace-string-again''
+        ''zle -N replace-string''
+        ''zle -N replace-string-again''
+        # alias to the actual function name
+        ''zle -N replace-pattern replace-string''
+        ''zle -N replace-pattern-again replace-string-again''
+        ''zle -N replace-regex replace-string''
+        ''zle -N replace-regex-again replace-string-again''
+        ''zle -N replace-regexp replace-string''
+        ''zle -N replace-regexp-again replace-string-again''
+
+        # Wrapper for replace-regexp that explicitly does not pre-populate the previous entry.
+        # Previous entry can be pre-populated in the prompt by either doing:
+        #    zstyle ':zle:replace-regexp' edit-previous true
+        # Or by simply passing a postiive numeric argument to the widget when called.
+        # Setting false or a negative numeric argument disables the pre-population.
+        ''
+        replace-string-noprepop () {
+          # don't pre-populate with the last pattern, ignorin the zstyle setting
+          replace-string -1
+        }
+        zle -N replace-string-noprepop
+
+        replace-string-prepop () {
+          # pre-populate with the last pattern, ignoring the zstyle setting
+          replace-string 1
+        }
+        zle -N replace-string-prepop
+
+        replace-pattern-noprepop () {
+          # don't pre-populate with the last pattern, ignorin the zstyle setting
+          replace-pattern -1
+        }
+        zle -N replace-pattern-noprepop
+
+        replace-pattern-prepop () {
+          # pre-populate with the last pattern, ignoring the zstyle setting
+          replace-pattern 1
+        }
+        zle -N replace-pattern-prepop
+
+        replace-regex-noprepop () {
+          # don't pre-populate with the last pattern, ignorin the zstyle setting
+          replace-regex -1
+        }
+        zle -N replace-regex-noprepop
+
+        replace-regex-prepop () {
+          # pre-populate with the last pattern, ignoring the zstyle setting
+          replace-regex 1
+        }
+        zle -N replace-regex-prepop
+        ''
+
         # To figure out what the keybinding is, press Ctrl+v and then the key combo you're interested in.
         # That will print shell key code you need to provide to bindkey.
+
+        # '^' means Ctrl+, and '^[' or '\e' means Alt+ (or Escape, but not Escape+, they're the same input)
 
         # 'menuselect' and 'listscroll' key maps are present only if the complist widget is enabled by setting zstyle 'menu' to interactive.
         # Comment them out otherwise.
@@ -519,40 +587,66 @@
         #''bindkey -M menuselect '^[[1;5D' emacs-backward-word''
         #''bindkey -M menuselect '\e[1;5D' emacs-backward-word''
 
+        # Alt+i: Up a line in multi-line input, or previous history if already at the top
+        ''bindkey '^[i' up-line-or-history''
+        # no "or-history" in menu selection or list scrolling
+        #''bindkey -M menuselect '^[i' up-line''
+        #''bindkey -M listscroll '^[i' up-line''
+
+        # Alt+k: Down a line in multi-line input, or next history if already at the bottom
+        ''bindkey '^[k' down-line-or-history''
+        # no "or-history" in menu selection or list scrolling
+        #''bindkey -M menuselect '^[k' down-line''
+        #''bindkey -M listscroll '^[k' down-line''
+
+        # Alt+Shift+i: equivalent of PgUp (start of input, including multi-line)
+        ''bindkey '^[I' beginning-of-buffer''
+
+        # Alt+Shift+k: equivalent of PgDn (end of input, including multi-line)
+        ''bindkey '^[K' end-of-buffer''
+
+        # WARNING: Tab is interpreted the same as Ctrl+Shift+i
+
         # Ctrl+Backspace
         ''bindkey '^^?' backward-kill-word''
 
-        # Ctrl+w
+        # Ctrl+w (cut region)
         ''bindkey '^w' kill-region-tracked''
 
-        # Alt+w
+        # Alt+w (copy region)
         ''bindkey '^[w' copy-region-as-kill-unmark''
 
         # Ctrl+k
         ''bindkey '^k' kill-line''
 
-        # Ctrl+y
+        # Ctrl+y (paste)
         ''bindkey '^y' yank''
 
-        # Alt+y
+        # Alt+y (replace paste with prior)
         ''bindkey '^[y' yank-pop''
 
         # Alt+space
         ''bindkey '^[ ' set-mark-command-tracked''
         #''bindkey -M menuselect '^[ ' accept-and-hold''
 
+        # Alt+@ (or Alt+Shift+space)
+        ''bindkey '^[@' set-mark-command-tracked''
+
         # Ctrl+space
         # conflicts with tmux copy-mode set mark
         #''bindkey '^ ' set-mark-command-tracked''
         ##''bindkey -M menuselect '^ ' accept-and-hold''
 
-        # Ctrl+@ (what's actually sent on Ctrl+space)
+        # Ctrl+@ (or Ctrl+Shift+space)
         ''bindkey '^@' set-mark-command-tracked''
         #''bindkey -M menuselect '^@' accept-and-hold''
 
-        # Ctrl+Shift+-
-        ''bindkey '^_' undo''
-        #''bindkey -M menuselect '^_' undo''
+        # Ctrl+x u
+        ''bindkey '^xu' undo''
+        #''bindkey -M menuselect '^xu' undo''
+        
+        # Ctrl+x r
+        ''bindkey '^xr' redo''
 
         # Ctrl+x Ctrl+x
         ''bindkey '^x^x' exchange-point-and-mark''
@@ -560,15 +654,28 @@
         # Ctrl+g
         ''bindkey '^g' unset-or-break-mark-command''
 
-        # WARNING: Tab is interpreted the same as Ctrl+Shift+i
+        # Alt+q : rebind from single to multi-line. 
+        # Saves current intput to buffer and clears it, restoring curren tinput on next prompt
+        ''bindkey '^[q' push-input''
 
-        # Alt+i
-        #''bindkey -M menuselect '^[i' up-line-or-history''
-        #''bindkey -M listscroll '^[i' up-line-or-history''
+        # Unbind Ctrl+Shift+j from accept-line (the effect same as Enter)
+        ''bindkey -r '^J' ''
+        # Unbind Ctrl+Shift+l from clear-screen
+        ''bindkey -r '^L' ''
+        # Unbind Ctrl+Shift+o from accept-line-and-down-history
+        ''bindkey -r '^O' ''
+        # Unbind Ctrl+Shift+U from kill-whole-line
+        ''bindkey -r '^U' ''
 
-        # Alt+k
-        #''bindkey -M menuselect '^[k' down-line-or-history''
-        #''bindkey -M listscroll '^[k' down-line-or-history''
+        # Ctrl+x Ctrl+e: open current input in $EDITOR
+        # Editor to use for this can be overridden with (example is 'gvim -f' command):
+        #    zstyle ':zle:edit-command-line' editor gvim -f
+        ''bindkey '^x^e' edit-command-line''
+
+        # Ctrl+x Ctrl+s : prompt for regex replacement in command (first only), no pre-populate
+        ''bindkey '^x^s' replace-string-noprepop''
+        # Ctrl+x s: prompt for regex replacement in command (first only), pre-populate with previous
+        ''bindkey '^xs' replace-string-prepop''
 
         ''
         ##############################################################
