@@ -344,3 +344,15 @@ sudo chcon unconfined_u:object_r:systemd_unit_file_t:s0 /nix/store/q8phx7jadr846
 ```
 
 4. Re-run the GPU setup script.
+
+#### Quick Alternative
+
+Running GPU setup script will always create the same symlink (`/etc/systemd/system/non-nixos-gpu.service`) if it doesn't already exist, and make sure it points to the correct location in the nix store. After it fails, we can quickly determine and correct the permissions with a couple fixed commands:
+```shell
+
+sudo restorecon -v /etc/systemd/system/non-nixos-gpu.service
+sudo restorecon -Rv /nix
+sudo chcon $(stat -c '%C' /etc/systemd/system/non-nixos-gpu.service) $(readlink -e /etc/systemd/system/non-nixos-gpu.service)
+```
+
+_This makes sure the correct SELinux label is on the file in the systemd folder, then makes sure the nix store is all properly labeled, then finally assigns/corrects the label on the systemd service unit file in the nix store so it matches what is required at the destination it is symlinked to._
