@@ -9,7 +9,7 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     # vscode is provided by the system
-    ../programs/zed-editor.nix
+    #../programs/zed-editor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
