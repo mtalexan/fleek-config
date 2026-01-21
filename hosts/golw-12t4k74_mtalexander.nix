@@ -8,8 +8,10 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
-    ../programs/zed-editor.nix
-    ../programs/emacs.nix
+    # This takes forever to build each time since it requires an impure build for GPU access, which prevents cachix usage.
+    #../programs/zed-editor.nix
+    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs.
+    #../programs/emacs.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well.
@@ -40,8 +42,8 @@
     #
     targets.genericLinux.gpu.nvidia = {
       enable = true;
-      version = "580.95.05";
-      sha256 = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
+      version = "580.126.09";
+      sha256 = "sha256-TKxT5I+K3/Zh1HyHiO0kBZokjJ/YCYzq/QiKSYmG7CY=";
     };
     
     #####################################
