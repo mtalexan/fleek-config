@@ -10,7 +10,7 @@
     ../programs/vscode.nix
     # This takes forever to build each time since it requires an impure build for GPU access, which prevents cachix usage.
     #../programs/zed-editor.nix
-    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs.
+    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
   ];
 
