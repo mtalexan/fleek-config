@@ -28,7 +28,7 @@ in
 
     '';
 
-    extraLuaConfig = lib.concatLines [
+    initLua = lib.concatLines [
       "vim.opt.backup = false"
       "vim.opt.relativenumber = true"
       "vim.opt.number = true"
