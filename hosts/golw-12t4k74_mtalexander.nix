@@ -5,9 +5,7 @@
     ../programs/ks-dev-tools.nix
     ../programs/kitty.nix
     ../programs/parallel_kitty.nix
-    # The nix install of this doesn't integrate with Ubuntu Kwin wayland properly, so copy to clipboard doesn't work.
-    # Which is weird since it works perfectly fine in Fedora Kwin wayland.
-    #../programs/flameshot.nix
+    ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
     # This takes forever to build each time since it requires an impure build for GPU access, which prevents cachix usage.
