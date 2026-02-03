@@ -77,13 +77,35 @@
         inputs.emacs-overlay.overlay
         inputs.git-agecrypt.overlay
         # vscode from separate vscode-nixpkgs flake input
-        (final: prev: {
-          vscode-independent = inputs.vscode-nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}.vscode;
-          })
+        (final: prev:
+          let
+            # redefine what the input pkgs set is, inserting the config for allowing unfree packages
+            pkgsVscode = import inputs.vscode-nixpkgs {
+              inherit (prev.stdenv.hostPlatform) system;
+              config = {
+                allowUnfree = true;
+                allowunfreePredicate = (_: true);
+              };
+            };
+          in {
+            vscode-independent = pkgsVscode.vscode;
+          }    
+        )
         # zed-editor-fhs from separate zed-nixpkgs flake input
-        (final: prev: {
-          zed-independent = inputs.zed-nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}.zed-editor-fhs;
-          })
+        (final: prev:
+          let
+            # redefine what the input pkgs set is, inserting the config for allowing unfree packages
+            pkgsZed = import inputs.zed-nixpkgs {
+              inherit (prev.stdenv.hostPlatform) system;
+              config = {
+                allowUnfree = true;
+                allowunfreePredicate = (_: true);
+              };
+            };
+          in {
+            zed-independent = pkgsZed.zed-editor-fhs;
+          }
+        )
         # must be last in this list
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];
@@ -93,6 +115,11 @@
       pkgsForSystem = system: import nixpkgs {
         inherit system;
         overlays = myOverlaysSet;
+        # Make sure the nixpkgs set allows unfree packages
+        config = {
+          allowUnfree = true;
+          allowunfreePredicate = (_: true);
+        };
       };
 
       # Function to construct the hostFile path from the config name
