@@ -20,7 +20,7 @@
     "preferred_completion_mode": "burn",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "model": "gpt-5.1-codex-max"
     }
   },
   "features": {
