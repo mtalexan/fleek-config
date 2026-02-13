@@ -9,7 +9,7 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
-    #../programs/zed-editor.nix
+    ../programs/zed-editor.nix
   ];
 
 
