@@ -9,9 +9,9 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
-    ../programs/zed-editor.nix
+    # Zed no longer compiles, it says it runs out of disk space when linking, even though it didn't
+    #../programs/zed-editor.nix
   ];
-
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
   # Make this recursive so we can use ${config.home.username} in the home.homeDirectory, and ${config.home.homeDirectory} 
