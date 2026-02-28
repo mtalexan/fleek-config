@@ -8,8 +8,9 @@
     ../programs/parallel_kitty.nix
     ../programs/flameshot.nix
     ../programs/distrobox.nix
-    # vscode is provided by the system
-    #../programs/zed-editor.nix
+    # vscode is provided by the system, but install it anyway so we get any extra config we need with it
+    ../programs/vscode.nix
+    ../programs/zed-editor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
