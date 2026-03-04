@@ -9,7 +9,8 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
-    ../programs/emacs.nix
+    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
+    #../programs/emacs.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well.
@@ -60,6 +61,9 @@
       # The Deskflow flatpak doesn't work on Ubuntu 24.04 Wayland due to the libie being too old.
       # This nix install works when run with sudo though, i.e. 'sudo $(which deskflow)'.
       pkgs.deskflow
+      
+      # Include the RPM tools for working with RPM packages
+      pkgs.rpm
     ];
 
     #####################################

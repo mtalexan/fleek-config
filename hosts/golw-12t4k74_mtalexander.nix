@@ -61,6 +61,9 @@
       # The Deskflow flatpak doesn't work on Ubuntu 24.04 Wayland due to the libie being too old.
       # This nix install works when run with sudo though, i.e. 'sudo $(which deskflow)'.
       pkgs.deskflow
+      
+      # Include the RPM tools for working with RPM packages
+      pkgs.rpm
     ];
 
     #####################################
