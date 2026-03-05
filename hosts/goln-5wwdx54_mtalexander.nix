@@ -64,6 +64,9 @@
       
       # Include the RPM tools for working with RPM packages
       pkgs.rpm
+      # Tools used frequently from the host
+      pkgs.shellcheck
+      pkgs.shellspec
     ];
 
     #####################################
