@@ -234,5 +234,11 @@
       //down
       "alt-k": "menu::SelectNext"
     }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-l": "search::ToggleSelection"
+    }
   }
 ]
