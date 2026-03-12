@@ -2602,16 +2602,16 @@ in {
         # allow multi-select until escape is hit
 
         # paths/files, also works for container names with tags
-        map kitty_mod+p>f kitten hints --type path --program @ --multiple
-        map kitty_mod+p>p kitten hints --type path --program @ --multiple
+        map kitty_mod+y>f kitten hints --type path --program @ --multiple
+        map kitty_mod+y>p kitten hints --type path --program @ --multiple
         # hash/digest
-        map kitty_mod+p>h kitten hints --type hash --program @ --multiple
+        map kitty_mod+y>h kitten hints --type hash --program @ --multiple
         # url
-        map kitty_mod+p>u kitten hints --type url --program @ --multiple
+        map kitty_mod+y>u kitten hints --type url --program @ --multiple
         # ip
-        map kitty_mod+p>i kitten hints --type ip --program @ --multiple
+        map kitty_mod+y>i kitten hints --type ip --program @ --multiple
         # word
-        map kitty_mod+p>w kitten hints --type word --program @ --multiple
+        map kitty_mod+y>w kitten hints --type word --program @ --multiple
 
         #: }}}
       ''
