@@ -18,8 +18,7 @@
         pkgs.nil
         # needed by Basher extension
         pkgs.shellcheck
-        # Use the one from a separate flake, which is actually zed-editor-fhs as well.
-        # We need the fhs version otherwise other tools we install aren't available to the extensions.
+        # Use the one from a separate flake, which is configured in the main flake.nix.
         pkgs.zed-independent
       ];
     home.file =

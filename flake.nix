@@ -103,7 +103,7 @@
               };
             };
           in {
-            zed-independent = pkgsZed.zed-editor-fhs;
+            zed-independent = pkgsZed.zed-editor;
           }
         )
         # must be last in this list
