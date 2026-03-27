@@ -89,7 +89,7 @@
             };
           in {
             vscode-independent = pkgsVscode.vscode;
-          }    
+          }
         )
         # zed-editor-fhs from separate zed-nixpkgs flake input
         (final: prev:

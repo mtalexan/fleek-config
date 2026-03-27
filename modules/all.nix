@@ -19,22 +19,22 @@
       flake itself is copied into the Nix Store and there's no tracking of where the flake came from on the system.
     '';
   };
-  
+
   # "includes". By convention programs/ are for individual programs, while modules/ are less specific.
   # WARNING: If any of these have options defined the import 
   imports = [
       #./nixgl.nix
-  
+
   # Custom home-manager modules that aren't upstream.
       # this one requires the kitty-save-session.nix overlay to be included in the flake.nix
       ../custom-modules/home-manager/kitty-save-session.nix
-  
+
   # Configurations
       ../programs/bash.nix
       ../programs/zsh.nix
-  
+
       ../programs/agenix.nix
-  
+
       ../programs/atuin.nix
       ../programs/bat.nix
       # set some env variables so the system certificates are used for various tools that don't use them by default
@@ -65,10 +65,10 @@
       ../programs/rustup.nix
       ../programs/script-directory.nix
       ../programs/tmux.nix
-  
+
       ../programs/starship.nix
   ];
-  
+
   config = {
     # This enables a lot of generic non-NixOS Linux support.
     targets.genericLinux.enable = true;

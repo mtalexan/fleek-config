@@ -26,6 +26,8 @@
       #          and breaks when the UID isn't in the /etc/passwd file (it does exactly what you're not allowed to do).
       #          Instead we set gpg.format below directly.
       #format = "ssh";
+      # this is required to suppress a warning due to a changed default, but really gpg.format sets it to ssh. See above.
+      format = "openpgp";
 
       # sets tag.gpgsign and commit.gpgsign to true
       signByDefault = true;
