@@ -64,7 +64,6 @@
       # just adds to the path/environment if cargo is already installed
       ../programs/rustup.nix
       ../programs/script-directory.nix
-      ../programs/tealdear.nix
       ../programs/tmux.nix
   
       ../programs/starship.nix
