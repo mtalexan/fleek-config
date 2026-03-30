@@ -79,19 +79,20 @@
           #sha256 = lib.fakeSha256;
         };
       }
-      {
-        # sets bell w/ message when long running things complete
-
-        # will source auto-notify.plugin.zsh
-        name = "auto-notify";
-        src = pkgs.fetchFromGitHub {
-          owner = "MichaelAquilina";
-          repo = "zsh-auto-notify";
-          rev = "0.10.1";
-          sha256 = "sha256-l5nXzCC7MT3hxRQPZv1RFalXZm7uKABZtfEZSMdVmro=";
-          #sha256 = lib.fakeSha256;
-        };
-      }
+      # Kitty now has notify settings that work better. Use those instead.
+      #{
+      #  # sets bell w/ message when long running things complete
+      #
+      #  # will source auto-notify.plugin.zsh
+      #  name = "auto-notify";
+      #  src = pkgs.fetchFromGitHub {
+      #    owner = "MichaelAquilina";
+      #    repo = "zsh-auto-notify";
+      #    rev = "0.10.1";
+      #    sha256 = "sha256-l5nXzCC7MT3hxRQPZv1RFalXZm7uKABZtfEZSMdVmro=";
+      #    #sha256 = lib.fakeSha256;
+      #  };
+      #}
       # conflicts with Ctrl+left/right for fwd/back word, and selection doesn't work with kitty
       #{
       #  # keybindings for shift selection in CLI
