@@ -15,6 +15,32 @@
   // auto-assist completion here to discover the options actually available.
   // Start a new Agent Panel thread and check the drop down for the model types
   // that can be set. The one below is just the default selected there. 
+  "cursor_blink": false,
+  "preview_tabs": {
+    "enable_keep_preview_on_code_navigation": true,
+    "enable_preview_file_from_code_navigation": true,
+    "enable_preview_multibuffer_from_code_navigation": true,
+    "enable_preview_from_file_finder": false
+  },
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": false
+  },
+  "title_bar": {
+    "show_menus": false,
+    "show_sign_in": false,
+    "show_branch_icon": true
+  },
+  "status_bar": {
+    "show_active_file": true,
+    "active_encoding_button": "enabled"
+  },
+  "search": {
+    "center_on_match": true,
+    "include_ignored": true
+  },
+  "current_line_highlight": "all",
+  "unnecessary_code_fade": 0.5,
+  "minimum_contrast_for_highlights": 80.0,
   "edit_predictions": {
     "provider": "copilot"
   },
@@ -27,7 +53,11 @@
       "model": "gpt-5.1-codex-max"
     }
   },
-  "icon_theme": "Colored Zed Icons Theme Dark",
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Colored Zed Icons Theme Dark",
+    "dark": "Colored Zed Icons Theme Dark"
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -40,22 +70,25 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Nebula Nova"
+    "dark": "Vibrant Abyss"
   },
-  "experimental.theme_overrides": {
-    // Nebula Nova theme is here: https://github.com/foxoman/nebula-pulse-zed-theme/blob/main/themes/nebula-nova.json
-    
-    // as bright as possible. When jumping between search matches, the pane is dimmed and the highlighted line number is the only way to tell where we are
-    "editor.active_line_number": "#FFFFFF",
-    // Differences in search match vs selected search match is too low contrast.
-    // The player[0].selection is selection background and is too similar in the Nebula Nova theme to the unselected.
-    //"search.match_background": "#FF8888",
-    "players":[
-      {
-        // default is #75BEFF3D
-        "selection": "#75BEFF5D"
-      }
-    ]
+  "theme_overrides": {
+    "Nebula Nova": {
+      // Nebula Nova theme is here: https://github.com/foxoman/nebula-pulse-zed-theme/blob/main/themes/nebula-nova.json
+      
+      // as bright as possible. When jumping between search matches, the pane is dimmed and the highlighted line number is the only way to tell where we are
+      "editor.active_line_number": "#00FF00FF",
+      "players": [
+        {
+          // The current highlight selection. 
+          // default is: "#75BEFF3D"
+          "selection": "#75BEFF88"
+        }
+      ] 
+    },
+    "Vibrant Abyss": {      
+      "editor.active_line_number": "#FF0000FF"
+    }
   },
   "pane_split_direction_horizontal": "down",
   // The direction that you want to split panes horizontally. Defaults to "left"
@@ -202,7 +235,6 @@
     "json5": true,
     "jsonnet": true,
     "just": true,
-    "just-ls": true,
     "kconfig": true,
     "latex": true,
     "linkerscript": true,
