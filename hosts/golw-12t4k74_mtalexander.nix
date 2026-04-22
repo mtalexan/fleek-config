@@ -67,6 +67,7 @@
       # Tools used frequently from the host
       pkgs.shellcheck
       pkgs.shellspec
+      pkgs.uv
     ];
 
     #####################################
