@@ -1,10 +1,10 @@
 {
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
-  "name": "Vibrant Abyss",
-  "author": "noelhorvath",
+  "name": "Vibrant Abyss Borders",
+  "author": "mtalexan",
   "themes": [
     {
-      "name": "Vibrant Abyss",
+      "name": "Vibrant Abyss Borders",
       "appearance": "dark",
       "style": {
         "accents": [
@@ -14,15 +14,15 @@
         ],
         "background": "#000000",
         "background.appearance": "opaque",
-        "border": "#000000",
-        "border.disabled": "#1e1e1e",
+        "border": "#8e8e8e",
+        "border.disabled": "#4e4e4e",
         "border.focused": "#ffee00",
         "border.selected": "#ffee00",
-        "border.variant": "#1e1e1e",
+        "border.variant": "#4e4e4e",
         "border.transparent": "#00000000",
         "drop_target.background": "#000000",
         "editor.active_line.background": "#1e1e1e",
-        "editor.active_line_number": "#dedede",
+        "editor.active_line_number": "#ff0000ff",
         "editor.active_wrap_guide": "#9c9c9c",
         "editor.background": "#000000",
         "editor.document_highlight.read_background": "#34a7ff70",

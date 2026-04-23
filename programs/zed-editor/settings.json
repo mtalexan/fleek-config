@@ -49,8 +49,10 @@
       "default": "allow"
     },
     "default_model": {
+      "effort": "high",
+      "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "gpt-5.1-codex-max"
+      "model": "claude-sonnet-4.6"
     }
   },
   "icon_theme": {
@@ -70,7 +72,7 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Vibrant Abyss"
+    "dark": "Vibrant Abyss Borders"
   },
   "theme_overrides": {
     "Nebula Nova": {
@@ -85,9 +87,6 @@
           "selection": "#75BEFF88"
         }
       ] 
-    },
-    "Vibrant Abyss": {      
-      "editor.active_line_number": "#FF0000FF"
     }
   },
   "pane_split_direction_horizontal": "down",
