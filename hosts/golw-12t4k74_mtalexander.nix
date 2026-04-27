@@ -68,9 +68,6 @@
       pkgs.shellcheck
       pkgs.shellspec
       pkgs.uv
-
-      # gitlab CLI tool
-      pkgs.glab
     ];
 
     #####################################
