@@ -68,6 +68,8 @@
       pkgs.shellcheck
       pkgs.shellspec
       pkgs.uv
+
+      pkgs.glab
     ];
 
     #####################################

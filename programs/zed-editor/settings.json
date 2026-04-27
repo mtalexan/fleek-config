@@ -77,16 +77,16 @@
   "theme_overrides": {
     "Nebula Nova": {
       // Nebula Nova theme is here: https://github.com/foxoman/nebula-pulse-zed-theme/blob/main/themes/nebula-nova.json
-      
+
       // as bright as possible. When jumping between search matches, the pane is dimmed and the highlighted line number is the only way to tell where we are
       "editor.active_line_number": "#00FF00FF",
       "players": [
         {
-          // The current highlight selection. 
+          // The current highlight selection.
           // default is: "#75BEFF3D"
           "selection": "#75BEFF88"
         }
-      ] 
+      ]
     }
   },
   "pane_split_direction_horizontal": "down",
@@ -173,14 +173,21 @@
     "max_scroll_history_lines": 100000
   },
 
-  
   "languages": {
     "Markdown": {
       // for some reason this is getting ignored in favor of the global override
       "soft_wrap": "editor_width"
     }
   },
-  
+
+  "git_hosting_providers": [
+    {
+      "provider": "gitlab",
+      "name": "SCM-02",
+      "base_url": "https://scm-02.karlstorz.com"
+    }
+  ],
+
   // The following is the list of installed extensions that we want installed by
   // all systems that use this same file. These have to be manually populated here by
   // running: `jq '.extensions | with_entries(.key=.value.manifest.id, .value=true)' ~/.local/share/zed/extensions/index.json`
