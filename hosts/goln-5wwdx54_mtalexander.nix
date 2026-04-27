@@ -41,7 +41,7 @@
     #
     targets.genericLinux.gpu.nvidia = {
       enable = true;
-      version = "580.95.05";
+      version = "580.126.09";
       sha256 = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
     };
     
