@@ -68,6 +68,14 @@
       pkgs.shellcheck
       pkgs.shellspec
       pkgs.uv
+      
+      # The gitlab CLI Tool
+      # Not a Home Manager package yet, so we can't auto-configure with identities.
+      # Requires running manually:
+      #   glab config set host scm-02.karlstorz.com
+      #   glab auth login --hostname scm-02.karlstorz.com
+      # You will need to generate and add a Personal Access Token, the OAuth doesn't work on this server and glab will just deadlock itself waiting for it to work.
+      pkgs.glab
     ];
 
     #####################################
