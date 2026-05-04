@@ -43,7 +43,7 @@
       enable = true;
       version = "580.142"; # this particular version was only 2-part SemVer for some reason
       sha256 = "sha256-IJFfzz/+icNVDPk7YKBKKFRTFQ2S4kaOGRGkNiBEdWM=";
-    };8
+    };
     
     #####################################
     # Extra host-unique non-configurable packages
