@@ -173,6 +173,10 @@
     "max_scroll_history_lines": 100000
   },
 
+  // Use semantic token parsing from the LSP if it's available, combined with the tree-sitter regex-based token highlighting.
+  // Not sure why this is disabled by default, set it to the option that actually makes sense.
+  "semantic_tokens": "combined",
+  
   "languages": {
     "Markdown": {
       // for some reason this is getting ignored in favor of the global override
