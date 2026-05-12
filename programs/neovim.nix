@@ -23,6 +23,12 @@ in
     vimAlias = true;
     vimdiffAlias = false;
 
+    # Not sure if these are actually needed, but the defaults were changed in newer homeManager versions
+    # and it now causes a warning if these aren't set explicitly. 
+    # Match the old defaults just to be sure.
+    withRuby = true;
+    withPython3 = true;
+    
     # bug in some versions of home-manager requires this to be set to something for plugins to get parsed
     extraConfig = ''
 
@@ -48,6 +54,7 @@ in
       # nicer mode line
       {
         plugin = lualine-nvim;
+        type = "viml";
         config = ''
           lua require('lualine').setup({options={theme='vscode'}})
         '';
@@ -59,6 +66,7 @@ in
       # vscode colorscheme
       {
         plugin = vscode-nvim;
+        type = "viml";
         config = ''
           :colorscheme vscode
         '';
@@ -68,6 +76,7 @@ in
       #  :Files, :GFiles, :Rg, and :Buffers
       {
         plugin = fzf-lua;
+        type = "viml";
         config = ''
           lua require('fzf-lua').setup({'fzf-vim'})
         '';
