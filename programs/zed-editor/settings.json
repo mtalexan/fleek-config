@@ -7,14 +7,13 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  // This syntax changes a LOT. Comment these out to use the default Zed.ai.
-  // Sign in with the 'agent: open configuration' panel and then uncomment
-  // this block to use GitHub Copilot.
-  // The name of the provider for GitHub Copilot changes, but they do not match between
-  // the agent.default_model.provider and the features.edit_prediction_provider. Use
-  // auto-assist completion here to discover the options actually available.
-  // Start a new Agent Panel thread and check the drop down for the model types
-  // that can be set. The one below is just the default selected there. 
+  "cli_default_open_behavior": "new_window",
+  "outline_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "cursor_blink": false,
   "preview_tabs": {
     "enable_keep_preview_on_code_navigation": true,
@@ -45,6 +44,7 @@
     "provider": "copilot"
   },
   "agent": {
+    "dock": "right",
     "tool_permissions": {
       "default": "allow"
     },
@@ -116,9 +116,11 @@
     "show_background": false
   },
   "project_panel": {
+    "dock": "left",
     "entry_spacing": "standard"
   },
   "collaboration_panel": {
+    "dock": "left",
     "button": false
   },
   // Whether the screen sharing icon is shown in the os status bar.
