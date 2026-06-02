@@ -7,6 +7,16 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "context_servers": {
+    "mcp-server-gitlab": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "gitlab_personal_access_token": "glpat-5LR8iFfNF7OWGozAoDj7y286MQp1OjUzCA.01.0y1snad2t",
+        "gitlab_api_url": "https://scm-02.karlstorz.com/api/v4"
+      }
+    }
+  },
   "cli_default_open_behavior": "new_window",
   "outline_panel": {
     "dock": "left"
@@ -25,9 +35,9 @@
     "show_pinned_tabs_in_separate_row": false
   },
   "title_bar": {
+    "show_branch_status_icon": true,
     "show_menus": false,
-    "show_sign_in": false,
-    "show_branch_icon": true
+    "show_sign_in": false
   },
   "status_bar": {
     "show_active_file": true,
@@ -44,6 +54,15 @@
     "provider": "copilot"
   },
   "agent": {
+    "default_profile": "write",
+    "profiles": {
+      "plan": {
+        "name": "Plan",
+        "tools": {},
+        "enable_all_context_servers": false,
+        "context_servers": {}
+      }
+    },
     "dock": "right",
     "tool_permissions": {
       "default": "allow"
