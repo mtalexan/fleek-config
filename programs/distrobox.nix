@@ -1,7 +1,7 @@
 { pkgs, misc, lib, config, options, ... }: {
   # WARNING: because we need an 'options.' key here, we have to use the verbose format with a 'config.home.' for home-manager things
 
-  # Not configurable in home-manager itself, add the package generically and setup config.home.file's for what we need
+  # Not configurable in home-manager itself, add the package generically
   config.home.packages = [
     pkgs.distrobox
   ];
@@ -41,64 +41,19 @@
     };
   };
 
-  config.home.file.".config/distrobox/distrobox.conf" = {
-    enable = config.custom.distrobox.hooks.enable || (config.custom.distrobox.config.engine != null) || (config.custom.distrobox.config.extra != null);
-    executable = false;
-    text = "" +
-      lib.optionalString config.custom.distrobox.hooks.enable
-        ''
-          container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
-          container_init_hook="~/.config/distrobox/init-hooks.sh"
-        ''
-      +
-      lib.optionalString (config.custom.distrobox.config.engine != null)
-        ''
-          container_manager="${config.custom.distrobox.config.engine}"
-        ''
-      +
-      lib.optionalString (config.custom.distrobox.config.extra != null) config.custom.distrobox.config.extra
-    ;
-  };
-  config.home.file.".config/distrobox/init-hooks.sh" = {
-    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
-    executable = true;
-    source = ../home_files/distrobox/init-hooks.sh;
-  };
-  config.home.file.".config/distrobox/pre-init-hooks.sh" = {
-    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
-    executable = true;
-    source = ../home_files/distrobox/pre-init-hooks.sh;
-  };
-  config.home.file.".config/distrobox/pre-init-hooks.d/.keep" = {
-    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
-    executable = false;
-    # only used to ensure the folder exists
-    text = "";
-  };
-  config.home.file.".config/distrobox/init-hooks.d/20-nix.sh" = {
-    enable = config.custom.distrobox.hooks.enable || config.custom.distrobox.hooks.host_certs || config.custom.distrobox.hooks.docker_sock;
-    executable = true;
-    source = ../home_files/distrobox/init-hooks.d/20-nix.sh;
-  };
+  # Distrobox config files are managed by chezmoi.
+  # The source files live in chezmoi/dot_config/distrobox/ and the .chezmoiignore.tmpl
+  # conditionally includes/excludes files based on the data flags below.
+  config.custom.chezmoi.templates.distrobox = {
+    enable = true;
 
-
-  config.home.file.".config/distrobox/certs/.keep" = {
-    enable = config.custom.distrobox.hooks.host_certs;
-    executable = false;
-    # only used to ensure the folder exists
-    text = "";
-  };
-  config.home.file.".config/distrobox/pre-init-hooks.d/00-root-cas.sh" = {
-    enable = config.custom.distrobox.hooks.host_certs;
-    executable = true;
-    source = ../home_files/distrobox/pre-init-hooks.d/00-root-cas.sh;
-  };
-
-
-  config.home.file.".config/distrobox/init-hooks.d/30-docker-sock.sh" = {
-    enable = config.custom.distrobox.hooks.docker_sock;
-    executable = true;
-    source = ../home_files/distrobox/init-hooks.d/30-docker-sock.sh;
+    data = {
+      hooks_enable = config.custom.distrobox.hooks.enable;
+      host_certs = config.custom.distrobox.hooks.host_certs;
+      docker_sock = config.custom.distrobox.hooks.docker_sock;
+      engine = if config.custom.distrobox.config.engine != null then config.custom.distrobox.config.engine else "";
+      extra = if config.custom.distrobox.config.extra != null then config.custom.distrobox.config.extra else "";
+    };
   };
 
 }

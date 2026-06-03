@@ -1,7 +1,39 @@
 # Files for programs not enabled on this host are ignored by chezmoi.
 # Each program's .enable field is set by the corresponding programs/*.nix module
 # via custom.chezmoi.templates.<program>.enable.
+# Ignore patterns are relative to the _destination_!
 
 {{ if not (and (hasKey . "zed") .zed.enable) }}
 .config/zed/**
+{{ end }}
+
+{{ if not (and (hasKey . "podman") .podman.enable) }}
+.config/containers/**
+{{ else }}
+  {{ if not .podman.shortnames }}
+.config/containers/registries.conf.d/000-shortnames.conf
+  {{ end }}
+{{ end }}
+
+{{ if not (and (hasKey . "distrobox") .distrobox.enable) }}
+.config/distrobox/**
+{{ else }}
+  {{- $dbAnyHook := or .distrobox.hooks_enable .distrobox.host_certs .distrobox.docker_sock -}}
+  {{- $dbConfNeeded := or .distrobox.hooks_enable (ne .distrobox.engine "") (ne .distrobox.extra "") -}}
+  {{ if not $dbConfNeeded }}
+.config/distrobox/distrobox.conf
+  {{ end }}
+  {{ if not $dbAnyHook }}
+.config/distrobox/init-hooks.sh
+.config/distrobox/pre-init-hooks.sh
+.config/distrobox/pre-init-hooks.d/**
+.config/distrobox/init-hooks.d/20-nix.sh
+  {{ end }}
+  {{ if not .distrobox.host_certs }}
+.config/distrobox/certs/**
+.config/distrobox/pre-init-hooks.d/00-root-cas.sh
+  {{ end }}
+  {{ if not .distrobox.docker_sock }}
+.config/distrobox/init-hooks.d/30-docker-sock.sh
+  {{ end }}
 {{ end }}

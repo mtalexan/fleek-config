@@ -1,0 +1,10 @@
+{{- if .distrobox.hooks_enable -}}
+container_pre_init_hook="~/.config/distrobox/pre-init-hooks.sh"
+container_init_hook="~/.config/distrobox/init-hooks.sh"
+{{ end -}}
+{{- if ne .distrobox.engine "" -}}
+container_manager="{{ .distrobox.engine }}"
+{{ end -}}
+{{- if ne .distrobox.extra "" -}}
+{{ .distrobox.extra }}
+{{- end -}}
