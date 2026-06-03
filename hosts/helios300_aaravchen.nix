@@ -61,6 +61,14 @@
         personal = "${config.home.homeDirectory}/.ssh/github_ed25519";
       };
 
+      # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
+      chezmoi.config.age_keys = {
+        personal = {
+          secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_personal";
+          # recipient set in identity file
+        };
+      };
+      
       # The primary distrobox config file
       distrobox = {
         hooks = {

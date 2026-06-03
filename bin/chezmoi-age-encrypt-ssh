@@ -12,6 +12,11 @@
 
 set -euo pipefail
 
+die() {
+    (( $# == 0 )) || echo >&2 "ERROR:" "$@"
+    exit 1
+}
+
 pubkey_file="${1:-}"
 
 if [[ -z "$pubkey_file" ]]; then
@@ -23,30 +28,17 @@ if [[ -z "$pubkey_file" ]]; then
 fi
 
 # Must be a .pub file
-if [[ "$pubkey_file" != *.pub ]]; then
-  echo "Error: Expected a .pub file (SSH public key), got: $pubkey_file" >&2
-  exit 1
-fi
+[[ "$pubkey_file" == *.pub ]] || die "Expected a .pub file (SSH public key), got: $pubkey_file"
 
-if [[ ! -f "$pubkey_file" ]]; then
-  echo "Error: File not found: $pubkey_file" >&2
-  exit 1
-fi
+[[ -f $pubkey_file ]] || die "File not found: $pubkey_file"
 
 # Extract only columns 1 and 2 (algorithm + base64 key material).
 # Column 3+ is the optional comment that age is sensitive to.
 recipient=$(awk 'NR==1 {print $1 " " $2}' "$pubkey_file")
 
-if [[ -z "$recipient" ]]; then
-  echo "Error: Could not parse public key from: $pubkey_file" >&2
-  exit 1
-fi
+[[ -n $recipient ]] || die "Could not parse public key from: $pubkey_file"
 
-if [[ "$recipient" != ssh-* && "$recipient" != ecdsa-* ]]; then
-  echo "Error: Not a recognized SSH public key algorithm in: $pubkey_file" >&2
-  echo "  Got: ${recipient%% *}" >&2
-  exit 1
-fi
+[[ "$recipient" == ssh-* || "$recipient" == ecdsa-* ]] || die "Not a recognized SSH public key algorithm (ssh-*, ecdsa-*) in: $pubkey_file ($recipient%% *})"
 
 # Encrypt stdin → stdout (armored for safe git storage)
 exec age --encrypt --armor --recipient "$recipient"

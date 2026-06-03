@@ -94,8 +94,10 @@
 
       # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
       chezmoi.config.age_keys = {
-        work = "${config.home.homeDirectory}/.ssh/fleek_chezmoi_agecrypt_work";
-        personal = "${config.home.homeDirectory}/.ssh/fleek_chezmoi_agecrypt_personal";
+        work = {
+          secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
+          # recipient set in identity file
+        };
       };
 
       # Zed editor feature toggles

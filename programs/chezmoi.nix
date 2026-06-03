@@ -29,19 +29,56 @@
         example = lib.literalExpression "[ pkgs.sops ]";
       };
 
-      # Location of named classes of age/SSH private keys available on this host.
+      # Named age key classes (identity + recipient) available on this host.
       age_keys = mkOption {
-        type = types.attrsOf types.str;
+        type = types.attrsOf (types.submodule ({ name, ... }: {
+          options = {
+            secret_file = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                Absolute path to the private (identity) key file on this host.
+              '';
+            };
+            recipient = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The age public key (recipient) corresponding to this identity,
+                or the SSH public key file contents corresponding to this identity.
+                Obtain with: 
+                  age-keygen -y <path-to-private-key> 
+                or
+                  cat ~/<path-to-pubic-key-file>
+
+                Note that this is allowed to include the optional name of the key that
+                may appear as a 3rd value in the SSH public key file.
+              '';
+            };
+          };
+        }));
         default = {};
         description = ''
-          Named classes of age/SSH private keys available on this host.
-          Maps a class name (e.g. "work", "personal") to an absolute path
-          to the SSH private key file.
-          Programs reference these by class name when registering secrets.
+          Named classes of age keys available on this host.
+          Maps a class name (e.g. "work", "personal") to a key specification
+          containing the identity file path and the corresponding recipient
+          public key string. Programs reference these by class name when
+          registering secrets.
+          The collected set of these identities and recipients are also included
+          in the chezmoi.toml file, allowing them to be used directly with the
+          'decrypt' built-in template function and/or with encrypted_* files,
+          though there is no traceability in that case for which key is used for
+          which artifacts, nor build-time enforcement.
         '';
         example = {
-          work = "/home/user/.ssh/fleek_agecrypt";
-          personal = "/home/user/.ssh/personal_age_key";
+          work = { 
+            secret_file = "/home/user/.age/fleek_agecrypt"; 
+            recipient = "age1..."; 
+          };
+          personal = { 
+            secret_file = "/home/user/.ssh/personal_age_encryption_key"; 
+            recipient = "ssh-ed25519 AAAAAAAAAAAAAAAAAAAAAAAAA"; 
+          };
         };
       };
     };
@@ -138,8 +175,44 @@
     # packages contributed by program modules via custom.chezmoi.config.apply_pkgs.
     allApplyPkgs = [ pkgs.age ] ++ config.custom.chezmoi.config.apply_pkgs;
   in {
+    # Validate that every keyClass referenced by a secret is defined in
+    # custom.chezmoi.config.age_keys and has both secret_file and recipient set.
+    assertions = let
+      allSecretRefs = lib.concatLists (lib.mapAttrsToList (program: cfg:
+        lib.mapAttrsToList (secretName: s: {
+          inherit program secretName;
+          keyClass = s.keyClass;
+        }) cfg.secrets
+      ) config.custom.chezmoi.templates);
+      ageKeys = config.custom.chezmoi.config.age_keys;
+      definedKeyClasses = lib.attrNames ageKeys;
+      # A key class is complete only when both secret_file and recipient are non-null.
+      isComplete = kc: builtins.hasAttr kc ageKeys
+        && ageKeys.${kc}.secret_file != null
+        && ageKeys.${kc}.recipient != null;
+      mkMessage = ref:
+        if !(builtins.hasAttr ref.keyClass ageKeys) then
+          "custom.chezmoi.templates.${ref.program}.secrets.${ref.secretName}.keyClass "
+          + "references '${ref.keyClass}' which is not defined in custom.chezmoi.config.age_keys. "
+          + "Defined key classes: ${lib.concatStringsSep ", " definedKeyClasses}"
+        else
+          let
+            kc = ageKeys.${ref.keyClass};
+            missing = (lib.optional (kc.secret_file == null) "secret_file")
+              ++ (lib.optional (kc.recipient == null) "recipient");
+          in
+          "custom.chezmoi.templates.${ref.program}.secrets.${ref.secretName}.keyClass "
+          + "references '${ref.keyClass}' which is missing required fields: "
+          + "${lib.concatStringsSep ", " missing}. "
+          + "Both secret_file and recipient must be set in custom.chezmoi.config.age_keys.${ref.keyClass}.";
+    in map (ref: {
+      assertion = isComplete ref.keyClass;
+      message = mkMessage ref;
+    }) allSecretRefs;
+
     home.packages = [
       pkgs.chezmoi
+      # Only add to the allApplyPkgs since all extra tools need to be manually added to the PATH during chezmoiApply
     ] ++ allApplyPkgs;
 
     # Generate ~/.config/chezmoi/chezmoi.toml
@@ -155,17 +228,29 @@
         } // cfg.data // {
           secrets = lib.mapAttrs (name: s: {
             file = "${config.custom.configdir}/chezmoi/.chezmoisecrets/${program}/${s.encryptedFile}";
-            identity = config.custom.chezmoi.config.age_keys.${s.keyClass};
+            identity = config.custom.chezmoi.config.age_keys.${s.keyClass}.secret_file;
           }) cfg.secrets;
         }) config.custom.chezmoi.templates;
 
         tomlFormat = pkgs.formats.toml {};
         configFile = tomlFormat.generate "chezmoi.toml" ({
+          encryption = "age";
           sourceDir = "${config.custom.configdir}/chezmoi";
           data = chezmoiData;
+          age = let
+            # Only include key classes where both secret_file and recipient are non-null.
+            completeKeys = lib.filterAttrs (_: v: v.secret_file != null && v.recipient != null) config.custom.chezmoi.config.age_keys;
+            # Strip optional trailing comment (e.g. user@host) from SSH public key recipients;
+            # age is sensitive to it. Age-native recipients (age1...) are single tokens and unaffected.
+            sanitizeRecipient = r: lib.concatStringsSep " " (lib.take 2 (lib.splitString " " r));
+          in {
+            command = "${pkgs.age}/bin/age";
+            identities = lib.mapAttrsToList (_: v: v.secret_file) completeKeys;
+            recipients = lib.mapAttrsToList (_: v: sanitizeRecipient v.recipient) completeKeys;
+          };
         } // lib.optionalAttrs (config.custom.chezmoi.config.merge_tool != null) {
           merge = {
-            command = config.custom.chezmoi.merge_tool;
+            command = config.custom.chezmoi.config.merge_tool;
             args = ["-d" "{{ .Destination }}" "{{ .Source }}" "{{ .Target }}"];
           };
         });

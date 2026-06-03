@@ -332,26 +332,41 @@ Key syntax notes:
 
 #### Defining and Using Secrets
 
-Secrets use age encryption with SSH keys. The system uses key classes — named references to SSH private keys that are defined per-host.
+Secrets use age encryption. The system uses key classes — named references to age identity (private key) files that are defined per-host along with their corresponding recipient (public key) strings.
 
 ##### 1. Define key classes on the host
 
 In `hosts/<host>_<user>.nix`, declare which age key classes are available and where to find them:
 ```nix
 custom.chezmoi.config.age_keys = {
-  work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
-  # personal = "${config.home.homeDirectory}/.ssh/personal_key";
+  work = {
+    secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
+    recipient = "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p";
+  };
+  # personal = {
+  #   secret_file = "${config.home.homeDirectory}/.age/personal_key";
+  #   recipient = "age1...";
+  # };
 };
 ```
 
 ##### 2. Encrypt the secret value
 
-Use the `bin/chezmoi-age-encrypt` helper script:
+Use one of the `bin/chezmoi-age-encrypt-*` helper scripts depending on the key type:
+
+**For age secret key files** (where the public key is derived from the secret key):
 ```shell
-echo -n "my-secret-token" | bin/chezmoi-age-encrypt ~/.ssh/fleek_agecrypt.pub > chezmoi/.chezmoisecrets/my_program/my_secret.age
+echo -n "my-secret-token" | bin/chezmoi-age-encrypt-age ~/.age/fleek_chezmoi_work > chezmoi/.chezmoisecrets/my_program/my_secret.age
 ```
 
-The script strips the optional comment field (column 3) from the SSH public key, which `age` is sensitive to. The output is armored (ASCII-safe) for storage in git.
+**For SSH public key files** (where the `.pub` file is used directly as the recipient):
+```shell
+echo -n "my-secret-token" | bin/chezmoi-age-encrypt-ssh ~/.ssh/my_key.pub > chezmoi/.chezmoisecrets/my_program/my_secret.age
+```
+
+`chezmoi-age-encrypt-age` calls `age-keygen -y` on the secret key file to derive the recipient public key, then encrypts.
+`chezmoi-age-encrypt-ssh` strips the optional comment field (column 3) from the SSH public key that `age` is sensitive to, then encrypts.
+Both produce armored (ASCII-safe) output suitable for storage in git.
 
 ##### 3. Register the secret in the program module the secret is used for
 
@@ -400,7 +415,10 @@ The Zed editor config demonstrates all of these features:
 Host file configuration (`hosts/{host}.nix`):
 ```nix
 custom = {
-  chezmoi.config.age_keys.work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
+  chezmoi.config.age_keys.work = {
+    secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
+    recipient = "age1...";
+  };
   zed = {
     gitlab_mcp.enable = true;
     copilot = true;

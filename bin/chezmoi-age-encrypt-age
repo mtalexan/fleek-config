@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# chezmoi-age-encrypt: Encrypt stdin using an age key file.
+# Assumes the age key file follows the standard practice of including the public key
+# as a comment line starting with '# public key: '
+#
+# Usage:
+#   echo -n "my-secret" | chezmoi-age-encrypt ~/.age/my_ke > secret.age
+
+set -euo pipefail
+
+die() {
+    (( $# == 0 )) || echo >&2 "ERROR:" "$@"
+    exit 1
+}
+
+key_file="${1:-}"
+
+if [[ -z "$key_file" ]]; then
+  echo "Usage: $(basename "$0") <path/to/age-key>" >&2
+  echo "" >&2
+  echo "  Reads plaintext from stdin, writes armored age ciphertext to stdout." >&2
+  exit 1
+fi
+
+[[ -f "$key_file" ]] || die "File not found: $bkey_file"
+
+recipient=$(age-keygen -y "$key_file")
+[[ -n $recipient ]] || die "Deriving public recipient key from Age secret key"
+
+# Encrypt stdin → stdout (armored for safe git storage)
+exec age --encrypt --armor --recipient "$recipient"

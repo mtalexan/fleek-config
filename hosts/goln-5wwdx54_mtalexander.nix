@@ -92,9 +92,12 @@
         personal = "${config.home.homeDirectory}/.ssh/github_personal_ed25519";
       };
 
-      # Age key classes available on this host for chezmoi secret decryption.
+      # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
       chezmoi.config.age_keys = {
-        work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
+        work = {
+          secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
+          # recipient set in identity file
+        };
       };
 
       # Zed editor feature toggles

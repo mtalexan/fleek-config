@@ -44,6 +44,14 @@
       git_keys = {
         personal = "${config.home.homeDirectory}/.ssh/id_ed25519_github";
       };
+
+      # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
+      chezmoi.config.age_keys = {
+        personal = {
+          secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_personal";
+          # recipient set in identity file
+        };
+      };
     };
 
     #####################################
