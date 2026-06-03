@@ -92,6 +92,20 @@
         personal = "${config.home.homeDirectory}/.ssh/github_personal_ed25519";
       };
 
+      # Age key classes available on this host for chezmoi secret decryption.
+      chezmoi.config.age_keys = {
+        work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
+      };
+
+      # Zed editor feature toggles
+      zed = {
+        gitlab_mcp = {
+            enable = true;
+            # url is set by the identities/*.nix file and inherited here
+        };
+        copilot = true;
+      };
+
       distrobox = {
         hooks = {
           enable = true;

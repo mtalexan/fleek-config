@@ -9,29 +9,28 @@ nix home-manager configs originally created using [fleek](https://github.com/ubl
 
 ## Structure
 
-The top level folder must contain the following files for it to work properly in different Nix use cases (**not sure what the non-`flake.*` are expected to provided!**):
-- flake.lock
-- flake.nix
-- home.nix
-- path.nix
-- shell.nix
-- user.nix
-
-`hosts/` contains the per-host config files. Roughly equivalent to `fleek`'s `$hostname/custom.nix` files.
-
-Settings are split up into `modules/` and `programs/` that each of specific configs.  
-- `programs/` are organized by the specific program they configure, and are only included if `all.nix` or the host-specific Nix file list it.  
-- `modules/` are always included and may cover a range of settings in each module. The main one is `all.nix`.
-
-There are also top-level folders:
-- `bin/` this folder is added to the PATH so in-place scripts and tools can be put in here.
-- `custom-modules/` contains manually written modules that don't exist upstream.
-  - `home-manager/` are home-manager configuration modules, they define a set 
-  - `overlay-packages/` are for importing into the overlays definition of the flake, either add packages, override packages, or modify build definitions (implicitly overriding packages).
-- `home_files/` directory structures of files that may need to be copied into place in the home folder by home-manager config settings. 
-- `sd_scripts/` for the `sd` tool, the help text files and the scripts in the directories implicitly define a set of subcommands that are part of the path and include auto-complete.
-- `secrets/` are the (r)agenix secrets for decryption with `agenix` home-manager module.
-- `snippets/` are shell script files that get sourced into the shellrc files by home-manager config settings.
+```
+./
+├── flake.lock                        # Pinned flake inputs
+├── flake.nix                         # Flake definition
+├── home.nix                          # (not sure what the non-flake.* are expected to provide!)
+├── path.nix                          #
+├── shell.nix                         #
+├── user.nix                          #
+├── hosts/                            # Per-host config files
+├── modules/                          # Always included, may cover a range of settings in each module.
+├── programs/                         # Per-program configs that are each included only if referenced by a host config or the modules/all.nix
+├── bin/                              # Added to PATH — in-place scripts and tools
+├── chezmoi/                          # Chezmoi source state directory (see Chezmoi Managed Configs)
+├── custom-modules/                   # Manually written modules that don't exist upstream
+│   ├── home-manager/                 # Home-manager configuration modules
+│   └── overlay-packages/             # For importing into ovarlay definitions in the flake.nix, either add packages, override packages, or modify build definitions
+├── home_files/                       # File trees to be copied into ~ by home-manager config
+├── identities/                       # `git-agecrypt` encrypted identity files for configurations of different identity-linked settings.
+├── sd_scripts/                       # `sd` tool scripts. Help text files and scripts that implicitly define a set of subcommands with auto-complete that are part of the PATH
+├── secrets/                          # (r)agenix secrets for decryption with `agenix` home-manager module
+└── snippets/                         # Shell script files sourced into shellrc by home-manager config
+```
 
 
 ## Usage
@@ -190,13 +189,18 @@ Examine the `inputs` section of the `flake.nix` to find the names of the flakes.
 
 ### Secrets
 
-Secrets come in two forms:
-- Secrets used by tools installed by home-manager
-- Secret `*.nix` files in the git repo that define the home-manager config
+Secrets come in three forms:
+- git-agecrypt: Files that are encrypted in git, but not in a clone that has the proper key(s)
+- Chezmoi age: Secrets used by chezmoi, and decrypted at run-time when chezmoi applies the config
+- (r)agenix: other secrets that are used at run-time by tools but are stored encrypted
 
-Shared secret keys used by tools home-manager installs might not be convenient to configure manually on every system. These make use of `agenix` to manually add them as encrypted `*.age` files in the `secrets/` folder.
+All three types of secrets make use of Age encryption, leveraging SSH keys for asymmetrical encryption/decryption. The pubilc SSH key is used to encrypt the secrets, and the private SSH key is used to decrypt them. All SSH keys for this are managed out-of-band from this configuration.
 
-Files that are part of the home-manager config itself (*.nix files), but that contain private or secret values make use of `git-agecrypt` to automatically store them in git as encrypted `*.age` files, but make them visible unencrypted in your working directory.
+The git-agecrypt secrets use the `git-agecrypt` tool to do `age` encryption/decryption as a git repo filter. The configuration ends up as part of the local cloned repo's config.  
+
+The `chezmoi` `age` secrets make use of explicit calls by `chezmoi` to the `age` CLI tool for when they should be decrypted, i.e. when `chezmoi apply` is run. The creation of the encrypted files is manual.  
+
+Shared secrets that may be used on the system at run-time by tools make use of the `agenix` tool, which does system run-time decryption into a well-defined temporary system location. They are available to anyone on the system able to access the `agenix` decrypted folder.
 
 #### Agenix Secrets
 
@@ -235,6 +239,206 @@ To add files, you need to (**BEFORE** committing the file):
 - Manually add the file to the `.gitattributes` so it gets smudged (see existing examples)
 
 **WARNING:** If `git-agecrypt` gets updated, you must re-run `git agecrypt init` in your clone again to update the absolute path to the binary it will use!
+
+### Chezmoi Managed Configs
+
+While home-manager is great for declarative configurations, many tools, like IDEs, don't easily support declaring a complete config in Nix, and instead work much better if they can be modified in-place at run-time and have changes adopted back into the version controlled source for the config file. [Chezmoi](https://www.chezmoi.io/) excels at this, supporting the ability to do diff and reverse-diff between the config that is currently configured to be generated, and the current config file state, while still allowing conditional templating of the generated configs.  
+
+Secrets still need to be kept secret however, so they are `age` encrypted files using public SSH keys as the key to encrypt with, and private SSH keys as the key to decrypt with. The secrets are decrypted by chezmoi directly from the encrypted files in the chezmoi config folder, which allows standard chezmoi tools to work directly with the encrypted files without ever exposing the secrets anywhere else.
+
+#### How It Works
+
+1. Home-manager installs `chezmoi` and `age`, and generates `~/.config/chezmoi/chezmoi.toml` with host-specific template data.
+2. A home-manager activation script runs `chezmoi apply` at the end of every `home-manager switch`/`fleek-apply`.
+3. Chezmoi reads its source directory (`chezmoi/` in this repo), evaluates Go templates, decrypts secrets, and writes the final config files to their target locations (e.g. `~/.config/zed/settings.json`).
+
+Secrets are **never** stored in the nix store in the clear, or in git. They remain age-encrypted in the repo and are decrypted only at `chezmoi apply` time by the `age` CLI using SSH private keys present on the host.
+
+Since all the template values defined in the home-manager config are inserted as data into the `chezmoi.toml` config file, standard `chezmoi` commands will operate with the static values from the current home-manager generation.
+
+#### Directory Structure
+
+```
+chezmoi/                              # Chezmoi source state directory
+├── .chezmoiignore.tmpl               # Controls which files are skipped per-host
+├── .chezmoitemplates/                # Reusable template helpers
+│   ├── age-decrypt-string            # Decrypt a secret, trim whitespace (single-line)
+│   └── age-decrypt-block             # Decrypt a secret, preserve whitespace (multi-line)
+├── .chezmoisecrets/                  # Age-encrypted secret values
+│   └── <program>/                    # One subdirectory per program
+│       └── <secret_name>.age          # Maps to .secrets.<program>.<secret_name>
+└── dot_config/                       # Maps to ~/.config/
+    └── <program>/                    # One directory per managed program
+        ├── some_file.json.tmpl       # Templated file (Go template syntax)
+        ├── other_file.json           # Static file (copied as-is)
+        └── subdir/                   # Subdirectories are fine
+```
+
+Chezmoi naming conventions:
+- `dot_` prefix → becomes a `.` in the target path (e.g. `dot_config/` → `~/.config/`)
+- `.tmpl` suffix → file is processed as a Go template before writing
+- Files without `.tmpl` are copied verbatim
+
+#### Adding a New Program to Chezmoi
+
+1. **Create the source files** in `chezmoi/dot_config/<program>/`, or whevever the file needs to be placed in the home folder:
+   - Static files go in directly (e.g. `keymap.json`)
+   - Files needing host-specific values or secrets get a `.tmpl` suffix (e.g. `settings.json.tmpl`)
+
+2. **Add an ignore rule** in `chezmoi/.chezmoiignore.tmpl`:
+   ```
+   {{ if not (and (hasKey . "my_program") .my_program.enable) }}
+   .config/my-program/**
+   {{ end }}
+   ```
+
+This populates an **ignore** list of program directories based on the `.<program>.enable` field in the `chezmoi.toml` config data. The `hasKey` guard handles the case where the program module isn't imported at all.
+
+3. **Register with chezmoi** in the program's `programs/<program>.nix`:
+   ```nix
+   custom.chezmoi.templates.my_program = {
+     # Controls .chezmoiignore — when true, chezmoi manages this program's files
+     enable = true;
+
+     # Pass any template data (exposed as .my_program.<key> in templates)
+     data = {
+       some_setting = config.custom.my_program.some_option;
+     };
+   };
+   ```
+
+The `custom.chezmoi.templates.<program>` entries get inserted into the `chezmoi.toml` config file as data when home-manager generates the file. Each program's data is structured as `.<program>.*` (with `.enable` and `.secrets` as reserved sibling keys). Chezmoi includes that data when processing the template files supplied to it.
+
+4. **Register secrets with chezmoi** in the program's `programs/<program>.nix` if needed (see next section)
+
+#### Writing Templates
+
+Chezmoi templates use [Go template syntax](https://pkg.go.dev/text/template). Template data from `custom.chezmoi.templates.<program>.data` is available as `.<program>.<key>`.
+
+For a program registered with `custom.chezmoi.templates.zed.data = { copilot = true; }`, the template accesses it as:
+```
+{{- if .zed.copilot }}
+  "edit_predictions": {
+    "provider": "copilot"
+  },
+{{- end }}
+```
+
+Key syntax notes:
+- `{{- ... -}}` trims surrounding whitespace
+- `{{ if .field }}...{{ end }}` for conditionals
+- `{{ .field.subfield }}` for nested data access
+- `{{ includeTemplate "template-name" .data }}` to call a reusable template with an object (`.data`) as the context
+
+#### Defining and Using Secrets
+
+Secrets use age encryption with SSH keys. The system uses key classes — named references to SSH private keys that are defined per-host.
+
+##### 1. Define key classes on the host
+
+In `hosts/<host>_<user>.nix`, declare which age key classes are available and where to find them:
+```nix
+custom.chezmoi.config.age_keys = {
+  work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
+  # personal = "${config.home.homeDirectory}/.ssh/personal_key";
+};
+```
+
+##### 2. Encrypt the secret value
+
+Use the `bin/chezmoi-age-encrypt` helper script:
+```shell
+echo -n "my-secret-token" | bin/chezmoi-age-encrypt ~/.ssh/fleek_agecrypt.pub > chezmoi/.chezmoisecrets/my_program/my_secret.age
+```
+
+The script strips the optional comment field (column 3) from the SSH public key, which `age` is sensitive to. The output is armored (ASCII-safe) for storage in git.
+
+##### 3. Register the secret in the program module the secret is used for
+
+In `programs/<program>.nix`, register the secret within the program's `templates` entry. Secrets are part of the unified per-program configuration:
+```nix
+# Registers as .my_program.secrets.my_secret in chezmoi templates
+# Encrypted file: chezmoi/.chezmoisecrets/my_program/my_secret.age
+custom.chezmoi.templates.my_program = {
+  enable = true;
+  secrets = lib.mkIf config.custom.my_program.needs_secret {
+    my_secret.keyClass = "work";
+  };
+};
+```
+
+The directory convention `chezmoi/.chezmoisecrets/<program>/<secret_name>.age` is derived from the attribute names. The `encryptedFile` option defaults to `<secret_name>.age` but can be overridden if the filename differs from the attribute name.
+
+The `keyClass` is resolved to an actual file path at evaluation time using the host's `custom.chezmoi.config.age_keys` map.
+
+##### 4. Use the secret in a template
+
+Call the reusable decrypt templates. Secrets are accessed as `.<program>.secrets.<secret_name>`:
+```
+// Single-line secret (token, password, API key):
+"api_token": "{{ includeTemplate "age-decrypt-string" .my_program.secrets.my_secret }}",
+
+// Multi-line secret (PEM certificate, SSH key, config block):
+{{ includeTemplate "age-decrypt-block" .my_program.secrets.my_secret }}
+```
+
+`age-decrypt-string` trims whitespace/newlines; `age-decrypt-block` preserves them verbatim.
+
+#### Example: Zed Editor
+
+The Zed editor config demonstrates all of these features:
+
+- **`programs/zed-editor.nix`** defines `custom.zed.gitlab_mcp.{enable,url}` and `custom.zed.copilot` options
+- **`programs/zed-editor.nix`** registers `custom.chezmoi.templates.zed` with `enable = true`, template data, and secrets
+- **`programs/zed-editor.nix`** registers the secret as `custom.chezmoi.templates.zed.secrets.gitlab_pat` using the `work` key class
+- **`identities/{identity}.nix`** sets `custom.zed.gitlab_mcp.url` (private value, kept in git-agecrypt encrypted file)
+- **`hosts/{host}.nix`** enables the zed feature flags (`gitlab_mcp.enable`, `copilot`) and defines the `work` key class
+- **`chezmoi/dot_config/zed/settings.json.tmpl`** conditionally renders the GitLab MCP block and Copilot blocks based on the boolean flags and values
+  - The GitLab MCP block uses `{{ includeTemplate "age-decrypt-string" .zed.secrets.gitlab_pat }}` to decrypt the PAT inline
+- **`chezmoi/dot_config/zed/keymap.json`** and **`themes/`** are static files managed by chezmoi without templating
+
+Host file configuration (`hosts/{host}.nix`):
+```nix
+custom = {
+  chezmoi.config.age_keys.work = "${config.home.homeDirectory}/.ssh/fleek_agecrypt";
+  zed = {
+    gitlab_mcp.enable = true;
+    copilot = true;
+  };
+};
+```
+
+Identity file configuration (`identities/{identity}.nix` — git-agecrypt encrypted):
+```nix
+# Private URL kept out of plaintext in the repo
+custom.zed.gitlab_mcp.url = "https://gitlab.example.com/api/v4";
+```
+
+#### Importing run-time changes into declarative config
+
+To see the list of files that are different between the current chezmoi source state and the generated config files on disk, run:
+```shell
+chezmoi status
+```
+
+To see an actual diff between what chezmoi would generate and what's on disk:
+```shell
+chezmoi diff
+# or visa versa
+chezmoi diff --reverse
+```
+
+For non-templated files that are just included as-is:
+```shell
+chezmoi re-add ~/path/to/file
+```
+
+To do a 3-way merge between the current file (`.Destination`), what's in the git repo (`.Source`), and what chezmoi would apply (`.Target`):
+```shell
+chezmoi merge ~/path/to/file
+# or to merge them all
+chezmoi merge-all
+```
 
 ## Troubleshooting
 

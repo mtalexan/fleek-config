@@ -1,0 +1,7 @@
+# Files for programs not enabled on this host are ignored by chezmoi.
+# Each program's .enable field is set by the corresponding programs/*.nix module
+# via custom.chezmoi.templates.<program>.enable.
+
+{{ if not (and (hasKey . "zed") .zed.enable) }}
+.config/zed/**
+{{ end }}

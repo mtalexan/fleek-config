@@ -1,0 +1,2 @@
+{{- /* Decrypts a single-line secret, trimming whitespace/newlines. */ -}}
+{{- output "age" "--decrypt" "-i" .identity .file | trim -}}

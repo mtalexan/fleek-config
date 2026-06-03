@@ -1,0 +1,2 @@
+{{- /* Decrypts a multi-line secret, preserving all whitespace. */ -}}
+{{- output "age" "--decrypt" "-i" .identity .file -}}

@@ -7,16 +7,18 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+{{- if .zed.gitlab_mcp }}
   "context_servers": {
     "mcp-server-gitlab": {
       "enabled": true,
       "remote": false,
       "settings": {
-        "gitlab_personal_access_token": "glpat-5LR8iFfNF7OWGozAoDj7y286MQp1OjUzCA.01.0y1snad2t",
-        "gitlab_api_url": "https://scm-02.karlstorz.com/api/v4"
+        "gitlab_personal_access_token": "{{ includeTemplate "age-decrypt-string" .zed.secrets.gitlab_pat }}",
+        "gitlab_api_url": "{{ .zed.gitlab_api_url }}"
       }
     }
   },
+{{- end }}
   "cli_default_open_behavior": "new_window",
   "outline_panel": {
     "dock": "left"
@@ -50,29 +52,30 @@
   "current_line_highlight": "all",
   "unnecessary_code_fade": 0.5,
   "minimum_contrast_for_highlights": 80.0,
+{{- if .zed.copilot }}
   "edit_predictions": {
     "provider": "copilot"
   },
+{{- end }}
   "agent": {
     "default_profile": "write",
-    "profiles": {
-      "plan": {
-        "name": "Plan",
-        "tools": {},
-        "enable_all_context_servers": false,
-        "context_servers": {}
-      }
-    },
     "dock": "right",
     "tool_permissions": {
+      "tools": {
+        "copy_path": {
+          "default": "allow"
+        }
+      },
       "default": "allow"
     },
+{{- if .zed.copilot }},
     "default_model": {
       "effort": "high",
       "enable_thinking": true,
       "provider": "copilot_chat",
       "model": "claude-opus-4.6"
     }
+{{- end }}
   },
   "icon_theme": {
     "mode": "dark",

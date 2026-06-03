@@ -34,6 +34,7 @@
       ../programs/zsh.nix
 
       ../programs/agenix.nix
+      ../programs/chezmoi.nix
 
       ../programs/atuin.nix
       ../programs/bat.nix

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# chezmoi-age-encrypt: Encrypt stdin using an SSH public key for age decryption.
+#
+# Usage:
+#   echo -n "my-secret" | chezmoi-age-encrypt ~/.ssh/my_key.pub > secret.age
+#
+# The age tool is sensitive to the optional comment/name field (column 3) that
+# may be present in SSH public key files. This script strips it, passing only
+# the algorithm and key material as the recipient.
+#
+# Requirements: age (https://github.com/FiloSottile/age)
+
+set -euo pipefail
+
+pubkey_file="${1:-}"
+
+if [[ -z "$pubkey_file" ]]; then
+  echo "Usage: $(basename "$0") <path/to/ssh-key.pub>" >&2
+  echo "" >&2
+  echo "  Reads plaintext from stdin, writes armored age ciphertext to stdout." >&2
+  echo "  The corresponding SSH private key is needed to decrypt." >&2
+  exit 1
+fi
+
+# Must be a .pub file
+if [[ "$pubkey_file" != *.pub ]]; then
+  echo "Error: Expected a .pub file (SSH public key), got: $pubkey_file" >&2
+  exit 1
+fi
+
+if [[ ! -f "$pubkey_file" ]]; then
+  echo "Error: File not found: $pubkey_file" >&2
+  exit 1
+fi
+
+# Extract only columns 1 and 2 (algorithm + base64 key material).
+# Column 3+ is the optional comment that age is sensitive to.
+recipient=$(awk 'NR==1 {print $1 " " $2}' "$pubkey_file")
+
+if [[ -z "$recipient" ]]; then
+  echo "Error: Could not parse public key from: $pubkey_file" >&2
+  exit 1
+fi
+
+if [[ "$recipient" != ssh-* && "$recipient" != ecdsa-* ]]; then
+  echo "Error: Not a recognized SSH public key algorithm in: $pubkey_file" >&2
+  echo "  Got: ${recipient%% *}" >&2
+  exit 1
+fi
+
+# Encrypt stdin → stdout (armored for safe git storage)
+exec age --encrypt --armor --recipient "$recipient"

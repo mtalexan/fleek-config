@@ -23,7 +23,7 @@
 
     # see below in the custom.git_keys for the git SSH key setup
 
-    # the locations of the SSH private keys to use for decrypting age secrets.
+    # the locations of the SSH private keys to use for decrypting age secrets from secrets/
     age.identityPaths = [
       "${config.home.homeDirectory}/.ssh/fleek_agecrypt"
     ];
@@ -90,6 +90,21 @@
       git_keys = {
         work = "${config.home.homeDirectory}/.ssh/gitlab_ed25519";
         personal = "${config.home.homeDirectory}/.ssh/github_personal_ed25519";
+      };
+
+      # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
+      chezmoi.config.age_keys = {
+        work = "${config.home.homeDirectory}/.ssh/fleek_chezmoi_agecrypt_work";
+        personal = "${config.home.homeDirectory}/.ssh/fleek_chezmoi_agecrypt_personal";
+      };
+
+      # Zed editor feature toggles
+      zed = {
+        gitlab_mcp = {
+            enable = true;
+            # url is set by the identities/*.nix file and inherited here
+        };
+        copilot = true;
       };
 
       distrobox = {
