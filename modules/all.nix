@@ -79,7 +79,6 @@
         # user selected packages
         pkgs.nerd-fonts.fira-code
         pkgs.nerd-fonts.symbols-only
-        pkgs.manix
         pkgs.jq
         pkgs.less
         pkgs.man

@@ -12,13 +12,8 @@
       allowUnfreePredicate = (_: true);
     };
   };
-  manual = {
-    # This causes an error, so disable it
-    ## adds a home-manager-helper command that opens a web page of the options
-    #html.enable = true;
-    # adds 'man home-manager.nix'
-    manpages.enable = true;
-  };
+  # the 'manual' section only generates a local man page for home-manager configuration settings.
+  # It's pretty useless though, just use the website.
 
   # A user systemd service to automatically clean up old home-manager generations.
   # It can also do nix store automatic cleanup as well
@@ -42,6 +37,8 @@
 
   # Extra outputs of the home.packages that should be installed
   home.extraOutputsToInstall = [
+    # output names that packages may use to contain their documentation
+    "man"
     "doc"
     "info"
     "devdoc"

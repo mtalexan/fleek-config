@@ -131,7 +131,7 @@
           user = builtins.elemAt parts 0; # First capturing group is the user
           host = builtins.elemAt parts 1; # Second capturing group is the host
         in
-          ./hosts/${host}_${user}.nix; # Construct the file path
+          (self + "/hosts/${host}_${user}.nix"); # Construct the file path
 
       # default linux template 
       linuxConfig = configName: home-manager.lib.homeManagerConfiguration {
@@ -143,8 +143,8 @@
         modules = [
           nix-index-database.homeModules.nix-index # Include the nix-index-database home-manager module
           agenix.homeManagerModules.default # Include agenix home-manager module
-          ./home.nix
-          ./user.nix
+          (self + "/home.nix")
+          (self + "/user.nix")
           (hostFileFromName configName) # Dynamically generate the host file path
           ({ nixpkgs.overlays = myOverlaysSet; })
         ];
