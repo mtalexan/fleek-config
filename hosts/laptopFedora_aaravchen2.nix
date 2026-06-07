@@ -33,8 +33,10 @@
     # Extra host-unique non-configurable packages
     #####################################
 
-    #home.packages = [
-    #];
+    home.packages = [
+      pkgs.rename
+      pkgs.cosign
+    ];
 
     #####################################
     # Custom defined config settings

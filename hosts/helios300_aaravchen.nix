@@ -46,6 +46,7 @@
 
     home.packages = [
       pkgs.rename
+      pkgs.cosign
     ];
 
     #####################################
