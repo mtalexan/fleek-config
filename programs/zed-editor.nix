@@ -42,9 +42,47 @@
         When false, these blocks are omitted entirely (Zed uses its own defaults).
       '';
     };
+    broken_wgpu = mkOption {
+      type = types.nullOr (types.enum [ "nvidia" "sw" ]);
+      default = null;
+      description = ''
+        Workaround for Zed's wgpu backend breaking common Intel iGPUs.
+        See: https://github.com/zed-industries/zed/issues/52517
+
+        - null:     No workaround applied. Use this when the iGPU is not present
+                    or the wgpu bug does not affect this host.
+        - "nvidia": Force Zed to use the NVIDIA dGPU's Vulkan ICD, bypassing the
+                    broken Intel driver. Requires an NVIDIA dGPU and sets
+                    VK_ICD_FILENAMES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json.
+        - "sw":     Force software (llvmpipe) rendering via the lavapipe ICD.
+                    Use this when no working dGPU is available. Slower, but functional.
+      '';
+    };
   };
 
-  config = {
+  config = let
+      # Use the one from a separate flake, which is configured in the main flake.nix.
+      zed_base = pkgs.zed-independent;
+  
+      wrapperArgs = {
+        nvidia = [ "--set" "VK_ICD_FILENAMES" "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json" ];
+        sw     = [ "--set" "VK_ICD_FILENAMES" "/usr/share/vulkan/icd.d/lvp_icd.x86_64.json" ];
+      };
+  
+      zedPkg =
+        if config.custom.zed.broken_wgpu != null
+        then
+          pkgs.symlinkJoin {
+            name = "zed-wrapped";
+            paths = [ zed_base ];
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/zeditor \
+                ${lib.concatStringsSep " \\\n              " wrapperArgs.${config.custom.zed.broken_wgpu}}
+            '';
+          }
+        else zed_base;
+    in {
     # Packages zed needs to have externally installed.
     home.packages = [
       # Nix language server has to be manually installed external to zed.
@@ -53,8 +91,8 @@
       pkgs.nil
       # needed by Basher extension
       pkgs.shellcheck
-      # Use the one from a separate flake, which is configured in the main flake.nix.
-      pkgs.zed-independent
+      # defined in the let block
+      zedPkg
     ];
 
     # Register zed with chezmoi for conditional file management and template data

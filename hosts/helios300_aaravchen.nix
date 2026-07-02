@@ -68,7 +68,14 @@
           # recipient set in identity file
         };
       };
-      
+
+      # Zed editor feature toggles
+      zed = {
+        # Zed currently has broken WGPU support for the Intel Xe iGPU. We need to force it to
+        # use the NVIDIA dGPU instead.
+        broken_wgpu = "nvidia";
+      };
+
       # The primary distrobox config file
       distrobox = {
         hooks = {
