@@ -9,8 +9,7 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/vscode.nix
-    # Zed no longer compiles, it says it runs out of disk space when linking, even though it didn't
-    #../programs/zed-editor.nix
+    ../programs/zed-editor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -36,8 +35,8 @@
     #
     targets.genericLinux.gpu.nvidia = {
       enable = true;
-      version = "595.58.03";
-      sha256 = "sha256-jA1Plnt5MsSrVxQnKu6BAzkrCnAskq+lVRdtNiBYKfk=";
+      version = "610.43.02";
+      sha256 = "sha256-MDSgVLtM33dS/43CclZMsQVROAS/9TU4lFkBsWyndGM=";
     };
     
     #####################################
