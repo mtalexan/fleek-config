@@ -160,7 +160,7 @@
         { name = "mike@kubic-730xd"; }
         { name = "mike@cloud-t610"; }
         { name = "aaravchen2@laptopFedora"; }
-        { name = "aaravchen@helios300"; }
+        { name = "aaravchen@helios3000"; }
         { name = "aaravchen@bazzite"; } # linked to helios3000
       ];
     in {
