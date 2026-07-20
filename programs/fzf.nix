@@ -92,40 +92,49 @@
         "--color=dark"
         "--cycle"
       ];
+      # Ctrl+R command, history
+      historyWidget = {
+        # disables the Ctrl+R binding when set to empty string
+        command = "";
+      };
       # Alt+C command, look for directories
-      changeDirWidgetCommand = lib.concatStringsSep " " [
-        "fd"
-        "--type d"
-        "--hidden"
-        "--follow"
-        "--exclude '.git'"
-        "."
-      ];
-      changeDirWidgetOptions = [
-        "--preview '${config.custom.fzf.dirPreviewCmd}'"
-        "--preview-window right,border-vertical"
-        "--bind 'ctrl-/:toggle-preview'"
-        "--scheme=path"
-        "--filepath-word"
-        "--multi"
-      ];
+      changeDirWidget = {
+        command = lib.concatStringsSep " " [
+          "fd"
+          "--type d"
+          "--hidden"
+          "--follow"
+          "--exclude '.git'"
+          "."
+        ];
+        options = [
+          "--preview '${config.custom.fzf.dirPreviewCmd}'"
+          "--preview-window right,border-vertical"
+          "--bind 'ctrl-/:toggle-preview'"
+          "--scheme=path"
+          "--filepath-word"
+          "--multi"
+        ];
+      };
       # Ctrl+T command, look for files
-      fileWidgetCommand = lib.concatStringsSep " " [
-        "fd"
-        "--type f"
-        "--hidden"
-        "--follow"
-        "--exclude '.git'"
-        "."
-      ];
-      fileWidgetOptions = [
-        "--preview '${config.custom.fzf.filePreviewCmd}'"
-        "--preview-window right,border-vertical"
-        "--bind 'ctrl-/:toggle-preview'"
-        "--scheme=path"
-        "--filepath-word"
-        "--multi"
-      ];
+      fileWidget = {
+        command = lib.concatStringsSep " " [
+          "fd"
+          "--type f"
+          "--hidden"
+          "--follow"
+          "--exclude '.git'"
+          "."
+        ];
+        options = [
+          "--preview '${config.custom.fzf.filePreviewCmd}'"
+          "--preview-window right,border-vertical"
+          "--bind 'ctrl-/:toggle-preview'"
+          "--scheme=path"
+          "--filepath-word"
+          "--multi"
+        ];
+      };
     };
 
     # default priority, formerly initExtra
