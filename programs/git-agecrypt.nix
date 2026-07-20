@@ -25,8 +25,11 @@
     # Add a home-manager activation hook that will run 'git agecrypt init' in the config directory this flake came from.
     # The exact path to the git-agecrypt binary is hardcoded into the local repo gitconfig, and needs to be manually updated.
     activation = {
+      # We can only call it on a specific folder with the 'git -C ... agecrypt init' syntax, which only works if the new
+      # git and git-agecrypt are both in the path. Add them explicitly to the start of the PATH for this one command.
       gitAgecryptInit = lib.hm.dag.entryAfter [ "installPackages" ] ''
-        run ${lib.getExe' pkgs.git-agecrypt "git-agecrypt"} -C ${lib.escapeShellArg config.custom.configdir} agecrypt init
+        PATH="${pkgs.git}/bin:${pkgs.git-agecrypt}/bin:$PATH" \
+        run git -C ${lib.escapeShellArg config.custom.configdir} agecrypt init
       '';
     };
   };
