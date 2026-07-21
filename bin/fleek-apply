@@ -9,9 +9,14 @@ readonly FLEEK_CONFIG_DIR="${FLEEK_CONFIG_DIR:-${HOME}/.local/share/fleek}"
 # Nix command must be called from this folders
 cd "${FLEEK_CONFIG_DIR}" || { echo >&2 "ERROR: Couldn't reach FLEEK_CONFIG_DIR=${FLEEK_CONFIG_DIR}"; exit 1; }
 
+_user=$(id -un)
+_hostname=$(hostname)
+# make sure to normalize it to lowercase
+_hostname=${_hostname,,}
+
 ## This command is copied from the fleek code in internal/flake/flake.go:568 for how it switches to the new home-manager.
 ## Except this hardcodes the NIXPKGS_ALLOW_UNFREE=1 and allows extra options like '--impure' to be passed to it and passed-thru.
-#NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
+#NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --impure home-manager/master -- -b bak switch --flake ".#${_user}@${_hostname}" "$@"
 
 # The above command is copied directly from the fleek code, but is intended to be used with the --impure option to allow the NIXPKGS_ALLOW_UNFREE=1
 # and optionally allow using config files that aren't yet commited in git.
@@ -19,4 +24,4 @@ cd "${FLEEK_CONFIG_DIR}" || { echo >&2 "ERROR: Couldn't reach FLEEK_CONFIG_DIR=$
 # the version of home-manager that's locked by the flake we're updating, since that's what we're using to provide the config functions.
 # According to this: https://discourse.nixos.org/t/using-flake-input-with-nix-shell/14147 we can do that by using the '--inputs-from .'
 # while in our fleek flake folder to get it to use the locked home-manager flake input as the home-manager flake definition.
-NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --inputs-from . home-manager -- -b bak switch --flake ".#$(id -un)@$(hostname)" "$@"
+NIXPKGS_ALLOW_UNFREE=1 nix run --no-write-lock-file --inputs-from . home-manager -- -b bak switch --flake ".#${_user}@${_hostname}" "$@"
