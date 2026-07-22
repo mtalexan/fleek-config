@@ -12,7 +12,7 @@ self: super: {
   let
     # define an addCgo function that merges in our desired changes to the attribute set
     addCgo = origArgs: origArgs // {
-      env.CGO_ENABLED = "1"; # Enables use of CGO for all golang builds
+      env = (origArgs.env or {}) // { CGO_ENABLED = "1"; }; # Enables use of CGO for all golang builds
       # gcc becomes a buildInput when building with CGO
       buildInputs = (origArgs.buildInputs or []) ++ [ super.gcc ]; # Add GCC for CGO
     };
