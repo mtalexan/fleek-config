@@ -7,14 +7,6 @@
 .config/zed/**
 {{ end }}
 
-{{ if not (and (hasKey . "podman") .podman.enable) }}
-.config/containers/**
-{{ else }}
-  {{ if not .podman.shortnames }}
-.config/containers/registries.conf.d/000-shortnames.conf
-  {{ end }}
-{{ end }}
-
 {{ if not (and (hasKey . "distrobox") .distrobox.enable) }}
 .config/distrobox/**
 {{ else }}
