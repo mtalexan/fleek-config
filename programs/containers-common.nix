@@ -122,7 +122,7 @@
   in {
     home.packages = []
       ++ lib.optional cfgopts.podman (wrapWithDistConfig pkgs.podman)
-      ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo;
+      ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo);
   };
 }
 
