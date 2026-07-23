@@ -22,7 +22,19 @@
           Creates a seccomp.json in the distribution config that matches the one provided by golang-github-containers-common.
         '';
       };
-      
+  
+      cgroup_manager = mkOption {
+        type = types.enum [ "cgroup" "systemd" ];
+        default = "systemd";
+        description = ''
+          The cgroup manager to use for podman (cgroup or systemd).
+          If the host system uses systemd, this MUST be set to systemd, otherwise it must be set to cgroup.
+          This option is always required to be set explicitly.
+          '';
+      };
+    };
+
+    user_config = {
       policy = mkOption {
         type = types.bool;
         default = true;
@@ -41,16 +53,6 @@
           package is used for the driver.
           '';
       };
-  
-      cgroup_manager = mkOption {
-        type = types.enum [ "cgroup" "systemd" ];
-        default = "systemd";
-        description = ''
-          The cgroup manager to use for podman (cgroup or systemd).
-          If the host system uses systemd, this MUST be set to systemd, otherwise it must be set to cgroup.
-          This option is always required to be set explicitly.
-          '';
-      };
     };
   };
 
@@ -58,6 +60,7 @@
   config = let
     cfgopts = config.custom.containers-common.config;
     cfgoptsdist = cfgopts.dist_config;
+    cfgoptsuser = cfgopts.user_config;
     
     # Install seccomp.json from the flake-included dist config
     seccompJson = pkgs.writeTextFile {
@@ -94,18 +97,18 @@
     # When defined, we check for needing each file.
     custom.chezmoi.templates.containers_common.data = lib.mkIf (cfgopts.podman || cfgopts.skopeo) {
       # if set, the file 
-      storage_driver = if (cfgoptsdist.storage_driver == null) then
+      storage_driver = if (cfgoptsuser.storage_driver == null) then
                           ""
                         else
                           # fuse-overlay sets the fuse overlay path as well, but has to be listed as type "overlay" in the storage.conf file.
-                          if (cfgoptsdist.storage_driver == "fuse-overlay") then
+                          if (cfgoptsuser.storage_driver == "fuse-overlay") then
                             "overlay"
                           else
-                            cfgoptsdist.storage_driver;
-      storage_driver_fuse_path = lib.mkIf (cfgoptsdist.storage_driver == "fuse-overlay") "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs";
+                            cfgoptsuser.storage_driver;
+      storage_driver_fuse_path = lib.mkIf (cfgoptsuser.storage_driver == "fuse-overlay") "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs";
 
       # enables the insecureAllowAnything file
-      policyjson = cfgoptsdist.policy;
+      policyjson = cfgoptsuser.policy;
       
     };
   };

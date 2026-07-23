@@ -69,6 +69,11 @@
       pkgs.shellcheck
       pkgs.shellspec
       pkgs.uv
+
+      # These have to be enabled via the config.custom.containers-common since they require special setup
+      # to include the minimum necessary config files.
+      #pkgs.podman
+      #pkgs.skopeo
       
       # The gitlab CLI Tool
       # Not a Home Manager package yet, so we can't auto-configure with identities.
@@ -108,9 +113,11 @@
         skopeo = true;
         dist_config = {
           seccomp = true;
+          cgroup_manager = "systemd";
+        };
+        user_config = {
           policy = true;
           storage_driver = "overlay";
-          cgroup_manager = "systemd";
         };
       };
 
