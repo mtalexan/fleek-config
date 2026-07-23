@@ -9,6 +9,7 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/containers-common.nix # needs enabling of config to make it do anything
     # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
   ];
@@ -97,6 +98,19 @@
         work = {
           secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
           # recipient set in identity file
+        };
+      };
+
+      # have to enable podman and skopeo here since our definition has to inject a distribution policy
+      # to make them work. 
+      containers-common.config = {
+        podman = true;
+        skopeo = true;
+        dist_config = {
+          seccomp = true;
+          policy = true;
+          storage_driver = "overlay";
+          cgroup_manager = "systemd";
         };
       };
 

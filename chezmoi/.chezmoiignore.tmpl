@@ -7,6 +7,17 @@
 .config/zed/**
 {{ end }}
 
+{{ if not (hasKey . "containers_common") }}
+.config/containers/**
+{{ else }}
+  {{ if not (eq .containers_common.storage_driver "") }}
+.config/containers/storage.conf.tmpl
+  {{ end }} 
+  {{ if not .containers_common.policyjson }}
+.config/containers/policy.json
+  {{ end }}
+{{ end }}
+
 {{ if not (and (hasKey . "distrobox") .distrobox.enable) }}
 .config/distrobox/**
 {{ else }}

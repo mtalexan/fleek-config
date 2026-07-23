@@ -1,0 +1,6 @@
+[storage]
+driver="{{- .containers_common.storage_driver -}}"
+{{- if (and (hasKey .containers_common "storage_driver_fuse_path") (not (eq .containers_common.storage_driver_fuse_path ""))) }}
+[storage.options]
+mount_program = "{{- .containers_common.storage_driver_fuse_path -}}"
+{{- end }}

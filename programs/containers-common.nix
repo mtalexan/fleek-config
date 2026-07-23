@@ -65,37 +65,6 @@
       destination = "/share/containers/seccomp.json";
       text = builtins.readFile ./containers_common_dist_config/seccomp.json;
     };
-
-    # Generate policy.json with insecureAcceptAnything default
-    policyJson = pkgs.writeTextFile {
-      name = "policy-dist-conf";
-      destination = "/share/containers/policy.json";
-      text = builtins.toJSON {
-        default = [
-          { 
-            type = "insecureAcceptAnything"; 
-          }
-        ];
-      };
-    };
-
-    # Generate storage.conf based on the selected storage driver
-    storageConf = pkgs.writeTextFile {
-      name = "storage-dist-conf";
-      # will end up under $out/
-      destination = "/share/containers/storage.conf";
-      # If using fuse-overlayfs, the config needs to be different.
-      text = if cfgoptsdist.storage_driver == "fuse-overlay" then ''
-        [storage]
-        driver="overlay"
-  
-        [storage.options]
-        mount_program = "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs"
-      '' else ''
-        [storage]
-        driver="${cfgoptsdist.storage_driver}"
-      '';
-    };
     
     # Generate containers.conf with cgroup_manager setting
     containersConf = pkgs.writeTextFile {
@@ -113,8 +82,6 @@
       name = "${pkg.pname or pkg.name}-with-dist-config";
       paths = [ pkg ]
         ++ lib.optional cfgoptsdist.seccomp seccompJson
-        ++ lib.optional cfgoptsdist.policy policyJson
-        ++ lib.optional (cfgoptsdist.storage_driver != null) storageConf
         # this one always needs to be included
         ++ [ containersConf ];
     };
@@ -123,6 +90,24 @@
     home.packages = []
       ++ lib.optional cfgopts.podman (wrapWithDistConfig pkgs.podman)
       ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo);
+
+    # When defined, we check for needing each file.
+    custom.chezmoi.templates.containers_common.data = lib.mkIf (cfgopts.podman || cfgopts.skopeo) {
+      # if set, the file 
+      storage_driver = if (cfgoptsdist.storage_driver == null) then
+                          ""
+                        else
+                          # fuse-overlay sets the fuse overlay path as well, but has to be listed as type "overlay" in the storage.conf file.
+                          if (cfgoptsdist.storage_driver == "fuse-overlay") then
+                            "overlay"
+                          else
+                            cfgoptsdist.storage_driver;
+      storage_driver_fuse_path = lib.mkIf (cfgoptsdist.storage_driver == "fuse-overlay") "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs";
+
+      # enables the insecureAllowAnything file
+      policyjson = cfgoptsdist.policy;
+      
+    };
   };
 }
 
