@@ -34,6 +34,7 @@
       };
     };
 
+    # these are setup via chezmoi so they're still modifiable by the user
     user_config = {
       policy = mkOption {
         type = types.bool;
@@ -52,6 +53,17 @@
           have native support for overlayfs in the kernel. If the 'fuse-overlay' is selected, the Nix fuse-overlayfs
           package is used for the driver.
           '';
+      };
+
+      containers_conf = {
+        tini = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Configures the ~/.config/containers/containers.conf to use tini as the init tool when running with --init, instead
+            of the default podman catanonit. 
+          '';
+        };
       };
     };
   };
@@ -92,7 +104,9 @@
   in {
     home.packages = []
       ++ lib.optional cfgopts.podman (wrapWithDistConfig pkgs.podman)
-      ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo);
+      ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo)
+      # tini only applies to podman
+      ++ lib.optional (cfgopts.podman && cfgoptsuser.containers_conf.tini) pkgs.tini;
 
     # When defined, we check for needing each file.
     custom.chezmoi.templates.containers_common.data = lib.mkIf (cfgopts.podman || cfgopts.skopeo) {
@@ -109,7 +123,14 @@
 
       # enables the insecureAllowAnything file
       policyjson = cfgoptsuser.policy;
-      
+
+      # Currently the only settings apply only to podman, so only set this if podman is enabled.
+      # Only enable the containers_conf if one of the values in it is enabled too.
+      # tini specified as in-path above.
+      containers_conf = lib.mkIf (cfgopts.podman && cfgoptsuser.containers_conf.tini) {
+        enabled = true; 
+        init_path = "${pkgs.tini}/bin/tini";
+      };
     };
   };
 }

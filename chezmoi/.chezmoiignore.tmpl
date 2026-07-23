@@ -16,6 +16,9 @@
   {{ if not .containers_common.policyjson }}
 .config/containers/policy.json
   {{ end }}
+  {{ if not (and (hasKey .containers_common "containers_conf") .containers_common.containers_conf.enabled) }}
+.config/containers/containers.conf.tmpl
+  {{ end }}
 {{ end }}
 
 {{ if not (and (hasKey . "distrobox") .distrobox.enable) }}

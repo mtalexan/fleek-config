@@ -1,0 +1,4 @@
+{{ if (hasKey .containers_common.containers_conf "init_path") }}
+[containers]
+init_path="{{- .containers_common.containers_conf.init_path -}}"
+{{ end }}
