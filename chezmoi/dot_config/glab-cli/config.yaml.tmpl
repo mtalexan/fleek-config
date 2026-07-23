@@ -1,0 +1,75 @@
+# What protocol to use when performing Git operations. Supported values: ssh, https.
+git_protocol: ssh
+# What editor glab should run when creating issues, merge requests, etc. This global config cannot be overridden by hostname.
+editor:
+# What browser glab should run when opening links. This global config cannot be overridden by hostname.
+browser:
+# Set your desired Markdown renderer style. Available options are [dark, light, notty]. To set a custom style, refer to https://github.com/charmbracelet/glamour#styles
+glamour_style: dark
+# Allow glab to automatically check for updates and notify you when there are new updates.
+check_update: true
+# Last update check timestamp, used for checking when the last update check was performed.
+last_update_check_timestamp:
+# Whether or not to display hyperlink escape characters when listing items like issues or merge requests. Set to TRUE to display hyperlinks in TTYs only. Force hyperlinks by setting FORCE_HYPERLINKS=1 as an environment variable.
+display_hyperlinks: true
+# Default GitLab hostname to use.
+host: {{ .glab.default_server_name }}
+# Set to true (1) to disable prompts, or false (0) to enable them.
+no_prompt: false
+# Set to false (0) to disable sending usage data to your GitLab instance or true (1) to enable.
+# See https://docs.gitlab.com/administration/settings/usage_statistics/
+# for more information
+telemetry: false
+# Automatically run GitLab Duo CLI without prompting (true/false). Set to true to skip the confirmation prompt.
+duo_cli_auto_run:
+# Automatically download Duo CLI binary without prompting (true/false).
+duo_cli_auto_download:
+# Path to the installed Duo CLI binary (automatically set). Default: ~/.config/glab-cli/bin/duo
+duo_cli_binary_path:
+# Version of the installed Duo CLI binary (automatically set).
+duo_cli_binary_version:
+# SHA256 checksum of the installed Duo CLI binary (automatically set).
+duo_cli_binary_checksum:
+# Last time an update check was performed (automatically set).
+duo_cli_last_update_check:
+# Configuration specific for GitLab instances.
+hosts:
+    gitlab.com:
+        # What protocol to use to access the API endpoint. Supported values: http, https.
+        api_protocol: https
+        # Configure host for API endpoint. Defaults to the host itself.
+        api_host: gitlab.com
+        # Subfolder where GitLab is installed (e.g., 'gitlab' for https://example.com/gitlab/)
+        # Use this when GitLab is hosted at a subfolder rather than domain root.
+        # Supports nested paths (e.g., 'apps/gitlab' for https://example.com/apps/gitlab/)
+        # Slashes are automatically trimmed, so 'gitlab', '/gitlab', and 'gitlab/' are equivalent.
+        # Only applies to HTTP/HTTPS operations (API and git clone).
+        subfolder:
+        # Alternate hostname for SSH git operations (e.g., 'ssh.example.com' or 'git.example.com')
+        # Use this when SSH uses a different hostname than HTTP/API operations.
+        # Only affects SSH cloning and git operations.
+        ssh_host:
+        # Your GitLab access token. To get one, read https://docs.gitlab.com/user/profile/personal_access_tokens/
+        token:
+        # Custom proxy for this host. Overrides environment proxy settings when set.
+        proxy:
+        # The domains of associated container registries. These are used to configure the
+        # Docker credential helper.
+        container_registry_domains: gitlab.com,gitlab.com:443,registry.gitlab.com
+        # Custom HTTP headers to add to all HTTP requests made by glab. Supports both direct values and environment variable loading.
+        # - name: Proxy-Authorization
+        #   value: Bearer token123
+        # - name: Cf-Access-Client-Secret
+        #   valueFromEnv: MY_SECRET_VALUE
+        custom_headers: []
+{{- for host := .glab.servers }}
+    {{ .glab.servers.$host.name }}:
+        api_protocol: https
+        api_host: {{ .glab.servers.$host.name }}
+        ssh_host: {{ .glab.servers.$host.name }}
+  {{- if (hasKey .glab.servers.$host "oauthtoken" ) }}
+        client-id: {{ .glab.servers.$host.oauthtoken }}
+  {{- else}}
+        token: {{ .glab.servers.$host.apitoken }}
+  {{- end }}
+{{- end }}

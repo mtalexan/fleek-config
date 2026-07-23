@@ -43,3 +43,7 @@
 .config/distrobox/init-hooks.d/30-docker-sock.sh
   {{ end }}
 {{ end }}
+
+{{ if not (and (hasKey . "glab") .glab.enable) }}
+.config/glab-cli/**
+{{ end }}
