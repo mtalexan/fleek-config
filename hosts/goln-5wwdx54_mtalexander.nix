@@ -121,6 +121,9 @@
         };
       };
 
+      # the rest of the settings are in the identities files, we just have to set this and include pkgs.glab
+      chezmoi.templates.glab.data.enable = true;
+      
       # Zed editor feature toggles
       zed = {
         gitlab_mcp = {
