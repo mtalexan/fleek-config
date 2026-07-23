@@ -62,14 +62,15 @@ hosts:
         # - name: Cf-Access-Client-Secret
         #   valueFromEnv: MY_SECRET_VALUE
         custom_headers: []
-{{- for host := .glab.servers }}
-    {{ .glab.servers.$host.name }}:
+{{- range $host := .glab.servers }}
+    {{ $host.name }}:
         api_protocol: https
-        api_host: {{ .glab.servers.$host.name }}
-        ssh_host: {{ .glab.servers.$host.name }}
-  {{- if (hasKey .glab.servers.$host "oauthtoken" ) }}
-        client-id: {{ .glab.servers.$host.oauthtoken }}
+        api_host: {{ $host.name }}
+        ssh_host: {{ $host.name }}
+  {{- if (hasKey $host "oauthtoken" ) }}
+        client-id: {{ $host.oauthtoken }}
   {{- else}}
-        token: {{ .glab.servers.$host.apitoken }}
+        token: {{ $host.apitoken }}
   {{- end }}
 {{- end }}
+last_seen_version: 1.108.0
