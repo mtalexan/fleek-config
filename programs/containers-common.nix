@@ -100,13 +100,17 @@
         # this one always needs to be included
         ++ [ containersConf ];
     };
-  
+
+    tini_pkg = pkgs.pkgsStatic.tini;
+    
   in {
     home.packages = []
       ++ lib.optional cfgopts.podman (wrapWithDistConfig pkgs.podman)
       ++ lib.optional cfgopts.skopeo (wrapWithDistConfig pkgs.skopeo)
-      # tini only applies to podman
-      ++ lib.optional (cfgopts.podman && cfgoptsuser.containers_conf.tini) pkgs.tini;
+      # tini only applies to podman.
+      # Need to use the statically compiled version of tini for this though, since the init_path binary
+      # gets bind-mounted into the container being run and won't have dynamic library access.
+      ++ lib.optional (cfgopts.podman && cfgoptsuser.containers_conf.tini) tini_pkg;
 
     # When defined, we check for needing each file.
     custom.chezmoi.templates.containers_common.data = lib.mkIf (cfgopts.podman || cfgopts.skopeo) {
@@ -124,12 +128,12 @@
       # enables the insecureAllowAnything file
       policyjson = cfgoptsuser.policy;
 
-      # Currently the only settings apply only to podman, so only set this if podman is enabled.
+      # Currently the settings apply only to podman, so only set this if podman is enabled.
       # Only enable the containers_conf if one of the values in it is enabled too.
-      # tini specified as in-path above.
+      # tini specified as in-path above, must be the static tini (see above).
       containers_conf = lib.mkIf (cfgopts.podman && cfgoptsuser.containers_conf.tini) {
         enabled = true; 
-        init_path = "${pkgs.tini}/bin/tini";
+        init_path = "${tini_pkg}/bin/tini";
       };
     };
   };
