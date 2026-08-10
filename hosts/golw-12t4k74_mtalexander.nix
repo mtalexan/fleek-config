@@ -88,11 +88,16 @@
       };
 
       # Age key classes available on this host for chezmoi secret decryption from chezmoi/.chezmoisecrets/*/*.age
-      chezmoi.config.age_keys = {
-        work = {
-          secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
-          # recipient set in identity file
+      chezmoi = {
+        config.age_keys = {
+          work = {
+            secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_work";
+            # recipient set in identity file
+          };
         };
+      
+        # the rest of the settings are in the identities files, we just have to set this and include pkgs.glab
+        templates.glab.data.enable = true;
       };
 
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
@@ -109,6 +114,8 @@
           storage_driver = "overlay";
         };
       };
+
+      atuin.ai = true;
       
       # Zed editor feature toggles
       zed = {
