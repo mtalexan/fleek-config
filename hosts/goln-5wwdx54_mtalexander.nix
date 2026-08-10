@@ -52,10 +52,8 @@
 
     home.packages = [
       pkgs.rename
-      # don't use podman or skopeo from nix,
-      # podman is suddenly experiencing a bug where 'podman run --userns:keep-id ...' isn't properly linking
-      #   the overlay folders together and fails to start any containers.
-      # skopeo wasn't built with glibc-static and CGO, so it can't parse users or groups from LDAP.
+
+      pkgs.meld
 
       # For sharing mouse/keyboard between machines. Requires external manual configuration between the
       # individual machines running it.
@@ -69,18 +67,9 @@
       pkgs.shellcheck
       pkgs.shellspec
       pkgs.uv
-
-      # These have to be enabled via the config.custom.containers-common since they require special setup
-      # to include the minimum necessary config files.
-      #pkgs.podman
-      #pkgs.skopeo
       
       # The gitlab CLI Tool
       # Not a Home Manager package yet, so we can't auto-configure with identities.
-      # Requires running manually:
-      #   glab config set host scm-02.karlstorz.com
-      #   glab auth login --hostname scm-02.karlstorz.com
-      # You will need to generate and add a Personal Access Token, the OAuth doesn't work on this server and glab will just deadlock itself waiting for it to work.
       pkgs.glab
     ];
 

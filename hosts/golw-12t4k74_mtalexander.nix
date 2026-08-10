@@ -9,6 +9,7 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/containers-common.nix # needs enabling of config to make it do anything
     # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
   ];
@@ -41,8 +42,8 @@
     #
     targets.genericLinux.gpu.nvidia = {
       enable = true;
-      version = "580.159.03";
-      sha256 = "sha256-MshdmbD2QMlQH2GzndrSCP0CiNAVxPvF/QQ1wHeD+nc=";
+      version = "580.173.02";
+      sha256 = "sha256-jY65AB4FqaimY9PV0wT+tk7yhE7hhczf2VJ4aCD0bhs=";
     };
     
     #####################################
@@ -51,10 +52,8 @@
 
     home.packages = [
       pkgs.rename
-      # don't use podman or skopeo from nix,
-      # podman is suddenly experiencing a bug where 'podman run --userns:keep-id ...' isn't properly linking
-      #   the overlay folders together and fails to start any containers.
-      # skopeo wasn't built with glibc-static and CGO, so it can't parse users or groups from LDAP.
+
+      pkgs.meld
 
       # For sharing mouse/keyboard between machines. Requires external manual configuration between the
       # individual machines running it.
@@ -71,10 +70,6 @@
       
       # The gitlab CLI Tool
       # Not a Home Manager package yet, so we can't auto-configure with identities.
-      # Requires running manually:
-      #   glab config set host scm-02.karlstorz.com
-      #   glab auth login --hostname scm-02.karlstorz.com
-      # You will need to generate and add a Personal Access Token, the OAuth doesn't work on this server and glab will just deadlock itself waiting for it to work.
       pkgs.glab
     ];
 
@@ -100,6 +95,21 @@
         };
       };
 
+      # have to enable podman and skopeo here since our definition has to inject a distribution policy
+      # to make them work. 
+      containers-common.config = {
+        podman = true;
+        skopeo = true;
+        dist_config = {
+          seccomp = true;
+          cgroup_manager = "systemd";
+        };
+        user_config = {
+          policy = true;
+          storage_driver = "overlay";
+        };
+      };
+      
       # Zed editor feature toggles
       zed = {
         gitlab_mcp = {
