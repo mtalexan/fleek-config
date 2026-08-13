@@ -1,7 +1,7 @@
 [
   {
     "label": "File Finder (fd+fzf)",
-    "command": "fd --type f --no-ignore --hidden --exclude '.git' --follow --strip-cwd-prefix --color=always | fzf --height=100% --bind='alt-/:toggle-preview' --multi --preview 'cat {}' --preview-window='right:50%:hidden' | xargs -r -d '\\n' zeditor -e ",
+    "command": "{{ .zed.fileSearchCmd }}",
     "cwd": "${ZED_WORKTREE_ROOT}",
     "hide": "always",
     "allow_concurrent_runs": true,

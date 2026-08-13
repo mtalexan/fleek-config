@@ -104,6 +104,21 @@
         gitlab_mcp = config.custom.zed.gitlab_mcp.enable;
         gitlab_api_url = config.custom.zed.gitlab_mcp.url;
         copilot = config.custom.zed.copilot;
+        # Defines the command to run for the task we've custom bound to Ctrl+P for file search since zed's built-in file search has so many problems.
+        # We're basically running an fd search in fzf to pick files to open in the current zed window.
+        # The regular 'fd ... | fzf ...' works poorly on very large directories because it basically writes every file in existence to fzf to fuzzy filter.
+        # Instead we set the fd command to run as a '--bind change:reload' event, which means fzf will kick off a new fd on each typed query update.
+        # fd normally only allows regex patterns, but to keep fuzzy filtering we end up filtering the results with fzf as well. 
+        # This won't work for all patterns, but it will for most as long as the special fzf search characters aren't used. Space-separated words are 
+        # treated as separate regexes to fd to take out the bulk of hits, and fzf filters down what's left.
+        # 
+        # Don't follow .gitignore, it breaks git externals.
+        # Need to force color output from fd.
+        # The usual Ctrl+/ for toggling preview conflicts, so custom bind in fzf to Alt+/.
+        # Start preview window hidden by default, and use the fzf-defined file preview program.
+        # Use 'zeditor -e' to force opening in the currently active window. 
+        # Do NOT use ${pkgs.zeditor}/bin/zeditor, we don't want to hardcode the task file to our specific zeditor verison.
+        fileSearchCmd = ''fzf --height=100% --bind='alt-/:toggle-preview' --multi --preview '${config.custom.fzf.filePreviewCmd}' --preview-window='right:50%:hidden' --query="" --bind 'change:reload:sleep 0.3;fd --type f --no-ignore-vcs --hidden --exclude '.git' --follow --strip-cwd-prefix --color=always {q} .' | xargs -r -d '\\n' zeditor -e '';
       };
 
       secrets = lib.mkIf config.custom.zed.gitlab_mcp.enable {

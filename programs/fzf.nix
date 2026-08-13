@@ -207,7 +207,7 @@
             # Set a global pre-defined temp variable to hold the FZF options we should use
             typeset -g _TMP_FZF_EXTRA_DEFAULT_OPTS=""
             if (( $# > 0 )); then
-              _TMP_FZF_EXTRA_DEFAULT_OPTS+=" --query='$*'
+              _TMP_FZF_EXTRA_DEFAULT_OPTS+=" --query='$*'"
             fi
   
             # Wrapper for the FZF provided fzf-file-widget that can be defined and registered

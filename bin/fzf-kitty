@@ -1,23 +1,48 @@
-#!/bin/sh
-# Copied from https://github.com/junegunn/fzf/discussions/2760#discussioncomment-4239679
-# Used to launch a kitty overlay with fzf in it
+#!/bin/bash
+# Copied from https://github.com/junegunn/fzf/discussions/2760#discussioncomment-4239679 and modified.
+# Used to launch a kitty overlay with fzf in it.
+# Allows piping input to it in real-time, and specifying the arguments to fzf as args to this script.
+
+REMOVE_FILE=()
+STDIN_PUMP_PID=
+
+cleanup() {
+    if [[ -n "$STDIN_PUMP_PID" ]]; then
+        kill "$STDIN_PUMP_PID" 2>/dev/null
+        wait "$STDIN_PUMP_PID" 2>/dev/null
+    fi
+    if ((${#REMOVE_FILE[@]} > 0)); then
+        rm -f "${REMOVE_FILE[@]}"
+    fi
+}
+trap 'cleanup' EXIT
 
 outpipe=$(mktemp -u)
 mkfifo -m 600 "$outpipe"
+REMOVE_FILE+=("${outpipe}")
 
+inpipe=
 if [ ! -t 0 ]; then
-    infile=$(mktemp /tmp/fzf-kitty.XXXXXX)
-    while read -r line; do
-        echo "$line" >>"$infile"
-    done
+    inpipe=$(mktemp -u)
+    mkfifo -m 600 "$inpipe"
+    REMOVE_FILE+=("${inpipe}")
+
+    # Pump our stdin into the fifo in the background. The explicit stdin
+    # redirection is required: bash redirects stdin of background jobs from
+    # /dev/null unless the job has a redirection of its own. 
+    # The write side blocks on open() until fzf opens the read side, so nothing is buffered here.
+    exec {stdin_fd}<&0
+    cat <&"$stdin_fd" >"$inpipe" &
+    STDIN_PUMP_PID=$!
 fi
 
-kitty @launch --cwd "$PWD" --env "PATH=$PATH" --env "INFILE=$infile" --env "OUTPIPE=$outpipe" _fzf-kitty-to "$@" >/dev/null
-
-read -r line <"$outpipe"
-
-if [ ! -t 0 ]; then
-    rm "$infile"
+# Pass in pre-defined environment variables naming the input and output pipes to use.
+# The _fzf-kitty-to script reads from the input pipe (if defined) and pipes it to the fzf command,
+# and writes all fzf stdout to the output pipe. Arguments passed to _fzf-kitty-to are passed as args to fzf.
+if ! kitten @ launch --type=overlay --cwd "$PWD" --env "PATH=$PATH" --env "_FZF_TO_KITTY_INPIPE=$inpipe" --env "_FZF_TO_KITTY_OUTPIPE=$outpipe" _fzf-kitty-to "$@" >/dev/null; then
+    echo "fzf-kitty: failed to launch kitty window" >&2
+    exit 1
 fi
-rm "$outpipe"
-echo "$line"
+
+# Readback from the pipe fzf wrote to inside the overlay window and write it to stdout.
+cat <"$outpipe"

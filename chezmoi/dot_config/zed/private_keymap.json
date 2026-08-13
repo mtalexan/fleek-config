@@ -244,7 +244,7 @@
   {
     "context": "Workspace",
     "bindings": {
-      "ctrl-p": ["task::Spawn", { "task_name": "File Finder (fd+fzf)", "reveal_target": "dock" }]
+      "ctrl-p": ["task::Spawn", { "task_name": "File Finder (fd+fzf)", "reveal_target": "center" }]
     }
   }
 ]

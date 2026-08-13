@@ -1,15 +1,13 @@
 #!/bin/bash
 # Copied from https://github.com/junegunn/fzf/discussions/2760#discussioncomment-4239679
 # Used by fzf-kitty script.
+# Whatever arguments are passed to it are passed as arguments to fzf.
+# Globals:
+#  _FZF_TO_KITTY_INPIPE: If set, it should be a named pipe to read fzf's input from.
+#  _FZF_TO_KITTY_OUTPIPE: Must be provided, it's the named pipe to write stdout to
 
-# https://github.com/junegunn/fzf/issues/2481#issuecomment-839591602
-tail_app="tail"
-if [[ "$(uname)" == "Darwin" ]]; then
-    tail_app=gtail
-fi
-
-if [[ -f "$INFILE" ]]; then
-    $tail_app -f "$INFILE" | fzf "$@" >"$OUTPIPE"
+if [[ -p "$_FZF_TO_KITTY_INPIPE" ]]; then
+    fzf "$@" <"$_FZF_TO_KITTY_INPIPE" >"$_FZF_TO_KITTY_OUTPIPE"
 else
-    fzf "$@" >"$OUTPIPE"
+    fzf "$@" >"$_FZF_TO_KITTY_OUTPIPE"
 fi
