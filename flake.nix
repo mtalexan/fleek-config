@@ -159,7 +159,7 @@
         { name = "mtalexander@goln-5wwdx54"; }
         { name = "mike@kubic-730xd"; }
         { name = "mike@cloud-t610"; }
-        { name = "aaravchen2@laptopFedora"; }
+        { name = "aaravchen2@laptopfedora"; }
         { name = "aaravchen@helios3000"; }
         { name = "aaravchen@bazzite"; } # linked to helios3000
       ];
