@@ -10,7 +10,7 @@
         # These override what each specified key/action does relative to the built-in defaults, but do not unmap any other existing
         #  bindings for a newly mapped action.
         # Some special modes may add/override specific bindings relative to this as well.
-        "ctrl-/:toggle-preview"
+        "alt-/:toggle-preview"
         "alt-bs:backward-kill-word"
         "alt-j:backward-char"
         "alt-l:forward-char"
@@ -31,6 +31,8 @@
         "ctrl-alt-k,alt-down:preview-down"
         "ctrl-alt-I:preview-page-up"
         "ctrl-alt-K:preview-page-down"
+        # ctrl-enter isn't allowed
+        "alt-space,ctrl-space,alt-enter:toggle"
       ];
       description = ''
         List of key bindings to actions for FZF. Affects both FZF_DEFAULT_OPTS and fzf-tab zsh plugin.
@@ -107,17 +109,16 @@
           "--no-ignore-vcs"
           "--follow"
           "--exclude '.git'"
+          "--strip-cwd-prefix"
           "."
         ];
         options = [
           "--preview '${config.custom.fzf.dirPreviewCmd}'"
           "--preview-window right,border-vertical"
-          "--bind 'ctrl-/:toggle-preview'"
           # take selected match and keep searching
-          "--bind 'alt-/:replace-query'"
+          "--bind 'ctrl-/:replace-query'"
           "--scheme=path"
           "--filepath-word"
-          "--multi"
         ];
       };
       # Ctrl+T command, look for files
@@ -134,8 +135,8 @@
         ];
         options = [
           "--preview '${config.custom.fzf.filePreviewCmd}'"
-          "--preview-window right,border-vertical"
-          "--bind 'ctrl-/:toggle-preview'"
+          # default to hidden, use the global alt-/ to show it
+          "--preview-window right,border-vertical,hidden"
           "--scheme=path"
           "--filepath-word"
           "--multi"
