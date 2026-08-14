@@ -119,7 +119,7 @@
         # Use 'zeditor -e' to force opening in the currently active window. 
         # Do NOT use ${pkgs.zeditor}/bin/zeditor, we don't want to hardcode the task file to our specific zeditor verison.
         # WARNING: This gets inserted into a JSON string, so it cannot contain " characters
-        fileSearchCmd = "fzf --height=100% --bind='alt-/:toggle-preview' --multi --preview '${config.custom.fzf.filePreviewCmd}' --preview-window='right:50%:hidden' --query='' --bind 'change:reload:sleep 0.3;fd --type f --no-ignore-vcs --hidden --exclude '.git' --follow --strip-cwd-prefix --color=always {q} .' | xargs -r -d '\\n' zeditor -e";
+        fileSearchCmd = "fd --type f --no-ignore-vcs --hidden --exclude '.git' --follow --strip-cwd-prefix --color=always | fzf --height=100% --bind='alt-/:toggle-preview' --multi --preview '${config.custom.fzf.filePreviewCmd}' --preview-window='right:50%:hidden' | xargs -r -d '\\n' zeditor -e";
       };
 
       secrets = lib.mkIf config.custom.zed.gitlab_mcp.enable {
