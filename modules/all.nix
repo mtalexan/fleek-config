@@ -38,6 +38,7 @@
 
       ../programs/atuin.nix
       ../programs/bat.nix
+      ../programs/broot.nix
       # set some env variables so the system certificates are used for various tools that don't use them by default
       ../programs/comma.nix
       ../programs/custom-certs.nix
