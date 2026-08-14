@@ -71,6 +71,11 @@ let
       });
 in {
   options.custom.emacs = {
+    sssd_workaround = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''Add an alias for emacs that works around emacs' inability to properly interact with SSSD users when called normally'';
+    };
     siteConfigOrg = lib.mkOption {
       # This must be type 'lines' and not 'str' so we can use lib.mkDefault, lib.mkBefore, and lib.mkAfter to construct it.
       type = lib.types.lines;
@@ -175,6 +180,14 @@ in {
       package = myEmacsPackageWithConfig;
     }; # end of programs.emacs
 
+    # WARNING: emacs installed via Nix suffers from an issue on SSSD systems where it's unaware of the SSSD users, so libnss lookups
+    #          will get './~$USER' as the users home folder instead of what's correct.  To solve this specifically for
+    #          emacs, we can call 'emacs --user ""' and it works to find the correct home folder.
+    home.shellAliases = lib.mkIf (config.custom.emacs.sssd_workaround) {
+      # make sure we point to our fully-configured emacs package, otherwise it will fallback the underlying non-configured emacs.
+      "emacs" = ''${config.programs.emacs.package}/bin/emacs --user "" '';
+    };
+    
     custom.emacs.configEl = lib.mkMerge [
       (lib.mkAfter ''
         ;; load the custom.el config file Emacs generates whenever you change a setting via the GUI menus

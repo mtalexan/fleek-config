@@ -136,18 +136,13 @@
         };
         config.engine = "docker";
       };
+
+      emacs.sssd_workaround = true;
     };
 
     #####################################
     # One-off Program Settings
     #####################################
-    # WARNING: emacs installed via Nix suffers from an issue on SSSD systems where it's unaware of the SSSD users, so libnss lookups
-    #          will get './~$USER' as the users home folder instead of what's correct.  To solve this specifcially for
-    #          emacs, we can call 'emacs --user ""' and it works to find the correct home folder.
-    home.shellAliases = {
-      # make sure we point to our fully-configured emacs package, otherwise it will fallback the underlying non-configured emacs.
-      "emacs" = ''${config.programs.emacs.package}/bin/emacs --user "" '';
-    };
   };
 }
 
