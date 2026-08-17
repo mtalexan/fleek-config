@@ -1,0 +1,246 @@
+#!/bin/bash
+# fd-quick - run fd from a compact spec that carries its own options.
+# Run `fd-quick --help` for the full description.
+set -u
+
+die() {
+    printf 'fd-quick: %s\n' "$1" >&2
+    exit 2
+}
+
+usage() {
+    cat <<'EOF'
+NAME
+    fd-quick - run fd from a compact spec that carries its own options
+
+SYNOPSIS
+    fd-quick [-n] [--] SPEC [SPEC ...]
+    fd-quick -h
+
+DESCRIPTION
+    Wraps fd with a shorthand that lets a few common options ride along in
+    front of the pattern, so an entire search fits in a single argument.
+    Useful anywhere fd has to be driven from one string, such as a prompt or
+    an editor's file-picker command.
+
+    A SPEC is a ':'-delimited list of config blocks followed by the pattern:
+
+        block:block:...:pattern
+
+    Blocks are read left to right and stop at the first segment that is not a
+    valid block; everything from there on is the pattern. The segment after
+    the last ':' is always the pattern, so 'tf:[[:digit:]]+' keeps its
+    character class and 'tmp/foo' searches for tmp/foo rather than setting
+    '-t mp/foo'.
+
+    Extra SPECs are joined with fd's --and, so every pattern has to match.
+    They may carry blocks of their own, but fd applies options to the search
+    as a whole rather than per pattern, so a block anywhere affects all of
+    them. Options are therefore hoisted to the front of the command line.
+
+OPTIONS
+    -n, --dry-run
+        Print the fd command line instead of running it, quoting only the
+        arguments that a shell would need quoted.
+
+    -h, --help
+        Print this help.
+
+    --
+        Stop reading fd-quick's own options; every later argument is a SPEC.
+
+CONFIG BLOCKS
+    e<ext>      -e <ext>    limit to an extension (repeatable)
+    t<type>     -t <type>   limit to a type (repeatable; -t f if none given)
+    S<size>     -S <size>   limit by size, e.g. 'S+100MB', 'S-2k'
+    !           --prune     do not descend into matches
+    <flags>                 one or more of the single-character flags below,
+                            in any order and any combination
+
+    Flags:
+        g       --glob          match with a glob
+        r       --regex         match with a regex (fd's default)
+        F       -F              match a fixed string
+        p       -p              match against the whole path
+        i       -i              ignore case
+        s       -s              force case sensitivity
+        L       --follow        follow symlinks
+        !L      --no-follow     do not follow symlinks
+        H       --hidden        include hidden entries
+        I       --no-ignore     ignore .gitignore and friends
+
+    '::' ends the blocks, exactly as '--' ends a command line's options:
+    everything after it is the pattern, however much of it looks like a block.
+    This is the only way to write a pattern whose own first segment would parse
+    as one, since prefixing a harmless block doesn't stop parsing - it just
+    consumes that one too:
+
+        tmp:foo       ->  fd -t mp -- foo
+        r:tmp:foo     ->  fd --regex -t mp -- foo
+        ::tmp:foo     ->  fd -t f -- tmp:foo
+        Fi::tmp:foo   ->  fd -t f -F -i -- tmp:foo
+
+    A '::' only counts when everything in front of it is a block, so a pattern
+    that merely contains one needs no escaping:
+
+        std::vector      ->  fd -t f -- std::vector
+        tf::std::vector  ->  fd -t f -- std::vector
+
+ENVIRONMENT
+    FD_QUICK_OPTS
+        Extra options, placed directly after 'fd'. Split with shell quoting
+        rules, so FD_QUICK_OPTS="--exclude '**/.git'" works as expected.
+
+    FD_QUICK_MAX_RESULTS
+        If non-empty, adds --max-results=<n>.
+
+EXAMPLES
+    fd-quick 'efoo:ebar:tf:tl:Lgp:**k3s*/**k3s*.bb*'
+        fd -e foo -e bar -t f -t l --follow --glob -p -- '**k3s*/**k3s*.bb*'
+
+    fd-quick 'tf:S-100MB:te:^foo.*bar$'
+        fd -t f -S -100MB -t e -- '^foo.*bar$'
+
+    FD_QUICK_OPTS="--exclude '**/.git'" FD_QUICK_MAX_RESULTS=100 \
+        fd-quick 'td:gp:build/**/tmp/**/images' 'tf:S+100MB:\.wic$'
+        fd --exclude '**/.git' --max-results=100 -t d --glob -p -t f \
+            -S +100MB --and '\.wic$' -- 'build/**/tmp/**/images'
+EOF
+}
+
+# Word-split an env var the way the shell would: quotes honoured, globs left alone.
+split_opts() {
+    local restore_glob=0
+    SPLIT_OPTS=()
+    [[ -z $1 ]] && return 0
+    [[ $- == *f* ]] || { set -f && restore_glob=1; }
+    eval "SPLIT_OPTS=($1)" || die "could not parse options: $1"
+    ((restore_glob)) && set +f
+    return 0
+}
+
+# Fills BLOCK_ARGS with the fd arguments for one option block, or fails if $1
+# isn't a valid block (which means the pattern starts here).
+parse_block() {
+    local block=$1 ch i
+    BLOCK_ARGS=()
+    case $block in
+        '') return 1 ;;
+        '!') BLOCK_ARGS=(--prune) && return 0 ;;
+        e?*) BLOCK_ARGS=(-e "${block#e}") && return 0 ;;
+        t?*) BLOCK_ARGS=(-t "${block#t}") && return 0 ;;
+        S?*) BLOCK_ARGS=(-S "${block#S}") && return 0 ;;
+    esac
+    # Anything else has to be a cluster of single-character flags.
+    for ((i = 0; i < ${#block}; i++)); do
+        ch=${block:i:1}
+        case $ch in
+            g) BLOCK_ARGS+=(--glob) ;;
+            r) BLOCK_ARGS+=(--regex) ;;
+            F) BLOCK_ARGS+=(-F) ;;
+            p) BLOCK_ARGS+=(-p) ;;
+            i) BLOCK_ARGS+=(-i) ;;
+            s) BLOCK_ARGS+=(-s) ;;
+            L) BLOCK_ARGS+=(--follow) ;;
+            H) BLOCK_ARGS+=(--hidden) ;;
+            I) BLOCK_ARGS+=(--no-ignore) ;;
+            '!')
+                # '!' is only a modifier, and only for L.
+                [[ ${block:i+1:1} == L ]] || return 1
+                BLOCK_ARGS+=(--no-follow)
+                ((i++))
+                ;;
+            *) return 1 ;;
+        esac
+    done
+    return 0
+}
+
+# Parses a ':'-separated list of blocks into SPEC_OPTS. Fails if any segment isn't
+# a valid block, in which case SPEC_OPTS is left half-filled for the caller to drop.
+parse_blocks() {
+    local rest=$1 block
+    [[ -n $rest ]] || return 0
+    while :; do
+        block=${rest%%:*}
+        parse_block "$block" || return 1
+        SPEC_OPTS+=("${BLOCK_ARGS[@]}")
+        [[ $block == t?* ]] && HAVE_TYPE=1
+        [[ $rest == *:* ]] || return 0
+        rest=${rest#*:}
+    done
+}
+
+# Splits one spec into SPEC_OPTS + SPEC_PATTERN.
+parse_spec() {
+    local remaining=$1 block had_type=$HAVE_TYPE
+    SPEC_OPTS=()
+    SPEC_PATTERN=
+    # '::' ends the blocks the way '--' ends a command line's options: everything
+    # after it is the pattern. It only counts when everything in front of it is
+    # really a block, so a pattern that merely contains '::' still parses.
+    if [[ $remaining == *::* ]]; then
+        if parse_blocks "${remaining%%::*}"; then
+            SPEC_PATTERN=${remaining#*::}
+            return 0
+        fi
+        SPEC_OPTS=()
+        HAVE_TYPE=$had_type
+    fi
+    # Otherwise blocks are read until a segment that isn't one, and the pattern is
+    # everything from there on.
+    while [[ $remaining == *:* ]]; do
+        block=${remaining%%:*}
+        parse_block "$block" || break
+        SPEC_OPTS+=("${BLOCK_ARGS[@]}")
+        [[ $block == t?* ]] && HAVE_TYPE=1
+        remaining=${remaining#*:}
+    done
+    SPEC_PATTERN=$remaining
+}
+
+dry_run=0
+while (($#)); do
+    case $1 in
+        -n | --dry-run) dry_run=1 && shift ;;
+        -h | --help) usage && exit 0 ;;
+        --) shift && break ;;
+        *) break ;;
+    esac
+done
+
+cmd=(fd)
+split_opts "${FD_QUICK_OPTS:-}"
+cmd+=("${SPLIT_OPTS[@]}")
+[[ -n ${FD_QUICK_MAX_RESULTS:-} ]] && cmd+=("--max-results=$FD_QUICK_MAX_RESULTS")
+
+HAVE_TYPE=0
+opts=()
+patterns=()
+for spec in "$@"; do
+    parse_spec "$spec"
+    opts+=("${SPEC_OPTS[@]}")
+    [[ -n $SPEC_PATTERN ]] && patterns+=("$SPEC_PATTERN")
+done
+((HAVE_TYPE)) || opts=(-t f "${opts[@]}")
+
+cmd+=("${opts[@]}")
+for ((i = 1; i < ${#patterns[@]}; i++)); do
+    cmd+=(--and "${patterns[i]}")
+done
+# '--' keeps a pattern that starts with '-' from being read as an option.
+((${#patterns[@]})) && cmd+=(-- "${patterns[0]}")
+
+if ((dry_run)); then
+    # Quote only what needs it, so the output stays close to what you'd type.
+    out=()
+    for arg in "${cmd[@]}"; do
+        case $arg in
+            '' | *[!A-Za-z0-9_./=+:@-]*) out+=("${arg@Q}") ;;
+            *) out+=("$arg") ;;
+        esac
+    done
+    printf '%s\n' "${out[*]}"
+else
+    exec "${cmd[@]}"
+fi

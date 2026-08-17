@@ -1,0 +1,196 @@
+#!/bin/bash
+# fzf-fd - fuzzy file picker that lets you steer the underlying `fd` search.
+#
+# Problem: `fzf --bind 'change:reload:fd ... {q}'` hands the whole fzf query to fd,
+# but fd wants a regex/glob while fzf wants fuzzy terms, so the two fight each other.
+#
+# This wrapper splits the typed query in two, using @...@ as the delimiter:
+#
+#     @\.wic$@ build images tmp
+#     ^^^^^^^^ ^^^^^^^^^^^^^^^^
+#     |        `- fuzzy-filters the results inside fzf
+#     `- regex handed to fd (re-runs fd only when it changes)
+#
+#   * No @...@ pair in the query  -> fd lists everything, fzf fuzzy-filters it (normal behaviour).
+#   * Half-typed pair (`@\.wi`)   -> the previous fd pattern stays in effect and the
+#                                    partial pattern is ignored, so fd is only re-run
+#                                    once you type the closing @.
+#   * `\@`                        -> literal @ (valid escape for both fd and this parser).
+#
+# Whatever ends up between the @s is handed to fd-quick as-is, so its full block
+# syntax is available: `@tf:ebb:gp:**/k3s*@` -> fd -t f -e bb --glob -p -- '**/k3s*'.
+# See `fd-quick --help`.
+#
+# fd is re-run only when the pattern part changes, and that reload is debounced:
+# fzf kills the running reload command when a new one arrives, so the leading sleep
+# swallows every keystroke made within FZF_FD_DEBOUNCE seconds (in-place edits of an
+# already-committed pattern included). The previous list stays visible and searchable
+# until the new fd output arrives, so the debounce costs no flicker.
+#
+# The trick that makes it work is fzf's `--disabled` + `search`/`transform-search`:
+# with search disabled fzf never filters on the input field itself, so we can feed it
+# whatever subset of the query we like while the full text stays visible and editable.
+#
+# Everything after the script name is passed straight through to fzf, e.g.
+#   fzf-fd --multi --preview 'bat --color=always {}' | xargs -r -d '\n' zeditor -e
+#
+# Env overrides:
+#   FZF_FD_DEBOUNCE  seconds to wait for more keystrokes before re-running fd
+#                    (default: 0.3, set to 0 to disable)
+#   FZF_FD_DEBUG     file to append query splits and fd runs to
+#   FD_QUICK_OPTS    passed through to fd-quick; defaulted below if unset. Dropping
+#                    --color=always is worth it on huge trees: fzf strips ANSI codes
+#                    whether or not --ansi is given, so they cost read time and memory
+#                    even when they aren't painted.
+set -u
+
+DEBOUNCE=${FZF_FD_DEBOUNCE:-0.3}
+
+# Absolute path to this script, so the fzf child processes can call back into it.
+case $0 in
+    */*) SELF=$(readlink -f "$0") ;;
+    *) SELF=$(command -v -- "$0") ;;
+esac
+
+# fd-quick turns the @...@ spec into an fd command line; prefer the copy sitting
+# next to this script over whatever is on PATH.
+FD_QUICK=${SELF%/*}/fd-quick
+[[ -x $FD_QUICK ]] || FD_QUICK=fd-quick
+
+FD_QUICK_OPTS="${FD_QUICK_OPTS:- --no-ignore-vcs --hidden --exclude .git --follow --strip-cwd-prefix --color=always}"
+export FD_QUICK_OPTS
+
+# Split $1 into the fd pattern and the fzf query.
+# Sets SPLIT_PAT / SPLIT_FUZZY / SPLIT_CLOSED (1 when a complete @...@ pair was found).
+split_query() {
+    local raw=$1 ch nxt i inside=0 seen=0
+    SPLIT_PAT=
+    SPLIT_FUZZY=
+    SPLIT_CLOSED=0
+    for ((i = 0; i < ${#raw}; i++)); do
+        ch=${raw:i:1}
+        nxt=${raw:i+1:1}
+        # Escaped delimiter: keep the backslash on the fd side (fd needs the escape
+        # too), drop it on the fzf side where it has no meaning.
+        # shellcheck disable=SC1003 # '\' really is a lone backslash here
+        if [[ $ch == '\' && $nxt == '@' ]]; then
+            if ((inside)); then SPLIT_PAT+='\@'; else SPLIT_FUZZY+='@'; fi
+            ((i++))
+            continue
+        fi
+        # Only the first pair is a delimiter pair; any later ones are literal text.
+        if [[ $ch == '@' ]] && ((seen == 0)); then
+            if ((inside)); then
+                inside=0
+                seen=1
+                SPLIT_CLOSED=1
+            else
+                inside=1
+            fi
+            continue
+        fi
+        if ((inside)); then SPLIT_PAT+=$ch; else SPLIT_FUZZY+=$ch; fi
+    done
+}
+
+# Bound to fzf's start/change events. Prints the actions fzf should run.
+do_transform() {
+    local state=$_FZF_FD_STATE old_pat new_pat old_query reload_cmd
+    local -a actions=()
+
+    split_query "${FZF_QUERY-}"
+    old_query=$(<"$state/query")
+    old_pat=$(<"$state/pattern")
+
+    # An unclosed pair means the user is still typing the pattern: keep the old one.
+    if ((SPLIT_CLOSED)); then new_pat=$SPLIT_PAT; else new_pat=$old_pat; fi
+
+    # Re-filter only when the fzf half changed, so editing the pattern in place
+    # doesn't kick off a search on every keystroke.
+    if [[ $SPLIT_FUZZY != "$old_query" ]]; then
+        printf '%s' "$SPLIT_FUZZY" >"$state/query"
+        actions+=("transform-search(cat $state/query)")
+    fi
+
+    # Re-run fd only when the pattern changed, debounced by a leading sleep that
+    # the next reload cancels. Must stay last: `reload:` swallows the rest of the
+    # action string, so nothing in the command needs escaping.
+    if [[ $new_pat != "$old_pat" ]]; then
+        printf '%s' "$new_pat" >"$state/pattern"
+        if [[ -n $new_pat ]]; then
+            printf 'fd(%s)> ' "$new_pat" >"$state/prompt"
+        else
+            printf '> ' >"$state/prompt"
+        fi
+        reload_cmd="'$SELF' --_fd"
+        [[ $DEBOUNCE =~ ^0*(\.0*)?$ ]] || reload_cmd="sleep $DEBOUNCE; $reload_cmd"
+        actions+=("transform-prompt(cat $state/prompt)" "reload:$reload_cmd")
+    fi
+
+    [[ -n ${FZF_FD_DEBUG:-} ]] &&
+        printf 'split raw=[%s] pat=[%s] fuzzy=[%s]\n' "${FZF_QUERY-}" "$new_pat" "$SPLIT_FUZZY" >>"$FZF_FD_DEBUG"
+
+    local IFS=+
+    printf '%s\n' "${actions[*]-}"
+}
+
+# Bound to fzf's reload: runs fd-quick with whatever spec is currently committed.
+do_fd() {
+    local state=$_FZF_FD_STATE pat
+    pat=$(<"$state/pattern")
+
+    [[ -n ${FZF_FD_DEBUG:-} ]] && printf 'fd   run  [%s]\n' "$pat" >>"$FZF_FD_DEBUG"
+
+    # Show fd's complaint (bad regex, unknown type, etc.) in the list instead of
+    # letting it scribble over the fzf UI.
+    if [[ -n $pat ]]; then
+        "$FD_QUICK" -- "$pat" 2>"$state/err" || sed -e 's/^/[fd] /' "$state/err"
+    else
+        "$FD_QUICK" 2>"$state/err" || sed -e 's/^/[fd] /' "$state/err"
+    fi
+}
+
+case ${1-} in
+    --_transform)
+        do_transform
+        exit 0
+        ;;
+    --_fd)
+        do_fd
+        exit 0
+        ;;
+    --_split) # debugging helper: fzf-fd --_split '@\.wic$@some terms'
+        split_query "${2-}"
+        printf 'pattern: [%s]\nquery:   [%s]\nclosed:  %s\n' "$SPLIT_PAT" "$SPLIT_FUZZY" "$SPLIT_CLOSED"
+        exit 0
+        ;;
+esac
+
+# ---------------------------------------------------------------------------
+# Launcher
+# ---------------------------------------------------------------------------
+
+# State shared with the child processes. Keep the path boring: it gets embedded in
+# fzf action strings, which are parsed for balanced parens.
+_FZF_FD_STATE=$(mktemp -d "${TMPDIR:-/tmp}/fzf-fd.XXXXXXXX")
+case $_FZF_FD_STATE in
+    *[^A-Za-z0-9/._-]*)
+        rmdir "$_FZF_FD_STATE"
+        _FZF_FD_STATE=$(mktemp -d /tmp/fzf-fd.XXXXXXXX)
+        ;;
+esac
+export _FZF_FD_STATE
+trap 'rm -rf "$_FZF_FD_STATE"' EXIT
+: >"$_FZF_FD_STATE/query"
+: >"$_FZF_FD_STATE/pattern"
+
+# The unfiltered listing is piped in so results show up while fzf is still starting;
+# from then on the `start`/`change` binding drives fd through reload.
+"$SELF" --_fd | fzf \
+    --disabled \
+    --ansi \
+    --scheme=path \
+    --color='disabled:regular' \
+    --header '@fd regex@ filters the file list; the rest fuzzy-filters the results' \
+    --bind "start,change:transform:'$SELF' --_transform" \
+    "$@"

@@ -18,7 +18,7 @@
 
     # list of paths to ignore
     ignores = [
-      ".git/"
+      "**/.git"
       "*.bak"
     ];
   };
