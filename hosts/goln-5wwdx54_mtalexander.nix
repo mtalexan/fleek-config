@@ -137,7 +137,8 @@
         config.engine = "docker";
       };
 
-      emacs.sssd_workaround = true;
+      # uncomment if emacs.nix is uncommented
+      # emacs.sssd_workaround = true;
     };
 
     #####################################
