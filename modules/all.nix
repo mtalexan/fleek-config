@@ -29,6 +29,9 @@
       # this one requires the kitty-save-session.nix overlay to be included in the flake.nix
       ../custom-modules/home-manager/kitty-save-session.nix
 
+  # warns during activation if the host's nscd socket is missing (non-NixOS NSS support)
+      ./nscd-check.nix
+
   # Configurations
       ../programs/bash.nix
       ../programs/zsh.nix
