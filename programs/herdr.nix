@@ -9,6 +9,9 @@
       terminal = {
         kitty_graphics = true;
       };
+      theme = {
+        name = "terminal";
+      };
       ui = {
         toast = {
           # system notifications
