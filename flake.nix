@@ -44,6 +44,11 @@
       # we don't have any darwin targets, so disable it to save a bit of size
       inputs.darwin.follows = "";
     };
+
+    # TUI vscode/zeditor tool
+    ttt = {
+      url = "github:eugenioenko/ttt";
+    };
     
     # Add VSCode as independent input, by pinning a second copy of nixpkgs
     vscode-nixpkgs = {
@@ -67,6 +72,7 @@
         language-servers,
         git-agecrypt,
         agenix,
+        ttt,
         vscode-nixpkgs,
         zed-nixpkgs,
         ...
@@ -76,6 +82,17 @@
         # extra overlays need to be added here
         inputs.emacs-overlay.overlay
         inputs.git-agecrypt.overlay
+
+        # ttt from separate flake
+        (final: prev: {
+          language-servers = inputs.language-servers.packages.${prev.stdenv.hostPlatform.system}.default;
+        })
+        
+        # ttt from separate flake
+        (final: prev: {
+          ttt = inputs.ttt.packages.${prev.stdenv.hostPlatform.system}.default;
+        })
+
         # vscode from separate vscode-nixpkgs flake input
         (final: prev:
           let

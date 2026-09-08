@@ -150,8 +150,7 @@ in {
       pkgs.nerd-fonts.jetbrains-mono
       pkgs.nerd-fonts.symbols-only
 
-      # Add all the language-servers from the flake
-      inputs.language-servers.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # Needs language-servers.nix
     ];
 
     # Just a nice to have so we can see what's in our generated site-config.org file. The file is read-only and in the nix store,

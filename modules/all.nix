@@ -70,8 +70,11 @@
       ../programs/rustup.nix
       ../programs/script-directory.nix
       ../programs/tmux.nix
+      ../programs/ttt.nix
 
       ../programs/starship.nix
+
+      ../programs/language-servers.nix
   ];
 
   config = {
