@@ -189,6 +189,13 @@
           name = entry.name;
           value = (entry.configFunction or linuxConfig) entry.name; # Default to linuxConfig if not set
         }) configurations);
+
+      # the installed home-manager needs to be the one from the flake
+      packages = nixpkgs.lib.genAttrs
+        [ "x86_64-linux" ]
+        (system: {
+          hm = home-manager.packages.${system}.default;
+        });
     };
 }
 

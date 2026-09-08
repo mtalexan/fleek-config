@@ -54,6 +54,7 @@
       ../programs/git-identity.nix
       # just adds to the path if already installed
       ../programs/golang.nix
+      ../programs/herdr.nix
       # adds the homebrew path and completions if already installed
       ../programs/homebrew.nix
       ../programs/jq.nix

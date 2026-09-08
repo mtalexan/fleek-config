@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -o pipefail
+# print what's being run, but also exit immediately on errors
+set -ex
+
+readonly FLEEK_CONFIG_DIR="${FLEEK_CONFIG_DIR:-${HOME}/.local/share/fleek}"
+
+# Nix command must be called from this folders
+cd "${FLEEK_CONFIG_DIR}" || { echo >&2 "ERROR: Couldn't reach FLEEK_CONFIG_DIR=${FLEEK_CONFIG_DIR}"; exit 1; }
+
+_user=$(id -un)
+_hostname=$(hostname)
+# make sure to normalize it to lowercase
+_hostname=${_hostname,,}
+
+# use the inputs from the flake to resolve the 'home-manager' command as part of nix-run, and make sure to explictly specify the config we're using.
+nix run --no-write-lock-file --inputs-from . home-manager -- --flake ".#${_user}@${_hostname}" "$@"
