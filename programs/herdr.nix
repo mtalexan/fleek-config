@@ -26,4 +26,17 @@
       };
     };
   };
+
+  # Needs to be after compinit is initialized
+  programs.zsh.initContent = lib.mkMerge [ (lib.mkOrder 1000 (lib.concatLines [
+    ''
+      eval "$(herdr completion zsh)"
+    ''
+  ]))];
+
+  programs.bash.initExtra = lib.concatLines [
+    ''
+    eval "$(herdr completion bash)"
+    ''
+  ];
 }
