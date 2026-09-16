@@ -35,6 +35,9 @@
 #   fzf-fd --multi --preview 'bat --color=always {}' | xargs -r -d '\n' zeditor -e
 #
 # Env overrides:
+#   FZF_FD_FZF_OPTS  Extra options to pass the FZF. Used unquoted so word splitting will occur.
+#                    This cannot be used to override the logic implementing the binding for changes
+#                    to the pattern, but can be used to set how files should be previewed, etc.
 #   FZF_FD_DEBOUNCE  seconds to wait for more keystrokes before re-running fd
 #                    (default: 0.3, set to 0 to disable)
 #   FZF_FD_DEBUG     file to append query splits and fd runs to
@@ -186,11 +189,12 @@ trap 'rm -rf "$_FZF_FD_STATE"' EXIT
 
 # The unfiltered listing is piped in so results show up while fzf is still starting;
 # from then on the `start`/`change` binding drives fd through reload.
+#shellcheck disable=SC2086 # intentional word splitting
 "$SELF" --_fd | fzf \
-    --disabled \
-    --ansi \
     --scheme=path \
-    --color='disabled:regular' \
     --header '@fd regex@ filters the file list; the rest fuzzy-filters the results' \
+    ${FZF_FD_FZF_OPTS:-} \
+    --disabled \
     --bind "start,change:transform:'$SELF' --_transform" \
+    --ansi \
     "$@"
