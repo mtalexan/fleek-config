@@ -7,6 +7,7 @@
     ../programs/parallel_kitty.nix
     ../programs/flameshot.nix
     ../programs/distrobox.nix
+    ../programs/copilot-api.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
@@ -124,6 +125,12 @@
             # url is set by the identities/*.nix file and inherited here
         };
         copilot = true;
+      };
+
+      # copilot-api gateway
+      copilot-api = {
+        autostart.enable = true;
+        account_type = "enterprise";
       };
 
       distrobox = {

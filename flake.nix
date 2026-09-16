@@ -50,6 +50,12 @@
       url = "github:eugenioenko/ttt";
     };
     
+    # Non-flake source input for copilot-api
+    copilot-api-src = {
+      url   = "github:Arthur742Ramos/copilot-api-rust";
+      flake = false;  # repo has no flake.nix; treat as raw source path
+    };
+
     # Add VSCode as independent input, by pinning a second copy of nixpkgs
     vscode-nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable";
@@ -75,55 +81,38 @@
         ttt,
         vscode-nixpkgs,
         zed-nixpkgs,
+        copilot-api-src,
         ...
       }@inputs:
     let
+      # not packaged as an overlay on its own
+      language-servers-overlay = final: prev: {
+        language-servers = inputs.language-servers.packages.${prev.stdenv.hostPlatform.system}.default;
+      };
+
+      # Not packaged as an overlay on its own
+      ttt-overlay = final: prev: {
+        ttt = inputs.ttt.packages.${prev.stdenv.hostPlatform.system}.default;
+      };
+
+      # extra overlays need to be added here
       myOverlaysSet = [
-        # extra overlays need to be added here
         inputs.emacs-overlay.overlay
         inputs.git-agecrypt.overlay
+        language-servers-overlay
+        ttt-overlay
 
-        # ttt from separate flake
-        (final: prev: {
-          language-servers = inputs.language-servers.packages.${prev.stdenv.hostPlatform.system}.default;
-        })
-        
-        # ttt from separate flake
-        (final: prev: {
-          ttt = inputs.ttt.packages.${prev.stdenv.hostPlatform.system}.default;
-        })
+        # The input is raw source and not a flake.nix, so we have a custom definition we use to create the package as an overlay and we just have
+        # to define which input the source is in.
+        ((import custom-modules/overlay-packages/copilot-api.nix) copilot-api-src)
 
-        # vscode from separate vscode-nixpkgs flake input
-        (final: prev:
-          let
-            # redefine what the input pkgs set is, inserting the config for allowing unfree packages
-            pkgsVscode = import inputs.vscode-nixpkgs {
-              inherit (prev.stdenv.hostPlatform) system;
-              config = {
-                allowUnfree = true;
-                allowunfreePredicate = (_: true);
-              };
-            };
-          in {
-            vscode-independent = pkgsVscode.vscode;
-          }
-        )
-        # zed-editor-fhs from separate zed-nixpkgs flake input
-        (final: prev:
-          let
-            # redefine what the input pkgs set is, inserting the config for allowing unfree packages
-            pkgsZed = import inputs.zed-nixpkgs {
-              inherit (prev.stdenv.hostPlatform) system;
-              config = {
-                allowUnfree = true;
-                allowunfreePredicate = (_: true);
-              };
-            };
-          in {
-            zed-independent = pkgsZed.zed-editor;
-          }
-        )
-        # must be last in this list
+        # These are set to be packages that get their dependencies from an independently pinned nixpkgs, so we don't have
+        # dependency version mismatch issues if we update just these input flakes.
+        # These packages can be referred to as pkgs.*-independent in modules.
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) vscode-nixpkgs "vscode" "vscode-independent")
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs "zed-editor" "zed-independent")
+
+        # must be last in this list. Forces all golang to be CGO=1 so it actually functions.
         (import custom-modules/overlay-packages/golang-cgo.nix)
       ];
 
@@ -132,7 +121,8 @@
       pkgsForSystem = system: import nixpkgs {
         inherit system;
         overlays = myOverlaysSet;
-        # Make sure the nixpkgs set allows unfree packages
+        # Make sure the nixpkgs set allows unfree packages.
+        # NOTE: Any independent nixpkgs need to set this as well (see independent-nixpkgs.nix)
         config = {
           allowUnfree = true;
           allowunfreePredicate = (_: true);

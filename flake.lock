@@ -23,6 +23,22 @@
         "type": "github"
       }
     },
+    "copilot-api-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785218470,
+        "narHash": "sha256-P2/ETHKwVaiq0Z/p5grJ6Richr3BhaEnSb+k5/PgimU=",
+        "owner": "Arthur742Ramos",
+        "repo": "copilot-api-rust",
+        "rev": "e840fc41e10fb750e6a16c505e6a63925a5eba18",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Arthur742Ramos",
+        "repo": "copilot-api-rust",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -266,6 +282,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "copilot-api-src": "copilot-api-src",
         "emacs-overlay": "emacs-overlay",
         "git-agecrypt": "git-agecrypt",
         "home-manager": "home-manager_2",
