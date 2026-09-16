@@ -127,11 +127,8 @@
         copilot = true;
       };
 
-      # copilot-api gateway
-      copilot-api = {
-        autostart.enable = true;
-        account_type = "enterprise";
-      };
+      # copilot-api gateway. Most settings are in the identity file.
+      copilot-api.autostart.enable = true;
 
       distrobox = {
         hooks = {
