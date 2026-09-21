@@ -1,0 +1,10 @@
+{
+  "provider": {
+    "openai-compatible": {
+      "options": {
+        "baseURL": {{ .kilo.base_url }},
+        "apiKey": {{ includeTemplate "age-decrypt-string" .kilo.secrets.api_key | toJson }}
+      }
+    }
+  }
+}

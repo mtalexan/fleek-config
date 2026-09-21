@@ -1,0 +1,58 @@
+diff --git a/programs/bun2nix/src/lockfile/package_deserializer.rs b/programs/bun2nix/src/lockfile/package_deserializer.rs
+index ccc7108..ad8a4c6 100644
+--- a/programs/bun2nix/src/lockfile/package_deserializer.rs
++++ b/programs/bun2nix/src/lockfile/package_deserializer.rs
+@@ -95,7 +95,8 @@ impl PackageDeserializer {
+         let specifier = drain_package_specifier(id).ok_or(Error::NoAtInPackageIdentifier)?;
+ 
+         if specifier.starts_with("http") {
+-            Self::deserialize_tarball_package(specifier)
++            let hash = swap_remove_value(&mut self.values, 0);
++            Self::deserialize_tarball_package(specifier, Some(hash))
+         } else if specifier.starts_with("github:") {
+             Self::deserialize_github_package(specifier)
+         } else {
+@@ -166,7 +167,7 @@ impl PackageDeserializer {
+         let path = drain_package_specifier(id).ok_or(Error::NoAtInPackageIdentifier)?;
+ 
+         if path.starts_with("http") {
+-            Self::deserialize_tarball_package(path)
++            Self::deserialize_tarball_package(path, None)
+         } else {
+             Self::deserialize_file_package(self.name, path)
+         }
+@@ -209,16 +210,27 @@ impl PackageDeserializer {
+     ///
+     /// Deserialize a tarball package from it's bun lockfile representation
+     ///
+-    /// This is found in the source as a tuple of arity 2
+-    pub fn deserialize_tarball_package(url: String) -> Result<Package> {
++    /// This is found in the source as a tuple of arity 2 or 3
++    pub fn deserialize_tarball_package(url: String, hash: Option<String>) -> Result<Package> {
+         debug_assert!(url.contains("http"), "Expected tarball url to contain http");
+ 
+-        let prefetch = Prefetch::prefetch_package(&url)?;
+-
+         let name = format!("tarball:{}", url);
+-        let fetcher = Fetcher::FetchTarball {
+-            url,
+-            hash: prefetch.hash,
++
++        let fetcher = if let Some(hash) = hash {
++            debug_assert!(hash.starts_with("sha512-"), "Expected SRI sha512 hash");
++
++            Fetcher::FetchUrl {
++                url,
++                hash,
++                name: None,
++            }
++        } else {
++            let prefetch = Prefetch::prefetch_package(&url)?;
++
++            Fetcher::FetchTarball {
++                url,
++                hash: prefetch.hash,
++            }
+         };
+ 
+         Ok(Package::new(name, fetcher))

@@ -56,6 +56,12 @@
       flake = false;  # repo has no flake.nix; treat as raw source path
     };
 
+    # Add Cursor (IDE) as independent input, by pinning a second copy of nixpkgs
+    code-cursor-nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
+    };
+
     # Add VSCode as independent input, by pinning a second copy of nixpkgs
     vscode-nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable";
@@ -67,6 +73,26 @@
       url = "github:nixos/nixpkgs/nixos-unstable";
       #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
     };
+
+    # Kilo from nixpkgs is broken, so use Kilo's upstream flake instead.
+    kilo = {
+      url = "github:Kilo-Org/kilocode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    bun2nix = {
+      # We need a patch to the bun2nix CLI tool that properly handles content hashed tarballs so it works with kilo.
+      #   Implemented in overlay-packages/bun2nix-cli-fixed.nix as well.
+      # Bun allows providing patches for dependencies directly, but uses a custom written patching that is fuzzy. Bun2nix
+      # normally extracts this into into a Nix variable and strips it from the source code so that the patches get applied 
+      # with GNU patch (which doesn't support the same fuzzy apply). If the patches don't apply cleanly this is a problem.
+      #   Implemented as a branch in the forked copy, adding userNativePatching argument to the nix.
+      # The forked branch includes both changes directly.
+      #url = "github:nix-community/bun2nix/2.1.2";
+      url = "github:mtalexan/bun2nix/allow-bun-patching-compatibilty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = {
@@ -79,9 +105,12 @@
         git-agecrypt,
         agenix,
         ttt,
+        code-cursor-nixpkgs,
         vscode-nixpkgs,
         zed-nixpkgs,
         copilot-api-src,
+        bun2nix,
+        kilo,
         ...
       }@inputs:
     let
@@ -95,12 +124,21 @@
         ttt = inputs.ttt.packages.${prev.stdenv.hostPlatform.system}.default;
       };
 
+      # We're using a fork of bun2nix instead since we also need the useNativeBunPatches feature.
+      ## TODO: Remove this when bun2nix adopts https://github.com/nix-community/bun2nix/pull/108
+      #bun2nix-overlay = (import custom-modules/overlay-packages/bun2nix-cli-fixed.nix) bun2nix;
+
+      kilo-overlay = (import custom-modules/overlay-packages/kilo.nix) kilo;
+
       # extra overlays need to be added here
       myOverlaysSet = [
-        inputs.emacs-overlay.overlay
-        inputs.git-agecrypt.overlay
+        emacs-overlay.overlay
+        git-agecrypt.overlay
         language-servers-overlay
         ttt-overlay
+        bun2nix.overlays.default
+
+        kilo-overlay
 
         # The input is raw source and not a flake.nix, so we have a custom definition we use to create the package as an overlay and we just have
         # to define which input the source is in.
@@ -109,6 +147,7 @@
         # These are set to be packages that get their dependencies from an independently pinned nixpkgs, so we don't have
         # dependency version mismatch issues if we update just these input flakes.
         # These packages can be referred to as pkgs.*-independent in modules.
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) code-cursor-nixpkgs "code-cursor" "code-cursor-independent")
         ((import custom-modules/overlay-packages/independent-nixpkgs.nix) vscode-nixpkgs "vscode" "vscode-independent")
         ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs "zed-editor" "zed-independent")
 

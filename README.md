@@ -20,6 +20,8 @@ nix home-manager configs originally created using [fleek](https://github.com/ubl
 ├── hosts/                            # Per-host config files
 ├── modules/                          # Always included, may cover a range of settings in each module.
 ├── programs/                         # Per-program configs that are each included only if referenced by a host config or the modules/all.nix
+│   ├── *.nix                         # Implementation details of each program's configuration.
+│   └── *-options.nix                 # Custom option declarations that should always be defined
 ├── bin/                              # Added to PATH — in-place scripts and tools
 ├── chezmoi/                          # Chezmoi source state directory (see Chezmoi Managed Configs)
 ├── custom-modules/                   # Manually written modules that don't exist upstream

@@ -8,6 +8,9 @@
     ../programs/flameshot.nix
     ../programs/distrobox.nix
     ../programs/copilot-api.nix
+    # Currently broken, it abuses Bun/nodejs and can't build
+    #../programs/kilo.nix
+    ../programs/cursor.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
@@ -129,6 +132,9 @@
 
       # copilot-api gateway. Most settings are in the identity file.
       copilot-api.autostart.enable = true;
+
+      # The api_keys are configured in the identities/*.nix
+      kilo.backend = "copilot";
 
       distrobox = {
         hooks = {

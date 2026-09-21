@@ -23,7 +23,9 @@
   # "includes". By convention programs/ are for individual programs, while modules/ are less specific.
   # WARNING: If any of these have options defined the import 
   imports = [
-      #./nixgl.nix
+      # Includes all the programs/*-options.nix so that all options are always defined, even if the
+      # program isn't used.
+      ./options.nix
 
   # Custom home-manager modules that aren't upstream.
       # this one requires the kitty-save-session.nix overlay to be included in the flake.nix

@@ -1,13 +1,4 @@
 { pkgs, misc, lib, config, ... }: {
-
-  options.custom.certs = with lib; {
-    bundle = mkOption {
-      type = types.nullOr types.str;
-      default = "/etc/ssl/certs/ca-certificates.crt";
-      description = "The per-system path to the Root CA certificates bundle. If set null, none of the variables for this are overidden.";
-    };
-  };
-
   config.home.sessionVariables = lib.mkIf (config.custom.certs.bundle != null) {
       # use the system certs for Node clients like VSCode
       NODE_EXTRA_CA_CERTS = config.custom.certs.bundle;

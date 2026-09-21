@@ -3,6 +3,10 @@
 # via custom.chezmoi.templates.<program>.enable.
 # Ignore patterns are relative to the _destination_!
 
+{{ if not (and (hasKey . "kilo") .kilo.enable) }}
+kilo/**
+{{ end }}
+
 {{ if not (and (hasKey . "zed") .zed.enable) }}
 .config/zed/**
 {{ end }}
