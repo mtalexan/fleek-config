@@ -1,18 +1,10 @@
 { pkgs, misc, lib, config, ... }:
-let
-  # Stop hook for notifying on Linux when attention is needed.
-  cursorAgentNotifier = pkgs.fetchFromGitHub {
-    owner = "glira";
-    repo = "cursor-agent-notifier";
-    rev = "ec1cbad85ea698ea4f2dc5c96e8029831658d915";
-    hash = "sha256-mUmDmf1OTc0AnGafK7OpYHPwo7x1j6Q1GTJTjy5U7P4=";
-  };
-in {
+{
   ## Stop hook for notifying on Linux when attention is needed.
 
   # File is a nix-store symlink; ~/.cursor and ~/.cursor/hooks are created as user-owned dirs.
   home.file.".cursor/hooks/notify-on-stop.sh" = {
-    source = "${cursorAgentNotifier}/hooks/notify-on-stop.sh";
+    source = ./cursor/hooks/notify-on-stop.sh;
     executable = true;
   };
 
@@ -31,7 +23,7 @@ in {
   home.packages = [
     # use the one from a separate flake so we can update it separately. Which package it actually ends up being is set in the flake.nix
     pkgs.code-cursor-independent
-    # needed by cursorAgentNotifier
+    # needed by notify-on-stop.sh
     pkgs.libnotify
   ];
 
