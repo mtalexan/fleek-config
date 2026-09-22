@@ -51,3 +51,7 @@ kilo/**
 {{ if not (and (hasKey . "glab") .glab.enable) }}
 .config/glab-cli/**
 {{ end }}
+
+{{ if not (and (hasKey . "cursor") .cursor.enable) }}
+.cursor/hooks.json
+{{ end }}

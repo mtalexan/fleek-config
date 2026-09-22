@@ -4,6 +4,7 @@
     ../programs/chezmoi-options.nix
     ../programs/containers-common-options.nix
     ../programs/copilot-api-options.nix
+    ../programs/cursor-options.nix
     ../programs/custom-certs-options.nix
     ../programs/distrobox-options.nix
     ../programs/extraterm-options.nix
