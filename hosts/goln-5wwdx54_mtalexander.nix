@@ -47,8 +47,8 @@
     #
     targets.genericLinux.gpu.nvidia = {
       enable = true;
-      version = "595.84"; # only 2-part SemVer for some reason
-      sha256 = "sha256-mcQE5SExvye8ptoCaNzOPr7cenOrF0BxqZXPGmxeugY=";
+      version = "595.91.07"; # only 2-part SemVer for some reason
+      sha256 = "sha256-yiPIjdJLB6GRZE4eEc+3vN11NzBXSa9A+YABiwleYxM=";
     };
     
     #####################################
