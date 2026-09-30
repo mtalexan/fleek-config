@@ -460,6 +460,80 @@ chezmoi merge ~/path/to/file
 chezmoi merge-all
 ```
 
+#### Editor settings (VS Code and Cursor)
+
+Settings, keybindings, snippets, and extensions for VS Code and Cursor live in `chezmoi/.editor-config/`. Each kind has a shared `common` document plus `vscode` and `cursor` overlays. Host overrides use the same files under `chezmoi/.editor-config/hosts/<user@host>/`, where `<user@host>` is the lowercased home-manager configuration name from `flake.nix` (for example `mtalexander@goln-5wwdx54`). Later layers win: shared common, shared editor, host common, host editor, then the git-ignored local secret files.
+
+`chezmoi re-add` and `chezmoi merge` overwrite the one-line render templates. Use `editor-sync import` instead.
+
+##### Migrating an existing editor before first activation
+
+After pulling these changes onto a machine that already has VS Code or Cursor files, import those files **before** the first `fleek-apply`. The activation renders the managed files and synchronizes extensions, so unimported live changes are overwritten or uninstalled.
+
+The flake exposes the tool without installing or activating the new home-manager generation:
+
+```shell
+cd ~/.local/share/fleek
+git pull
+nix run .#editor-sync -- import
+git status --short
+git add -A chezmoi/.editor-config chezmoi/.chezmoisecrets
+git diff --cached
+# Commit now, or include --impure when applying staged changes.
+bin/fleek-apply --impure
+```
+
+`nix run` builds and runs only `editor-sync`; it does not run home-manager activation, chezmoi, or extension synchronization. The command finds the writable checkout from `FLEEK_CONFIG_DIR`, the current directory, or `~/.local/share/fleek`, in that order. During import, choose `A` or `E` for changes that belong only to this `user@host`, and `a` or `e` for changes that should reach every host. Review and stage newly created host overlays before applying because Nix flakes do not include untracked files.
+
+After the first successful activation, `editor-sync` is installed in `PATH`, so subsequent imports can use `editor-sync import` directly.
+
+##### Importing later editor changes
+
+To bring a live edit back into the source:
+
+1. Run `chezmoi status` or `chezmoi diff` and look for drift under `~/.config/Code/User/` or `~/.config/Cursor/User/`.
+2. Run `editor-sync import` in a terminal. With no arguments it reviews every kind in each editor whose config exists on this machine. Add `vscode` or `cursor` to limit it to one editor, and `settings`, `keybindings`, `snippets`, or `extensions` to limit it to one kind, in either order. Tab completion lists the subcommands and their arguments.
+3. At each prompt choose:
+   - `s` to skip this change
+   - `a` for all editors, all hosts
+   - `e` for this editor, all hosts
+   - `A` for all editors, this host
+   - `E` for this editor, this host
+   - `k` when this setting is a secret (settings only)
+   - `p` to decide on the parent value instead
+   - `q` to quit without writing
+4. When the difference is an array, choose `w` (whole array), `i` (by index; order matters, and a short array is padded with JSON `null`), or `c` (by element content; order does not matter). Keybindings suggest `key`, `command`, and `when` as identity fields.
+5. Confirm the summary. `a` and `e` propagate to other hosts on the next apply. `A` and `E` stay in `chezmoi/.editor-config/hosts/<user@host>/` and apply only on that machine.
+6. Run `fleek-apply`.
+
+You do not need to pass `--host` when running `editor-sync` yourself. It defaults to your lowercased login and short hostname, `user@host`, which matches the home-manager configuration name. Pass `--host` only to work on another machine's overrides.
+
+`k` asks which secret store to use. Age encryption lists keys in `~/.age/`, writes the ciphertext with `chezmoi-age-encrypt-age` or `chezmoi-age-encrypt-ssh` to `chezmoi/.chezmoisecrets/editor-sync/`, and stores only a `file` and `identity` reference in the layer you pick (`a`, `e`, `A`, or `E`). Local-only asks `c` (both editors on this machine) or `e` (this editor) and writes `~/.config/editor-sync/local/common.jsonc`, `vscode.jsonc`, or `cursor.jsonc`, which are not in git. Import a secret before `fleek-apply`, or the live value is overwritten.
+
+Import new extensions before `fleek-apply`. The next sync uninstalls any extension that is installed in the app and not in the source.
+
+Move a value that is already in a layer:
+
+```shell
+editor-sync move settings --from common --to vscode '["python.languageServer"]'
+editor-sync move extensions --from common --to host/mtalexander@goln-5wwdx54/cursor publisher.name
+editor-sync move settings --from local/cursor --to cursor '["my.apiKey"]'
+```
+
+Confirm the printed change. Age ciphertext files move under `chezmoi/.chezmoisecrets/editor-sync/` with the value. Moving from the local secret files into git encrypts with the age helper scripts. Moving the other way decrypts into `~/.config/editor-sync/local/` and deletes the `.age` file.
+
+To sync extensions by hand, run `editor-sync extensions-sync`. It syncs both editors, using `code` and `cursor` from `PATH`, and skips an editor whose CLI or `extensions.json` is missing.
+
+##### Automatic rendering and extension sync
+
+`fleek-apply` and `home-manager switch` render editor files and sync extensions with no extra prompt.
+
+`chezmoiApply` runs `chezmoi apply`. Each editor file is a one-line template that calls `editor-sync render --host <user@host>`. The host comes from the home-manager configuration name, passed to chezmoi as `.editor_sync.host`. Render starts from the shared common document, applies that editor's shared overlay, then `hosts/<user@host>/` common and that editor's host overlay. Age references are decrypted from `chezmoi/.chezmoisecrets/editor-sync/` with `age --decrypt`. Render then applies `~/.config/editor-sync/local/` common and that editor's local file. Later layers win. Keys that exist only in the local secret files are included in the rendered file, so apply keeps them.
+
+Files for an editor are skipped when its module is not imported, via the `.vscode.enable` and `.cursor.enable` ignore rules.
+
+After `chezmoiApply`, each imported editor module runs `editor-sync extensions-sync` for its own editor, passing the same `--host` and the Nix store path of `code` or `cursor`. The desired ids are the all-hosts common and editor lists, then this host's common and editor lists, with later layers winning. It installs missing ids and uninstalls extra ids with `code` or `cursor`. Extension sync is skipped when `extensions.json` is missing. Failures print a warning and do not fail activation. Live edits that were not imported are overwritten or uninstalled here.
+
 ## Troubleshooting
 
 ### Cannot connect to socket after ostree upgrade

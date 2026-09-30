@@ -185,6 +185,7 @@
         extraSpecialArgs = {
           inherit inputs; # Pass flake inputs to our config
           stdenv.hostPlatform.system = "x86_64-linux"; # Pass the same 'system' variable as we're using for our 'pkgs' to our config
+          fleekConfigName = configName; # The user@host name of this home-manager configuration
         };
         modules = [
           nix-index-database.homeModules.nix-index # Include the nix-index-database home-manager module
@@ -224,6 +225,10 @@
         [ "x86_64-linux" ]
         (system: {
           hm = home-manager.packages.${system}.default;
+          # This isn't the default but gives the ability to run the editor-sync tool that's tightly coupled to this config
+          # before you've built+activated the home-manager config. This allows importing of editor settings into the config
+          # before the build+activate overwrites your local config settings.
+          editor-sync = (pkgsForSystem system).callPackage ./programs/editor-sync/package.nix {};
         });
     };
 }

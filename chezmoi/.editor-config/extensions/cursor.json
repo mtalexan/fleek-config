@@ -1,0 +1,13 @@
+{
+    "add": [
+        "anysphere.cpptools",
+        "anysphere.cursorpyright",
+        "anysphere.remote-containers",
+        "anysphere.remote-ssh",
+        "batisteo.vscode-django",
+        "donjayamanne.python-environment-manager",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "vadimcn.vscode-lldb"
+    ],
+    "remove": []
+}

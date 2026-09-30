@@ -1,0 +1,69 @@
+#compdef editor-sync
+
+local -a commands layers hosts
+commands=(
+  'render:write one editor file from the chezmoi source'
+  'import:merge live editor changes back into the source'
+  'extensions-sync:install and uninstall extensions'
+  'move:move a value between layers'
+)
+local default_host=${(L)${:-$USERNAME@${HOST%%.*}}}
+hosts=($default_host)
+local dir
+for dir in ${FLEEK_CONFIG_DIR:-$HOME/.local/share/fleek}/chezmoi/.editor-config/hosts/*(N/); do
+  (( ${hosts[(Ie)${dir:t}]} )) || hosts+=(${dir:t})
+done
+layers=(common vscode cursor local/common local/vscode local/cursor)
+local host
+for host in $hosts; do
+  layers+=(host/$host/common host/$host/vscode host/$host/cursor)
+done
+
+local -a common_opts
+common_opts=(
+  "--source[chezmoi .editor-config directory]:directory:_files -/"
+  "--host[lowercased user@host (default $default_host)]:host:($hosts)"
+)
+
+_arguments -C \
+  '1:command:->command' \
+  '*::arg:->args'
+
+case $state in
+  command)
+    _describe -t commands 'editor-sync command' commands
+    ;;
+  args)
+    case $words[1] in
+      render)
+        _arguments $common_opts \
+          '1:editor:(vscode cursor)' \
+          '2:kind:(settings keybindings snippets)' \
+          '3:snippet:'
+        ;;
+      import)
+        local -a left
+        (( ${words[(Ie)vscode]} || ${words[(Ie)cursor]} )) || left+=(vscode cursor)
+        local k have_kind=0
+        for k in settings keybindings snippets extensions; do
+          (( ${words[(Ie)$k]} )) && have_kind=1
+        done
+        (( have_kind )) || left+=(settings keybindings snippets extensions)
+        _arguments $common_opts "*:editor or kind:($left)"
+        ;;
+      extensions-sync)
+        _arguments $common_opts \
+          '1:editor:(vscode cursor)' \
+          '2:cli:_command_names -e'
+        ;;
+      move)
+        _arguments $common_opts \
+          "--from[source layer]:layer:($layers)" \
+          "--to[destination layer]:layer:($layers)" \
+          '--snippet[snippet file name]:snippet:' \
+          '1:kind:(settings keybindings snippets extensions)' \
+          '2:path or extension id:'
+        ;;
+    esac
+    ;;
+esac

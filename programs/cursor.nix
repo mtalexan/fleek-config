@@ -1,5 +1,7 @@
 { pkgs, misc, lib, config, ... }:
 {
+  imports = [ ./editor-sync ];
+
   ## Stop hook for notifying on Linux when attention is needed.
 
   # File is a nix-store symlink; ~/.cursor and ~/.cursor/hooks are created as user-owned dirs.
@@ -56,6 +58,24 @@
   #  #userSettings = {};
   #  #userTasks = {};
   #};
+
+  # After chezmoiApply has rendered settings. Missing extensions.json skips; failures warn.
+  home.activation.editorSyncCursorExtensions = lib.hm.dag.entryAfter [ "chezmoiApply" ] ''
+    if ! ${config.custom.editorSync.package}/bin/editor-sync extensions-sync \
+        --source ${config.custom.configdir}/chezmoi/.editor-config \
+        --host ${lib.escapeShellArg config.custom.editorSync.host} \
+        cursor ${pkgs.code-cursor-independent}/bin/cursor
+    then
+      echo ""
+      echo "╔══════════════════════════════════════════════════════════════╗"
+      echo "║  WARNING: Cursor extension sync FAILED                      ║"
+      echo "╠══════════════════════════════════════════════════════════════╣"
+      echo "║  Your home-manager activation completed, but editor-sync    ║"
+      echo "║  failed to install or uninstall Cursor extensions. Run      ║"
+      echo "║  'editor-sync extensions-sync' manually to diagnose.        ║"
+      echo "╚══════════════════════════════════════════════════════════════╝"
+    fi
+  '';
 }
 
 # vim: ts=2:sw=2:expandtab

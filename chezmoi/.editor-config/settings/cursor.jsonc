@@ -1,0 +1,11 @@
+{
+    "set": [
+        {
+            "path": [
+                "python.languageServer"
+            ],
+            "value": "None"
+        }
+    ],
+    "unset": []
+}

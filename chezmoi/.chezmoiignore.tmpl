@@ -54,4 +54,9 @@ kilo/**
 
 {{ if not (and (hasKey . "cursor") .cursor.enable) }}
 .cursor/hooks.json
+.config/Cursor/**
+{{ end }}
+
+{{ if not (and (hasKey . "vscode") .vscode.enable) }}
+.config/Code/**
 {{ end }}
