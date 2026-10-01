@@ -60,3 +60,18 @@ kilo/**
 {{ if not (and (hasKey . "vscode") .vscode.enable) }}
 .config/Code/**
 {{ end }}
+
+{{ if not (and (hasKey . "agents") .agents.enable) }}
+.agents/**
+{{ else }}
+  {{ if not .agents.work }}
+.agents/skills/work/**
+.agents/skills/ifp-host-*
+  {{ end }}
+  {{ if not .agents.personal }}
+.agents/skills/personal/**
+  {{ end }}
+  {{ if not .agents.common }}
+.agents/skills/common/**
+  {{ end }}
+{{ end }}

@@ -105,6 +105,9 @@
         templates.glab.data.enable = true;
       };
 
+      # ifp-host agent skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_work.
+      agents.work = true;
+
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
       # to make them work. 
       containers-common.config = {

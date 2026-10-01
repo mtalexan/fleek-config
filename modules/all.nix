@@ -40,6 +40,7 @@
 
       ../programs/agenix.nix
       ../programs/chezmoi.nix
+      ../programs/agents.nix
 
       ../programs/atuin.nix
       ../programs/bat.nix
