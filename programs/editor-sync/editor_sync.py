@@ -1628,8 +1628,8 @@ def ensure_snippet_templates(store: Store, snippet: str) -> None:
         if dest.is_file():
             continue
         body = (
-            "{{ output \"editor-sync\" \"render\" \"--source\" "
-            "(joinPath .chezmoi.sourceDir \".editor-config\") \"--host\" .editor_sync.host "
+            "{{ output (joinPath .chezmoi.sourceDir \"..\" \"programs\" \"editor-sync\" \"editor_sync.py\") \"render\" \"--source\" "
+            "(joinPath .chezmoi.sourceDir \".editor-config\") \"--host\" (includeTemplate \"editor-sync-host\" .) "
             f"\"{editor}\" \"snippets\" \"{snippet}\" -}}\n"
         )
         store.write(dest, body)

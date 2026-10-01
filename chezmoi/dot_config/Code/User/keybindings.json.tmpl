@@ -1,1 +1,1 @@
-{{ output "editor-sync" "render" "--source" (joinPath .chezmoi.sourceDir ".editor-config") "--host" .editor_sync.host "vscode" "keybindings" -}}
+{{ output (joinPath .chezmoi.sourceDir ".." "programs" "editor-sync" "editor_sync.py") "render" "--source" (joinPath .chezmoi.sourceDir ".editor-config") "--host" (includeTemplate "editor-sync-host" .) "vscode" "keybindings" -}}

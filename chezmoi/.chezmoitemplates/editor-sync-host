@@ -1,0 +1,6 @@
+{{- /* Lowercased user@host. Prefer the home-manager configuration name once chezmoi.toml has it. */ -}}
+{{- if hasKey . "editor_sync" -}}
+{{- .editor_sync.host -}}
+{{- else -}}
+{{- lower (print .chezmoi.username "@" .chezmoi.hostname) -}}
+{{- end -}}
