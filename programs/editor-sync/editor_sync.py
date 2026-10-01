@@ -1628,7 +1628,7 @@ def ensure_snippet_templates(store: Store, snippet: str) -> None:
         if dest.is_file():
             continue
         body = (
-            "{{ output (joinPath .chezmoi.sourceDir \"..\" \"programs\" \"editor-sync\" \"editor_sync.py\") \"render\" \"--source\" "
+            "{{ output (includeTemplate \"editor-sync-cmd\" .) \"render\" \"--source\" "
             "(joinPath .chezmoi.sourceDir \".editor-config\") \"--host\" (includeTemplate \"editor-sync-host\" .) "
             f"\"{editor}\" \"snippets\" \"{snippet}\" -}}\n"
         )

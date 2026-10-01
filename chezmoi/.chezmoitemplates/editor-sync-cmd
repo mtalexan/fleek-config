@@ -1,0 +1,7 @@
+{{- /* Installed editor-sync (on the activation PATH), else the checkout script before first activation. */ -}}
+{{- $installed := lookPath "editor-sync" -}}
+{{- if $installed -}}
+{{- $installed -}}
+{{- else -}}
+{{- joinPath .chezmoi.sourceDir ".." "programs" "editor-sync" "editor_sync.py" -}}
+{{- end -}}
