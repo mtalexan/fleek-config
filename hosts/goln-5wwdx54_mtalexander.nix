@@ -105,7 +105,7 @@
         templates.glab.data.enable = true;
       };
 
-      # ifp-host agent skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_work.
+      # skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_work
       agents = {
         work = true;
         common = true;

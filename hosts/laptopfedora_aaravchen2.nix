@@ -11,6 +11,7 @@
     # vscode is provided by the system, but install it anyway so we get any extra config we need with it
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/cursor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
@@ -57,6 +58,12 @@
           secret_file = "${config.home.homeDirectory}/.age/fleek_chezmoi_personal";
           # recipient set in identity file
         };
+      };
+
+      # skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_personal
+      agents = {
+        personal = true;
+        common = true;
       };
       
       # The primary distrobox config file
