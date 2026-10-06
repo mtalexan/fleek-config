@@ -28,6 +28,9 @@
     home.username = "mtalexander";
     home.homeDirectory = "/home/${config.home.username}";
 
+    # The host already runs an agent. Only load ~/.ssh keys into it.
+    custom.ssh-agent.auto-load-keys = true;
+
     # see below in the custom.git_keys for the git SSH key setup
 
     # the locations of the SSH private keys to use for decrypting age secrets.

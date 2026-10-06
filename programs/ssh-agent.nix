@@ -1,15 +1,19 @@
 { pkgs, lib, config, ... }:
-# Adds a systemd user service that starts the ssh-agent at login.
-# Adds the SSH_AUTH_SOCK to the shell rc files.
-# Adds a systemd user service that starts after the agent and automatically loads
-#  all key files from ~/.ssh/ into the agent so they can be used.
-# WARNING: Some desktop environments already ship an ssh-agent that's enabled by default.
-#          This will override that agent's socket setting.
+# Two independent switches:
+#   custom.ssh-agent.enable    start ssh-agent at login and set SSH_AUTH_SOCK in bashrc and zshrc
+#   custom.ssh-agent.auto-load-keys   load ~/.ssh private keys into the running agent
+# With only auto-load-keys, the host agent and its SSH_AUTH_SOCK are left in place.
 let
+  cfg = config.custom.ssh-agent;
   socket = config.services.ssh-agent.socket;
   openssh = config.services.ssh-agent.package;
   ssh-add = lib.getExe' openssh "ssh-add";
   ssh-keygen = lib.getExe' openssh "ssh-keygen";
+
+  shellSocketExport = ''
+    # ssh-agent is the default socket name from home-manager services.ssh-agent.
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/${socket}"
+  '';
 
   # Discover private keys when the unit runs. The set of files in ~/.ssh is not
   # known when this config is built.
@@ -45,41 +49,53 @@ let
   '';
 in
 {
-  # Starts ssh-agent at login and exports SSH_AUTH_SOCK for login shells, zsh,
-  # and the systemd/D-Bus session. The bash snippet below covers non-login bash.
-  services.ssh-agent.enable = true;
+  options.custom.ssh-agent = {
+    enable = lib.mkEnableOption ''
+      the home-manager ssh-agent user service. Also sets SSH_AUTH_SOCK in
+      bashrc and zshrc to that service's socket.
+      Leave this off when the host already provides an agent.
+    '';
 
-  # ssh-agent -a refuses to start when the socket path already exists.
-  systemd.user.services.ssh-agent.Service.ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/${socket}";
-
-  systemd.user.services.ssh-agent-add-keys = {
-    Unit = {
-      Description = "Load ~/.ssh private keys into ssh-agent";
-      After = [ "ssh-agent.service" ];
-      Requires = [ "ssh-agent.service" ];
-    };
-
-    Service = {
-      Type = "oneshot";
-      # never: an unexpected passphrase must fail this file, not hang login on a dialog
-      Environment = [
-        "SSH_AUTH_SOCK=%t/${socket}"
-        "SSH_ASKPASS_REQUIRE=never"
-      ];
-      ExecStart = addKeys;
-    };
-
-    Install.WantedBy = [ "default.target" ];
+    auto-load-keys = lib.mkEnableOption ''
+      loading private keys from ~/.ssh into the running agent at login.
+      Uses this module's socket when custom.ssh-agent.enable is set, and the
+      host SSH_AUTH_SOCK otherwise.
+    '';
   };
 
-  # Home-manager writes the socket export into ~/.profile only. Kitty starts
-  # non-login shells, which do not source that file.
-  # Keep an existing SSH_AUTH_SOCK when SSH_CONNECTION is set so ssh -A is preserved.
-  programs.bash.initExtra = ''
-    if [ -z "$SSH_AUTH_SOCK" -o -z "$SSH_CONNECTION" ]; then
-      export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/${socket}"
-    fi
-  '';
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      services.ssh-agent.enable = true;
+
+      # Home-manager writes SSH_AUTH_SOCK for login shells only.
+      # Kitty starts non-login shells, which skip that file.
+      programs.bash.initExtra = shellSocketExport;
+      programs.zsh.initContent = shellSocketExport;
+    })
+
+    (lib.mkIf cfg.auto-load-keys {
+      systemd.user.services.ssh-agent-add-keys = {
+        Unit = {
+          Description = "Load ~/.ssh private keys into ssh-agent";
+          After = lib.optionals cfg.enable [ "ssh-agent.service" ];
+          PartOf = lib.optionals cfg.enable [ "ssh-agent.service" ];
+        };
+
+        Service = {
+          Type = "oneshot";
+          # Stays active so PartOf restarts this unit with ssh-agent.service.
+          RemainAfterExit = cfg.enable;
+          # never: an unexpected passphrase must fail this file, not hang login on a dialog
+          Environment =
+            [ "SSH_ASKPASS_REQUIRE=never" ]
+            ++ lib.optional cfg.enable "SSH_AUTH_SOCK=%t/${socket}";
+          ExecStart = addKeys;
+        };
+
+        Install.WantedBy = [ "default.target" ];
+      };
+    })
+  ];
 }
 
 # vim: ts=2:sw=2:expandtab
