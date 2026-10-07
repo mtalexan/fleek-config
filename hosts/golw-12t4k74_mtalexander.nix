@@ -117,9 +117,11 @@
         common = true;
       };
 
-      xpra.enable = true;
-      cursor.xpra = true;
-      cursor.remote = true;
+      xpra.enable = false;
+      cursor = {
+        xpra = false;
+        remote = false;
+      };
 
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
       # to make them work. 
