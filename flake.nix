@@ -147,9 +147,16 @@
         # These are set to be packages that get their dependencies from an independently pinned nixpkgs, so we don't have
         # dependency version mismatch issues if we update just these input flakes.
         # These packages can be referred to as pkgs.*-independent in modules.
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) code-cursor-nixpkgs "code-cursor" "code-cursor-independent")
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) vscode-nixpkgs "vscode" "vscode-independent")
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs "zed-editor" "zed-independent")
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) code-cursor-nixpkgs [
+          [ "code-cursor" "code-cursor-independent" ]
+          [ "cursor-cli" "cursor-cli-independent" ]
+        ])
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) vscode-nixpkgs [
+          [ "vscode" "vscode-independent" ]
+        ])
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs [
+          [ "zed-editor" "zed-independent" ]
+        ])
 
         # must be last in this list. Forces all golang to be CGO=1 so it actually functions.
         (import custom-modules/overlay-packages/golang-cgo.nix)

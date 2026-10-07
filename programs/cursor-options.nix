@@ -52,7 +52,14 @@ let
     ];
   };
 in {
-  options.custom.cursor.hooks = lib.genAttrs cursorHookTypes hookTypeOption;
+  options.custom.cursor = {
+    xpra = lib.mkEnableOption "launching Cursor in the configured Xpra session";
+    remote = lib.mkEnableOption ''
+      a cursor-remote command. It attaches to an Xpra session over SSH.
+      The display defaults to custom.xpra.display unless --display is given.
+    '';
+    hooks = lib.genAttrs cursorHookTypes hookTypeOption;
+  };
 }
 
 # vim: ts=2:sw=2:expandtab

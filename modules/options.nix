@@ -11,6 +11,7 @@
     ../programs/emacs-options.nix
     ../programs/fzf-options.nix
     ../programs/kilo-options.nix
+    ../programs/xpra-options.nix
     ../programs/zed-editor-options.nix
   ];
 }
