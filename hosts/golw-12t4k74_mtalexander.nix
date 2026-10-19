@@ -14,7 +14,7 @@
     ../programs/cursor.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
-    ../programs/ssh-agent.nix
+    #../programs/ssh-agent.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
     # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
@@ -29,7 +29,7 @@
     home.homeDirectory = "/home/${config.home.username}";
 
     # The host already runs an agent. Only load ~/.ssh keys into it.
-    custom.ssh-agent.auto-load-keys = true;
+    #custom.ssh-agent.auto-load-keys = true;
 
     # see below in the custom.git_keys for the git SSH key setup
 
