@@ -45,11 +45,6 @@
       inputs.darwin.follows = "";
     };
 
-    # TUI vscode/zeditor tool
-    ttt = {
-      url = "github:eugenioenko/ttt";
-    };
-    
     # Non-flake source input for copilot-api
     copilot-api-src = {
       url   = "github:Arthur742Ramos/copilot-api-rust";
@@ -104,7 +99,6 @@
         language-servers,
         git-agecrypt,
         agenix,
-        ttt,
         code-cursor-nixpkgs,
         vscode-nixpkgs,
         zed-nixpkgs,
@@ -119,11 +113,6 @@
         language-servers = inputs.language-servers.packages.${prev.stdenv.hostPlatform.system}.default;
       };
 
-      # Not packaged as an overlay on its own
-      ttt-overlay = final: prev: {
-        ttt = inputs.ttt.packages.${prev.stdenv.hostPlatform.system}.default;
-      };
-
       # We're using a fork of bun2nix instead since we also need the useNativeBunPatches feature.
       ## TODO: Remove this when bun2nix adopts https://github.com/nix-community/bun2nix/pull/108
       #bun2nix-overlay = (import custom-modules/overlay-packages/bun2nix-cli-fixed.nix) bun2nix;
@@ -135,7 +124,6 @@
         emacs-overlay.overlay
         git-agecrypt.overlay
         language-servers-overlay
-        ttt-overlay
         bun2nix.overlays.default
 
         kilo-overlay

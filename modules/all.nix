@@ -74,7 +74,6 @@
       ../programs/rustup.nix
       ../programs/script-directory.nix
       ../programs/tmux.nix
-      ../programs/ttt.nix
       ../programs/xpra.nix
 
       ../programs/starship.nix

@@ -61,6 +61,18 @@ kilo/**
 .config/Code/**
 {{ end }}
 
+{{ if not (and (hasKey . "emacs") .emacs.enable) }}
+.emacs.d/**
+{{ else }}
+.emacs.d/init.el
+.emacs.d/common.nix.el
+.emacs.d/host.nix.el
+.emacs.d/custom.el
+.emacs.d/elpa/**
+.emacs.d/common.el
+.emacs.d/hosts/*.el
+{{ end }}
+
 {{ if not (and (hasKey . "agents") .agents.enable) }}
 .agents/**
 {{ else }}

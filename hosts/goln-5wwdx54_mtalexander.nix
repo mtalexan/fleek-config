@@ -16,7 +16,6 @@
     ../programs/zed-editor.nix
     #../programs/ssh-agent.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
-    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
   ];
 

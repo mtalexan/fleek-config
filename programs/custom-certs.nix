@@ -4,6 +4,8 @@
       NODE_EXTRA_CA_CERTS = config.custom.certs.bundle;
       # All Nix commands should use the system certs
       NIX_SSL_CERT_FILE = config.custom.certs.bundle;
+      # fetchgit reads this before NIX_SSL_CERT_FILE. The cacert setup hook can replace NIX_SSL_CERT_FILE.
+      NIX_GIT_SSL_CAINFO = config.custom.certs.bundle;
       # use the system certs for Python code using the Requests module
       REQUESTS_CA_BUNDLE = config.custom.certs.bundle;
       # use the system certs for other Python code

@@ -1,0 +1,10 @@
+#+TITLE: Emacs configuration for kubic-730xd_mike
+
+Chezmoi manages this file. Edit =~/.emacs.d/hosts/kubic-730xd_mike.org=, then bring it back with =chezmoi re-add ~/.emacs.d/hosts/kubic-730xd_mike.org=.
+
+Loaded after =host.nix.el= and before =custom.el=. =use-package= forms in =:tangle yes= blocks are installed from the emacs overlay on the next rebuild after re-add. Copy settings out of =custom.el= into a block here when they should be kept.
+
+* Host settings
+#+begin_src emacs-lisp :tangle yes
+;; Host-specific settings.
+#+end_src

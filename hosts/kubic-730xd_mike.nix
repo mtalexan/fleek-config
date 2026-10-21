@@ -2,7 +2,6 @@
 
   imports = [
     ../identities/personal.nix # set the default identities and secrets
-    # Currently has broken support for NIX_SSL_CERT_FILE and custom Root CA certs from nixpkgs.emacs-unstable
     #../programs/emacs.nix
   ];
 
