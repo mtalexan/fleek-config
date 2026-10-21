@@ -1,4 +1,17 @@
-{ pkgs, misc, lib, config, ... }: {
+{ pkgs, misc, lib, config, ... }:
+let
+  # There's an open bug in nixpkgs for VSCode that loses the executable permission for the copilot-runtime.
+  # There's a PR fix: https://github.com/NixOS/nixpkgs/pull/573515/files
+  # Until the PR is merged, we just manually fix it here.
+  vscodePackage = pkgs.vscode-independent.overrideAttrs (oldAttrs: {
+    postFixup = (oldAttrs.postFixup or "") + ''
+      copilotDir="$out/lib/vscode/resources/app/node_modules.asar.unpacked/@github"
+      if [ -d "$copilotDir" ]; then
+        find "$copilotDir" -type f -name copilot-runtime -exec chmod a+x {} +
+      fi
+    '';
+  });
+in {
   imports = [ ./editor-sync ];
 
   # already includes it's own *.desktop entry file, you just have to restart the gnome session to get it to show up
@@ -7,7 +20,7 @@
   # Instead, install only the package.  This still has the program and the desktop files, but doesn't try to manage the settings files.
   home.packages = [
     # use the one from a separate flake so we can update it separately. Which package it actually ends up being is set in the flake.nix
-    pkgs.vscode-independent
+    vscodePackage
   ];
 
   #programs.vscode = {
@@ -37,7 +50,7 @@
     if ! ${config.custom.editorSync.package}/bin/editor-sync extensions-sync \
         --source ${config.custom.configdir}/chezmoi/.editor-config \
         --host ${lib.escapeShellArg config.custom.editorSync.host} \
-        vscode ${pkgs.vscode-independent}/bin/code
+        vscode ${vscodePackage}/bin/code
     then
       echo ""
       echo "╔══════════════════════════════════════════════════════════════╗"
