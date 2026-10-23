@@ -7,11 +7,6 @@
     ../programs/parallel_kitty.nix
     ../programs/flameshot.nix
     ../programs/distrobox.nix
-    # Currently broken, it abuses Bun/nodejs and can't build
-    #../programs/kilo.nix
-    # Only needed if kilo is using it.
-    #../programs/copilot-api.nix
-    ../programs/cursor.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
     #../programs/ssh-agent.nix
@@ -147,12 +142,6 @@
         };
         copilot = true;
       };
-
-      # copilot-api gateway. Most settings are in the identity file.
-      copilot-api.autostart.enable = false;
-
-      # The api_keys are configured in the identities/*.nix
-      kilo.backend = "copilot";
 
       distrobox = {
         hooks = {

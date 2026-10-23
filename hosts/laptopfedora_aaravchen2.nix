@@ -11,7 +11,6 @@
     # vscode is provided by the system, but install it anyway so we get any extra config we need with it
     ../programs/vscode.nix
     ../programs/zed-editor.nix
-    ../programs/cursor.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
