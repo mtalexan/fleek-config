@@ -1,13 +1,14 @@
 { pkgs, misc, lib, config, ... }: {
   programs.herdr = {
     enable = true;
+    # Settings aren't read-only, only the settings specified below will be overwritten,
+    # and only on activation.
+    mutableSettings = true;
+    # See https://herdr.dev/docs/config-reference/
     settings = {
       experimental = {
         # put all pain history in the session so it can be restored
         pane_history = true;
-      };
-      terminal = {
-        kitty_graphics = true;
       };
       theme = {
         name = "terminal";
@@ -16,13 +17,12 @@
         toast = {
           # system notifications
           delivery = "system";
-          clipboard = {
-            enabled = false;
-          };
         };
+        status_indicators = "symbols";
       };
       update = {
-        version_check = false;
+        # tells you if there's a new version available
+        version_check = true;
       };
     };
   };
