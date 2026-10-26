@@ -75,6 +75,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # herdr plugins packaged for Nix, plus a home-manager module that registers them
+    herdr-nix = {
+      url = "github:lorenzorapetti/herdr-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     bun2nix = {
       # We need a patch to the bun2nix CLI tool that properly handles content hashed tarballs so it works with kilo.
       #   Implemented in overlay-packages/bun2nix-cli-fixed.nix as well.
@@ -105,6 +112,7 @@
         copilot-api-src,
         bun2nix,
         kilo,
+        herdr-nix,
         ...
       }@inputs:
     let
@@ -185,6 +193,7 @@
         modules = [
           nix-index-database.homeModules.nix-index # Include the nix-index-database home-manager module
           agenix.homeManagerModules.default # Include agenix home-manager module
+          herdr-nix.homeModules.default # Adds programs.herdr.plugins and pluginSettings
           (self + "/home.nix")
           (self + "/user.nix")
           (hostFileFromName configName) # Dynamically generate the host file path
