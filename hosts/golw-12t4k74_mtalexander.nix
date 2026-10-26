@@ -9,7 +9,8 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
-    #../programs/ssh-agent.nix
+    ../programs/github-copilot-cli.nix
+    ../programs/herdr.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
     #../programs/emacs.nix
   ];
