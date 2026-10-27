@@ -1,36 +1,69 @@
 { pkgs, misc, lib, config, herdrPlugins, ... }:
 let
   # Plugins to enable. Each entry is:
-  #   plugin   - package from herdr-nix (herdrPlugins.*)
+  #   plugin   - package from herdr-nix (herdrPlugins.*), https://github.com/lorenzorapetti/herdr-nix
   #   id       - plugin id, as used in action commands and pluginSettings
   #   bindings - list of { key, action, description } that become plugin_action keybindings.
   #              The action is the plugin-local action id and gets prefixed with the plugin id.
   #   settings - optional attrset written to the plugin's config file, null for none
   herdrPluginList = [
     {
+      # Plannotator annotations
       plugin = herdrPlugins.herdr-annotate-full;
       id = "annotate";
       bindings = [
-        { key = "prefix+alt+a"; action = "capture"; description = "annotate selection"; }
-        { key = "prefix+alt+m"; action = "manage"; description = "manage annotations"; }
-        { key = "prefix+alt+c"; action = "copy-context"; description = "copy annotations"; }
-        { key = "prefix+alt+d"; action = "open"; description = "review folder in plannotator"; }
-        { key = "prefix+alt+l"; action = "last"; description = "review last agent message"; }
+        { key = "prefix+a"; action = "capture"; description = "annotate selected text"; }
+        { key = "prefix+m"; action = "manage"; description = "manage annotations"; }
+        { key = "prefix+c"; action = "copy-context"; description = "copy annotations with context"; }
+        { key = "prefix+v"; action = "send-context"; description = "paste annotations and archive them"; }
+        { key = "prefix+ctrl+o"; action = "open"; description = "open a file picker in the current folder to select file(s) for annotation"; }
+        { key = "prefix+shift+o"; action = "last-newest"; description = "annotate the last message"; }
       ];
+
+      # all config for this is part of the plannotator-tui, under the [herdr] key.
       settings = null;
     }
     {
-      plugin = herdrPlugins.herdr-navigator;
-      id = "herdr-navigator";
-      bindings = [
-        { key = "prefix+alt+o"; action = "open"; description = "open navigator"; }
-        { key = "prefix+alt+p"; action = "open-side"; description = "open navigator in side pane"; }
-        { key = "prefix+alt+b"; action = "jump-back"; description = "navigator jump back"; }
-      ];
+      # Makes the agent sidebar structured and more useful
+      plugin = herdrPlugins.herdr-radar;
+      id = "herdr-radar";
+      bindings =[];
       settings = null;
+    }
+    {
+      # A jump-to-anything selector with fuzzy search and optional auto-titling.
+      plugin = herdrPlugins.herdr-bar;
+      id = "herdr-bar";
+      bindings = [
+        { key = "prefix+k"; action = "open"; description = "open the bar"; }
+      ];
+      settings = {
+        # Show tail of what's running in the workspace. Auto = only when wide enough.
+        preview = "auto";
+        mouse = true;
+        # Automatically suppressed if alternative naming plugins are present
+        auto_titles = true;
+        # New agent session in workspace can replace the auto-title name
+        follow_new_sessions = true;
+        # The filter the bar opens with by default. Can always add prefix to quick jump to filters:
+        #  @ agents
+        #  % panes
+        #  tabs
+        #  $ shells
+        #  ! blocked
+        #  > actions (only if actions = true)
+        #  all
+        scope = "all";
+        # If enabled, your current focus is the default selection on open. If false it's the last focused, which
+        # allows you to alt+tab by opening then quickly pressing enter.
+        select_current = false;
+        # show plugin actions, and allow > quick filtering for them
+        actions = true;
+      };
     }
     # Currently broken due to a bug in the plugin tests that is timing dependent instead of deterministic.
     #{
+    #  # Change reviewer with annotation support
     #  plugin = herdrPlugins.herdr-reviewr;
     #  id = "persiyanov.reviewr";
     #  bindings = [
@@ -39,10 +72,12 @@ let
     #  settings = null;
     #}
     {
-      plugin = herdrPlugins.herdr-automatic-rename;
-      id = "herdr-automatic-rename";
+      # Addiitonal sidebar with file explorer, file search/open, and VCS.
+      plugin = herdrPlugins.herdr-sidebar;
+      id = "herdr-sidebar";
       bindings = [
-        { key = "prefix+alt+n"; action = "reset"; description = "reset automatic names"; }
+        { key = "prefix+ctrl+p"; action = "show-explorer"; description = "open/focus the sidebar explorer view w/o toggle"; }
+        { key = "prefix+p"; action = "quick-open"; description = "open fuzzy file search"; }
       ];
       settings = null;
     }
