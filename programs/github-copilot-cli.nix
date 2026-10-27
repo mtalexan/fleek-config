@@ -37,6 +37,26 @@
           toolOutput = false;
         };
 
+        # What to include in statusline
+        footer = {
+          showModelEffort = true;
+          showDirectory = true;
+          showBranch = true;
+          showContextWindow = true;
+          showQuota = true;
+          showAiUsed = true;
+          showAgent = true;
+          showCodeChanges = true;
+          showUsername = false;
+          showSandbox = true;
+          showYolo = true;
+          showCiStatus = false;
+          showSchedules = false;
+          showPullRequest = false;
+          # This semes to be the whatever random extras it wants to include
+          showCustom = true;
+        };
+        
         # The default. But only a few things are actually clickable, so maybe this should be turned off instead?
         mouse = true;
         # Not the default, but necessary for being able to copy anything at all from the output when mouse = true.
