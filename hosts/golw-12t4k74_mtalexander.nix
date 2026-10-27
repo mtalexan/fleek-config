@@ -28,9 +28,6 @@
 
     # see below in the custom.git_keys for the git SSH key setup
 
-    # Kubuntu 24.04 ships shared-mime-info 2.4. Plasma 5 crashes if Nix adds a 2.5+ MIME database.
-    custom.shared-mime-info.useStable = true;
-
     # the locations of the SSH private keys to use for decrypting age secrets from secrets/
     age.identityPaths = [
       "${config.home.homeDirectory}/.ssh/fleek_agecrypt"
@@ -109,16 +106,17 @@
         templates.glab.data.enable = true;
       };
 
+      # This says to use shared-mime-info 2.4 from stable nixpkgs instead of the >=2.5 one from unstable nixpkgs.
+      # The host and nix must either both be <2.5 or >=2.5. The 2.5 mime database from Freedesktop reversed some MIME type
+      # definition dependencies and it causes circular dependency loops if you mix them. Qt is especially sensitive to this
+      # and didn't get a fix for it until Qt 6.5. That makes Kubuntu 24.04 (which is Qt5) hang then crash the entire DE
+      # constantly when this occurs.
+      shared-mime-info.useStable = true;
+      
       # skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_work
       agents = {
         work = true;
         common = true;
-      };
-
-      xpra.enable = false;
-      cursor = {
-        xpra = false;
-        remote = false;
       };
 
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
