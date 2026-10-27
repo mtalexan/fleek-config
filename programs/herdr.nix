@@ -96,9 +96,9 @@ in {
     ''
   ];
 
-  home.sessionVariables = {
-    # Do NOT make this a specific path to a plannotator-ui binary, or existing Copilot
-    # sessions will break whenever we activate a new home-manager config.
-    COPILOT_EDITOR = "plannotator-ui";
-  };
+  #home.sessionVariables = {
+  #  # Do NOT make this a specific path to a plannotator-ui binary, or existing Copilot
+  #  # sessions will break whenever we activate a new home-manager config.
+  #  COPILOT_EDITOR = "plannotator-ui";
+  #};
 }
