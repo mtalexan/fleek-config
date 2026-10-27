@@ -24,7 +24,8 @@
         respectGitignore = false;
         # default is 50, max possible is 1000.
         commandHistoryMaxSize = 1000;
-        # don't allow the system to sleep while an agent is running.
+        # Don't allow the system to sleep while an agent is running.
+        # WARNING: This also prevents locking, not just sleeping.
         keepAlive = "busy";
         workflows.maxConcurrentRuns = cfg.maxParallel;
         # disable all the OpenTelemetry
@@ -36,6 +37,20 @@
           toolArguments = false;
           toolOutput = false;
         };
+
+        # needed for HydraFusion model support currently
+        experimental = true;
+
+        defaultMode = "plan";
+        # Don't ask about every little thing.
+        # There appears to be no real way to set this mode per-prompt(?)
+        defaultPermissionMode = "assisted";
+
+        # When selecting just "auto", which is the default type: efficiency, balance, intelligence
+        autoTier = "intelligence";
+        planModel = "auto";
+        model = "hydrafusion";
+        
       };
     };
   };
