@@ -34,6 +34,9 @@
   # warns during activation if the host's nscd socket is missing (non-NixOS NSS support)
       ./nscd-check.nix
 
+  # pins or guards the Nix shared-mime-info version against the host's (see programs/shared-mime-info-options.nix)
+      ../programs/shared-mime-info.nix
+
   # Configurations
       ../programs/bash.nix
       ../programs/zsh.nix

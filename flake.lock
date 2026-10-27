@@ -358,8 +358,25 @@
         "language-servers": "language-servers",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_2",
+        "shared-mime-info-nixpkgs": "shared-mime-info-nixpkgs",
         "vscode-nixpkgs": "vscode-nixpkgs",
         "zed-nixpkgs": "zed-nixpkgs"
+      }
+    },
+    "shared-mime-info-nixpkgs": {
+      "locked": {
+        "lastModified": 1792898606,
+        "narHash": "sha256-Mg3rRjsbMqhSMxop5PYMXos8SwAjejrxSgVThTvP9eg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1f607aa79b6356ed45d3cd3c8079c196e79efa2c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "systems": {

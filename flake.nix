@@ -69,6 +69,14 @@
       #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
     };
 
+    # Stable nixpkgs that still ships shared-mime-info 2.4, for hosts whose distro MIME database is still 2.4.
+    # Mixing 2.4 and 2.5+ MIME databases creates C/C++/ObjC parent cycles that crash Qt 5 (KDE Plasma 5).
+    # See programs/shared-mime-info-options.nix.
+    shared-mime-info-nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-26.05";
+      #inputs.nixpkgs.follows = "nixpkgs"; # Independence from the nixpkgs flake is the whole point
+    };
+
     # Kilo from nixpkgs is broken, so use Kilo's upstream flake instead.
     kilo = {
       url = "github:Kilo-Org/kilocode";
@@ -109,6 +117,7 @@
         code-cursor-nixpkgs,
         vscode-nixpkgs,
         zed-nixpkgs,
+        shared-mime-info-nixpkgs,
         copilot-api-src,
         bun2nix,
         kilo,
@@ -152,6 +161,9 @@
         ])
         ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs [
           [ "zed-editor" "zed-independent" ]
+        ])
+        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) shared-mime-info-nixpkgs [
+          [ "shared-mime-info" "shared-mime-info-stable" ]
         ])
 
         # must be last in this list. Forces all golang to be CGO=1 so it actually functions.

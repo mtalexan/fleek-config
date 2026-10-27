@@ -28,6 +28,9 @@
 
     # see below in the custom.git_keys for the git SSH key setup
 
+    # Kubuntu 24.04 ships shared-mime-info 2.4. Plasma 5 crashes if Nix adds a 2.5+ MIME database.
+    custom.shared-mime-info.useStable = true;
+
     # the locations of the SSH private keys to use for decrypting age secrets from secrets/
     age.identityPaths = [
       "${config.home.homeDirectory}/.ssh/fleek_agecrypt"

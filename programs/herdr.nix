@@ -7,44 +7,44 @@ let
   #              The action is the plugin-local action id and gets prefixed with the plugin id.
   #   settings - optional attrset written to the plugin's config file, null for none
   herdrPluginList = [
-    {
-      plugin = herdrPlugins.herdr-annotate-full;
-      id = "annotate";
-      bindings = [
-        { key = "prefix+alt+a"; action = "capture"; description = "annotate selection"; }
-        { key = "prefix+alt+m"; action = "manage"; description = "manage annotations"; }
-        { key = "prefix+alt+c"; action = "copy-context"; description = "copy annotations"; }
-        { key = "prefix+alt+d"; action = "open"; description = "review folder in plannotator"; }
-        { key = "prefix+alt+l"; action = "last"; description = "review last agent message"; }
-      ];
-      settings = null;
-    }
-    {
-      plugin = herdrPlugins.herdr-navigator;
-      id = "herdr-navigator";
-      bindings = [
-        { key = "prefix+alt+o"; action = "open"; description = "open navigator"; }
-        { key = "prefix+alt+p"; action = "open-side"; description = "open navigator in side pane"; }
-        { key = "prefix+alt+b"; action = "jump-back"; description = "navigator jump back"; }
-      ];
-      settings = null;
-    }
-    {
-      plugin = herdrPlugins.herdr-reviewr;
-      id = "persiyanov.reviewr";
-      bindings = [
-        { key = "prefix+alt+r"; action = "toggle"; description = "toggle reviewr"; }
-      ];
-      settings = null;
-    }
-    {
-      plugin = herdrPlugins.herdr-automatic-rename;
-      id = "herdr-automatic-rename";
-      bindings = [
-        { key = "prefix+alt+n"; action = "reset"; description = "reset automatic names"; }
-      ];
-      settings = null;
-    }
+    #{
+    #  plugin = herdrPlugins.herdr-annotate-full;
+    #  id = "annotate";
+    #  bindings = [
+    #    { key = "prefix+alt+a"; action = "capture"; description = "annotate selection"; }
+    #    { key = "prefix+alt+m"; action = "manage"; description = "manage annotations"; }
+    #    { key = "prefix+alt+c"; action = "copy-context"; description = "copy annotations"; }
+    #    { key = "prefix+alt+d"; action = "open"; description = "review folder in plannotator"; }
+    #    { key = "prefix+alt+l"; action = "last"; description = "review last agent message"; }
+    #  ];
+    #  settings = null;
+    #}
+    #{
+    #  plugin = herdrPlugins.herdr-navigator;
+    #  id = "herdr-navigator";
+    #  bindings = [
+    #    { key = "prefix+alt+o"; action = "open"; description = "open navigator"; }
+    #    { key = "prefix+alt+p"; action = "open-side"; description = "open navigator in side pane"; }
+    #    { key = "prefix+alt+b"; action = "jump-back"; description = "navigator jump back"; }
+    #  ];
+    #  settings = null;
+    #}
+    #{
+    #  plugin = herdrPlugins.herdr-reviewr;
+    #  id = "persiyanov.reviewr";
+    #  bindings = [
+    #    { key = "prefix+alt+r"; action = "toggle"; description = "toggle reviewr"; }
+    #  ];
+    #  settings = null;
+    #}
+    #{
+    #  plugin = herdrPlugins.herdr-automatic-rename;
+    #  id = "herdr-automatic-rename";
+    #  bindings = [
+    #    { key = "prefix+alt+n"; action = "reset"; description = "reset automatic names"; }
+    #  ];
+    #  settings = null;
+    #}
   ];
 in {
   programs.herdr = {
