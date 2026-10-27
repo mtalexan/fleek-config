@@ -95,6 +95,37 @@ sudo restorecon -R /nix
 **WARNING:** You may need to re-run this SELinux relabel command after every system update (esp. on OpenSUSE ostree distros).  
 **WARNING:** After you run this, you will need to re-fix the SELinux context on the file pointed to by `/etc/systemd/system/non-nixos-gpu.service`
 
+### Custom root CAs for daemon downloads
+
+On hosts requiring custom root CAs, configure the Nix daemon as well as the installer and user shell. The variables in `programs/custom-certs.nix` apply to user sessions, not the daemon. Fixed-output fetch derivations inherit allowlisted variables from the daemon's environment.
+
+Create `/etc/systemd/system/nix-daemon.service.d/10-custom-ca.conf` with `sudoedit`, using the same bundle path as `custom.certs.bundle`. Replace the path below on hosts that use another location, such as `/etc/ssl/ca-bundle.pem` on OpenSUSE.
+
+```ini
+[Service]
+Environment="NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt"
+Environment="NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+Environment="NIX_GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
+Environment="REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+Environment="SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+Environment="CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+```
+
+Keep all six variables aligned with `programs/custom-certs.nix`. If the drop-in directory does not exist, create it with `sudo mkdir -p /etc/systemd/system/nix-daemon.service.d` before editing the file.
+
+Wait for active builds to finish, then reload and restart the daemon:
+
+```shell
+sudo systemctl daemon-reload &&
+  sudo systemctl restart nix-daemon.service
+systemctl show nix-daemon.service -p Environment
+nix store info --json
+```
+
+The bundle must also be readable inside fetch sandboxes. Check `nix config show sandbox-paths` and, if needed, add `extra-sandbox-paths = /etc/ssl/certs/ca-certificates.crt` to the host's Nix configuration using the actual bundle path. Each remote builder needs its own daemon environment and accessible bundle.
+
+This keeps TLS verification and sandboxing enabled. Nix permits network access for hash-pinned fixed-output fetches, while ordinary builds remain network-isolated. Herdr's Rust helpers compile and test offline using the fetched dependencies.
+
 ### New System
 
 Note: Items marked with `(A)` only need to be performed if you need agecrypt identity decryption for your new host.
