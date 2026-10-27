@@ -16,7 +16,6 @@
       mutableSettings = true;
       # see https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference#user-settings-copilotsettingsjson
       settings = {
-        mouse = true;
         renderMarkdown = true;
         # This also includes first-party plugins. The CLI tool itself will always fail to update, so it's fine to enable this.
         autoUpdate = true;
@@ -38,7 +37,12 @@
           toolOutput = false;
         };
 
-        # needed for HydraFusion model support currently
+        # The default. But only a few things are actually clickable, so maybe this should be turned off instead?
+        mouse = true;
+        # Not the default, but necessary for being able to copy anything at all from the output when mouse = true.
+        copyOnSelect = true;
+        
+        # needed for HydraFusion model support, and "assisted" permissions mode currently
         experimental = true;
 
         defaultMode = "plan";

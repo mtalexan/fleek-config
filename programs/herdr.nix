@@ -75,6 +75,8 @@ in {
           delivery = "system";
         };
         status_indicators = "symbols";
+        # ctrl+right-click  passes the right-click thru to the agent
+        right_click_passthrough_modifier = "ctrl";
       };
       update = {
         # tells you if there's a new version available
@@ -96,9 +98,8 @@ in {
     ''
   ];
 
-  #home.sessionVariables = {
-  #  # Do NOT make this a specific path to a plannotator-ui binary, or existing Copilot
-  #  # sessions will break whenever we activate a new home-manager config.
-  #  COPILOT_EDITOR = "plannotator-ui";
-  #};
+  home.shellAliases = {
+    # force setting the HERDR_AGENT variable when running copilot so it's recognized properly
+    copilot = "HERDR_AGENT=copilot copilot";
+  };
 }
