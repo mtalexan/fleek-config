@@ -195,10 +195,10 @@ in {
         # we re-bound the default prefix+v
         split_vertical = "prefix+|";
 
-        pane_left = "prefix+left";
-        pane_right = "prefix+right";
-        pane_up = "prefix+up";
-        pane_down = "prefix+down";
+        focus_pane_left = "prefix+left";
+        focus_pane_right = "prefix+right";
+        focus_pane_up = "prefix+up";
+        focus_pane_down = "prefix+down";
         # normally cycles forward thru panes
         last_pane = "prefix+tab";
 
