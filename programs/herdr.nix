@@ -71,6 +71,7 @@ let
     cp github-copilot.toml $out
   '';
 
+  ##########################################################################
   # Plugins to enable. Each entry is:
   #   plugin   - package from herdr-nix (herdrPlugins.*), https://github.com/lorenzorapetti/herdr-nix
   #   id       - plugin id, as used in action commands and pluginSettings
@@ -107,6 +108,8 @@ let
       id = "herdr-bar";
       bindings = [
         { key = "prefix+k"; action = "open"; description = "open the bar"; }
+        # This might conflict sometimes, but we use it so frequently that it's better if it's easy to hit
+        { key = "ctrl+k"; action = "open"; description = "open the bar"; }
       ];
       settings = {
         # Show tail of what's running in the workspace. Auto = only when wide enough.
