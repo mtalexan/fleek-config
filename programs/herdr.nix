@@ -142,16 +142,17 @@ let
     #  ];
     #  settings = null;
     #}
-    {
-      # Addiitonal sidebar with file explorer, file search/open, and VCS.
-      plugin = herdrPlugins.herdr-sidebar;
-      id = "herdr-sidebar";
-      bindings = [
-        { key = "prefix+ctrl+p"; action = "show-explorer"; description = "open/focus the sidebar explorer view w/o toggle"; }
-        { key = "prefix+p"; action = "quick-open"; description = "open fuzzy file search"; }
-      ];
-      settings = null;
-    }
+    # Uses up too much real estate, and affects how tabs are opened/closed since it shows up as a separate tab pane.
+    #{
+    #  # Addiitonal sidebar with file explorer, file search/open, and VCS.
+    #  plugin = herdrPlugins.herdr-sidebar;
+    #  id = "herdr-sidebar";
+    #  bindings = [
+    #    { key = "prefix+ctrl+p"; action = "show-explorer"; description = "open/focus the sidebar explorer view w/o toggle"; }
+    #    { key = "prefix+p"; action = "quick-open"; description = "open fuzzy file search"; }
+    #  ];
+    #  settings = null;
+    #}
   ];
 in {
   programs.herdr = {
@@ -164,11 +165,6 @@ in {
       (lib.filter (e: e.settings != null) herdrPluginList));
     # See https://herdr.dev/docs/config-reference/
     settings = {
-      keys.command = lib.concatMap (e: map (b: {
-        inherit (b) key description;
-        type = "plugin_action";
-        command = "${e.id}.${b.action}";
-      }) e.bindings) herdrPluginList;
       experimental = {
         # put all pain history in the session so it can be restored
         pane_history = true;
@@ -189,6 +185,17 @@ in {
         # tells you if there's a new version available
         version_check = true;
       };
+
+      terminal = {
+        # Use our built-in zsh for the shell explicitly, just like we do with Kitty
+        default_shell = lib.getExe config.programs.zsh.package;
+      };
+      
+      keys.command = lib.concatMap (e: map (b: {
+        inherit (b) key description;
+        type = "plugin_action";
+        command = "${e.id}.${b.action}";
+      }) e.bindings) herdrPluginList;
     };
   };
 
