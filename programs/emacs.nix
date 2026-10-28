@@ -14,6 +14,13 @@
 # as site-lisp/default.el, so edits to the chezmoi org files do not apply, and
 # those files would also load a second time from init.el.
 let
+  serverProfiles = import ./emacs/languages.nix {
+    inherit pkgs lib;
+    pythonServer = config.custom.emacs.pythonServer;
+  };
+  serverSettings = lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (name: profile: "(setq fleek-eglot-${name}-command '(${lib.concatMapStringsSep " " builtins.toJSON profile.command}))")
+    serverProfiles);
   parts = builtins.match "^(.*)@(.*)$" fleekConfigName;
   hostKey =
     if parts == null then
@@ -49,6 +56,53 @@ let
     extraEmacsPackages = epkgs: with epkgs; [
       use-package
       org
+      corfu
+      cape
+      eldoc-box
+    ] ++ [
+      (treesit-grammars.with-grammars (g: [ g.tree-sitter-tsx g.tree-sitter-typescript g.tree-sitter-javascript g.tree-sitter-jsdoc g.tree-sitter-toml ]))
+      adoc-mode
+      basic-mode
+      bitbake
+      cil-mode
+      clojure-mode
+      cmake-mode
+      coffee-mode
+      csharp-mode
+      cython-mode
+      dart-mode
+      dockerfile-mode
+      dts-mode
+      ess
+      fsharp-mode
+      go-mode
+      groovy-mode
+      hcl-mode
+      jq-mode
+      json-mode
+      julia-mode
+      just-mode
+      kconfig-mode
+      kotlin-mode
+      lua-mode
+      markdown-mode
+      mermaid-mode
+      nix-mode
+      php-mode
+      plantuml-mode
+      powershell
+      raku-mode
+      rbs-mode
+      rpm-spec-mode
+      rust-mode
+      shader-mode
+      swift-mode
+      systemd
+      typescript-mode
+      wat-mode
+      web-mode
+      xquery-mode
+      yaml-mode
     ];
     alwaysEnsure = true;
     alwaysTangle = false;
@@ -96,6 +150,12 @@ let
   '';
 in {
   config = {
+    custom.emacs.commonEl = lib.mkBefore ''
+      ;;; -*- lexical-binding: t -*-
+      ${serverSettings}
+      (with-eval-after-load 'rust-rustfmt
+        (setq rust-rustfmt-bin "${pkgs.rustfmt}/bin/rustfmt"))
+    '';
     home.packages = [
       pkgs.nanum-gothic-coding
       pkgs.nerd-fonts.hack
@@ -107,6 +167,11 @@ in {
     home.file.".emacs.d/common.nix.el".text = config.custom.emacs.commonEl;
     home.file.".emacs.d/host.nix.el".text = config.custom.emacs.hostEl;
     home.file.".emacs.d/init.el".text = initEl;
+    home.file.".emacs.d/early-init.el".text = ''
+      ;;; -*- lexical-binding: t -*-
+      ;; rpm-spec-mode autoloads expand a compilation-mode definition.
+      (require 'compile)
+    '';
 
     programs.emacs = {
       enable = true;

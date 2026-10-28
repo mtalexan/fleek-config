@@ -1,0 +1,21 @@
+--- a/src/bitbake_language_server/server.py
++++ b/src/bitbake_language_server/server.py
+@@ -6,5 +6,6 @@
+ import re
+ from typing import Any
+ 
++from lsprotocol.types import LogMessageParams, MessageType, PublishDiagnosticsParams
+ from lsprotocol.types import (
+     INITIALIZE,
+@@ -43,5 +44,11 @@
+ class BitbakeLanguageServer(LanguageServer):
+     r"""Bitbake language server."""
+ 
++    def show_message_log(self, message: str) -> None:
++        self.window_log_message(LogMessageParams(MessageType.Log, message))
++
++    def publish_diagnostics(self, uri: str, diagnostics: list[Diagnostic]) -> None:
++        self.text_document_publish_diagnostics(PublishDiagnosticsParams(uri, diagnostics))
++
+     def __init__(self, *args: Any, **kwargs: Any) -> None:
+         r"""Init.

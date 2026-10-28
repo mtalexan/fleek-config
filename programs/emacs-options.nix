@@ -1,5 +1,10 @@
 { lib, ... }: {
   options.custom.emacs = {
+    pythonServer = lib.mkOption {
+      type = lib.types.enum [ "basedpyright" "ty" ];
+      default = "basedpyright";
+      description = "Common Python Eglot server profile.";
+    };
     sssd_workaround = lib.mkOption {
       type = lib.types.bool;
       default = false;

@@ -17,6 +17,7 @@ The startup screen can only be disabled from =init.el=.
 * Core Settings
 ** Basic UI Configuration
 #+begin_src emacs-lisp :tangle yes
+;;; -*- lexical-binding: t -*-
 ;; Line numbers
 (global-display-line-numbers-mode t)
 
@@ -34,67 +35,118 @@ The startup screen can only be disabled from =init.el=.
 (setq use-package-always-ensure nil)
 #+end_src
 
-* LSP Configuration
-** LSP Mode
+* Language support
+All Emacs-enabled hosts share native file-mode associations, Eglot settings, completion, and mouse settings. Nix installs language modes and supplies executable command variables through =common.nix.el=. Each mode's =use-package= declaration below owns its additional file associations, native =eglot-server-programs= entries, and startup hooks.
+
+=M-x describe-mode= documents the current major mode. Customize =eglot-server-programs= to inspect or override server associations, and use =M-x eglot-events-buffer= to inspect a running server. Click Eglot's mode-line entry for its native navigation, refactoring, and diagnostics menu.
+
+Mode hooks call =eglot-ensure= directly, including for remote files. Eglot handles startup through its native local and TRAMP support. Remote server entries must use commands available on the remote host, not local Nix store paths.
+
+Emacs 31 requires trusted content for automatic Flymake diagnostics. Customize =trusted-content= to approve only your trusted project directories, then re-enable =flymake-mode=. No global trust override is applied.
+
+** Eglot
 #+begin_src emacs-lisp :tangle yes
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (
-         ;; On-demand LSP activation for each language
-         (rust-mode . lsp-deferred)
-         (python-mode . lsp-deferred)
-         (nix-mode . lsp-deferred)
-         (go-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-         (javascript-mode . lsp-deferred)
-         (sh-mode . lsp-deferred)
-         (c-mode . lsp-deferred)
-         (c++-mode . lsp-deferred)
-         (java-mode . lsp-deferred)
-         (yaml-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred)
+(use-package eglot
+  :ensure nil
   :config
-  (setq lsp-idle-delay 0.5
-        lsp-log-io nil
-        lsp-completion-provider :capf
-        lsp-headerline-breadcrumb-enable nil))
+  (setq eglot-sync-connect 0
+        eglot-autoshutdown t
+        eglot-events-buffer-config '(:size 0 :format short)
+        read-process-output-max (* 1024 1024)))
+
+(add-to-list 'load-path user-emacs-directory)
 #+end_src
 
-** LSP UI
+** Documentation
 #+begin_src emacs-lisp :tangle yes
-(use-package lsp-ui
-  :commands lsp-ui-mode
+(use-package eldoc-box
+  :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode)
   :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-position 'at-point
-        lsp-ui-doc-delay 0.5
-        lsp-ui-sideline-enable t
-        lsp-ui-sideline-show-hover t
-        lsp-ui-sideline-show-diagnostics t))
+  (setq eldoc-box-only-multi-line t))
 #+end_src
 
 * Completion
-** Company Mode
+Corfu opens after two characters and 75 ms of idle time. Eglot's native completion metadata handles server trigger characters. Corfu's native Return and Tab bindings apply. Cape adds file paths and buffer-local words without scanning other buffers.
+
+Automatic completion excludes special/comint buffers. Buffer size and minified filenames have no custom completion restrictions. Manual completion remains available. Popup timing excludes server computation and indexing.
+
+** Corfu and Cape
 #+begin_src emacs-lisp :tangle yes
-(use-package company
-  :hook (prog-mode . company-mode)
-  :bind (:map company-active-map
-              ("<tab>" . company-complete-selection))
+(use-package corfu
+  :init
+  (setq corfu-auto t
+        corfu-auto-delay 0.075
+        corfu-auto-prefix 2
+        corfu-preselect 'prompt
+        corfu-preview-current nil
+        corfu-on-exact-match nil
+        corfu-popupinfo-delay '(0.4 . 0.2)
+        global-corfu-modes '((not special-mode comint-mode minibuffer-mode) t)
+        tab-always-indent 'complete)
+  (global-corfu-mode 1)
   :config
-  (setq company-idle-delay 0.2
-        company-minimum-prefix-length 1
-        company-backends '((company-capf company-dabbrev-code))))
+  (corfu-popupinfo-mode 1)
+  (corfu-history-mode 1)
+  (corfu-mouse-mode 1)
+  (savehist-mode 1)
+  (add-to-list 'savehist-additional-variables 'corfu-history))
+
+(use-package cape
+  :demand t
+  :init
+  (setq cape-dabbrev-buffer-function #'current-buffer)
+  :config
+  (add-hook 'completion-at-point-functions #'cape-file 90)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev 95))
+#+end_src
+
+* Mouse access
+Native menus and the right-click context menu expose global, major-mode, minor-mode, project, version-control, and buffer actions. Eglot's mode-line menu exposes language-server actions. Graphical frames provide a toolbar, scrollbars, and clickable Corfu candidates. Keyboard bindings remain available.
+
+Terminal frames enable =xterm-mouse-mode=. Your terminal and any tmux session must forward mouse events. Use the terminal's selection bypass gesture, commonly Shift-drag, to copy outside Emacs. Terminal Corfu candidate clicking is not supported upstream. Use =completion-help-at-point= in a buffer or =minibuffer-completion-help= in the minibuffer, then left-click a candidate in the native completion list. Full hover and graphical custom-editor parity is not available in a terminal.
+
+#+begin_src emacs-lisp :tangle yes
+(use-package menu-bar
+  :ensure nil
+  :config
+  (menu-bar-mode 1))
+
+(use-package tool-bar
+  :ensure nil
+  :config
+  (tool-bar-mode 1))
+
+(use-package scroll-bar
+  :ensure nil
+  :config
+  (set-scroll-bar-mode 'right))
+
+(use-package xt-mouse
+  :ensure nil
+  :config
+  (xterm-mouse-mode 1))
+
+(use-package mouse
+  :ensure nil
+  :config
+  (context-menu-mode 1)
+  (add-hook 'context-menu-functions #'context-menu-global t)
+  (add-hook 'context-menu-functions #'context-menu-buffers t)
+  (add-hook 'context-menu-functions #'context-menu-project t)
+  (add-hook 'context-menu-functions #'context-menu-vc t))
+
+(use-package simple
+  :ensure nil
+  :bind (:map completion-list-mode-map
+              ("<mouse-1>" . choose-completion)))
 #+end_src
 
 * Syntax Checking
-** Flycheck
+** Flymake
+Eglot enables native Flymake diagnostics for managed buffers. Flycheck is not automatically enabled alongside it.
 #+begin_src emacs-lisp :tangle yes
-(use-package flycheck
-  :hook (prog-mode . flycheck-mode)
-  :config
-  (setq flycheck-check-syntax-automatically '(save mode-enabled)))
+(use-package flymake
+  :ensure nil)
 #+end_src
 
 * Project Management
@@ -181,50 +233,559 @@ The startup screen can only be disabled from =init.el=.
 #+end_src
 
 * Language-Specific Settings
+Native package associations handle standard file extensions. The =:mode= entries below add missing extensions or resolve ambiguities. Native =eglot-server-programs= entries select the protocol language ID and Nix-managed command. Major-mode hooks call =eglot-ensure= without a custom startup guard.
+
+** C, C++, and Objective-C
+#+begin_src emacs-lisp :tangle yes
+(use-package cc-mode
+  :ensure nil
+  :defer t
+  :mode (("\\.\\(?:cu\\|cuh\\|hip\\|sycl\\)\\'" . c++-mode)
+         ("\\.mm\\'" . objc-mode))
+  :hook ((c-mode . eglot-ensure)
+         (c-ts-mode . eglot-ensure)
+         (c++-mode . eglot-ensure)
+         (c++-ts-mode . eglot-ensure)
+         (objc-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((c-mode :language-id "c") (c-ts-mode :language-id "c"))
+                     fleek-eglot-clangd-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((c++-mode :language-id "cpp") (c++-ts-mode :language-id "cpp"))
+                     fleek-eglot-clangd-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((objc-mode :language-id "objective-c"))
+                     fleek-eglot-clangd-command)))
+#+end_src
+
 ** Rust
 #+begin_src emacs-lisp :tangle yes
 (use-package rust-mode
-  :mode "\\.rs\\'"
+  :defer t
+  :hook ((rust-mode . eglot-ensure)
+         (rust-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((rust-mode :language-id "rust") (rust-ts-mode :language-id "rust"))
+                     fleek-eglot-rust-command))
   :config
   (setq rust-format-on-save t))
 #+end_src
 
 ** Python
 #+begin_src emacs-lisp :tangle yes
-(use-package python-mode
-  :mode "\\.py\\'")
+(use-package python
+  :ensure nil
+  :defer t
+  :hook ((python-mode . eglot-ensure)
+         (python-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((python-mode :language-id "python") (python-ts-mode :language-id "python"))
+                     fleek-eglot-python-command)))
 #+end_src
 
 ** Nix
 #+begin_src emacs-lisp :tangle yes
 (use-package nix-mode
-  :mode "\\.nix\\'")
+  :defer t
+  :hook ((nix-mode . eglot-ensure)
+         (nix-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((nix-mode :language-id "nix") (nix-ts-mode :language-id "nix"))
+                     fleek-eglot-nix-command)))
 #+end_src
 
 ** Go
 #+begin_src emacs-lisp :tangle yes
 (use-package go-mode
-  :mode "\\.go\\'")
+  :defer t
+  :commands go-dot-mod-mode
+  :mode (("/go\\.\\(?:mod\\|work\\)\\'" . go-dot-mod-mode))
+  :hook ((go-mode . eglot-ensure)
+         (go-ts-mode . eglot-ensure)
+         (go-dot-mod-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((go-mode :language-id "go") (go-ts-mode :language-id "go"))
+                     fleek-eglot-go-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((go-dot-mod-mode :language-id "go.mod"))
+                     fleek-eglot-go-command)))
 #+end_src
 
 ** TypeScript
 #+begin_src emacs-lisp :tangle yes
 (use-package typescript-mode
-  :mode "\\.ts\\'"
+  :defer t
+  :mode ("\\.\\(?:mts\\|cts\\)\\'" . typescript-mode)
+  :hook ((typescript-mode . eglot-ensure)
+         (typescript-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((typescript-mode :language-id "typescript") (typescript-ts-mode :language-id "typescript"))
+                     fleek-eglot-typescript-command))
   :config
   (setq typescript-indent-level 2))
+
+(use-package js
+  :ensure nil
+  :defer t
+  :mode ("\\.jsx\\'" . js-jsx-mode)
+  :hook ((js-mode . eglot-ensure)
+         (js-ts-mode . eglot-ensure)
+         (js-jsx-mode . eglot-ensure)
+         (js-json-mode . eglot-ensure)
+         (json-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((js-mode :language-id "javascript") (js-ts-mode :language-id "javascript"))
+                     fleek-eglot-typescript-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((js-jsx-mode :language-id "javascriptreact"))
+                     fleek-eglot-typescript-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((js-json-mode :language-id "json") (json-ts-mode :language-id "json"))
+                     fleek-eglot-json-command)))
+
+(use-package typescript-ts-mode
+  :ensure nil
+  :defer t
+  :mode ("\\.tsx\\'" . tsx-ts-mode)
+  :hook ((tsx-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((tsx-ts-mode :language-id "typescriptreact"))
+                     fleek-eglot-typescript-command)))
 #+end_src
 
 ** YAML
 #+begin_src emacs-lisp :tangle yes
 (use-package yaml-mode
-  :mode "\\.ya?ml\\'")
+  :defer t
+  :hook ((yaml-mode . eglot-ensure)
+         (yaml-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((yaml-mode :language-id "yaml") (yaml-ts-mode :language-id "yaml"))
+                     fleek-eglot-yaml-command)))
 #+end_src
 
 ** Markdown
 #+begin_src emacs-lisp :tangle yes
 (use-package markdown-mode
-  :mode "\\.md\\'")
+  :defer t
+  :mode "\\.\\(?:jmd\\|mdc\\|copilotmd\\)\\'"
+  :hook ((markdown-mode . eglot-ensure)
+         (gfm-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((markdown-mode :language-id "markdown") (gfm-mode :language-id "markdown"))
+                     fleek-eglot-markdown-command)))
+#+end_src
+
+** Data and markup
+#+begin_src emacs-lisp :tangle yes
+(use-package json-mode
+  :defer t
+  :mode (("\\.\\(?:jsonc\\|code-snippets\\)\\'" . jsonc-mode)
+         ("/\\(?:[jt]sconfig\\(?:\\.[^/]+\\)?\\.json\\|\\.\\(?:babelrc\\|eslintrc\\|jshintrc\\)\\|\\.ember-cli\\)\\'" . jsonc-mode))
+  :hook ((json-mode . eglot-ensure)
+         (jsonc-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((json-mode :language-id "json"))
+                     fleek-eglot-json-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((jsonc-mode :language-id "jsonc"))
+                     fleek-eglot-json-command)))
+
+(use-package toml-ts-mode
+  :ensure nil
+  :mode "\\.toml\\'"
+  :hook ((toml-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((toml-ts-mode :language-id "toml"))
+                     fleek-eglot-toml-command)))
+
+(use-package nxml-mode
+  :ensure nil
+  :defer t
+  :mode "\\.\\(?:drawio\\|dio\\|csproj\\|fsproj\\|vbproj\\|vcxproj\\|props\\|targets\\|slnx\\|xsl\\|xslt\\)\\'"
+  :hook ((nxml-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((nxml-mode :language-id "xml"))
+                     fleek-eglot-xml-command)))
+
+(use-package sgml-mode
+  :ensure nil
+  :defer t
+  :hook ((html-mode . eglot-ensure)
+         (mhtml-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((html-mode :language-id "html") (mhtml-mode :language-id "html"))
+                     fleek-eglot-html-command)))
+
+(use-package css-mode
+  :ensure nil
+  :defer t
+  :hook ((css-mode . eglot-ensure)
+         (css-ts-mode . eglot-ensure)
+         (scss-mode . eglot-ensure)
+         (less-css-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((css-mode :language-id "css") (css-ts-mode :language-id "css"))
+                     fleek-eglot-css-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((scss-mode :language-id "scss"))
+                     fleek-eglot-css-command))
+  (add-to-list 'eglot-server-programs
+               (cons '((less-css-mode :language-id "less"))
+                     fleek-eglot-css-command)))
+
+(use-package sql
+  :ensure nil
+  :defer t
+  :hook ((sql-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((sql-mode :language-id "sql"))
+                     fleek-eglot-sql-command)))
+
+(use-package jq-mode
+  :defer t
+  :hook ((jq-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((jq-mode :language-id "jq"))
+                     fleek-eglot-jq-command)))
+
+(use-package wat-mode
+  :commands wat-mode
+  :mode "\\.wat\\'"
+  :hook ((wat-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((wat-mode :language-id "wat"))
+                     fleek-eglot-wat-command)))
+#+end_src
+
+** Jinja and other templates
+Jinja files use template-aware syntax editing and =jinja-lsp=. =C-c l t= switches the same buffer to its host language and back. A double suffix such as =.yaml.j2= identifies the host using native file detection. For a single suffix or a different host, use =C-c l T=. Every configured major mode can be selected.
+
+Eglot manages one language server per buffer. Seamless services for arbitrary hosts would require projected documents, source-position mapping, diagnostic filtering, and edit translation. This configuration keeps native major-mode switching instead. The host server sees the template source, so template delimiters can cause host diagnostics, and servers that reject template filenames may not provide semantic results. Switching does not render, rewrite, or save the template.
+
+#+begin_src emacs-lisp :tangle yes
+(use-package web-mode
+  :defer t
+  :mode (("\\.\\(?:j2\\|jinja\\|jinja2\\|sls\\)\\'" . fleek-jinja-mode)
+         ("\\.\\(?:erb\\|rhtml\\|rhtm\\|hbs\\|hjs\\|handlebars\\|jade\\|pug\\|razor\\|cshtml\\|gotmpl\\|tmpl\\)\\'" . web-mode))
+  :hook ((fleek-jinja-mode . eglot-ensure))
+  :bind (("C-c l t" . fleek-template-toggle)
+         ("C-c l T" . fleek-template-choose-host))
+  :init
+  (require 'fleek-template)
+  (add-to-list 'eglot-server-programs
+               (cons '((fleek-jinja-mode :language-id "jinja"))
+                     fleek-eglot-jinja-command)))
+#+end_src
+
+** JVM and .NET
+#+begin_src emacs-lisp :tangle yes
+(use-package java-mode
+  :ensure nil
+  :defer t
+  :hook ((java-mode . eglot-ensure)
+         (java-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((java-mode :language-id "java") (java-ts-mode :language-id "java"))
+                     fleek-eglot-java-command)))
+(use-package kotlin-mode
+  :defer t
+  :mode "\\.kts\\'"
+  :hook ((kotlin-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((kotlin-mode :language-id "kotlin"))
+                     fleek-eglot-kotlin-command)))
+(use-package groovy-mode
+  :defer t
+  :mode ("/Jenkinsfile[^/]*\\'" "\\.\\(?:gradle\\|jenkinsfile\\)\\'")
+  :hook ((groovy-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((groovy-mode :language-id "groovy"))
+                     fleek-eglot-groovy-command)))
+(use-package clojure-mode
+  :defer t
+  :hook ((clojure-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((clojure-mode :language-id "clojure"))
+                     fleek-eglot-clojure-command)))
+(use-package csharp-mode
+  :defer t
+  :hook ((csharp-mode . eglot-ensure)
+         (csharp-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((csharp-mode :language-id "csharp") (csharp-ts-mode :language-id "csharp"))
+                     fleek-eglot-csharp-command)))
+(use-package fsharp-mode
+  :defer t
+  :hook ((fsharp-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((fsharp-mode :language-id "fsharp"))
+                     fleek-eglot-fsharp-command)))
+#+end_src
+
+** Other programming languages
+#+begin_src emacs-lisp :tangle yes
+(use-package lua-mode
+  :defer t
+  :hook ((lua-mode . eglot-ensure)
+         (lua-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((lua-mode :language-id "lua") (lua-ts-mode :language-id "lua"))
+                     fleek-eglot-lua-command)))
+(use-package ruby-mode
+  :ensure nil
+  :defer t
+  :hook ((ruby-mode . eglot-ensure)
+         (ruby-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((ruby-mode :language-id "ruby") (ruby-ts-mode :language-id "ruby"))
+                     fleek-eglot-ruby-command)))
+(use-package php-mode
+  :defer t
+  :hook ((php-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((php-mode :language-id "php"))
+                     fleek-eglot-php-command)))
+(use-package perl-mode
+  :ensure nil
+  :defer t
+  :hook ((perl-mode . eglot-ensure)
+         (cperl-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((perl-mode :language-id "perl") (cperl-mode :language-id "perl"))
+                     fleek-eglot-perl-command)))
+(use-package julia-mode
+  :defer t
+  :hook ((julia-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((julia-mode :language-id "julia"))
+                     fleek-eglot-julia-command)))
+(use-package ess
+  :defer t
+  :hook ((ess-r-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((ess-r-mode :language-id "r"))
+                     fleek-eglot-r-command)))
+(use-package dart-mode
+  :defer t
+  :hook ((dart-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((dart-mode :language-id "dart"))
+                     fleek-eglot-dart-command)))
+(use-package sh-script
+  :ensure nil
+  :defer t
+  :mode (("\\.\\(?:bats\\|azcli\\)\\'" . sh-mode))
+  :hook ((sh-mode . eglot-ensure)
+         (bash-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((sh-mode :language-id "shellscript") (bash-ts-mode :language-id "shellscript"))
+                     fleek-eglot-bash-command)))
+(use-package powershell
+  :defer t
+  :hook ((powershell-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((powershell-mode :language-id "powershell"))
+                     fleek-eglot-powershell-command)))
+(use-package swift-mode
+  :defer t)
+#+end_src
+
+** Build and system files
+#+begin_src emacs-lisp :tangle yes
+(use-package cmake-mode
+  :defer t
+  :hook ((cmake-mode . eglot-ensure)
+         (cmake-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((cmake-mode :language-id "cmake") (cmake-ts-mode :language-id "cmake"))
+                     fleek-eglot-cmake-command)))
+(use-package make-mode
+  :ensure nil
+  :defer t
+  :hook ((makefile-mode . eglot-ensure)
+         (makefile-gmake-mode . eglot-ensure)
+         (makefile-bsdmake-mode . eglot-ensure)
+         (makefile-automake-mode . eglot-ensure)
+         (makefile-makepp-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((makefile-mode :language-id "makefile")
+                       (makefile-gmake-mode :language-id "makefile")
+                       (makefile-bsdmake-mode :language-id "makefile")
+                       (makefile-automake-mode :language-id "makefile")
+                       (makefile-makepp-mode :language-id "makefile"))
+                     fleek-eglot-autotools-command)))
+(use-package bitbake
+  :commands bitbake-mode
+  :mode (("\\.\\(?:bb\\|bbappend\\|bbclass\\)\\'" . bitbake-mode))
+  :hook ((bitbake-mode . eglot-ensure)
+         (bitbake-host-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((bitbake-mode :language-id "bitbake") (bitbake-host-mode :language-id "bitbake"))
+                     fleek-eglot-bitbake-command)))
+(use-package dts-mode
+  :defer t
+  :mode "\\.\\(?:dts\\|dtsi\\|dtso\\)\\'"
+  :hook ((dts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((dts-mode :language-id "dts"))
+                     fleek-eglot-dts-command)))
+(use-package dockerfile-mode
+  :defer t
+  :mode ("/\\(?:Dockerfile\\|Containerfile\\)\\(?:\\.[^/]*\\)?\\'"
+         "\\.\\(?:dockerfile\\|containerfile\\)\\'")
+  :hook ((dockerfile-mode . eglot-ensure)
+         (dockerfile-ts-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((dockerfile-mode :language-id "dockerfile") (dockerfile-ts-mode :language-id "dockerfile"))
+                     fleek-eglot-docker-command)))
+(use-package just-mode
+  :defer t
+  :hook ((just-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((just-mode :language-id "just"))
+                     fleek-eglot-just-command)))
+(use-package systemd
+  :defer t
+  :commands systemd-mode
+  :mode (("\\.service\\.d/[^/]+\\.conf\\'" . systemd-mode))
+  :hook ((systemd-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((systemd-mode :language-id "systemd"))
+                     fleek-eglot-systemd-command)))
+(use-package rpm-spec-mode
+  :defer t
+  :mode "\\.spec\\'")
+(use-package kconfig-mode
+  :defer t
+  :mode "/\\(?:Kconfig[^/]*\\|\\.config\\)\\'")
+(use-package hcl-mode
+  :defer t)
+(use-package conf-mode
+  :ensure nil
+  :defer t
+  :mode (("\\.\\(?:jsonl\\|schema\\|properties\\|vmoptions\\)\\'" . conf-mode)
+         ("/go\\.sum\\'" . conf-mode)
+         ("/\\(?:mkosi\\.conf\\|CMakeCache\\.txt\\|hosts\\|\\.shellcheckrc\\|\\.flake8\\|\\.pep8\\|\\.pylintrc\\|\\.pypirc\\)\\'" . conf-mode)
+         ("/\\(?:\\.env\\(?:\\.[^/]*\\)?\\|\\.flaskenv\\|jvm\\.options\\)\\'" . conf-mode)
+         ("/\\(?:requirements\\|constraints\\)/[^/]+\\.\\(?:txt\\|in\\)\\'" . conf-mode)
+         ("/[^/]*\\(?:requirements\\|constraints\\)[^/]*\\.\\(?:txt\\|in\\)\\'" . conf-mode)
+         ("/\\(?:\\.gitignore\\(?:_global\\)?\\|\\.dockerignore\\|\\.containerignore\\|\\.npmignore\\|\\.vscodeignore\\|\\.copilotignore\\)\\'" . conf-unix-mode)
+         ("/git-rebase-todo\\'" . conf-mode)))
+#+end_src
+
+** Documents and syntax-only modes
+#+begin_src emacs-lisp :tangle yes
+(use-package tex-mode
+  :ensure nil
+  :defer t
+  :mode (("\\.\\(?:bbx\\|cbx\\|lbx\\|cls\\|sty\\|dtx\\|ins\\|ltx\\|pnw\\|ptexw\\|jnw\\|jtexw\\|rnw\\|rtex\\|snw\\)\\'" . latex-mode)
+         ("\\.ctx\\'" . plain-tex-mode))
+  :hook ((latex-mode . eglot-ensure)
+         (plain-tex-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((latex-mode :language-id "latex") (plain-tex-mode :language-id "latex"))
+                     fleek-eglot-tex-command)))
+(use-package bibtex
+  :ensure nil
+  :defer t
+  :hook ((bibtex-mode . eglot-ensure))
+  :init
+  (add-to-list 'eglot-server-programs
+               (cons '((bibtex-mode :language-id "bibtex"))
+                     fleek-eglot-tex-command)))
+(use-package adoc-mode
+  :defer t)
+(use-package rst
+  :ensure nil
+  :defer t)
+(use-package mermaid-mode
+  :defer t)
+(use-package plantuml-mode
+  :defer t
+  :mode "\\.\\(?:puml\\|plantuml\\|iuml\\|pu\\|wsd\\)\\'")
+(use-package shader-mode
+  :defer t
+  :mode "\\.\\(?:hlsl\\|hlsli\\|fx\\|fxh\\|vsh\\|psh\\|cginc\\|compute\\|shader\\)\\'")
+(use-package basic-mode
+  :defer t
+  :mode "\\.\\(?:vb\\|vbs\\|vba\\|bas\\|brs\\)\\'")
+(use-package xquery-mode
+  :defer t
+  :mode "\\.\\(?:xq\\|xql\\|xqm\\|xquery\\|xqy\\)\\'")
+(use-package cython-mode
+  :defer t)
+(use-package coffee-mode
+  :defer t)
+(use-package raku-mode
+  :defer t)
+(use-package rbs-mode
+  :defer t)
+(use-package cil-mode
+  :defer t
+  :mode "\\.cil\\'")
+(use-package m4-mode
+  :ensure nil
+  :defer t
+  :mode "\\.te\\'")
+(use-package bat-mode
+  :ensure nil
+  :defer t)
+(use-package asm-mode
+  :ensure nil
+  :defer t)
+(use-package ld-script
+  :ensure nil
+  :defer t)
+(use-package diff-mode
+  :ensure nil
+  :defer t)
+(use-package text-mode
+  :ensure nil
+  :defer t
+  :mode (("/\\(?:COMMIT_EDITMSG\\|MERGE_MSG\\)\\'" . text-mode)))
+
 #+end_src
 
 * Keybindings
@@ -247,5 +808,5 @@ The startup screen can only be disabled from =init.el=.
 
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 20 1024 1024))))
+            (setq gc-cons-threshold (* 64 1024 1024))))
 #+end_src
