@@ -201,6 +201,8 @@ in {
         pane_down = "prefix+down";
         # normally cycles forward thru panes
         last_pane = "prefix+tab";
+
+        new_tab = "prefix+t";
         
         command = lib.concatMap (e: map (b: {
           inherit (b) key description;
