@@ -49,6 +49,8 @@ in {
   config = {
     home.packages = [ plannotator ];
 
+    custom.chezmoi.templates.plannotator.enable = true;
+
     # The plannotator-copilot plugin hook hardcodes $HOME/.local/bin/plannotator.
     home.file.".local/bin/plannotator".source = "${plannotator}/bin/plannotator";
   };

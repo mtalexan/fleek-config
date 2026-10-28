@@ -1,0 +1,39 @@
+{
+  "inboxSound": {
+    "dialogShownFor": "0.28.32",
+    "volume": 100
+  },
+  "inboxAgentNotes": {
+    "offered": true,
+    "asked": [
+      "cursor"
+    ]
+  },
+  "inboxNotifications": {
+    "allowedOrigin": "http://localhost:37463",
+    "enabled": true,
+    "dismissed": false
+  },
+  "inboxBoard": false,
+  "inboxTour": {
+    "version": 2,
+    "seen_at": "2026-10-27T21:08:08.300Z",
+    "finished_at": "2026-10-27T21:15:11.255Z",
+    "skipped_at": null,
+    "notify_again": false
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "plannotator",
+    "dark": "plannotator"
+  },
+  "reviewAnalysis": {
+    "semanticDiff": true,
+    "callFlow": false
+  },
+  "diffOptions": {
+    "lineDiffType": "char",
+    "lineBgIntensity": "subtle",
+    "expandUnchanged": true
+  }
+}

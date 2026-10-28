@@ -3,6 +3,10 @@
 # via custom.chezmoi.templates.<program>.enable.
 # Ignore patterns are relative to the _destination_!
 
+{{ if not (and (hasKey . "plannotator") .plannotator.enable) }}
+.plannotator/**
+{{ end }}
+
 {{ if not (and (hasKey . "kilo") .kilo.enable) }}
 kilo/**
 {{ end }}
