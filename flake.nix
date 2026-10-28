@@ -90,6 +90,13 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    # AI agent CLIs packaged for Nix. Provides plannotator, which isn't in nixpkgs.
+    # Doesn't follow our nixpkgs so the packages match numtide's binary cache.
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      # no follows. This makes these tools use their own independent nixpkgs, whatever they need/expect.
+    };
+
     bun2nix = {
       # We need a patch to the bun2nix CLI tool that properly handles content hashed tarballs so it works with kilo.
       #   Implemented in overlay-packages/bun2nix-cli-fixed.nix as well.

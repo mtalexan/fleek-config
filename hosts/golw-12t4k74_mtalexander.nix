@@ -119,6 +119,11 @@
         common = true;
       };
 
+      github-copilot-cli = {
+        # maximum number of concurrent chats.
+        maxParallel = 8;
+      };
+      
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
       # to make them work. 
       containers-common.config = {

@@ -1,5 +1,18 @@
 { pkgs, misc, lib, config, herdrPlugins, ... }:
 let
+  # The herdr-annotate-full/lite plugin requires one of a few different clipboard tools to be available. But the
+  # nix packaging of it doesn't include any of those tools with it. So create a wrapper for it that injects those tools as part
+  # of the PATH of the plugin tool so it has them.
+  # It defaults to using the wl-clipboard tools, but if they fail it falls back to the xclip tools automatically.
+  herdrAnnotate = herdrPlugins.herdr-annotate-full.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
+    postInstall = (old.postInstall or "") + ''
+      # The Linux manifest also uses the .exe filename for this native helper.
+      wrapProgram $out/bin/herdr-annotate.exe \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.wl-clipboard pkgs.xclip ]}
+    '';
+  });
+
   # Plugins to enable. Each entry is:
   #   plugin   - package from herdr-nix (herdrPlugins.*), https://github.com/lorenzorapetti/herdr-nix
   #   id       - plugin id, as used in action commands and pluginSettings
@@ -9,7 +22,7 @@ let
   herdrPluginList = [
     {
       # Plannotator annotations
-      plugin = herdrPlugins.herdr-annotate-full;
+      plugin = herdrAnnotate;
       id = "annotate";
       bindings = [
         { key = "prefix+a"; action = "capture"; description = "annotate selected text"; }
