@@ -111,11 +111,10 @@
         work = true;
         common = true;
       };
-
-      xpra.enable = false;
-      cursor = {
-        xpra = false;
-        remote = false;
+      
+      github-copilot-cli = {
+        # maximum number of concurrent chats.
+        maxParallel = 8;
       };
 
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
