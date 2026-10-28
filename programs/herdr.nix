@@ -191,11 +191,23 @@ in {
         default_shell = lib.getExe config.programs.zsh.package;
       };
       
-      keys.command = lib.concatMap (e: map (b: {
-        inherit (b) key description;
-        type = "plugin_action";
-        command = "${e.id}.${b.action}";
-      }) e.bindings) herdrPluginList;
+      keys = {
+        # we re-bound the default prefix+v
+        split_vertical = "prefix+|";
+
+        pane_left = "prefix+left";
+        pane_right = "prefix+right";
+        pane_up = "prefix+up";
+        pane_down = "prefix+down";
+        # normally cycles forward thru panes
+        last_pane = "prefix+tab";
+        
+        command = lib.concatMap (e: map (b: {
+          inherit (b) key description;
+          type = "plugin_action";
+          command = "${e.id}.${b.action}";
+        }) e.bindings) herdrPluginList;
+      };
     };
   };
 
