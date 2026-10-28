@@ -38,6 +38,30 @@ let
         --set-default PLANNOTATOR_BROWSER ${lib.getExe openUrl}
     '';
   };
+
+  # The plannotator-copilot hook runs `$HOME/.local/bin/plannotator copilot-plan` before every tool call.
+  # Plannotator only acts on exit_plan_mode, where it blocks until the browser review is submitted. Copilot
+  # gives no sign it's waiting on the user, so send a desktop notification for that case first.
+  # We have to replicate the filtering plannotator does so we can generate the notification for a review
+  # being opened in the browser.
+  hookWrapper = pkgs.writeShellApplication {
+    name = "plannotator";
+    runtimeInputs = [ pkgs.jq pkgs.libnotify pkgs.util-linux ];
+    text = ''
+      if [ "''${1:-}" != "copilot-plan" ]; then
+        exec ${lib.getExe plannotator} "$@"
+      fi
+
+      input=$(cat)
+      if [ "$(jq -r '.toolName // empty' <<<"$input" 2>/dev/null)" = "exit_plan_mode" ]; then
+        project=$(jq -r '.cwd // empty' <<<"$input" 2>/dev/null || true)
+        # Detached so a slow or missing notification daemon can't delay the review.
+        setsid notify-send --app-name="GitHub Copilot" --icon=dialog-question \
+          "Plan ready for review" "''${project:-$PWD}" >/dev/null 2>&1 </dev/null &
+      fi
+      exec ${lib.getExe plannotator} "$@" <<<"$input"
+    '';
+  };
 in {
   options.custom.plannotator.package = lib.mkOption {
     type = lib.types.package;
@@ -52,7 +76,7 @@ in {
     custom.chezmoi.templates.plannotator.enable = true;
 
     # The plannotator-copilot plugin hook hardcodes $HOME/.local/bin/plannotator.
-    home.file.".local/bin/plannotator".source = "${plannotator}/bin/plannotator";
+    home.file.".local/bin/plannotator".source = lib.getExe hookWrapper;
   };
 }
 

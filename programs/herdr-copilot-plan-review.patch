@@ -1,0 +1,19 @@
+--- a/github-copilot.toml
++++ b/github-copilot.toml
+@@ -23,6 +23,16 @@
+   ] },
+ ]
+ 
++# Local addition: the plannotator-copilot preToolUse hook holds exit_plan_mode open while the
++# plan review runs in the browser. Copilot shows this pending tool line until the review is submitted.
++[[rules]]
++id = "plannotator_plan_review"
++state = "blocked"
++priority = 200
++region = "bottom_non_empty_lines(10)"
++visible_blocker = true
++line_regex = ['^\s*○\s+Plan ready for review(?:\s|-|$)']
++
+ [[rules]]
+ id = "background_agents_working"
+ state = "working"

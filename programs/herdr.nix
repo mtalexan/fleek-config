@@ -13,6 +13,64 @@ let
     '';
   });
 
+  # Local override for herdr's Copilot screen-scraping state detection, installed to
+  # ~/.config/herdr/agent-detection/copilot.toml.
+  # herdr does not merge this file with its own rules. It replaces the entire Copilot detection manifest
+  # (bundled or auto-updated remote), so it must contain every upstream rule. It's built from the manifest
+  # bundled in the herdr source plus our local rules from the patch. The patch only adds a rule that marks
+  # the pane blocked while a plannotator plan review is open in the browser.
+  # While this override exists, herdr's remote manifest updates for Copilot are ignored, so upstream rule
+  # changes only arrive with herdr package updates. The build fails if the patch no longer applies.
+  herdrCopilotManifest = pkgs.runCommand "herdr-copilot-manifest-${config.programs.herdr.package.version}" {
+    nativeBuildInputs = [ pkgs.patch pkgs.jq config.programs.herdr.package ];
+  } ''
+    cp ${config.programs.herdr.package.src}/src/detect/manifests/github-copilot.toml github-copilot.toml
+    chmod u+w github-copilot.toml
+    if ! patch --fuzz=0 --no-backup-if-mismatch github-copilot.toml ${./herdr-copilot-plan-review.patch}; then
+      echo "error: programs/herdr-copilot-plan-review.patch no longer applies to the Copilot detection manifest" >&2
+      echo "       bundled in herdr ${config.programs.herdr.package.version} (src/detect/manifests/github-copilot.toml)." >&2
+      echo "       Re-check the upstream rules and regenerate the patch." >&2
+      exit 1
+    fi
+
+    # Check the patched manifest classifies sample Copilot screens as expected.
+    export HOME=$PWD/home XDG_CONFIG_HOME=$PWD/config
+    mkdir -p $HOME $XDG_CONFIG_HOME/herdr/agent-detection
+    cp github-copilot.toml $XDG_CONFIG_HOME/herdr/agent-detection/copilot.toml
+    cat > pending.txt <<'EOF'
+     ○ Plan ready for review - **Do the thing** · summary: "- **Do the thing**"    9m 43s
+
+     ~/project +1 -0
+    ╻▄▄▄▄▄▄▄▄▄▄
+    ┃
+    ╹▀▀▀▀▀▀▀▀▀▀
+     ◎ Working - plan · 34.2 KiB esc interrupt
+    EOF
+    cat > resolved.txt <<'EOF'
+     ● Plan ready for review - **Do the thing** · summary: "- **Do the thing**"    9m 43s
+
+     ● Edit  Edit src/main.rs
+
+     ~/project +1 -0
+    ╻▄▄▄▄▄▄▄▄▄▄
+    ┃
+    ╹▀▀▀▀▀▀▀▀▀▀
+     ◎ Working · esc interrupt
+    EOF
+    check() {
+      local state
+      state=$(herdr agent explain --file "$1" --agent copilot --json | jq -r .state)
+      if [ "$state" != "$2" ]; then
+        echo "error: patched Copilot manifest classified $1 as '$state', expected '$2'" >&2
+        exit 1
+      fi
+    }
+    check pending.txt blocked
+    check resolved.txt working
+
+    cp github-copilot.toml $out
+  '';
+
   # Plugins to enable. Each entry is:
   #   plugin   - package from herdr-nix (herdrPlugins.*), https://github.com/lorenzorapetti/herdr-nix
   #   id       - plugin id, as used in action commands and pluginSettings
@@ -132,6 +190,14 @@ in {
         version_check = true;
       };
     };
+  };
+
+  xdg.configFile."herdr/agent-detection/copilot.toml" = {
+    source = herdrCopilotManifest;
+    # A running server only rereads detection manifests on request. Fails harmlessly if no server is running.
+    onChange = ''
+      run ${lib.getExe config.programs.herdr.package} server reload-agent-manifests || true
+    '';
   };
 
   # Needs to be after compinit is initialized
