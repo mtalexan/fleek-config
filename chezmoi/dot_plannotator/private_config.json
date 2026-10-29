@@ -29,11 +29,60 @@
   },
   "reviewAnalysis": {
     "semanticDiff": true,
-    "callFlow": false
+    "callFlow": true
   },
   "diffOptions": {
     "lineDiffType": "char",
     "lineBgIntensity": "subtle",
-    "expandUnchanged": true
-  }
+    "expandUnchanged": false
+  },
+  "updateCheck": true,
+  "conventionalComments": true,
+  "conventionalLabels": [
+    {
+      "label": "suggestion",
+      "display": "suggestion",
+      "blocking": true
+    },
+    {
+      "label": "nitpick",
+      "display": "nit",
+      "blocking": true
+    },
+    {
+      "label": "question",
+      "display": "question",
+      "blocking": true
+    },
+    {
+      "label": "issue",
+      "display": "issue",
+      "blocking": true
+    },
+    {
+      "label": "praise",
+      "display": "praise",
+      "blocking": false
+    },
+    {
+      "label": "thought",
+      "display": "thought",
+      "blocking": true
+    },
+    {
+      "label": "note",
+      "display": "note",
+      "blocking": false
+    },
+    {
+      "label": "todo",
+      "display": "todo",
+      "blocking": true
+    },
+    {
+      "label": "chore",
+      "display": "chore",
+      "blocking": false
+    }
+  ]
 }
