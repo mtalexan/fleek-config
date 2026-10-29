@@ -1,5 +1,6 @@
 { pkgs, misc, lib, config, herdrPlugins, ... }:
 let
+  herdrPlannotator = config.custom.herdr.plannotator;
   # The herdr-annotate-full/lite plugin requires one of a few different clipboard tools to be available. But the
   # nix packaging of it doesn't include any of those tools with it. So create a wrapper for it that injects those tools as part
   # of the PATH of the plugin tool so it has them.
@@ -78,23 +79,26 @@ let
   #   bindings - list of { key, action, description } that become plugin_action keybindings.
   #              The action is the plugin-local action id and gets prefixed with the plugin id.
   #   settings - optional attrset written to the plugin's config file, null for none
-  herdrPluginList = [
-    {
-      # Plannotator annotations
-      plugin = herdrAnnotate;
-      id = "annotate";
-      bindings = [
-        { key = "prefix+a"; action = "capture"; description = "annotate selected text"; }
-        { key = "prefix+m"; action = "manage"; description = "manage annotations"; }
-        { key = "prefix+c"; action = "copy-context"; description = "copy annotations with context"; }
-        { key = "prefix+v"; action = "send-context"; description = "paste annotations and archive them"; }
-        { key = "prefix+ctrl+o"; action = "open"; description = "open a file picker in the current folder to select file(s) for annotation"; }
-        { key = "prefix+shift+o"; action = "last-newest"; description = "annotate the last message"; }
-      ];
+  herdrPluginList =
+    lib.optionals herdrPlannotator.enable [
+      {
+        # Plannotator annotations
+        plugin = herdrAnnotate;
+        id = "annotate";
+        bindings = [
+          { key = "prefix+a"; action = "capture"; description = "annotate selected text"; }
+          { key = "prefix+m"; action = "manage"; description = "manage annotations"; }
+          { key = "prefix+c"; action = "copy-context"; description = "copy annotations with context"; }
+          { key = "prefix+v"; action = "send-context"; description = "paste annotations and archive them"; }
+          { key = "prefix+ctrl+o"; action = "open"; description = "open a file picker in the current folder to select file(s) for annotation"; }
+          { key = "prefix+shift+o"; action = "last-newest"; description = "annotate the last message"; }
+        ];
 
-      # all config for this is part of the plannotator-tui, under the [herdr] key.
-      settings = null;
-    }
+        # all config for this is part of the plannotator-tui, under the [herdr] key.
+        settings = null;
+      }
+    ]
+    ++ [
     {
       # Makes the agent sidebar structured and more useful
       plugin = herdrPlugins.herdr-radar;
@@ -156,8 +160,25 @@ let
     #  ];
     #  settings = null;
     #}
-  ];
+    ]
+    ++ lib.optionals herdrPlannotator.terminalBrowser.enable [
+      {
+        # Review pages open in this browser. plannotator-open-url drives it per workspace.
+        plugin = herdrPlugins.herdr-terminal-browser;
+        id = herdrPlugins.herdr-terminal-browser.passthru.pluginId;
+        bindings = [ ];
+        settings = null;
+      }
+    ];
 in {
+  imports = [ ./plannotator.nix ];
+
+  assertions = [
+    {
+      assertion = !herdrPlannotator.terminalBrowser.enable || herdrPlannotator.enable;
+      message = "custom.herdr.plannotator.terminalBrowser.enable requires custom.herdr.plannotator.enable";
+    }
+  ];
   programs.herdr = {
     enable = true;
     # Settings aren't read-only, only the settings specified below will be overwritten,
@@ -216,12 +237,16 @@ in {
     };
   };
 
-  xdg.configFile."herdr/agent-detection/copilot.toml" = {
-    source = herdrCopilotManifest;
-    # A running server only rereads detection manifests on request. Fails harmlessly if no server is running.
-    onChange = ''
-      run ${lib.getExe config.programs.herdr.package} server reload-agent-manifests || true
-    '';
+  custom.plannotator.enable = lib.mkIf herdrPlannotator.enable (lib.mkDefault true);
+
+  xdg.configFile = lib.mkIf herdrPlannotator.enable {
+    "herdr/agent-detection/copilot.toml" = {
+      source = herdrCopilotManifest;
+      # A running server only rereads detection manifests on request. Fails harmlessly if no server is running.
+      onChange = ''
+        run ${lib.getExe config.programs.herdr.package} server reload-agent-manifests || true
+      '';
+    };
   };
 
   # Needs to be after compinit is initialized

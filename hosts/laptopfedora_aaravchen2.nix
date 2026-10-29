@@ -66,6 +66,20 @@
         personal = true;
         common = true;
       };
+
+      github-copilot-cli = {
+        # maximum number of concurrent chats.
+        maxParallel = 8;
+        # The Plannotator browser-based tool for reviewing Plans, and enable the /plannotator-review command for reviewing and commenting on changes.
+        plannotator.enable = true;
+      };
+
+      herdr.plannotator = {
+        # Enable the Plannotator plugin that uses the in-browser plugin for annotation of anything.
+        enable = true;
+        # Use terminal-browser as a tab in herdr to open Plannotator. This applies to anything that opens plannotator from within a herdr pane.
+        terminalBrowser.enable = false;
+      };
       
       # The primary distrobox config file
       distrobox.hooks = {

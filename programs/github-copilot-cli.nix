@@ -9,12 +9,15 @@
 
     # Marketplace sources (owner/repo, git URL, or local path) to register.
     # Registered names come from each marketplace.json, so they can't be set here.
-    copilotMarketplaces = [
+    # optionals, not mkIf. mkIf returns a module conditional, and list operations fail on it.
+    copilotMarketplaces = [] 
+    ++ lib.optionals cfg.plannotator.enable [
       "backnotprop/plannotator"
     ];
 
     # Plugin specs in plugin@marketplace form, exactly as passed to `copilot plugin install`.
-    copilotPlugins = [
+    copilotPlugins = []
+    ++ lib.optionals cfg.plannotator.enable [
       "plannotator-copilot@plannotator"
     ];
 
@@ -82,6 +85,9 @@
       fi
     '') copilotPlugins);
   in {
+    # enable plannotator itself if the setting is enabled for us. Make sure not to disable it globally if we're disabled.
+    custom.plannotator.enable = lib.mkIf (cfg.plannotator.enable) cfg.plannotator.enable;
+
     # Additive only. Plugins and marketplaces removed from the lists are left installed.
     home.activation.githubCopilotCliPlugins =
       lib.hm.dag.entryAfter [ "linkGeneration" "githubCopilotCliSettings" ] copilotPluginsScript;
@@ -90,8 +96,8 @@
       enable = true;
       # if there are any programs.mcp.servers, use the settings too but with lower priority
       enableMcpIntegration = true;
-      mcpServers = {} 
-      // lib.mkIf cfg.plannotatorInbox.enable {
+      # optionalAttrs, not `{} // mkIf`. `//` merges mkIf's internal attributes instead of the server.
+      mcpServers = lib.optionalAttrs cfg.plannotator.inboxEnable {
         # Adds the Plannotator Inbox as an MCP, though Copilot currently doesn't have any mode
         # where it serves a purpose.
         plannotator-inbox = {
