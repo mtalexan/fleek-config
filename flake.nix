@@ -129,6 +129,7 @@
         bun2nix,
         kilo,
         herdr-nix,
+        llm-agents,
         ...
       }@inputs:
     let
@@ -159,18 +160,22 @@
         # These are set to be packages that get their dependencies from an independently pinned nixpkgs, so we don't have
         # dependency version mismatch issues if we update just these input flakes.
         # These packages can be referred to as pkgs.*-independent in modules.
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) code-cursor-nixpkgs [
+        ((import custom-modules/overlay-packages/independent-package-from-flake.nix) code-cursor-nixpkgs [
           [ "code-cursor" "code-cursor-independent" ]
           [ "cursor-cli" "cursor-cli-independent" ]
         ])
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) vscode-nixpkgs [
+        ((import custom-modules/overlay-packages/independent-package-from-flake.nix) vscode-nixpkgs [
           [ "vscode" "vscode-independent" ]
         ])
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) zed-nixpkgs [
+        ((import custom-modules/overlay-packages/independent-package-from-flake.nix) zed-nixpkgs [
           [ "zed-editor" "zed-independent" ]
         ])
-        ((import custom-modules/overlay-packages/independent-nixpkgs.nix) shared-mime-info-nixpkgs [
+        ((import custom-modules/overlay-packages/independent-package-from-flake.nix) shared-mime-info-nixpkgs [
           [ "shared-mime-info" "shared-mime-info-stable" ]
+        ])
+        # Home Manager looks up github-copilot-cli. The llm-agents package keeps that name's dependency closure.
+        ((import custom-modules/overlay-packages/independent-package-from-flake.nix) llm-agents [
+          [ "copilot-cli" "github-copilot-cli" ]
         ])
 
         # must be last in this list. Forces all golang to be CGO=1 so it actually functions.
@@ -183,7 +188,7 @@
         inherit system;
         overlays = myOverlaysSet;
         # Make sure the nixpkgs set allows unfree packages.
-        # NOTE: Any independent nixpkgs need to set this as well (see independent-nixpkgs.nix)
+        # NOTE: Any independent nixpkgs need to set this as well (see independent-package-from-flake.nix)
         config = {
           allowUnfree = true;
           allowunfreePredicate = (_: true);
