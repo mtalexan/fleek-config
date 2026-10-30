@@ -61,6 +61,14 @@
         };
       };
 
+
+      # This says to use shared-mime-info 2.4 from stable nixpkgs instead of the >=2.5 one from unstable nixpkgs.
+      # The host and nix must either both be <2.5 or >=2.5. The 2.5 mime database from Freedesktop reversed some MIME type
+      # definition dependencies and it causes circular dependency loops if you mix them. Qt is especially sensitive to this
+      # and didn't get a fix for it until Qt 6.5. That makes Kubuntu 24.04 (which is Qt5) hang then crash the entire DE
+      # constantly when this occurs.
+      shared-mime-info.useStable = true;
+      
       # skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_personal
       agents = {
         personal = true;
