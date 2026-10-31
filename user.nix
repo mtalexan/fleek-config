@@ -36,12 +36,17 @@ in
   # applications/ directory changes. Nix profile switches only swap symlinks, so
   # the cache can keep stale entries. It also keeps entries dropped for a
   # failed TryExec, which is evaluated only at build time.
-  # Home Manager runs activation with a restricted PATH, so add the system
-  # directories where Ubuntu installs kbuildsycoca6.
+  # Run the rebuild through the systemd user manager so it gets the same
+  # environment as Plasma. Activation's restricted PATH lacks ~/.nix-profile/bin,
+  # so TryExec=kitty and similar fail and the entries get dropped. The cache
+  # filename is also a hash of XDG_DATA_DIRS, so the calling shell's value can
+  # write a file Plasma never reads. Without a user manager this does nothing,
+  # and kded rebuilds at the next login.
+  # Add the system directories where kbuildsycoca6 and systemd-run are installed.
   home.activation.rebuildKdeSycoca = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     PATH="$PATH:/usr/local/bin:/usr/bin"
-    if command -v kbuildsycoca6 >/dev/null 2>&1; then
-      kbuildsycoca6 --noincremental >/dev/null 2>&1 || true
+    if command -v kbuildsycoca6 >/dev/null 2>&1 && command -v systemd-run >/dev/null 2>&1; then
+      systemd-run --user --wait --quiet --collect kbuildsycoca6 --noincremental >/dev/null 2>&1 || true
     fi
   '';
 
