@@ -13,6 +13,7 @@
     ../programs/herdr.nix
     ../programs/containers-common.nix # needs enabling of config to make it do anything
     #../programs/emacs.nix
+    ../programs/obsidian.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well.

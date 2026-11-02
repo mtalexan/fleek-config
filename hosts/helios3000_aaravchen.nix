@@ -10,6 +10,7 @@
     ../programs/distrobox.nix
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/obsidian.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well

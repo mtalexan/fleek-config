@@ -13,6 +13,7 @@
     ../programs/zed-editor.nix
     ../programs/github-copilot-cli.nix
     ../programs/herdr.nix
+    ../programs/obsidian.nix
   ];
 
   # declare it explicitly so we can access the config.custom.files section to set options as well
