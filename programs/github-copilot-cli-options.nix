@@ -1,5 +1,9 @@
 { lib, ... }: {
   options.custom.github-copilot-cli = with lib; {
+    keepAlive = mkEnableOption ''
+      preventing sleep while an agent is running. Also prevents screen locking
+    '';
+
     maxParallel = mkOption {
       type = types.ints.positive;
       default = 4;

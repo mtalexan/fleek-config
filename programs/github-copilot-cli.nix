@@ -121,9 +121,6 @@
         respectGitignore = false;
         # default is 50, max possible is 1000.
         commandHistoryMaxSize = 1000;
-        # Don't allow the system to sleep while an agent is running.
-        # WARNING: This also prevents locking, not just sleeping.
-        keepAlive = "busy";
         workflows.maxConcurrentRuns = cfg.maxParallel;
         # disable all the OpenTelemetry
         telemetry.capture = {
@@ -182,6 +179,10 @@
         model = "hydrafusion";
         
         
+      } // lib.optionalAttrs cfg.keepAlive {
+        # Don't allow the system to sleep while an agent is running.
+        # WARNING: This also prevents locking, not just sleeping.
+        keepAlive = "busy";
       };
     };
   };
