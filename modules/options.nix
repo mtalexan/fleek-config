@@ -12,6 +12,7 @@
     ../programs/fzf-options.nix
     ../programs/github-copilot-cli-options.nix
     ../programs/herdr-options.nix
+    ../programs/jabra_engage_75-options.nix
     ../programs/kilo-options.nix
     ../programs/shared-mime-info-options.nix
     ../programs/xpra-options.nix

@@ -37,6 +37,9 @@
   # pins or guards the Nix shared-mime-info version against the host's (see programs/shared-mime-info-options.nix)
       ../programs/shared-mime-info.nix
 
+  # Jabra Engage 75 mute workaround (see programs/jabra_engage_75-options.nix)
+      ../programs/jabra_engage_75.nix
+
   # Configurations
       ../programs/bash.nix
       ../programs/zsh.nix
