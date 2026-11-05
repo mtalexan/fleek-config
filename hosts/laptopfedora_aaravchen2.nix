@@ -83,6 +83,9 @@
         plannotator.enable = false;
       };
 
+      # Route Plannotator reviews and editor requests to the herdr client viewing the session. See programs/herdr-bridge.nix.
+      herdr.bridge.enable = true;
+
       herdr.plannotator = {
         # Enable the Plannotator plugin that uses the in-browser plugin for annotation of anything.
         enable = false;

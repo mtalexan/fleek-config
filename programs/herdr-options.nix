@@ -23,4 +23,76 @@
       '';
     };
   };
+
+  options.custom.herdr.bridge = with lib; {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Route Plannotator reviews and editor requests to the herdr client that is viewing the session.
+        Attach through the herdr-with-remote wrapper (aliased as herdr) so the client can claim requests
+        and open the browser or editor on its own machine. Requires custom.herdr.plannotator.enable for reviews.
+      '';
+    };
+
+    claimTimeout = mkOption {
+      type = types.ints.positive;
+      default = 3;
+      description = "Seconds a request waits for a wrapped client to claim it before falling back.";
+    };
+
+    editor = {
+      default = mkOption {
+        type = types.enum [ "zed" "code" ];
+        default = "zed";
+        description = "Editor opened by the default editor keybinding. Resolved on the viewing client, not the server.";
+      };
+
+      alt = mkOption {
+        type = types.enum [ "zed" "code" ];
+        default = "code";
+        description = "Editor opened by the alt editor keybinding. Resolved on the viewing client, not the server.";
+      };
+    };
+
+    keys = {
+      edit = mkOption {
+        type = types.str;
+        default = "prefix+e";
+        description = "Keybinding that opens the current pane's workspace in the default editor.";
+      };
+
+      editAlt = mkOption {
+        type = types.str;
+        default = "prefix+shift+e";
+        description = "Keybinding that opens the current pane's workspace in the alt editor.";
+      };
+    };
+
+    aliasHerdr = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Alias `herdr` to herdr-with-remote in zsh and bash. Pane and non-attach commands still run the real herdr.";
+    };
+
+    janitor = {
+      interval = mkOption {
+        type = types.str;
+        default = "15min";
+        description = "How often the herdr-bridge janitor timer runs (systemd time span).";
+      };
+
+      pendingMaxAge = mkOption {
+        type = types.ints.positive;
+        default = 3600;
+        description = "Seconds a pending request may wait before the janitor checks whether it is still resolvable.";
+      };
+
+      claimStaleAfter = mkOption {
+        type = types.ints.positive;
+        default = 300;
+        description = "Seconds after which an unacknowledged claim is treated as abandoned and re-pended or removed.";
+      };
+    };
+  };
 }

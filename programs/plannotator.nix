@@ -3,6 +3,8 @@
 let
   upstream = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.plannotator;
   useTerminalBrowser = config.custom.herdr.plannotator.terminalBrowser.enable;
+  bridgeEnabled = config.custom.herdr.bridge.enable;
+  bridgeBin = lib.getExe (import ./herdr-bridge.nix { inherit pkgs lib config herdrPlugins; }).tool;
 
   # Only forced when the in-terminal opener is enabled, so other hosts do not build terminal-browser.
   herdrBin = lib.getExe config.programs.herdr.package;
@@ -255,8 +257,23 @@ let
         echo "plannotator-open-url: missing url" >&2
         exit 1
       fi
+    '' + lib.optionalString bridgeEnabled ''
+      # Ask the herdr client that is viewing the session to open the review on its own machine.
+      # Exit 0 means a remote client opened it, 10 means a local client claimed it, and anything else
+      # means nobody claimed it. Without a claim the client may be remote, so skip the in-terminal browser.
+      if [[ "''${HERDR_ENV:-}" == "1" ]]; then
+        rc=0
+        bridge_out=$(${bridgeBin} request-url "$url" --owner-pid "$PPID") || rc=$?
+        if [[ $rc -eq 0 ]]; then
+          exit 0
+        elif [[ $rc -eq 10 ]]; then
+          ${bridgeBin} release "''${bridge_out#local }"
+        else
+          :${lib.optionalString useTerminalBrowser "; terminal_ok=0"}
+        fi
+      fi
     '' + lib.optionalString useTerminalBrowser ''
-      if [[ "''${HERDR_ENV:-}" == "1" && -n "''${HERDR_PANE_ID:-}" ]]; then
+      if [[ "''${terminal_ok:-1}" == 1 && "''${HERDR_ENV:-}" == "1" && -n "''${HERDR_PANE_ID:-}" ]]; then
         if open_in_herdr "$url"; then
           exit 0
         fi
@@ -276,7 +293,8 @@ let
     postBuild = ''
       wrapProgram $out/bin/plannotator \
         --suffix PATH : ${lib.makeBinPath [ pkgs.git pkgs.openssh pkgs.xdg-utils ]} \
-        --set-default PLANNOTATOR_BROWSER ${lib.getExe openUrl}
+        --set-default PLANNOTATOR_BROWSER ${lib.getExe openUrl} \
+        --set-default PLANNOTATOR_REMOTE 0
     '';
   };
 

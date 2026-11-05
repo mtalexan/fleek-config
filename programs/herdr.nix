@@ -1,6 +1,8 @@
 { pkgs, misc, lib, config, herdrPlugins, ... }:
 let
   herdrPlannotator = config.custom.herdr.plannotator;
+  bridgeCfg = config.custom.herdr.bridge;
+  herdrBridge = import ./herdr-bridge.nix { inherit pkgs lib config herdrPlugins; };
   # The herdr-annotate-full/lite plugin requires one of a few different clipboard tools to be available. But the
   # nix packaging of it doesn't include any of those tools with it. So create a wrapper for it that injects those tools as part
   # of the PATH of the plugin tool so it has them.
@@ -95,6 +97,19 @@ let
         ];
 
         # all config for this is part of the plannotator-tui, under the [herdr] key.
+        settings = null;
+      }
+    ]
+    ++ lib.optionals bridgeCfg.enable [
+      {
+        # Opens the focused pane's workspace in an editor on the machine viewing the session.
+        # Editor choice is resolved by the viewing client, see programs/herdr-bridge.nix.
+        plugin = herdrBridge.plugin;
+        id = "herdr-bridge";
+        bindings = [
+          { key = bridgeCfg.keys.edit; action = "edit"; description = "open workspace in editor on the viewing machine"; }
+          { key = bridgeCfg.keys.editAlt; action = "edit-alt"; description = "open workspace in alt editor on the viewing machine"; }
+        ];
         settings = null;
       }
     ]
@@ -265,5 +280,25 @@ in {
   home.shellAliases = {
     # force setting the HERDR_AGENT variable when running copilot so it's recognized properly
     copilot = "HERDR_AGENT=copilot copilot";
+  } // lib.optionalAttrs (bridgeCfg.enable && bridgeCfg.aliasHerdr) {
+    # Attach forms go through the wrapper, everything else execs the real herdr unchanged.
+    herdr = "${lib.getExe herdrBridge.tool} wrap";
+  };
+
+  systemd.user.services.herdr-bridge-janitor = lib.mkIf bridgeCfg.enable {
+    Unit.Description = "Remove abandoned herdr-bridge requests";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe herdrBridge.tool} janitor";
+    };
+  };
+
+  systemd.user.timers.herdr-bridge-janitor = lib.mkIf bridgeCfg.enable {
+    Unit.Description = "Run the herdr-bridge janitor periodically";
+    Timer = {
+      OnStartupSec = "5min";
+      OnUnitActiveSec = bridgeCfg.janitor.interval;
+    };
+    Install.WantedBy = [ "timers.target" ];
   };
 }
