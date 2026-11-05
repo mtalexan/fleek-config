@@ -176,7 +176,7 @@
         #          Auto mode currently selects this model pretty frequently, which causes this breakage as well.
         #model = "auto";
         # Requires experimental = true
-        model = "hydrafusion";
+        model = "fusion";
         
         
       } // lib.optionalAttrs cfg.keepAlive {
