@@ -170,13 +170,8 @@
         autoTier = "intelligence";
         planModel = "auto";
 
-        # WARNING: The GPT-6.1 Sol model is broken and will hang forever whenever trying to start implementation of a plan.
-        #          This occurs both when moving from Plan -> Implement, and when already in Implement and instructing it to
-        #          simply implement the plan. In the latter case it fails by returning to plan mode for plan re-review.
-        #          Auto mode currently selects this model pretty frequently, which causes this breakage as well.
-        #model = "auto";
-        # Requires experimental = true
-        model = "fusion";
+        # If experimental=true, this corresponds to the Fusion models
+        model = "auto";
         
         
       } // lib.optionalAttrs cfg.keepAlive {
