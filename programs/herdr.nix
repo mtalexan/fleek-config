@@ -20,8 +20,13 @@ let
   # ~/.config/herdr/agent-detection/copilot.toml.
   # herdr does not merge this file with its own rules. It replaces the entire Copilot detection manifest
   # (bundled or auto-updated remote), so it must contain every upstream rule. It's built from the manifest
-  # bundled in the herdr source plus our local rules from the patch. The patch only adds a rule that marks
-  # the pane blocked while a plannotator plan review is open in the browser.
+  # bundled in the herdr source plus our local rules from the patch. The patch:
+  #   - marks the pane blocked while a plannotator plan review is open in the browser
+  #   - treats "Waiting for background agents/shells" as working for every spinner frame and mode prefix
+  #     (upstream only matches the ◎ frame, so waiting on sub-agents flickered to idle)
+  #   - treats the Copilot 1.0.107+ "ctrl+c interrupt" footer as working
+  #   - only checks the bottom lines for the "esc interrupt"/"esc to cancel" working hints, so transcript text
+  #     quoting them doesn't keep an idle session working
   # While this override exists, herdr's remote manifest updates for Copilot are ignored, so upstream rule
   # changes only arrive with herdr package updates. The build fails if the patch no longer applies.
   herdrCopilotManifest = pkgs.runCommand "herdr-copilot-manifest-${config.programs.herdr.package.version}" {
@@ -29,8 +34,8 @@ let
   } ''
     cp ${config.programs.herdr.package.src}/src/detect/manifests/github-copilot.toml github-copilot.toml
     chmod u+w github-copilot.toml
-    if ! patch --fuzz=0 --no-backup-if-mismatch github-copilot.toml ${./herdr-copilot-plan-review.patch}; then
-      echo "error: programs/herdr-copilot-plan-review.patch no longer applies to the Copilot detection manifest" >&2
+    if ! patch --fuzz=0 --no-backup-if-mismatch github-copilot.toml ${./herdr-copilot-detection.patch}; then
+      echo "error: programs/herdr-copilot-detection.patch no longer applies to the Copilot detection manifest" >&2
       echo "       bundled in herdr ${config.programs.herdr.package.version} (src/detect/manifests/github-copilot.toml)." >&2
       echo "       Re-check the upstream rules and regenerate the patch." >&2
       exit 1
@@ -60,6 +65,55 @@ let
     ╹▀▀▀▀▀▀▀▀▀▀
      ◎ Working · esc interrupt
     EOF
+    bg() {
+      cat <<EOF
+     ● Task  Explore the code
+
+     ~/project +1 -0
+    ╻▄▄▄▄▄▄▄▄▄▄
+    ┃
+    ╹▀▀▀▀▀▀▀▀▀▀
+     $1 · ''${2:-2 agents running · esc stop agents}
+    EOF
+    }
+    bg '◎ Waiting for background agents' > bg-agents.txt
+    bg '◉ Waiting for background agents' > bg-agents-filled.txt
+    bg '● Waiting for background agents' > bg-agents-solid.txt
+    bg '◉ Waiting for background shells' > bg-shells.txt
+    bg 'Autopilot · Allow All · ◉ Waiting for background agents' > bg-prefixed.txt
+    bg '◎ Working' 'ctrl+c interrupt' > ctrlc-footer.txt
+    cat > idle-prompt.txt <<'EOF'
+     ● Done. All tests pass.
+
+     ~/project +1 -0
+    ╻▄▄▄▄▄▄▄▄▄▄
+    ┃
+    ╹▀▀▀▀▀▀▀▀▀▀
+     shift+tab switch mode · ctrl+s run command
+    EOF
+    # Transcript text quoting the working hints must not keep an idle session working.
+    cat > idle-quoted-hints.txt <<'EOF'
+     ● The footer shows "esc interrupt", "esc to cancel", or "ctrl+c interrupt" while working.
+       ◉ Waiting for background agents · esc stop agents
+
+     ● Done.
+
+     ~/project +1 -0
+    ╻▄▄▄▄▄▄▄▄▄▄
+    ┃
+    ╹▀▀▀▀▀▀▀▀▀▀
+     ← open sidebar · Interactive · Assisted Permissions · / commands · ? help · ctrl+y view/edit plan
+    EOF
+    cat > permission-over-bg.txt <<'EOF'
+     ◉ Waiting for background agents · 1 agent running
+
+     Run this command?
+     ❯ 1. Yes
+       2. Yes, and don't ask again
+       3. No (Esc)
+
+     ↑↓ to navigate · enter to select · esc to cancel
+    EOF
     check() {
       local state
       state=$(herdr agent explain --file "$1" --agent copilot --json | jq -r .state)
@@ -70,6 +124,12 @@ let
     }
     check pending.txt blocked
     check resolved.txt working
+    for f in bg-agents bg-agents-filled bg-agents-solid bg-shells bg-prefixed ctrlc-footer; do
+      check $f.txt working
+    done
+    check idle-prompt.txt idle
+    check idle-quoted-hints.txt idle
+    check permission-over-bg.txt blocked
 
     cp github-copilot.toml $out
   '';
@@ -254,7 +314,7 @@ in {
 
   custom.plannotator.enable = lib.mkIf herdrPlannotator.enable (lib.mkDefault true);
 
-  xdg.configFile = lib.mkIf herdrPlannotator.enable {
+  xdg.configFile = {
     "herdr/agent-detection/copilot.toml" = {
       source = herdrCopilotManifest;
       # A running server only rereads detection manifests on request. Fails harmlessly if no server is running.

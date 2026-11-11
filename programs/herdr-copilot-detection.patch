@@ -1,0 +1,49 @@
+--- a/github-copilot.toml
++++ b/github-copilot.toml
+@@ -23,19 +23,44 @@
+   ] },
+ ]
+ 
++# Local addition: the plannotator-copilot preToolUse hook holds exit_plan_mode open while the
++# plan review runs in the browser. Copilot shows this pending tool line until the review is submitted.
++[[rules]]
++id = "plannotator_plan_review"
++state = "blocked"
++priority = 200
++region = "bottom_non_empty_lines(10)"
++visible_blocker = true
++line_regex = ['^\s*○\s+Plan ready for review(?:\s|-|$)']
++
++# Local change: upstream only matches the ◎ spinner frame, so the other frames (◉, ●) fell back to idle.
++# Accept any spinner glyph, a mode prefix such as "Autopilot · Allow All ·", and the shells variant.
+ [[rules]]
+ id = "background_agents_working"
+ state = "working"
+ priority = 110
+ region = "bottom_non_empty_lines(6)"
+ visible_working = true
+-line_regex = ['^\s*◎\s+Waiting for background agents(?:\s|·|$)']
++line_regex = ['^\s*(?:.*·\s*)?\S\s+Waiting for background (?:agents|shells)(?:\s|·|$)']
+ 
++# Local addition: Copilot 1.0.107+ shows "ctrl+c interrupt" instead of "esc interrupt" in the working footer.
++[[rules]]
++id = "working_interrupt_footer"
++state = "working"
++priority = 105
++region = "bottom_non_empty_lines(3)"
++visible_working = true
++any = [
++  { contains = ["ctrl+c interrupt"] },
++]
++
++# Local change: upstream checks the whole recent screen, so transcript text that quotes these hints kept an
++# idle session "working". Copilot only draws them in the spinner/footer lines at the bottom.
+ [[rules]]
+ id = "working_cancel_hint"
+ state = "working"
+ priority = 100
+-region = "whole_recent"
++region = "bottom_non_empty_lines(6)"
+ visible_working = true
+ any = [
+   { contains = ["esc to cancel"] },
