@@ -160,7 +160,8 @@ def owner_alive(owner):
     """owner is {"pid", "start"} as recorded by publish, or None for requests without an owner."""
     if owner is None:
         return True
-    return proc_start_time(owner["pid"]) == owner["start"]
+    start = owner.get("start")
+    return start is not None and proc_start_time(owner.get("pid")) == start
 
 
 def new_request(kind, payload, owner_pid=None):
