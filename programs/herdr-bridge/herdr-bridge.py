@@ -15,8 +15,6 @@ import pty
 import re
 import secrets
 import select
-import shlex
-import shutil
 import signal
 import socket
 import subprocess
@@ -302,44 +300,6 @@ def cmd_request_edit(args):
         return 0
     spawn_detached(editor_command(editor_for(args.variant, args.editor), path, None))
     notify("Editor opened on the herdr host", path)
-    return 0
-
-
-def focused_pane_cwd_for_key(dest, session):
-    """Ask the herdr server that owns this client for its focused pane's directory, over SSH when remote."""
-    base = [HERDR] + (["--session", session] if session else []) + ["pane", "current"]
-    if dest:
-        remote = ["herdr"] + base[1:]
-        script = 'PATH="$HOME/.nix-profile/bin:$PATH" ' + " ".join(shlex.quote(a) for a in remote)
-        cmd = [SSH, "-o", "BatchMode=yes", dest, script]
-    else:
-        cmd = base
-    out = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-    if out.returncode != 0:
-        raise RuntimeError(out.stderr.strip() or f"pane lookup exited {out.returncode}")
-    pane = json.loads(out.stdout)["result"]["pane"]
-    path = pane.get("foreground_cwd") or pane.get("cwd")
-    if not path:
-        raise RuntimeError("focused pane has no directory")
-    return path
-
-
-def cmd_key_edit(args):
-    """Keybinding handler that runs on the viewing client, so the editor opens on this machine."""
-    dest = os.environ.get("HERDR_BRIDGE_REMOTE") or None
-    session = os.environ.get("HERDR_BRIDGE_SESSION") or None
-    try:
-        path = focused_pane_cwd_for_key(dest, session)
-    except (OSError, RuntimeError, ValueError, KeyError, TypeError, subprocess.TimeoutExpired) as e:
-        message = f"herdr-bridge key-edit: {e}"
-        log(message)
-        print(message, file=sys.stderr)
-        if shutil.which("notify-send"):
-            subprocess.run(["notify-send", "herdr-bridge", message], check=False)
-        return 1
-    editor = editor_for("alt" if args.alt else "default", None)
-    log(f"key-edit: {editor} {path} dest={dest}")
-    spawn_detached(editor_command(editor, path, dest))
     return 0
 
 
@@ -742,9 +702,6 @@ def cmd_wrap(args):
     SESSION = session
     client = Client(dest)
     threading.Thread(target=client.pull, daemon=True).start()
-    # Inherited by the client's shell keybindings, which run key-edit on this machine.
-    os.environ["HERDR_BRIDGE_REMOTE"] = dest
-    os.environ["HERDR_BRIDGE_SESSION"] = session or ""
     try:
         code = run_proxy([HERDR, *herdr_args], client)
     finally:
@@ -766,10 +723,6 @@ def build_parser():
     p.add_argument("--variant", choices=["default", "alt"], default="default")
     p.add_argument("--editor", choices=["zed", "code"], default=None)
     p.set_defaults(func=cmd_request_edit)
-
-    p = sub_parsers.add_parser("key-edit", help="keybinding handler: open the focused pane's workspace on this machine")
-    p.add_argument("--alt", action="store_true", help="use the alt editor")
-    p.set_defaults(func=cmd_key_edit)
 
     p = sub_parsers.add_parser("release", help="remove a claim after a locally handled request")
     p.add_argument("claimed")
