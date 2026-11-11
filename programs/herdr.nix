@@ -343,6 +343,8 @@ in {
   } // lib.optionalAttrs (bridgeCfg.enable && bridgeCfg.aliasHerdr) {
     # Attach forms go through the wrapper, everything else execs the real herdr unchanged.
     herdr = "${lib.getExe herdrBridge.tool} wrap";
+  } // lib.optionalAttrs bridgeCfg.enable {
+    herdr-edit = "${lib.getExe herdrBridge.tool} request-edit";
   };
 
   systemd.user.services.herdr-bridge-janitor = lib.mkIf bridgeCfg.enable {

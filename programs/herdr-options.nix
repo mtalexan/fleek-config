@@ -30,7 +30,7 @@
       default = false;
       description = ''
         Route Plannotator reviews and editor requests to the herdr client that is viewing the session.
-        Attach through the herdr-with-remote wrapper (aliased as herdr) so the client can claim requests
+        Attach through the herdr-bridge wrap command (aliased as herdr) so the client can claim requests
         and open the browser or editor on its own machine. Requires custom.herdr.plannotator.enable for reviews.
       '';
     };
@@ -72,7 +72,7 @@
     aliasHerdr = mkOption {
       type = types.bool;
       default = true;
-      description = "Alias `herdr` to herdr-with-remote in zsh and bash. Pane and non-attach commands still run the real herdr.";
+      description = "Alias `herdr` to `herdr-bridge wrap` in zsh and bash. Pane and non-attach commands still run the real herdr.";
     };
 
     janitor = {

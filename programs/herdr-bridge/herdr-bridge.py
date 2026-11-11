@@ -260,8 +260,32 @@ def cmd_request_url(args):
     return 10
 
 
+def focused_pane_cwd():
+    """Plugin actions run in the plugin directory, so ask herdr for the pane's directory."""
+    pane_id = os.environ.get("HERDR_PANE_ID")
+    if not pane_id:
+        return None
+    out = subprocess.run([HERDR, "pane", "get", pane_id], capture_output=True, text=True, timeout=10)
+    try:
+        return json.loads(out.stdout)["result"]["pane"]["cwd"]
+    except (ValueError, KeyError, TypeError):
+        return None
+
+
+def resolve_edit_path(arg):
+    """Absolute args stay as-is, relative args resolve against the pane's directory, and no arg means the pane itself."""
+    base = focused_pane_cwd() or os.environ.get("HERDR_ACTIVE_PANE_CWD") or os.getcwd()
+    return os.path.abspath(os.path.join(base, arg or "."))
+
+
 def cmd_request_edit(args):
-    path = os.path.abspath(args.path or os.environ.get("HERDR_ACTIVE_PANE_CWD") or os.getcwd())
+    if not os.environ.get("HERDR_PANE_ID"):
+        print("herdr-bridge request-edit must be run from inside a herdr pane", file=sys.stderr)
+        return 1
+    path = resolve_edit_path(args.path)
+    if not os.path.exists(path):
+        print(f"herdr-bridge request-edit: no such path: {path}", file=sys.stderr)
+        return 1
     req = new_request("edit", {"path": path, "variant": args.variant, "editor": args.editor})
     if request(req, keep_pending=False) is not None:
         return 0
@@ -684,7 +708,7 @@ def build_parser():
     p.set_defaults(func=cmd_request_url)
 
     p = sub_parsers.add_parser("request-edit", help="ask the viewing client to open a workspace in an editor")
-    p.add_argument("path", nargs="?")
+    p.add_argument("path", nargs="?", help="absolute, or relative to the current pane's directory; defaults to the pane directory")
     p.add_argument("--variant", choices=["default", "alt"], default="default")
     p.add_argument("--editor", choices=["zed", "code"], default=None)
     p.set_defaults(func=cmd_request_edit)
