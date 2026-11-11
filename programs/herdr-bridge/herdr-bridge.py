@@ -301,7 +301,7 @@ def cmd_check(args):
     return 0 if resolvable(req) else 1
 
 
-def cmd_janitor(_args):
+def sweep_session():
     ensure_store()
     now = time.time()
 
@@ -317,7 +317,9 @@ def cmd_janitor(_args):
         except (FileNotFoundError, json.JSONDecodeError):
             unlink(path)
             continue
-        if not owner_alive(req.get("owner")) or (age > PENDING_MAX_AGE and not resolvable(req)):
+        # Edits have no liveness probe, so they only age out. Reviews are kept while they still resolve.
+        expired = age > PENDING_MAX_AGE and (req.get("type") != "open-url" or not resolvable(req))
+        if not owner_alive(req.get("owner")) or expired:
             unlink(path)
 
     for name in os.listdir(sub("claimed")):
@@ -336,15 +338,23 @@ def cmd_janitor(_args):
             else:
                 unlink(path)
 
-    for d in ("tmp",):
-        for name in os.listdir(sub(d)):
-            path = sub(f"{d}/{name}")
-            with contextlib.suppress(FileNotFoundError):
-                if now - os.stat(path).st_mtime > CLAIM_STALE_AFTER:
-                    unlink(path)
+    for name in os.listdir(sub("tmp")):
+        path = sub(f"tmp/{name}")
+        with contextlib.suppress(FileNotFoundError):
+            if now - os.stat(path).st_mtime > CLAIM_STALE_AFTER:
+                unlink(path)
 
     for name in os.listdir(sub("trash")):
         unlink(sub(f"trash/{name}"))
+
+
+def cmd_janitor(_args):
+    global SESSION
+    # Sweep every session's store, not just this server's. Named sessions keep their own store.
+    for name in os.listdir(STATE_BASE) if os.path.isdir(STATE_BASE) else []:
+        if os.path.isdir(os.path.join(STATE_BASE, name)):
+            SESSION = name
+            sweep_session()
     return 0
 
 

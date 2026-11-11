@@ -1,7 +1,7 @@
 { pkgs, lib, config, herdrPlugins ? null }:
 # Routes Plannotator reviews and editor requests to the herdr client that is viewing the session.
-# Returns the bridge tool, the herdr plugin that exposes the editor actions, and the janitor
-# runs on the server. Attach through `herdr-bridge wrap` (aliased as herdr) on the viewing machine.
+# Returns the bridge tool and the herdr plugin that exposes the editor actions. The janitor
+# timer runs on the server. Attach through `herdr-bridge wrap` (aliased as herdr) on the viewing machine.
 let
   cfg = config.custom.herdr.bridge;
   herdrBin = lib.getExe config.programs.herdr.package;
