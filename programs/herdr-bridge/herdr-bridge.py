@@ -556,22 +556,25 @@ class Client:
                 os.unlink(self.ctl)
 
 
-def parse_attach(args):
-    """Return (True, dest or None, session) for attach forms, or (False, None, None) for anything else."""
+def parse_remote(args):
+    """Return (dest, session, herdr_args) when --remote or --ssh is given, else (None, None, args).
+    --ssh is wrapper-only, so it is rewritten to --remote for the real herdr."""
     dest = None
     session = "herdr"
+    herdr_args = []
     i = 0
     while i < len(args):
         arg = args[i]
+        if arg in ("--remote", "--ssh") and i + 1 < len(args):
+            dest = args[i + 1]
+            herdr_args += ["--remote", dest]
+            i += 2
+            continue
         if arg == "--session" and i + 1 < len(args):
             session = args[i + 1]
-            i += 2
-        elif arg in ("--remote", "--ssh") and i + 1 < len(args):
-            dest = args[i + 1]
-            i += 2
-        else:
-            return False, None, None
-    return True, dest, session
+        herdr_args.append(arg)
+        i += 1
+    return (dest, session, herdr_args) if dest else (None, None, args)
 
 
 def copy_winsize(dst_fd):
@@ -684,15 +687,14 @@ def run_proxy(argv, client):
 
 def cmd_wrap(args):
     global SESSION
-    attach, dest, session = parse_attach(args)
-    if not attach or os.environ.get("HERDR_ENV") == "1" or not sys.stdin.isatty():
-        os.execv(HERDR, [HERDR, *args])
+    dest, session, herdr_args = parse_remote(args)
+    if dest is None or os.environ.get("HERDR_ENV") == "1" or not sys.stdin.isatty():
+        os.execv(HERDR, [HERDR, *herdr_args])
     SESSION = session
     client = Client(dest)
-    if dest:
-        threading.Thread(target=client.pull, daemon=True).start()
+    threading.Thread(target=client.pull, daemon=True).start()
     try:
-        code = run_proxy([HERDR, *args], client)
+        code = run_proxy([HERDR, *herdr_args], client)
     finally:
         client.close()
     sys.exit(code if code is not None and code >= 0 else 1)
