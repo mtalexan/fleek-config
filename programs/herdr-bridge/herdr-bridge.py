@@ -43,6 +43,8 @@ TOKEN_RE = re.compile(rb"\x1b\](?:0|2);hbridge:([0-9a-f]{16})(?:\x07|\x1b\\)")
 OSC_MAX = 128
 PULL_IDLE_SECONDS = 60
 REAPER_INTERVAL = 30
+# Returned by request() when a client claimed and finished the request before the caller looked.
+CLAIMED_DONE = "claimed-done"
 
 # Run on the herdr host over ssh. Store path is $HOME/.local/state/herdr-bridge/$1 (the session).
 # Positional args: $1 session, $2 id, $3 mode, $4 client id.
@@ -230,13 +232,16 @@ def request(req, keep_pending):
     if claimed is not None:
         return claimed
     if keep_pending:
+        if not os.path.exists(sub(f"pending/{rid}.json")):
+            # Claimed after the wait ended, and the claimer already finished with it.
+            return find_claim(rid) or CLAIMED_DONE
         return None
     try:
         os.rename(sub(f"pending/{rid}.json"), sub(f"trash/{rid}.json"))
         os.unlink(sub(f"trash/{rid}.json"))
     except FileNotFoundError:
         # A client claimed it between the timeout and the cancel.
-        return find_claim(rid)
+        return find_claim(rid) or CLAIMED_DONE
     return None
 
 
@@ -248,7 +253,7 @@ def cmd_request_url(args):
     if claimed is None:
         notify("Plannotator review", url)
         return 1
-    if claimed_mode(claimed) == "remote":
+    if claimed == CLAIMED_DONE or claimed_mode(claimed) == "remote":
         return 0
     print(f"local {claimed}")
     return 10
