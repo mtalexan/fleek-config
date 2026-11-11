@@ -1,7 +1,7 @@
-{ pkgs, lib, config, herdrPlugins ? null }:
+{ pkgs, lib, config }:
 # Routes Plannotator reviews and editor requests to the herdr client that is viewing the session.
-# Returns the bridge tool and the herdr plugin that exposes the editor actions. The janitor
-# timer runs on the server. Attach through `herdr-bridge wrap` (aliased as herdr) on the viewing machine.
+# Returns the bridge tool. The janitor timer runs on the server. Attach through `herdr-bridge wrap`
+# (aliased as herdr) on the viewing machine.
 let
   cfg = config.custom.herdr.bridge;
   herdrBin = lib.getExe config.programs.herdr.package;
@@ -22,16 +22,7 @@ let
   tool = pkgs.writers.writePython3Bin "herdr-bridge" {
     flakeIgnore = [ "E501" "E731" ];
   } (substitute ./herdr-bridge/herdr-bridge.py substitutions);
-
-  plugin = herdrPlugins.mkHerdrPlugin {
-    pname = "herdr-bridge";
-    version = "0.1.0";
-    src = ./herdr-bridge/plugin;
-    # The actions run `herdr-bridge` by name, so the tool must be on the plugin's PATH.
-    runtimeInputs = [ tool ];
-    meta.description = "Open a herdr pane's workspace in an editor on the viewing machine";
-  };
 in
 {
-  inherit tool plugin;
+  inherit tool;
 }

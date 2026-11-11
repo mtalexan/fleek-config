@@ -4,7 +4,7 @@ let
   upstream = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.plannotator;
   useTerminalBrowser = config.custom.herdr.plannotator.terminalBrowser.enable;
   bridgeEnabled = config.custom.herdr.bridge.enable;
-  bridgeBin = lib.getExe (import ./herdr-bridge.nix { inherit pkgs lib config herdrPlugins; }).tool;
+  bridgeBin = lib.getExe (import ./herdr-bridge.nix { inherit pkgs lib config; }).tool;
 
   # Only forced when the in-terminal opener is enabled, so other hosts do not build terminal-browser.
   herdrBin = lib.getExe config.programs.herdr.package;

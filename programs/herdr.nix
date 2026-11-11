@@ -2,7 +2,7 @@
 let
   herdrPlannotator = config.custom.herdr.plannotator;
   bridgeCfg = config.custom.herdr.bridge;
-  herdrBridge = import ./herdr-bridge.nix { inherit pkgs lib config herdrPlugins; };
+  herdrBridge = import ./herdr-bridge.nix { inherit pkgs lib config; };
   # The herdr-annotate-full/lite plugin requires one of a few different clipboard tools to be available. But the
   # nix packaging of it doesn't include any of those tools with it. So create a wrapper for it that injects those tools as part
   # of the PATH of the plugin tool so it has them.
@@ -160,19 +160,6 @@ let
         settings = null;
       }
     ]
-    ++ lib.optionals bridgeCfg.enable [
-      {
-        # Opens the focused pane's workspace in an editor on the machine viewing the session.
-        # Editor choice is resolved by the viewing client, see programs/herdr-bridge.nix.
-        plugin = herdrBridge.plugin;
-        id = "herdr-bridge";
-        bindings = [
-          { key = bridgeCfg.keys.edit; action = "edit"; description = "open workspace in editor on the viewing machine"; }
-          { key = bridgeCfg.keys.editAlt; action = "edit-alt"; description = "open workspace in alt editor on the viewing machine"; }
-        ];
-        settings = null;
-      }
-    ]
     ++ [
     {
       # Makes the agent sidebar structured and more useful
@@ -303,11 +290,15 @@ in {
 
         new_tab = "prefix+t";
         
-        command = lib.concatMap (e: map (b: {
+        command = (lib.concatMap (e: map (b: {
           inherit (b) key description;
           type = "plugin_action";
           command = "${e.id}.${b.action}";
-        }) e.bindings) herdrPluginList;
+        }) e.bindings) herdrPluginList) ++ lib.optionals bridgeCfg.enable [
+          # Shell keybindings run on the viewing client, so the editor opens on that machine.
+          { key = bridgeCfg.keys.edit; description = "open workspace in editor on the viewing machine"; type = "shell"; command = "${lib.getExe herdrBridge.tool} key-edit"; }
+          { key = bridgeCfg.keys.editAlt; description = "open workspace in alt editor on the viewing machine"; type = "shell"; command = "${lib.getExe herdrBridge.tool} key-edit --alt"; }
+        ];
       };
     };
   };
