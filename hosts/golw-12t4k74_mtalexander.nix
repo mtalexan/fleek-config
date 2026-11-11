@@ -126,15 +126,17 @@
         # The Plannotator browser-based tool for reviewing Plans, and enable the /plannotator-review command for reviewing and commenting on changes.
         plannotator.enable = true;
       };
+      
+      herdr = {
+        # Enable the custom herdr-bridge plugin for better support of remote sessions. Required by both client and server side.
+        # Includes a shell alias for 'herdr' to use a client wrapper that detects remote sessions and uses the plugin for
+        # coordinating opening Plannotator and GUI editor sessions on the viewing machine instead of the server.
+        bridge.enable = true;
 
-      # Route Plannotator reviews and editor requests to the herdr client viewing the session. See programs/herdr-bridge.nix.
-      herdr.bridge.enable = true;
-
-      herdr.plannotator = {
-        # Enable the Plannotator plugin that uses the in-browser plugin for annotation of anything.
-        enable = true;
-        # Use terminal-browser as a tab in herdr to open Plannotator. This applies to anything that opens plannotator from within a herdr pane.
-        terminalBrowser.enable = false;
+        plannotator = {
+          # Enable the Plannotator plugin that uses the in-browser plugin for annotation of anything.
+          enable = true;
+        };
       };
       
       # have to enable podman and skopeo here since our definition has to inject a distribution policy
