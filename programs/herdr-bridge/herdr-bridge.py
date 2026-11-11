@@ -260,9 +260,16 @@ def cmd_request_url(args):
     return 10
 
 
+def current_pane_id():
+    """Plugin actions get the focused pane as HERDR_ACTIVE_PANE_ID; HERDR_PANE_ID is pane-local for CLI use."""
+    if os.environ.get("HERDR_PLUGIN_ACTION_ID"):
+        return os.environ.get("HERDR_ACTIVE_PANE_ID") or os.environ.get("HERDR_PANE_ID")
+    return os.environ.get("HERDR_PANE_ID") or os.environ.get("HERDR_ACTIVE_PANE_ID")
+
+
 def focused_pane_cwd():
     """Plugin actions run in the plugin directory, so ask herdr for the pane's directory."""
-    pane_id = os.environ.get("HERDR_PANE_ID")
+    pane_id = current_pane_id()
     if not pane_id:
         return None
     out = subprocess.run([HERDR, "pane", "get", pane_id], capture_output=True, text=True, timeout=10)
@@ -278,14 +285,20 @@ def resolve_edit_path(arg):
     return os.path.abspath(os.path.join(base, arg or "."))
 
 
+def fail(message):
+    """Report an error on stderr, and as a herdr notification when run as a plugin action (no terminal)."""
+    print(message, file=sys.stderr)
+    if os.environ.get("HERDR_PLUGIN_ACTION_ID"):
+        notify("herdr-bridge", message)
+    return 1
+
+
 def cmd_request_edit(args):
-    if not os.environ.get("HERDR_PANE_ID"):
-        print("herdr-bridge request-edit must be run from inside a herdr pane", file=sys.stderr)
-        return 1
+    if not current_pane_id():
+        return fail("herdr-bridge request-edit must be run from inside a herdr pane")
     path = resolve_edit_path(args.path)
     if not os.path.exists(path):
-        print(f"herdr-bridge request-edit: no such path: {path}", file=sys.stderr)
-        return 1
+        return fail(f"herdr-bridge request-edit: no such path: {path}")
     req = new_request("edit", {"path": path, "variant": args.variant, "editor": args.editor})
     if request(req, keep_pending=False) is not None:
         return 0
