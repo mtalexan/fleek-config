@@ -2,8 +2,6 @@
 
   imports = [
     ../identities/personal.nix # set the default identities and secrets
-    #../modules/fedora_shells.nix
-    ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/parallel_kitty.nix
     ../programs/flameshot.nix

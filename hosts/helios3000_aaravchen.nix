@@ -2,14 +2,15 @@
 
   imports = [
     ../identities/personal.nix # set the default identities and secrets
-    #../modules/fedora_shells.nix
-    ../programs/terminator.nix
     ../programs/kitty.nix
     ../programs/parallel_kitty.nix
     ../programs/flameshot.nix
     ../programs/distrobox.nix
+    # vscode is provided by the system, but install it anyway so we get any extra config we need with it
     ../programs/vscode.nix
     ../programs/zed-editor.nix
+    ../programs/github-copilot-cli.nix
+    ../programs/herdr.nix
     ../programs/obsidian.nix
   ];
 
@@ -72,20 +73,42 @@
         };
       };
 
-      # Zed editor feature toggles
-      zed = {
-        # Zed currently has broken WGPU support for the Intel Xe iGPU. We need to force it to
-        # use the NVIDIA dGPU instead.
-        broken_wgpu = "nvidia";
+      # This says to use shared-mime-info 2.4 from stable nixpkgs instead of the >=2.5 one from unstable nixpkgs.
+      # The host and nix must either both be <2.5 or >=2.5. The 2.5 mime database from Freedesktop reversed some MIME type
+      # definition dependencies and it causes circular dependency loops if you mix them. Qt is especially sensitive to this
+      # and didn't get a fix for it until Qt 6.5. That makes Kubuntu 24.04 (which is Qt5) hang then crash the entire DE
+      # constantly when this occurs.
+      shared-mime-info.useStable = true;
+      
+      # skills under ~/.agents/skills/work, encrypted to fleek_chezmoi_personal
+      agents = {
+        personal = true;
+        common = true;
       };
 
-      # The primary distrobox config file
-      distrobox = {
-        hooks = {
+      github-copilot-cli = {
+        # maximum number of concurrent chats.
+        maxParallel = 8;
+        # The Plannotator browser-based tool for reviewing Plans, and enable the /plannotator-review command for reviewing and commenting on changes.
+        plannotator.enable = false;
+      };
+
+      herdr = {
+        # Enable the custom herdr-bridge plugin for better support of remote sessions. Required by both client and server side.
+        # Includes a shell alias for 'herdr' to use a client wrapper that detects remote sessions and uses the plugin for
+        # coordinating opening Plannotator and GUI editor sessions on the viewing machine instead of the server.
+        bridge.enable = false;
+
+        plannotator = {
+          # Enable the Plannotator plugin that uses the in-browser plugin for annotation of anything.
           enable = true;
-          docker_sock = true;
         };
-        config.engine = "docker";
+      };
+      
+      # The primary distrobox config file
+      distrobox.hooks = {
+        enable = true;
+        docker_sock = true;
       };
     };
 
